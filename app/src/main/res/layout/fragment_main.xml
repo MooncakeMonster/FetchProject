@@ -1,0 +1,46 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/clouds"
+    tools:context=".MainActivity"
+    android:id="@+id/main_layout">
+
+    <ImageView
+        android:layout_width="@dimen/icon_horizontal_margin"
+        android:layout_height="@dimen/icon_vertical_margin"
+        android:id="@+id/icon"
+        android:background="@drawable/bearicon"
+        android:layout_above="@+id/slogan"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="@dimen/slogan_h"
+        android:layout_height="@dimen/slogan_v"
+        android:id="@+id/slogan"
+        android:background="@drawable/slogan"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <com.facebook.login.widget.LoginButton
+        xmlns:fb="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="48dp"
+        fb:login_text="@string/login_desc"
+        fb:logout_text="@string/logout_desc"
+        android:layout_below="@+id/slogan"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="@dimen/tap_h"
+        android:layout_height="@dimen/tap_v"
+        android:id="@+id/tap"
+        android:src="@drawable/tap"
+        android:layout_below="@+id/login_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp" />
+
+</RelativeLayout>

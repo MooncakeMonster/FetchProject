@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="AppThemeMenu" parent="android:Theme.Holo.Light">
+        <item name="android:windowTitleSize">54dip</item>
+    </style>
+
+</resources>

@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.fetchelp;
+package mooncakemonster.orbitalcalendar.timetable;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,15 +8,15 @@ import android.view.ViewGroup;
 
 import mooncakemonster.orbitalcalendar.R;
 
-public class FetchHelpFragment extends Fragment {
+public class TimetableFragment extends Fragment {
 
-    public FetchHelpFragment(){}
+    public TimetableFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_fetch_help, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_timetable, container, false);
 
         return rootView;
     }

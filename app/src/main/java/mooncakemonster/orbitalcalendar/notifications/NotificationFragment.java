@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 
 import mooncakemonster.orbitalcalendar.R;
 
-public class Notifications extends Fragment {
+public class NotificationFragment extends Fragment {
 
-    public Notifications(){}
+    public NotificationFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

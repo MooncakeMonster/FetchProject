@@ -30,7 +30,7 @@
     <dimen name="bear_h">550dp</dimen>
 
     <dimen name="upcomingEvent_w">280dp</dimen>
-    <dimen name="upcomingEvent_h">150dp</dimen>
+    <dimen name="upcomingEvent_h">200dp</dimen>
 
     <dimen name="upevent_w">280dp</dimen>
     <dimen name="upevent_h">50dp</dimen>

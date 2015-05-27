@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/upevent_h"
         android:id="@+id/upEvent"
-        android:background="@drawable/upevent"
+        android:background="@drawable/ucevent"
         android:layout_above="@+id/listView"
         android:layout_centerHorizontal="true" />
 

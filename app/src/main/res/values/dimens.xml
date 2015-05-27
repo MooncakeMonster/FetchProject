@@ -28,4 +28,7 @@
 
     <dimen name="bear_w">280dp</dimen>
     <dimen name="bear_h">550dp</dimen>
+
+    <dimen name="upcomingEvent_w">280dp</dimen>
+    <dimen name="upcomingEvent_h">200dp</dimen>
 </resources>

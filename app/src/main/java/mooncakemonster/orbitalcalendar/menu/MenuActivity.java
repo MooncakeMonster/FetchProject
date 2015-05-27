@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.adapter.NavDrawerListAdapter;
-import mooncakemonster.orbitalcalendar.fragments.HomeFragment;
+import mooncakemonster.orbitalcalendar.fragments.CalendarFragment;
 import mooncakemonster.orbitalcalendar.fragments.PeopleFragment;
 import mooncakemonster.orbitalcalendar.model.NavDrawerItem;
 
@@ -134,7 +134,7 @@ public class MenuActivity extends Activity {
     private void displayView(int position) {
         Fragment fragment = null;
         switch (position) {
-            case 0: fragment = new HomeFragment(); break;
+            case 0: fragment = new CalendarFragment(); break;
             case 1: fragment = new PeopleFragment(); break;
             default: break;
         }

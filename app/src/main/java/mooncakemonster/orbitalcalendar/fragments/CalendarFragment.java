@@ -1,6 +1,7 @@
 package mooncakemonster.orbitalcalendar.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,16 +9,18 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.adapter.CustomListAdapter;
+import mooncakemonster.orbitalcalendar.event.EventActivity;
 
 public class CalendarFragment extends Fragment {
 
     private ListView listView;
     private ArrayAdapter<String> listAdapter;
-    private String[] upcomingEvents = {"Mooncake", "Monster", "Hello", "Bye"};
+    private String[] upcomingEvents = {"Mooncake", "Monster", "Hello", "Bye", "Mooncake",
+            "Monster", "Hello", "Bye", "Mooncake", "Monster", "Hello", "Bye", "Mooncake", "Monster",
+            "Hello", "Bye", "Mooncake", "Monster", "Hello", "Bye"};             // Testing if scrolling works
 
     public CalendarFragment(){}
 
@@ -31,7 +34,7 @@ public class CalendarFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity().getBaseContext(), parent.getItemIdAtPosition(position) + " is selected", Toast.LENGTH_LONG).show();
+                startActivity(new Intent(getActivity().getApplicationContext(), EventActivity.class));
             }
         });
         return rootView;

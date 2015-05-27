@@ -10,6 +10,7 @@ import android.app.FragmentManager;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
@@ -18,8 +19,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
@@ -30,7 +38,7 @@ import mooncakemonster.orbitalcalendar.timetable.TimetableFragment;
 import mooncakemonster.orbitalcalendar.voting.VotingFragment;
 
 
-public class MenuActivity extends Activity {
+public class MenuActivity extends FragmentActivity {
 
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
@@ -48,6 +56,9 @@ public class MenuActivity extends Activity {
 
     private ArrayList<NavDrawerItem> navDrawerItems;
     private NavDrawerListAdapter adapter;
+
+    // caldroid Calendar
+    private CaldroidFragment caldroidFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +104,58 @@ public class MenuActivity extends Activity {
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        //Creating Caldroid calendar here
+        //Variable formatter for setting up listener later
+        final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+        //(1) Create calendar
+        caldroidFragment = new CaldroidFragment();
+        //Get today's date and time using Java's Calendar class
+        Calendar cal = Calendar.getInstance();
+        //Bundle args will supply the information for caldroidFragment.setArguments(args) to build the calendar
+        Bundle args = new Bundle();
+        //Extract today's date to insert in bundle args
+        args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
+        args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+        //Set theme for Caldroid's calendar
+        args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
+        //Build caldroidFragment with the above information and setting
+        caldroidFragment.setArguments(args);
+        //Ensure caldroidFragment will be attached to the activity
+        android.support.v4.app.FragmentTransaction t = getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.cal_fragment, caldroidFragment);
+        t.commit();
+
+        // (2) Setup listener for caldroidFragment
+        final CaldroidListener listener = new CaldroidListener() {
+            @Override
+            public void onSelectDate(Date date, View view) {
+                Toast.makeText(getApplicationContext(), formatter.format(date),
+                        Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onChangeMonth(int month, int year) {
+                String text = "month: " + month + " year: " + year;
+                Toast.makeText(getApplicationContext(), text,
+                        Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onLongClickDate(Date date, View view) {
+                Toast.makeText(getApplicationContext(),
+                        "Long click " + formatter.format(date),
+                        Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onCaldroidViewCreated() {
+                if (caldroidFragment.getLeftArrowButton() != null) {
+                    Toast.makeText(getApplicationContext(),
+                            "Caldroid view is created", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        };
+        // Setup Caldroid
+        caldroidFragment.setCaldroidListener(listener);
 
         if (savedInstanceState == null) { displayView(0); }
     }

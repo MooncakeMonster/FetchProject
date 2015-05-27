@@ -1,14 +1,14 @@
 package mooncakemonster.orbitalcalendar.model;
 
 /**
- * Created by BAOJUN on 24/5/15.
+ * This program sets the title and icon of each fragment in the navigation drawer.
  */
+
 public class NavDrawerItem {
 
     private String title;
     private int icon;
     private String count = "0";
-    // boolean to set visiblity of the counter
     private boolean isCounterVisible = false;
 
     public NavDrawerItem(){}

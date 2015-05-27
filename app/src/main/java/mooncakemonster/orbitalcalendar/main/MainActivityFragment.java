@@ -1,5 +1,9 @@
 package mooncakemonster.orbitalcalendar.main;
 
+/**
+ * This fragment is for Facebook Login.
+ */
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,9 +25,6 @@ import mooncakemonster.orbitalcalendar.R;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class MainActivityFragment extends Fragment {
 
     private LoginButton loginButton;

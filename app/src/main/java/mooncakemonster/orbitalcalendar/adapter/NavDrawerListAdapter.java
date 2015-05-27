@@ -15,8 +15,9 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.model.NavDrawerItem;
 
 /**
- * Created by BAOJUN on 24/5/15.
+ * This program displays the view of the navigation drawer.
  */
+
 public class NavDrawerListAdapter extends BaseAdapter{
 
     private Context context;

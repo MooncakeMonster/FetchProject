@@ -11,7 +11,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by BAOJUN on 20/5/15.
+ * This program is used to get hash key for Facebook.
  */
 public class KeyActivity extends Application {
 
@@ -24,9 +24,7 @@ public class KeyActivity extends Application {
     public void printHashKey() {
         // Add code to print out the key hash
         try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "mooncakemonster.calendar",
-                    PackageManager.GET_SIGNATURES);
+            PackageInfo info = getPackageManager().getPackageInfo("mooncakemonster.calendar", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());

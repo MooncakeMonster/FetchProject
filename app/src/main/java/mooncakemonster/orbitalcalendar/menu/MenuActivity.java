@@ -1,5 +1,9 @@
 package mooncakemonster.orbitalcalendar.menu;
 
+/**
+ * This program act as main activity for navigation drawer to run.
+ */
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;

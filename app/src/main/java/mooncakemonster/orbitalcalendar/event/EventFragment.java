@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.fragments;
+package mooncakemonster.orbitalcalendar.event;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -8,16 +8,20 @@ import android.view.ViewGroup;
 
 import mooncakemonster.orbitalcalendar.R;
 
-public class PeopleFragment extends Fragment {
+/**
+ * Created by BAOJUN on 27/5/15.
+ */
+public class EventFragment extends Fragment {
 
-    public PeopleFragment(){}
+    public EventFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                                 Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_people, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_event, container, false);
 
         return rootView;
     }
 }
+

@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.model;
+package mooncakemonster.orbitalcalendar.menu;
 
 /**
  * This program sets the title and icon of each fragment in the navigation drawer.

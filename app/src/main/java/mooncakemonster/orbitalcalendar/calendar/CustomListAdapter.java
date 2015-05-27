@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.adapter;
+package mooncakemonster.orbitalcalendar.calendar;
 
 import android.content.Context;
 import android.graphics.Color;

@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.fragments;
+package mooncakemonster.orbitalcalendar.calendar;
 
 import android.app.Fragment;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.adapter.CustomListAdapter;
 import mooncakemonster.orbitalcalendar.event.EventActivity;
 
 public class CalendarFragment extends Fragment {

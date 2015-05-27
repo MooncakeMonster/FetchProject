@@ -11,8 +11,8 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +22,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.adapter.NavDrawerListAdapter;
-import mooncakemonster.orbitalcalendar.fragments.CalendarFragment;
-import mooncakemonster.orbitalcalendar.fragments.PeopleFragment;
-import mooncakemonster.orbitalcalendar.model.NavDrawerItem;
+import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
+import mooncakemonster.orbitalcalendar.event.EventFragment;
 
 
 public class MenuActivity extends Activity {
@@ -135,7 +133,7 @@ public class MenuActivity extends Activity {
         Fragment fragment = null;
         switch (position) {
             case 0: fragment = new CalendarFragment(); break;
-            case 1: fragment = new PeopleFragment(); break;
+            case 1: fragment = new EventFragment(); break;
             default: break;
         }
 

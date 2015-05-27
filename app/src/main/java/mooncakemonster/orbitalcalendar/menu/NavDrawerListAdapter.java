@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.adapter;
+package mooncakemonster.orbitalcalendar.menu;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.model.NavDrawerItem;
 
 /**
  * This program displays the view of the navigation drawer.

@@ -80,8 +80,6 @@ public class CalendarFragment extends Fragment {
         // Setup Caldroid
         caldroidFragment.setCaldroidListener(listener);
 
-        //if (savedInstanceState == null) { displayView(0); }
-
         return rootView;
     }
 

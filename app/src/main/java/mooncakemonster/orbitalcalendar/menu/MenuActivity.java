@@ -19,8 +19,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.roomorama.caldroid.CaldroidFragment;
-
 import java.util.ArrayList;
 
 import mooncakemonster.orbitalcalendar.R;
@@ -95,6 +93,8 @@ public class MenuActivity extends FragmentActivity {
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        if (savedInstanceState == null) { displayView(0); }
     }
 
     // This method links slide menu to its fragment

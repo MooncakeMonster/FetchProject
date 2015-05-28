@@ -33,5 +33,5 @@
     <dimen name="upcomingEvent_h">200dp</dimen>
 
     <dimen name="upevent_w">280dp</dimen>
-    <dimen name="upevent_h">50dp</dimen>
+    <dimen name="upevent_h">45dp</dimen>
 </resources>

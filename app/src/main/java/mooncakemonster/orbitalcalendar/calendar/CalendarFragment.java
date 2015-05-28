@@ -25,16 +25,16 @@ import mooncakemonster.orbitalcalendar.event.EventActivity;
 
 public class CalendarFragment extends Fragment {
 
+    // caldroid Calendar
+    private CaldroidFragment caldroidFragment;
+    private FragmentActivity myContext;
+
+    // upcoming Events List
     private ListView listView;
     private ArrayAdapter<String> listAdapter;
     private String[] upcomingEvents = {"Mooncake", "Monster", "Hello", "Bye", "Mooncake",
             "Monster", "Hello", "Bye", "Mooncake", "Monster", "Hello", "Bye", "Mooncake", "Monster",
             "Hello", "Bye", "Mooncake", "Monster", "Hello", "Bye"};             // Testing if scrolling works
-
-    // caldroid Calendar
-    private CaldroidFragment caldroidFragment;
-
-    private FragmentActivity myContext;
 
     public CalendarFragment(){}
 
@@ -70,28 +70,22 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onCaldroidViewCreated() {
                 if (caldroidFragment.getLeftArrowButton() != null) {
-                    Toast.makeText(getActivity().getApplicationContext(),
-                            "Caldroid view is created", Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(getActivity().getApplicationContext(), "Caldroid view is created", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onSelectDate(Date date, View view) {
-                Toast.makeText(getActivity().getApplicationContext(), formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onChangeMonth(int month, int year) {
                 String text = "month: " + month + " year: " + year;
-                Toast.makeText(getActivity().getApplicationContext(), text,
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onLongClickDate(Date date, View view) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        "Long click " + formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplicationContext(), "Long click " + formatter.format(date), Toast.LENGTH_SHORT).show();
             }
         };
         // Setup Caldroid
@@ -99,6 +93,8 @@ public class CalendarFragment extends Fragment {
 
         //if (savedInstanceState == null) { displayView(0); }
 
+
+        // List of upcoming events
         listView = (ListView) rootView.findViewById(R.id.listView);
         listAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.custom_list, upcomingEvents);
         listView.setAdapter(listAdapter);
@@ -114,7 +110,7 @@ public class CalendarFragment extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        myContext=(FragmentActivity) activity;
+        myContext = (FragmentActivity) activity;
         super.onAttach(activity);
     }
 }

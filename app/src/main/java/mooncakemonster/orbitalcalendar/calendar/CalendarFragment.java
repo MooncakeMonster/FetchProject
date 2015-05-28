@@ -2,6 +2,7 @@ package mooncakemonster.orbitalcalendar.calendar;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
+import com.roomorama.caldroid.WeekdayArrayAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,9 +45,8 @@ public class CalendarFragment extends Fragment {
         //Extract today's date to insert in bundle args
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
-        //Set theme for Caldroid's calendar
-        args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
-
+        //Make background transparent
+        args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
         //Build caldroidFragment with the above information and setting
         caldroidFragment.setArguments(args);
         //Ensure caldroidFragment will be attached to the activity
@@ -58,6 +59,8 @@ public class CalendarFragment extends Fragment {
 
             @Override
             public void onCaldroidViewCreated() {
+                //Ensure
+                WeekdayArrayAdapter.textColor = Color.BLACK;
                 if (caldroidFragment.getLeftArrowButton() != null) {
                     Toast.makeText(getActivity().getApplicationContext(), "Caldroid view is created", Toast.LENGTH_SHORT).show();
                 }
@@ -82,7 +85,6 @@ public class CalendarFragment extends Fragment {
 
         return rootView;
     }
-
     @Override
     public void onAttach(Activity activity) {
         myContext = (FragmentActivity) activity;

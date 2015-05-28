@@ -8,24 +8,27 @@
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/cal_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="280dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical" />
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/upcomingEvent_h"
-        android:id="@+id/listView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="@dimen/upevent_h"
         android:id="@+id/upEvent"
+        android:layout_below="@+id/cal_fragment"
         android:background="@drawable/ucevent"
-        android:layout_above="@+id/listView"
         android:layout_centerHorizontal="true" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/upcomingEvent_h"
+        android:id="@+id/listView"
+        android:layout_below="@+id/upEvent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

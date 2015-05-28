@@ -42,15 +42,6 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
-        listView = (ListView) rootView.findViewById(R.id.listView);
-        listAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.custom_list, upcomingEvents);
-        listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startActivity(new Intent(getActivity().getApplicationContext(), EventActivity.class));
-            }
-        });
 
         //Creating Caldroid calendar here
         //Variable formatter for setting up listener later
@@ -76,7 +67,6 @@ public class CalendarFragment extends Fragment {
         // (2) Setup listener for caldroidFragment
         final CaldroidListener listener = new CaldroidListener() {
 
-            /*
             @Override
             public void onCaldroidViewCreated() {
                 if (caldroidFragment.getLeftArrowButton() != null) {
@@ -85,7 +75,6 @@ public class CalendarFragment extends Fragment {
                             .show();
                 }
             }
-            */
 
             @Override
             public void onSelectDate(Date date, View view) {
@@ -109,6 +98,16 @@ public class CalendarFragment extends Fragment {
         caldroidFragment.setCaldroidListener(listener);
 
         //if (savedInstanceState == null) { displayView(0); }
+
+        listView = (ListView) rootView.findViewById(R.id.listView);
+        listAdapter = new CustomListAdapter(getActivity().getApplicationContext(), R.layout.custom_list, upcomingEvents);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                startActivity(new Intent(getActivity().getApplicationContext(), EventActivity.class));
+            }
+        });
 
         return rootView;
     }

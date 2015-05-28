@@ -36,6 +36,8 @@ public class CustomListAdapter extends ArrayAdapter {
         TextView text = (TextView) view.findViewById(R.id.textView);
 
         if (items[position] != null) {
+            if(position % 2 == 0) text.setBackgroundColor(Color.TRANSPARENT);
+            else if(position % 2 != 0) text.setBackgroundColor(Color.TRANSPARENT);
             text.setTextColor(Color.BLACK);
             text.setText(items[position]);
         }

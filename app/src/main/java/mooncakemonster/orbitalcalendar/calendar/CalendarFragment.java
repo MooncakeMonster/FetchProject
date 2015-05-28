@@ -57,6 +57,7 @@ public class CalendarFragment extends Fragment {
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         //Set theme for Caldroid's calendar
         args.putInt(CaldroidFragment.THEME_RESOURCE, com.caldroid.R.style.CaldroidDefaultDark);
+
         //Build caldroidFragment with the above information and setting
         caldroidFragment.setArguments(args);
         //Ensure caldroidFragment will be attached to the activity
@@ -92,7 +93,6 @@ public class CalendarFragment extends Fragment {
         caldroidFragment.setCaldroidListener(listener);
 
         //if (savedInstanceState == null) { displayView(0); }
-
 
         // List of upcoming events
         listView = (ListView) rootView.findViewById(R.id.listView);

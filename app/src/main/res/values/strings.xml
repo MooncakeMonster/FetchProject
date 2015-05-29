@@ -5,7 +5,7 @@
     <string name="app_id">928219673905619</string>
     <string name="title_activity_first">FirstActivity</string>
     <string name="login_desc">Login With Facebook</string>
-    <string name="logout_desc">Logout of Facebook</string>
+    <string name="logout_desc">Logout From Facebook</string>
     <string name="title_activity_menu">MenuActivity</string>
 
     <string name="drawer_open">Slider Menu Opened</string>

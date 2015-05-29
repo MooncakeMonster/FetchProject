@@ -15,7 +15,6 @@
     <string-array name="nav_drawer_items">
         <item>Calendar</item>
         <item>Notifications</item>
-        <item>Events</item>
         <item>Timetable</item>
         <item>Voting Results</item>
         <item >Get Fetch to Help</item>
@@ -27,7 +26,6 @@
         <item>@mipmap/red</item>
         <item>@mipmap/blue</item>
         <item>@mipmap/green</item>
-        <item>@mipmap/cyan</item>
         <item>@mipmap/purple</item>
         <item>@mipmap/orange</item>
     </array>

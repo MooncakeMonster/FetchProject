@@ -2,6 +2,7 @@ package mooncakemonster.orbitalcalendar.calendar;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -19,6 +20,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.event.EventActivity;
 
 public class CalendarFragment extends Fragment {
 
@@ -69,6 +71,9 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onSelectDate(Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
+                // TODO: Put to test :p
+                Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
+                startActivity(intent);
             }
             @Override
             public void onChangeMonth(int month, int year) {
@@ -85,6 +90,7 @@ public class CalendarFragment extends Fragment {
 
         return rootView;
     }
+
     @Override
     public void onAttach(Activity activity) {
         myContext = (FragmentActivity) activity;

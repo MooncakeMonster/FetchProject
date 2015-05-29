@@ -95,7 +95,7 @@ public class MainActivityFragment extends Fragment {
 
         loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setFragment(this);
-        loginButton.setReadPermissions(Arrays.asList("user_events"));
+        loginButton.setReadPermissions(Arrays.asList("user_friends"));
         //LoginManager.getInstance().logInWithReadPermissions(MainActivityFragment.this, Arrays.asList("user_events"));
         loginButton.registerCallback(mCallbackManager, mCallback);
 

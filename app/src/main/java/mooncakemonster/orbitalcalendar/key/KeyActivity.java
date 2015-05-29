@@ -24,7 +24,7 @@ public class KeyActivity extends Application {
     public void printHashKey() {
         // Add code to print out the key hash
         try {
-            PackageInfo info = getPackageManager().getPackageInfo("mooncakemonster.calendar", PackageManager.GET_SIGNATURES);
+            PackageInfo info = getPackageManager().getPackageInfo("mooncakemonster.orbitalcalendar", PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());

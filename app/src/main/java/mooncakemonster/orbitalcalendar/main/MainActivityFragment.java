@@ -19,7 +19,6 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -97,7 +96,7 @@ public class MainActivityFragment extends Fragment {
         loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setFragment(this);
         loginButton.setReadPermissions(Arrays.asList("user_events"));
-        LoginManager.getInstance().logInWithReadPermissions(MainActivityFragment.this, Arrays.asList("user_events"));
+        //LoginManager.getInstance().logInWithReadPermissions(MainActivityFragment.this, Arrays.asList("user_events"));
         loginButton.registerCallback(mCallbackManager, mCallback);
 
         return view;

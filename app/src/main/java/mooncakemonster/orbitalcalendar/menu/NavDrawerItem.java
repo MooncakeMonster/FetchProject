@@ -13,6 +13,10 @@ public class NavDrawerItem {
 
     public NavDrawerItem(){}
 
+    public NavDrawerItem(String title){
+        this.title = title;
+    }
+
     public NavDrawerItem(String title, int icon){
         this.title = title;
         this.icon = icon;

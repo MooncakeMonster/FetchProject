@@ -24,8 +24,12 @@
     <!-- Nav Drawer List Item Icons -->
     <!-- Keep them in order as the titles are in -->
     <array name="nav_drawer_icons">
-        <item>@drawable/ic_home</item>
-        <item>@drawable/ic_people</item>
+        <item>@mipmap/red</item>
+        <item>@mipmap/blue</item>
+        <item>@mipmap/green</item>
+        <item>@mipmap/cyan</item>
+        <item>@mipmap/purple</item>
+        <item>@mipmap/orange</item>
     </array>
 
     <!-- Content Description -->

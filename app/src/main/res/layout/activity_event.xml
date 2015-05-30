@@ -7,18 +7,9 @@
     android:background="@drawable/clouds"
     tools:context="mooncakemonster.orbitalcalendar.event.EventActivity">
 
+    <!-- Select calendar dates buttons (Start and End) -->
 
-    <Button
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="ADD"
-        android:id="@+id/add"
-        android:layout_alignTop="@+id/button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="43dp"
-        android:layout_marginStart="43dp" />
-
+    <!-- Event title -->
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="50dp"
@@ -27,54 +18,98 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
+    <!-- Location -->
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:id="@+id/location"
         android:hint="Location"
-        android:layout_below="@+id/title"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="139dp" />
+        android:layout_below="@+id/title" />
+
+    <!-- Notes -->
+
+    <!-- Remind me checkbox -->
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remind me"
+        android:id="@+id/checkBox"
+        android:layout_above="@+id/add"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <!-- Add and invite buttons -->
+    <Button
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:id="@+id/add"
+        android:text="ADD"
+        android:background="@drawable/redbutton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/endT"
+        android:layout_alignEnd="@+id/endT" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/notes"
+        android:id="@+id/editText"
         android:hint="Notes"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/location"
-        android:layout_alignEnd="@+id/location" />
+        android:layout_below="@+id/endD"
+        android:layout_alignRight="@+id/endT"
+        android:layout_alignEnd="@+id/endT" />
 
     <Button
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="INVITE"
-        android:id="@+id/button"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/add"
-        android:layout_toEndOf="@+id/add" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Remind me"
-        android:id="@+id/checkBox"
-        android:layout_below="@+id/notes"
+        android:text="End Date"
+        android:id="@+id/endD"
+        android:textSize="18dp"
+        android:background="@color/caldroid_transparent"
+        android:layout_below="@+id/startD"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/startT"
+        android:layout_toStartOf="@+id/startT" />
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:text="Every"
-        android:id="@+id/checkBox"
-        android:layout_below="@+id/title"
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Start Date"
+        android:id="@+id/startD"
+        android:textSize="18dp"
+        android:background="@color/caldroid_transparent"
+        android:layout_below="@+id/location"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/startT"
+        android:layout_toStartOf="@+id/startT" />
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="Start Time"
+        android:id="@+id/startT"
+        android:textSize="18dp"
+        android:background="@color/caldroid_transparent"
+        android:layout_below="@+id/location"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:text="End Time"
+        android:id="@+id/endT"
+        android:textSize="18dp"
+        android:background="@color/caldroid_transparent"
+        android:layout_below="@+id/startT"
+        android:layout_alignLeft="@+id/startT"
+        android:layout_alignStart="@+id/startT" />
 
 </RelativeLayout>

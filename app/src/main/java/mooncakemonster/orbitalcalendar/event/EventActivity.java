@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,9 +29,10 @@ public class EventActivity extends Activity {
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd/MM/yyyy");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
     private Button beginDate, endDate, beginTime, endTime, addEventButton;
+    private Context context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
@@ -39,7 +41,7 @@ public class EventActivity extends Activity {
     }
 
     // This method sets selected date by user on the button.
-    private void setButtonFunction() {
+    protected Dialog setButtonFunction() {
         beginDate = (Button) findViewById(R.id.startD);
         endDate = (Button) findViewById(R.id.endD);
         beginTime = (Button) findViewById(R.id.startT);
@@ -53,32 +55,65 @@ public class EventActivity extends Activity {
         beginDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(DIALOG_BEGIN_DATE);
+                DatePickerDialog date = new DatePickerDialog(EventActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        dateTime.set(year, monthOfYear, dayOfMonth);
+                        beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
+                    }
+                }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
+                date.show();
             }
         });
 
         endDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(DIALOG_END_DATE);
+                DatePickerDialog date = new DatePickerDialog(EventActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        dateTime.set(year, monthOfYear, dayOfMonth);
+                        endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
+                    }
+                }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
+                date.show();
             }
         });
 
         beginTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(DIALOG_BEGIN_TIME);
+                TimePickerDialog time = new TimePickerDialog(EventActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        dateTime.set(Calendar.MINUTE, minute);
+                        beginTime.setText(timeFormatter.format(dateTime.getTime()));
+                    }
+                }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
+                time.show();
             }
         });
 
         endTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDialog(DIALOG_END_TIME);
+                TimePickerDialog time = new TimePickerDialog(EventActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        dateTime.set(Calendar.MINUTE, minute);
+                        endTime.setText(timeFormatter.format(dateTime.getTime()));
+                    }
+                }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
+                time.show();
             }
         });
+
+        return null;
     }
 
+    /*
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
@@ -127,11 +162,15 @@ public class EventActivity extends Activity {
         return null;
     }
 
+    */
+
     // This method stores event once "ADD" button is clicked.
     private void addEvent() {
         addEventButton = (Button) findViewById(R.id.add);
         addEventButton.setBackgroundResource(R.drawable.redbutton);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -139,6 +178,7 @@ public class EventActivity extends Activity {
         getMenuInflater().inflate(R.menu.menu_event, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

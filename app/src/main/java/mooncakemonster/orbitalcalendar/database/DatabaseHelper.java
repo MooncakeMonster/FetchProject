@@ -3,13 +3,14 @@ package mooncakemonster.orbitalcalendar.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
     private static final String DATABASE_NAME = "appointment";
     //What is this appointment about
     private static final String EVENT = "event";
-    //TODO: DATE IMPLEMENTATION
+    //Date tentatively stored as YYYY-MM-DD HH:MM
     private static final String DATE = "date";
     //Where the event is held
     private static final String LOCATION = "location";
@@ -18,11 +19,13 @@ public class DatabaseHelper extends SQLiteOpenHelper
     //Send reminder on N many minutes before the event; if zero, no notification
     private static final String REMIND = "remind";
 
-    //VERIFY the VERSION thing, appears to relate to updating the table;
-    private static final int DATABASE_VERSION = 2;
-
-    //TODO: FILL THE COMMAND FOR CREATING TABLE
-    private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + "(" + EVENT + "string";
+    private static final int DATABASE_VERSION = 1;
+    private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + "( " + "_id INTEGER PRIMARY KEY, "
+                                                                                         + EVENT + " TEXT NOT NULL, "
+                                                                                         + DATE + " INTEGER NOT NULL, "
+                                                                                         + LOCATION + " TEXT, "
+                                                                                         + NOTES + " TEXT, "
+                                                                                         + REMIND + " INTEGER NOT NULL;";
 
     public DatabaseHelper(Context context)
     {
@@ -31,11 +34,13 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     public void onCreate(SQLiteDatabase db)
     {
-
+        db.execSQL(DATABASE_CREATE);
     }
 
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-
+        Log.w(DatabaseHelper.class.getName(),"Upgrading database from version " + oldVersion + " to " + newVersion + ", which will destroy all old data.");
+        db.execSQL("DROP TABLE IF EXISTS " + DATABASE_NAME);
+        onCreate(db);
     }
 }

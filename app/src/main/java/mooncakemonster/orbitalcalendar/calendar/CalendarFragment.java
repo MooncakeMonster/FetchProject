@@ -61,7 +61,7 @@ public class CalendarFragment extends Fragment {
 
             @Override
             public void onCaldroidViewCreated() {
-                //Ensure
+                //Ensure days of the week displayed (e.g. Sun, Mon, Tues,...) are black
                 WeekdayArrayAdapter.textColor = Color.BLACK;
                 if (caldroidFragment.getLeftArrowButton() != null) {
                     Toast.makeText(getActivity().getApplicationContext(), "Caldroid view is created", Toast.LENGTH_SHORT).show();

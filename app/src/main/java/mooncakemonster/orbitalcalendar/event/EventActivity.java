@@ -103,8 +103,7 @@ public class EventActivity extends Activity {
                 }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
 
             case DIALOG_BEGIN_TIME:
-                return new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener()
-                {
+                return new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -115,8 +114,7 @@ public class EventActivity extends Activity {
                 }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
 
             case DIALOG_END_TIME:
-                return new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener()
-                {
+                return new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

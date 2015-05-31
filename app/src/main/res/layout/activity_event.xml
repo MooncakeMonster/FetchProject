@@ -30,9 +30,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/title" />
 
-    <!-- Notes -->
-
-    <!-- Remind me checkbox -->
+    <!-- Reminder checkbox -->
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,6 +41,7 @@
         android:layout_alignParentStart="true" />
 
     <!-- Add and invite buttons -->
+    <!--Add button-->
     <Button
         android:layout_width="130dp"
         android:layout_height="50dp"
@@ -54,7 +53,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/endT"
         android:layout_alignEnd="@+id/endT" />
+        <!-- Add the android:onClick="onClick" to above, along with other necessary modification-->
 
+    <!--Notes-->
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -65,6 +66,20 @@
         android:layout_below="@+id/endD"
         android:layout_alignRight="@+id/endT"
         android:layout_alignEnd="@+id/endT" />
+
+    <!--Start and End Date-->
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Start Date"
+        android:id="@+id/startD"
+        android:textSize="18dp"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/location"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/startT"
+        android:layout_toStartOf="@+id/startT" />
 
     <Button
         android:layout_width="150dp"
@@ -79,19 +94,7 @@
         android:layout_toLeftOf="@+id/startT"
         android:layout_toStartOf="@+id/startT" />
 
-    <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:text="Start Date"
-        android:id="@+id/startD"
-        android:textSize="18dp"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/location"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/startT"
-        android:layout_toStartOf="@+id/startT" />
-
+    <!--Start and End Time-->
     <Button
         android:layout_width="120dp"
         android:layout_height="wrap_content"

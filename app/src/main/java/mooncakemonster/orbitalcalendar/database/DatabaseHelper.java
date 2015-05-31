@@ -7,25 +7,29 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-    private static final String DATABASE_NAME = "appointment";
+
+    public static final String DATABASE_NAME = "appointment.db";
+    //Serial number of the rows
+    public static final String COLUMN_ID = "_id";
     //What is this appointment about
-    private static final String EVENT = "event";
+    public static final String EVENT = "event";
     //Date tentatively stored as YYYY-MM-DD HH:MM
-    private static final String DATE = "date";
+    public static final String DATE = "date";
     //Where the event is held
-    private static final String LOCATION = "location";
+    public static final String LOCATION = "location";
     //Miscellaneous notes
-    private static final String NOTES = "notes";
+    public static final String NOTES = "notes";
     //Send reminder on N many minutes before the event; if zero, no notification
-    private static final String REMIND = "remind";
+    public static final String REMIND = "remind";
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + "( " + "_id INTEGER PRIMARY KEY, "
+    private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + "( " + COLUMN_ID + " INTEGER PRIMARY KEY, "
                                                                                          + EVENT + " TEXT NOT NULL, "
                                                                                          + DATE + " INTEGER NOT NULL, "
                                                                                          + LOCATION + " TEXT, "
                                                                                          + NOTES + " TEXT, "
-                                                                                         + REMIND + " INTEGER NOT NULL;";
+                                                                                         + REMIND + " INTEGER NOT NULL"
+                                                                                  + " );";
 
     public DatabaseHelper(Context context)
     {

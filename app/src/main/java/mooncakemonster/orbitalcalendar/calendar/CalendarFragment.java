@@ -31,7 +31,7 @@ public class CalendarFragment extends Fragment {
 
     // listview for Events
     private ListView listView;
-    int[] imgResource = { R.mipmap.red, R.mipmap.red, R.mipmap.red, R.mipmap.red, R.mipmap.red  };
+    int[] imgResource = { R.mipmap.red, R.mipmap.blue, R.mipmap.green, R.mipmap.purple, R.mipmap.orange  };
     String[] eventName = { "BBQ", "Birthday", "Meeting", "Sleep", "Slack" };
     String[] eventTime = { "1pm", "2pm", "3pm", "4am", "Whole day"};
 

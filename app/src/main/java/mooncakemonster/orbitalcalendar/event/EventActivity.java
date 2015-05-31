@@ -14,6 +14,7 @@ import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
 
@@ -23,12 +24,20 @@ public class EventActivity extends Activity {
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd/MM/yyyy");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
     private Button beginDate, endDate, beginTime, endTime;
+    //Variable for extracting date from incoming intent. Default value is date today
+    private Date dateObj = Calendar.getInstance().getTime();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
-
+        //Extract date from intent
+        Bundle extras = getIntent().getExtras();
+        if (extras != null)
+        {
+            //Testing
+            //dateObj = dateObj.setTime(extras.getLongExtra("date_passed", -1L));
+        }
         setButtonFunction();
     }
 

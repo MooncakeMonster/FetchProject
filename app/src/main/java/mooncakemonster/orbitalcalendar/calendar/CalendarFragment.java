@@ -64,8 +64,9 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onSelectDate(Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
-                // TODO: Put to test :p
+                //Open EventActivity for user to input their appointment
                 Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
+                intent.putExtra("date_passed", date);
                 startActivity(intent);
             }
             @Override

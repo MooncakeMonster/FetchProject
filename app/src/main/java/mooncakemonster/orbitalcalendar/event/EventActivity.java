@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -109,6 +110,23 @@ public class EventActivity extends Activity {
         });
 
         return null;
+    }
+
+    public void onClick(View view){
+        switch (view.getId()) {
+            case R.id.addAppointmentButton:
+        }
+    }
+
+    protected void getEditTextInput()
+    {
+        final EditText eventInput = (EditText) findViewById(R.id.title);
+        //TODO: DATE PARSING
+        //final EditText dateInput = (EditText) findViewById(R.id.appointmentDate);
+        final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
+        final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
+        //TODO: FIND SUITABLE REPLACMENT FOR EDITTEXT FOR CHECKBOX
+        //final EditText remindInput = (EditText) findViewById(R.id.appointmentReminder);
     }
 
     @Override

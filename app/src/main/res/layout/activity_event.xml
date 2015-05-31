@@ -24,7 +24,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/location"
+        android:id="@+id/appointmentLocation"
         android:hint="Location"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -35,8 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Remind me"
-        android:id="@+id/checkBox"
-        android:layout_above="@+id/add"
+        android:id="@+id/appointmentReminder"
+        android:layout_above="@+id/addAppointmentButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -45,15 +45,15 @@
     <Button
         android:layout_width="130dp"
         android:layout_height="50dp"
-        android:id="@+id/add"
+        android:id="@+id/addAppointmentButton"
         android:text="ADD"
         android:background="@android:color/white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/endT"
-        android:layout_alignEnd="@+id/endT" />
-        <!-- Add the android:onClick="onClick" to above, along with other necessary modification-->
+        android:layout_alignEnd="@+id/endT"
+        android:onClick="onClick" />
 
     <!--Notes-->
     <EditText
@@ -61,7 +61,7 @@
         android:layout_height="50dp"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/appointmentNotes"
         android:hint="Notes"
         android:layout_below="@+id/endD"
         android:layout_alignRight="@+id/endT"
@@ -75,7 +75,7 @@
         android:id="@+id/startD"
         android:textSize="18dp"
         android:background="@android:color/transparent"
-        android:layout_below="@+id/location"
+        android:layout_below="@+id/appointmentLocation"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_toLeftOf="@+id/startT"
@@ -102,7 +102,7 @@
         android:id="@+id/startT"
         android:textSize="18dp"
         android:background="@android:color/transparent"
-        android:layout_below="@+id/location"
+        android:layout_below="@+id/appointmentLocation"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 

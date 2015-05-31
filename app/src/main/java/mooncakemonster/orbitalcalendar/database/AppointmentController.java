@@ -45,9 +45,9 @@ public class AppointmentController
 
         //Move cursor to the first row of the result, not the table
         cursor.moveToFirst();
-        Appointment newComment = cursorToAppointment(cursor);
+        Appointment newAppt = cursorToAppointment(cursor);
         cursor.close();
-        return newComment;
+        return newAppt;
     }
 
     public void deleteComment(Appointment comment) {

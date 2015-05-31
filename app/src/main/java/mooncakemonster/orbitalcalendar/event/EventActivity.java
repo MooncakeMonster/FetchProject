@@ -22,7 +22,7 @@ public class EventActivity extends Activity {
 
     //Variable for extracting date from incoming intent. Default is current time.
     private Calendar dateTime = Calendar.getInstance();
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd/MM/yyyy");
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy, EEE");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
     private Button beginDate, endDate, beginTime, endTime;
 

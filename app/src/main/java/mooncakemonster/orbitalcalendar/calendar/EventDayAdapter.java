@@ -13,9 +13,6 @@ import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 
-/**
- * Created by BAOJUN on 31/5/15.
- */
 public class EventDayAdapter extends ArrayAdapter{
     private List list = new ArrayList();
 

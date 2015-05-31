@@ -1,8 +1,5 @@
 package mooncakemonster.orbitalcalendar.calendar;
 
-/**
- * Created by BAOJUN on 31/5/15.
- */
 public class EventClass {
 
     private int event_resource;

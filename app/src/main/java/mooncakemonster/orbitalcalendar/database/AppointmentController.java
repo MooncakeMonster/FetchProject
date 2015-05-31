@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class CommentController
+import java.util.Collections;
+
+public class AppointmentController
 {
     // Database fields
     private SQLiteDatabase database;
@@ -30,7 +31,7 @@ public class CommentController
         dbHelper.close();
     }
 
-    public Comment createComment(String event, int date, String location, String notes, String remind) {
+    public Appointment createAppointment(String event, int date, String location, String notes, String remind) {
         ContentValues values = new ContentValues();
         //Insert key-value in ContentValues
         values.put(DatabaseHelper.EVENT, event);
@@ -40,43 +41,48 @@ public class CommentController
         values.put(DatabaseHelper.REMIND, remind);
 
         long insertId = database.insert(DatabaseHelper.DATABASE_NAME, null, values);
-        Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME, allColumns,
-                DatabaseHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
-        //Sort the table after insertion
-        //database.rawQuery()
+        Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME, allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+
+        //Move cursor to the first row of the result, not the table
         cursor.moveToFirst();
-        Comment newComment = cursorToComment(cursor);
+        Appointment newComment = cursorToAppointment(cursor);
         cursor.close();
         return newComment;
     }
 
-    public void deleteComment(Comment comment) {
+    public void deleteComment(Appointment comment) {
         long id = comment.getId();
         System.out.println("Comment deleted with id: " + id);
         database.delete(DatabaseHelper.DATABASE_NAME, DatabaseHelper.COLUMN_ID + " = " + id, null);
     }
 
-    public List<Comment> getAllAppointment() {
-        List<Comment> comments = new ArrayList<Comment>();
+    public List<Appointment> getAllAppointment() {
+        List<Appointment> appointments = new ArrayList<Appointment>();
 
         Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME,allColumns, null, null, null, null, null);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            Comment comment = cursorToComment(cursor);
-            comments.add(comment);
+            Appointment appointment = cursorToAppointment(cursor);
+            appointments.add(appointment);
             cursor.moveToNext();
         }
         // make sure to close the cursor
         cursor.close();
-        return comments;
+        Collections.sort(appointments);
+        return appointments;
     }
 
-    private Comment cursorToComment(Cursor cursor) {
-        Comment comment = new Comment();
-        comment.setId(cursor.getLong(0));
-        comment.setComment(cursor.getString(1));
-        return comment;
-    }
+    private Appointment cursorToAppointment(Cursor cursor) {
+        Appointment appt = new Appointment();
+        //Get values from cursor
+        appt.setId(cursor.getLong(0));
+        appt.setEvent(cursor.getString(1));
+        appt.setDate(cursor.getLong(2));
+        appt.setLocation(cursor.getString(3));
+        appt.setNotes(cursor.getString(4));
+        appt.setRemind(cursor.getInt(5));
 
+        return appt;
+    }
 }

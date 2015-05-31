@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.roomorama.caldroid.CaldroidFragment;
@@ -27,6 +28,13 @@ public class CalendarFragment extends Fragment {
     // caldroid Calendar
     private CaldroidFragment caldroidFragment;
     private FragmentActivity myContext;
+
+    // listview for Events
+    private ListView listView;
+    int[] imgResource = { R.mipmap.red, R.mipmap.red, R.mipmap.red, R.mipmap.red, R.mipmap.red  };
+    String[] eventName = { "BBQ", "Birthday", "Meeting", "Sleep", "Slack" };
+    String[] eventTime = { "1pm", "2pm", "3pm", "4am", "Whole day"};
+
 
     public CalendarFragment(){}
 
@@ -93,6 +101,20 @@ public class CalendarFragment extends Fragment {
         android.support.v4.app.FragmentTransaction t = myContext.getSupportFragmentManager().beginTransaction();
         t.replace(R.id.cal_fragment, caldroidFragment);
         t.commit();
+
+        // listview
+        listView = (ListView) rootView.findViewById(R.id.eventlistView);
+        EventDayAdapter adapter = new EventDayAdapter(getActivity().getApplicationContext(), R.layout.row_layout);
+        listView.setAdapter(adapter);
+
+        int i = 0;
+
+        for(String Name: eventName) {
+            EventClass event = new EventClass(imgResource[i], Name, eventTime[i]);
+            adapter.add(event);
+            i++;
+        }
+
         return rootView;
     }
 

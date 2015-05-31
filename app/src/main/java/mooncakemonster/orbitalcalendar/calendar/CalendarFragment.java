@@ -31,10 +31,9 @@ public class CalendarFragment extends Fragment {
     public CalendarFragment(){}
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
-
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
         //Creating Caldroid calendar here
         //Variable formatter for setting up listener later
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
@@ -51,14 +50,9 @@ public class CalendarFragment extends Fragment {
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
         //Build caldroidFragment with the above information and setting
         caldroidFragment.setArguments(args);
-        //Ensure caldroidFragment will be attached to the activity
-        android.support.v4.app.FragmentTransaction t = myContext.getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.cal_fragment, caldroidFragment);
-        t.commit();
 
         // (2) Setup listener for caldroidFragment
         final CaldroidListener listener = new CaldroidListener() {
-
             @Override
             public void onCaldroidViewCreated() {
                 //Ensure days of the week displayed (e.g. Sun, Mon, Tues,...) are black
@@ -67,7 +61,6 @@ public class CalendarFragment extends Fragment {
                     Toast.makeText(getActivity().getApplicationContext(), "Caldroid view is created", Toast.LENGTH_SHORT).show();
                 }
             }
-
             @Override
             public void onSelectDate(Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
@@ -87,12 +80,22 @@ public class CalendarFragment extends Fragment {
         };
         // Setup Caldroid
         caldroidFragment.setCaldroidListener(listener);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
+        //Ensure caldroidFragment will be attached to the activity
+        android.support.v4.app.FragmentTransaction t = myContext.getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.cal_fragment, caldroidFragment);
+        t.commit();
         return rootView;
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         myContext = (FragmentActivity) activity;
         super.onAttach(activity);
     }

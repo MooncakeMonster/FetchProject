@@ -1,17 +1,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@drawable/clouds"
+    android:background="@android:color/transparent"
     tools:context="mooncakemonster.orbitalcalendar.event.EventActivity">
 
     <!-- Select calendar dates buttons (Start and End) -->
 
     <!-- Event title -->
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/title"
         android:hint="Title"
@@ -20,7 +22,7 @@
 
     <!-- Location -->
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:id="@+id/location"
         android:hint="Location"
@@ -46,7 +48,7 @@
         android:layout_height="50dp"
         android:id="@+id/add"
         android:text="ADD"
-        android:background="@color/caldroid_white"
+        android:background="@android:color/white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -54,7 +56,7 @@
         android:layout_alignEnd="@+id/endT" />
 
     <EditText
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:inputType="textMultiLine"
         android:ems="10"
@@ -70,7 +72,7 @@
         android:text="End Date"
         android:id="@+id/endD"
         android:textSize="18dp"
-        android:background="@color/caldroid_transparent"
+        android:background="@android:color/transparent"
         android:layout_below="@+id/startD"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -83,7 +85,7 @@
         android:text="Start Date"
         android:id="@+id/startD"
         android:textSize="18dp"
-        android:background="@color/caldroid_transparent"
+        android:background="@android:color/transparent"
         android:layout_below="@+id/location"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -96,7 +98,7 @@
         android:text="Start Time"
         android:id="@+id/startT"
         android:textSize="18dp"
-        android:background="@color/caldroid_transparent"
+        android:background="@android:color/transparent"
         android:layout_below="@+id/location"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -107,7 +109,7 @@
         android:text="End Time"
         android:id="@+id/endT"
         android:textSize="18dp"
-        android:background="@color/caldroid_transparent"
+        android:background="@android:color/transparent"
         android:layout_below="@+id/startT"
         android:layout_alignLeft="@+id/startT"
         android:layout_alignStart="@+id/startT" />

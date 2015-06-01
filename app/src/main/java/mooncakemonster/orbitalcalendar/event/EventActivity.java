@@ -5,6 +5,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
 
@@ -24,7 +26,11 @@ public class EventActivity extends Activity {
     private Calendar dateTime = Calendar.getInstance();
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy, EEE");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
-    private Button beginDate, endDate, beginTime, endTime;
+    //Link buttons with the respective id
+    private Button beginDate = (Button) findViewById(R.id.startD);
+    private Button endDate = (Button) findViewById(R.id.endD);
+    private Button beginTime = (Button) findViewById(R.id.startT);
+    private Button endTime = (Button) findViewById(R.id.endT);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,16 +42,12 @@ public class EventActivity extends Activity {
         {
             dateTime.setTimeInMillis(extras.getLong("date_passed", -1L));
         }
+
         setButtonFunction();
     }
 
     // This method sets selected date by user on the button.
     protected Dialog setButtonFunction() {
-        beginDate = (Button) findViewById(R.id.startD);
-        endDate = (Button) findViewById(R.id.endD);
-        beginTime = (Button) findViewById(R.id.startT);
-        endTime = (Button) findViewById(R.id.endT);
-
         beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
         endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
         beginTime.setText(timeFormatter.format(dateTime.getTime()));
@@ -118,13 +120,26 @@ public class EventActivity extends Activity {
         }
     }
 
-    protected void getEditTextInput()
+    protected void getInput()
     {
         final EditText eventInput = (EditText) findViewById(R.id.title);
-        //TODO: DATE PARSING
-        //final EditText dateInput = (EditText) findViewById(R.id.appointmentDate);
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
         final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
+
+        //Data parsing begins here
+        final String event = eventInput.getText().toString();
+        //Begin date and time
+        final String beginD = beginDate.getText().toString();
+        final String beginT = beginTime.getText().toString();
+        Log.i("TIME LOOKS LIKE THIS", "TIME LOOKS LIKE THIS: BeginD => " + beginD + "     BeginT => " + beginT);
+        final long beginEvent;
+        //End date and time
+        final String endD = endDate.getText().toString();
+        final String endT = endTime.getText().toString();
+        final long endEvent;
+        final String location = locationInput.getText().toString();
+        final String notes = notesInput.getText().toString();
+
         //TODO: FIND SUITABLE REPLACMENT FOR EDITTEXT FOR CHECKBOX
         //final EditText remindInput = (EditText) findViewById(R.id.appointmentReminder);
     }

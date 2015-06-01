@@ -11,7 +11,8 @@ public class Appointment implements Comparable<Appointment> {
 
     private long id;
     private String event;
-    private long date;
+    private long startDate;
+    private long endDate;
     private String location;
     private String notes;
     private int remind;
@@ -32,12 +33,20 @@ public class Appointment implements Comparable<Appointment> {
         this.event = event;
     }
 
-    public long getDate() {
-        return date;
+    public long getStartDate() {
+        return startDate;
     }
 
-    public void setDate(Long date) {
-        this.date = date;
+    public void setStartDate(long startDate) {
+        this.startDate = startDate;
+    }
+
+    public long getEndDate(){
+        return endDate;
+    }
+
+    public void setEndDate(long endDate) {
+        this.endDate = endDate;
     }
 
     public String getLocation() {
@@ -71,8 +80,8 @@ public class Appointment implements Comparable<Appointment> {
     }
 
     public int compareTo(@NonNull Appointment that) {
-        if (this.getDate() < that.getDate()) return -1;
-        if (this.getDate() > that.getDate()) return 1;
+        if (this.getStartDate() < that.getStartDate()) return -1;
+        if (this.getStartDate() > that.getStartDate()) return 1;
 
         else
             return this.getEvent().compareTo(that.getEvent());

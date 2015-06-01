@@ -17,7 +17,8 @@ public class AppointmentController
     private DatabaseHelper dbHelper;
     private String[] allColumns = { DatabaseHelper.COLUMN_ID,
                                     DatabaseHelper.EVENT,
-                                    DatabaseHelper.DATE,
+                                    DatabaseHelper.STARTDATE,
+                                    DatabaseHelper.ENDDATE,
                                     DatabaseHelper.LOCATION,
                                     DatabaseHelper.NOTES,
                                     DatabaseHelper.REMIND,
@@ -31,11 +32,12 @@ public class AppointmentController
         dbHelper.close();
     }
 
-    public Appointment createAppointment(String event, int date, String location, String notes, String remind) {
+    public Appointment createAppointment(String event, long startdate, long enddate, String location, String notes, String remind) {
         ContentValues values = new ContentValues();
         //Insert key-value in ContentValues
         values.put(DatabaseHelper.EVENT, event);
-        values.put(DatabaseHelper.DATE, date);
+        values.put(DatabaseHelper.STARTDATE, startdate);
+        values.put(DatabaseHelper.ENDDATE, enddate);
         values.put(DatabaseHelper.LOCATION, location);
         values.put(DatabaseHelper.NOTES, notes);
         values.put(DatabaseHelper.REMIND, remind);
@@ -67,21 +69,23 @@ public class AppointmentController
             appointments.add(appointment);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
+        // Note! Close cursor after use
         cursor.close();
+        //Sort list of appointments
         Collections.sort(appointments);
         return appointments;
     }
 
     private Appointment cursorToAppointment(Cursor cursor) {
         Appointment appt = new Appointment();
-        //Get values from cursor
+        //Get values from cursor to create appointment
         appt.setId(cursor.getLong(0));
         appt.setEvent(cursor.getString(1));
-        appt.setDate(cursor.getLong(2));
-        appt.setLocation(cursor.getString(3));
-        appt.setNotes(cursor.getString(4));
-        appt.setRemind(cursor.getInt(5));
+        appt.setStartDate(cursor.getLong(2));
+        appt.setEndDate(cursor.getLong(3));
+        appt.setLocation(cursor.getString(4));
+        appt.setNotes(cursor.getString(5));
+        appt.setRemind(cursor.getInt(6));
 
         return appt;
     }

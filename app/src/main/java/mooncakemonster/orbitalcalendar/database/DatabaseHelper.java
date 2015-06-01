@@ -13,8 +13,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public static final String COLUMN_ID = "_id";
     //What is this appointment about
     public static final String EVENT = "event";
-    //Date tentatively stored as YYYY-MM-DD HH:MM
-    public static final String DATE = "date";
+    //Date tentatively stored as millisecond
+    public static final String STARTDATE = "startdate";
+    public static final String ENDDATE = "enddate";
     //Where the event is held
     public static final String LOCATION = "location";
     //Miscellaneous notes
@@ -25,7 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + "( " + COLUMN_ID + " INTEGER PRIMARY KEY, "
                                                                                          + EVENT + " TEXT NOT NULL, "
-                                                                                         + DATE + " INTEGER NOT NULL, "
+                                                                                         + STARTDATE + " INTEGER NOT NULL, "
+                                                                                         + ENDDATE + "INTEGER, "
                                                                                          + LOCATION + " TEXT, "
                                                                                          + NOTES + " TEXT, "
                                                                                          + REMIND + " INTEGER NOT NULL"

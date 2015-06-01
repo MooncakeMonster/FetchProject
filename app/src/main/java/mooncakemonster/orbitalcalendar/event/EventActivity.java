@@ -116,10 +116,11 @@ public class EventActivity extends Activity {
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.addAppointmentButton:
+                insertInDatabase();
         }
     }
 
-    protected void getInput()
+    protected void insertInDatabase()
     {
         final EditText eventInput = (EditText) findViewById(R.id.title);
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);

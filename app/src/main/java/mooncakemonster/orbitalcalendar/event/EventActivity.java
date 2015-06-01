@@ -23,13 +23,13 @@ public class EventActivity extends Activity {
 
     //Variable for extracting date from incoming intent. Default is current time.
     private Calendar dateTime = Calendar.getInstance();
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd MMM yyyy, EEE");
-    private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+    //Standardize string input for date and time formatting
+    private String dateFormat = "dd MMM yyyy, EEE";
+    private String timeFormat = "hh:mm a";
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
+    private SimpleDateFormat timeFormatter = new SimpleDateFormat(timeFormat);
     //Link buttons with the respective id
-    private Button beginDate = (Button) findViewById(R.id.startD);
-    private Button endDate = (Button) findViewById(R.id.endD);
-    private Button beginTime = (Button) findViewById(R.id.startT);
-    private Button endTime = (Button) findViewById(R.id.endT);
+    private Button beginDate, endDate, beginTime, endTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,11 @@ public class EventActivity extends Activity {
 
     // This method sets selected date by user on the button.
     protected Dialog setButtonFunction() {
+        beginDate = (Button) findViewById(R.id.startD);
+        endDate = (Button) findViewById(R.id.endD);
+        beginTime = (Button) findViewById(R.id.startT);
+        endTime = (Button) findViewById(R.id.endT);
+
         beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
         endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
         beginTime.setText(timeFormatter.format(dateTime.getTime()));
@@ -117,6 +122,7 @@ public class EventActivity extends Activity {
         switch (view.getId()) {
             case R.id.addAppointmentButton:
                 insertInDatabase();
+                break;
         }
     }
 
@@ -126,22 +132,38 @@ public class EventActivity extends Activity {
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
         final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
 
+        if(beginDate == null || beginTime == null || endDate == null || endTime == null)
+        {
+            beginDate = (Button) findViewById(R.id.startD);
+            endDate = (Button) findViewById(R.id.endD);
+            beginTime = (Button) findViewById(R.id.startT);
+            endTime = (Button) findViewById(R.id.endT);
+        }
+
         //Data parsing begins here
         final String event = eventInput.getText().toString();
-        //Begin date and time
+        //Formatter for use later
+        final SimpleDateFormat formatter;
+        //Begin date and time. Format as e.g. 08 Jun 2015, Mon & 09:00 PM respectively
+        //TODO: PARSE DATE AND TIME INTO MILLISECOND
         final String beginD = beginDate.getText().toString();
+        //TODO: CONVERT beginD to Appointment.java's startProperDate format YYYY-MM-DD
         final String beginT = beginTime.getText().toString();
-        Log.i("TIME LOOKS LIKE THIS", "TIME LOOKS LIKE THIS: BeginD => " + beginD + "     BeginT => " + beginT);
+        Calendar begin = Calendar.getInstance();
         final long beginEvent;
         //End date and time
+        //TODO: PARSE DATE AND TIME INTO MILLISECOND
         final String endD = endDate.getText().toString();
         final String endT = endTime.getText().toString();
+        Calendar end = Calendar.getInstance();
         final long endEvent;
         final String location = locationInput.getText().toString();
         final String notes = notesInput.getText().toString();
 
-        //TODO: FIND SUITABLE REPLACMENT FOR EDITTEXT FOR CHECKBOX
-        //final EditText remindInput = (EditText) findViewById(R.id.appointmentReminder);
+        //TODO: EVERY N DAY/WEEK/MONTH/YEAR
+        //BULK INSERT INTO DATABASE
+
+        //TODO: REMINDER - PARSE INTO DATE (NEXT: SET "DAEMON" FOR REMINDER)
     }
 
     @Override

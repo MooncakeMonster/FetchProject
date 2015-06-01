@@ -33,7 +33,5 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_event">Create New Event</string>
 </resources>

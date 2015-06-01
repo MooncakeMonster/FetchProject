@@ -17,6 +17,7 @@ public class AppointmentController
     private DatabaseHelper dbHelper;
     private String[] allColumns = { DatabaseHelper.COLUMN_ID,
                                     DatabaseHelper.EVENT,
+                                    DatabaseHelper.STARTPROPERDATE,
                                     DatabaseHelper.STARTDATE,
                                     DatabaseHelper.ENDDATE,
                                     DatabaseHelper.LOCATION,
@@ -32,10 +33,11 @@ public class AppointmentController
         dbHelper.close();
     }
 
-    public Appointment createAppointment(String event, long startdate, long enddate, String location, String notes, String remind) {
+    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, String remind) {
         ContentValues values = new ContentValues();
         //Insert key-value in ContentValues
         values.put(DatabaseHelper.EVENT, event);
+        values.put(DatabaseHelper.STARTPROPERDATE, startproperdate);
         values.put(DatabaseHelper.STARTDATE, startdate);
         values.put(DatabaseHelper.ENDDATE, enddate);
         values.put(DatabaseHelper.LOCATION, location);
@@ -81,11 +83,12 @@ public class AppointmentController
         //Get values from cursor to create appointment
         appt.setId(cursor.getLong(0));
         appt.setEvent(cursor.getString(1));
-        appt.setStartDate(cursor.getLong(2));
-        appt.setEndDate(cursor.getLong(3));
-        appt.setLocation(cursor.getString(4));
-        appt.setNotes(cursor.getString(5));
-        appt.setRemind(cursor.getInt(6));
+        appt.setStartProperDate(cursor.getString(2));
+        appt.setStartDate(cursor.getLong(3));
+        appt.setEndDate(cursor.getLong(4));
+        appt.setLocation(cursor.getString(5));
+        appt.setNotes(cursor.getString(6));
+        appt.setRemind(cursor.getInt(7));
 
         return appt;
     }

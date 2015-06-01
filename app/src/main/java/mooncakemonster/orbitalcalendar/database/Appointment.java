@@ -11,6 +11,7 @@ public class Appointment implements Comparable<Appointment> {
 
     private long id;
     private String event;
+    private String startProperDate;
     private long startDate;
     private long endDate;
     private String location;
@@ -31,6 +32,14 @@ public class Appointment implements Comparable<Appointment> {
 
     public void setEvent(String event) {
         this.event = event;
+    }
+
+    public String getStartProperDate(){
+        return startProperDate;
+    }
+
+    public void setStartProperDate(String startProperDate) {
+        this.startProperDate = startProperDate;
     }
 
     public long getStartDate() {

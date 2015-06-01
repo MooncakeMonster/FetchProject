@@ -30,18 +30,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/title" />
 
-    <!-- Reminder checkbox -->
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Remind me"
-        android:id="@+id/appointmentReminder"
-        android:layout_above="@+id/addAppointmentButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <!-- Add and invite buttons -->
-    <!--Add button-->
+    <!-- Add button -->
     <Button
         android:layout_width="130dp"
         android:layout_height="50dp"
@@ -56,16 +45,6 @@
         android:onClick="onClick" />
 
     <!--Notes-->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/appointmentNotes"
-        android:hint="Notes"
-        android:layout_below="@+id/endD"
-        android:layout_alignRight="@+id/endT"
-        android:layout_alignEnd="@+id/endT" />
 
     <!--Start and End Date-->
     <Button
@@ -116,5 +95,91 @@
         android:layout_below="@+id/startT"
         android:layout_alignLeft="@+id/startT"
         android:layout_alignStart="@+id/startT" />
+
+    <!-- Checkbox to select range of days/week/month for event -->
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Every"
+        android:id="@+id/checkBox"
+        android:textSize="18dp"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    <!-- Reminder checkbox -->
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Remind me"
+        android:textSize="18dp"
+        android:id="@+id/checkBox3"
+        android:checked="false"
+        android:layout_below="@+id/checkBox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="3"
+        android:id="@+id/button"
+        android:textSize="18dp"
+        android:background="@android:color/transparent"
+        android:layout_alignBottom="@+id/checkBox3"
+        android:layout_toRightOf="@+id/checkBox3"
+        android:layout_toEndOf="@+id/checkBox3" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="mins before event"
+        android:id="@+id/button2"
+        android:textSize="18dp"
+        android:background="@android:color/transparent"
+        android:layout_alignTop="@+id/button"
+        android:layout_toRightOf="@+id/button"
+        android:layout_toEndOf="@+id/button" />
+
+    <!-- Every button -->
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="5"
+        android:id="@+id/button3"
+        android:textSize="18dp"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/endD"
+        android:layout_toRightOf="@+id/checkBox3"
+        android:layout_toEndOf="@+id/checkBox3" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="months"
+        android:id="@+id/weeks"
+        android:textSize="18dp"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/endD"
+        android:layout_alignLeft="@+id/button2"
+        android:layout_alignStart="@+id/button2" />
+
+    <!-- Notes -->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:inputType="textMultiLine"
+        android:ems="10"
+        android:id="@+id/editText"
+        android:hint="Notes"
+        android:layout_below="@+id/checkBox3"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

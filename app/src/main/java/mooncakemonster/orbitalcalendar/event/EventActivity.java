@@ -124,7 +124,7 @@ public class EventActivity extends Activity {
         //TODO: DATE PARSING
         //final EditText dateInput = (EditText) findViewById(R.id.appointmentDate);
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
-        final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
+        //final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
         //TODO: FIND SUITABLE REPLACMENT FOR EDITTEXT FOR CHECKBOX
         //final EditText remindInput = (EditText) findViewById(R.id.appointmentReminder);
     }

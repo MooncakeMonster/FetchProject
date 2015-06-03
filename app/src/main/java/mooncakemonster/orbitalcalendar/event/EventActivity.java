@@ -28,7 +28,7 @@ public class EventActivity extends Activity {
 
     //Variable for extracting date from incoming intent. Default is current time.
     private Calendar dateTime = Calendar.getInstance();
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd/MM/yyyy");
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy, EEE");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
     private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
 
@@ -37,7 +37,7 @@ public class EventActivity extends Activity {
     AlertDialog.Builder alertBw1, alertBw2;
     AlertDialog alertDw1, alertDw2;
 
-    CharSequence[] everyWheel = { "day", "week", "month", "year"};
+    CharSequence[] everyWheel = { "day event", "week event", "month event", "year event"};
     CharSequence[] remindWheel = { "min before event", "hour before event", "day before event" };
 
     @Override
@@ -63,10 +63,13 @@ public class EventActivity extends Activity {
         beginTime = (Button) findViewById(R.id.startT);
         endTime = (Button) findViewById(R.id.endT);
 
-        beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
-        endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
-        beginTime.setText(timeFormatter.format(dateTime.getTime()));
-        endTime.setText(timeFormatter.format(dateTime.getTime()));
+        final String dateFormat = dateFormatter.format(dateTime.getTime());
+        final String timeFormat = timeFormatter.format(dateTime.getTime());
+
+        beginDate.setText("From     " + dateFormat);
+        endDate.setText("To         " + dateFormat);
+        beginTime.setText(timeFormat);
+        endTime.setText(timeFormat);
 
         beginDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,10 +78,10 @@ public class EventActivity extends Activity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         dateTime.set(year, monthOfYear, dayOfMonth);
-                        beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
+                        beginDate.setText("From     " + dateFormat);
                     }
                 }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
-                //date.setTitle(dateFormatter.format(dateTime.getTime()));
+                date.setTitle(dateFormat);
                 date.show();
             }
         });
@@ -90,10 +93,10 @@ public class EventActivity extends Activity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         dateTime.set(year, monthOfYear, dayOfMonth);
-                        endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
+                        endDate.setText("To         " + dateFormat);
                     }
                 }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
-                //date.setTitle(dateFormatter.format(dateTime.getTime()));
+                date.setTitle(dateFormat);
                 date.show();
             }
         });
@@ -106,10 +109,10 @@ public class EventActivity extends Activity {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         dateTime.set(Calendar.MINUTE, minute);
-                        beginTime.setText(timeFormatter.format(dateTime.getTime()));
+                        beginTime.setText(timeFormat);
                     }
                 }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
-                time.setTitle(timeFormatter.format(dateTime.getTime()));
+                time.setTitle(timeFormat);
                 time.show();
             }
         });
@@ -122,10 +125,10 @@ public class EventActivity extends Activity {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         dateTime.set(Calendar.MINUTE, minute);
-                        endTime.setText(timeFormatter.format(dateTime.getTime()));
+                        endTime.setText(timeFormat);
                     }
                 }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
-                time.setTitle(timeFormatter.format(dateTime.getTime()));
+                time.setTitle(timeFormat);
                 time.show();
             }
         });
@@ -140,7 +143,7 @@ public class EventActivity extends Activity {
         remindBox = (Button) findViewById(R.id.remindweek);
 
         everyNum.setText("1");
-        everyBox.setText("day");
+        everyBox.setText("day event");
         remindNum.setText("1");
         remindBox.setText("min before event");
 
@@ -168,10 +171,10 @@ public class EventActivity extends Activity {
                 build1.setSingleChoiceItems(everyWheel, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(!everyNum.getText().equals("1") && which == 0) everyBox.setText("days");
-                        else if(!everyNum.getText().equals("1") && which == 1) everyBox.setText("weeks");
-                        else if(!everyNum.getText().equals("1") && which == 2) everyBox.setText("months");
-                        else if(!everyNum.getText().equals("1") && which == 3) everyBox.setText("years");
+                        if(!everyNum.getText().equals("1") && which == 0) everyBox.setText("days event");
+                        else if(!everyNum.getText().equals("1") && which == 1) everyBox.setText("weeks event");
+                        else if(!everyNum.getText().equals("1") && which == 2) everyBox.setText("months event");
+                        else if(!everyNum.getText().equals("1") && which == 3) everyBox.setText("years event");
                         else everyBox.setText(everyWheel[which]);
                     }
                 }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -251,15 +254,16 @@ public class EventActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 everyNum.setText(Integer.toString(numberPicker.getValue()));
-                if(everyNum.equals("1") && everyBox.getText().equals("days")) everyBox.setText("day");
-                else if(everyNum.equals("1") && everyBox.getText().equals("weeks")) everyBox.setText("week");
-                else if(everyNum.equals("1") && everyBox.getText().equals("months")) everyBox.setText("month");
-                else if(everyNum.equals("1") && everyBox.getText().equals("years")) everyBox.setText("year");
+                //TODO: When user choose 1, remove 's' doesn't work
+                if(everyNum.equals("1") && everyBox.getText().equals("days event")) everyBox.setText("day event");
+                else if(everyNum.equals("1") && everyBox.getText().equals("weeks event")) everyBox.setText("week event");
+                else if(everyNum.equals("1") && everyBox.getText().equals("months event")) everyBox.setText("month event");
+                else if(everyNum.equals("1") && everyBox.getText().equals("years event")) everyBox.setText("year event");
 
-                else if(!everyNum.equals("1") && everyBox.getText().equals("day")) everyBox.setText("days");
-                else if(!everyNum.equals("1") && everyBox.getText().equals("week")) everyBox.setText("weeks");
-                else if(!everyNum.equals("1") && everyBox.getText().equals("month")) everyBox.setText("months");
-                else if(!everyNum.equals("1") && everyBox.getText().equals("year")) everyBox.setText("years");
+                else if(!everyNum.equals("1") && everyBox.getText().equals("day event")) everyBox.setText("days event");
+                else if(!everyNum.equals("1") && everyBox.getText().equals("week event")) everyBox.setText("weeks event");
+                else if(!everyNum.equals("1") && everyBox.getText().equals("month event")) everyBox.setText("months event");
+                else if(!everyNum.equals("1") && everyBox.getText().equals("year event")) everyBox.setText("years event");
                 dialog.dismiss();
             }
         });
@@ -298,6 +302,7 @@ public class EventActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 remindNum.setText(Integer.toString(numberPicker.getValue()));
+                //TODO: When user choose 1, remove 's' doesn't work
                 if(remindNum.equals("1") && remindBox.getText().equals("mins before event")) remindBox.setText("min before event");
                 else if(remindNum.equals("1") && remindBox.getText().equals("hours before event")) remindBox.setText("hour before event");
                 else if(remindNum.equals("1") && remindBox.getText().equals("days before event")) remindBox.setText("day before event");

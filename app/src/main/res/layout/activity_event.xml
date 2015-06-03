@@ -161,7 +161,7 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="months"
+        android:text="days event"
         android:id="@+id/everyweek"
         android:textSize="18dp"
         android:background="@android:color/transparent"

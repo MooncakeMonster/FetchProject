@@ -1,9 +1,12 @@
 package mooncakemonster.orbitalcalendar.event;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
 import java.text.SimpleDateFormat;
@@ -23,13 +28,14 @@ public class EventActivity extends Activity {
 
     //Variable for extracting date from incoming intent. Default is current time.
     private Calendar dateTime = Calendar.getInstance();
-    //Standardize string input for date and time formatting
-    private String dateFormat = "dd MMM yyyy, EEE";
-    private String timeFormat = "hh:mm a";
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat(dateFormat);
-    private SimpleDateFormat timeFormatter = new SimpleDateFormat(timeFormat);
-    //Link buttons with the respective id
-    private Button beginDate, endDate, beginTime, endTime;
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy, EEE");
+    private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+    private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
+
+    final Context context = this;
+    NumberPicker numberPicker;
+    AlertDialog.Builder alertBw1, alertBw2;
+    AlertDialog alertDw1, alertDw2;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,12 +47,14 @@ public class EventActivity extends Activity {
         {
             dateTime.setTimeInMillis(extras.getLong("date_passed", -1L));
         }
-
         setButtonFunction();
+        setCheckBoxFunction();
     }
 
     // This method sets selected date by user on the button.
     protected Dialog setButtonFunction() {
+
+        // NullPointer if the following is not coded in this method:
         beginDate = (Button) findViewById(R.id.startD);
         endDate = (Button) findViewById(R.id.endD);
         beginTime = (Button) findViewById(R.id.startT);
@@ -118,11 +126,111 @@ public class EventActivity extends Activity {
         return null;
     }
 
+    public void setCheckBoxFunction() {
+        everyNum = (Button) findViewById(R.id.everynum);
+        everyBox = (Button) findViewById(R.id.everyweek);
+        remindNum = (Button) findViewById(R.id.remindnum);
+        remindBox = (Button) findViewById(R.id.remindweek);
+
+        everyNum.setText("1");
+        everyBox.setText("day");
+        remindNum.setText("1");
+        remindBox.setText("min before event");
+
+        everyNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAlert1();
+                alertDw1.show();
+            }
+        });
+
+        remindNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAlert2();
+                alertDw2.show();
+            }
+        });
+    }
+
+    // This method opens dialog for everyNum button.
+    private void setAlert1() {
+        //TODO: Reduce similar codes as compared to setAlert2()
+        numberPicker = new NumberPicker(context);
+        numberPicker.setClickable(false);
+        numberPicker.setEnabled(true);
+        numberPicker.setWrapSelectorWheel(true);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(100);
+
+        final RelativeLayout linearLayout = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
+        RelativeLayout.LayoutParams numPickerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        numPickerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        linearLayout.setLayoutParams(params);
+        linearLayout.addView(numberPicker, numPickerParams);
+        linearLayout.isClickable();
+
+        alertBw1 = new AlertDialog.Builder(context);
+        alertBw1.setView(linearLayout);
+
+        alertBw1.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                everyNum.setText(Integer.toString(numberPicker.getValue()));
+                dialog.dismiss();
+            }
+        });
+
+        alertDw1 = alertBw1.create();
+    }
+
+    // This method opens dialog for remindNum button.
+    private void setAlert2() {
+        //TODO: Reduce similar codes as compared to setAlert1()
+        numberPicker = new NumberPicker(context);
+        numberPicker.setClickable(false);
+        numberPicker.setEnabled(true);
+        numberPicker.setWrapSelectorWheel(true);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(100);
+
+        final RelativeLayout linearLayout = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
+        RelativeLayout.LayoutParams numPickerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        numPickerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        linearLayout.setLayoutParams(params);
+        linearLayout.addView(numberPicker, numPickerParams);
+        linearLayout.isClickable();
+
+        alertBw2 = new AlertDialog.Builder(context);
+        alertBw2.setView(linearLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                remindNum.setText(Integer.toString(numberPicker.getValue()));
+                dialog.dismiss();
+            }
+        });
+
+        alertDw2 = alertBw2.create();
+    }
+
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.addAppointmentButton:
-                insertInDatabase();
-                break;
         }
     }
 
@@ -132,38 +240,22 @@ public class EventActivity extends Activity {
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
         final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
 
-        if(beginDate == null || beginTime == null || endDate == null || endTime == null)
-        {
-            beginDate = (Button) findViewById(R.id.startD);
-            endDate = (Button) findViewById(R.id.endD);
-            beginTime = (Button) findViewById(R.id.startT);
-            endTime = (Button) findViewById(R.id.endT);
-        }
-
         //Data parsing begins here
         final String event = eventInput.getText().toString();
-        //Formatter for use later
-        final SimpleDateFormat formatter;
-        //Begin date and time. Format as e.g. 08 Jun 2015, Mon & 09:00 PM respectively
-        //TODO: PARSE DATE AND TIME INTO MILLISECOND
+        //Begin date and time
         final String beginD = beginDate.getText().toString();
-        //TODO: CONVERT beginD to Appointment.java's startProperDate format YYYY-MM-DD
         final String beginT = beginTime.getText().toString();
-        Calendar begin = Calendar.getInstance();
+        Log.i("TIME LOOKS LIKE THIS", "TIME LOOKS LIKE THIS: BeginD => " + beginD + "     BeginT => " + beginT);
         final long beginEvent;
         //End date and time
-        //TODO: PARSE DATE AND TIME INTO MILLISECOND
         final String endD = endDate.getText().toString();
         final String endT = endTime.getText().toString();
-        Calendar end = Calendar.getInstance();
         final long endEvent;
         final String location = locationInput.getText().toString();
         final String notes = notesInput.getText().toString();
 
-        //TODO: EVERY N DAY/WEEK/MONTH/YEAR
-        //BULK INSERT INTO DATABASE
-
-        //TODO: REMINDER - PARSE INTO DATE (NEXT: SET "DAEMON" FOR REMINDER)
+        //TODO: FIND SUITABLE REPLACMENT FOR EDITTEXT FOR CHECKBOX
+        //final EditText remindInput = (EditText) findViewById(R.id.appointmentReminder);
     }
 
     @Override

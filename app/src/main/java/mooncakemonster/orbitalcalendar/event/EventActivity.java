@@ -18,31 +18,27 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.database.AppointmentController;
 
 public class EventActivity extends Activity {
 
     //Variable for extracting date from incoming intent. Default is current time.
     private Calendar dateTime = Calendar.getInstance();
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy, EEE");
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("EEE, dd/MM/yyyy");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
     private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
-
-    //AppointmentController variable to control the SQLite database
-    private AppointmentController appointmentDatabase;
 
     final Context context = this;
     NumberPicker numberPicker;
     AlertDialog.Builder alertBw1, alertBw2;
     AlertDialog alertDw1, alertDw2;
+
+    CharSequence[] everyWheel = { "day", "week", "month", "year"};
+    CharSequence[] remindWheel = { "min before event", "hour before event", "day before event" };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,8 +52,6 @@ public class EventActivity extends Activity {
         }
         setButtonFunction();
         setCheckBoxFunction();
-
-        appointmentDatabase = new AppointmentController(this);
     }
 
     // This method sets selected date by user on the button.
@@ -77,13 +71,14 @@ public class EventActivity extends Activity {
         beginDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog date = new DatePickerDialog(EventActivity.this, new DatePickerDialog.OnDateSetListener() {
+                final DatePickerDialog date = new DatePickerDialog(EventActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         dateTime.set(year, monthOfYear, dayOfMonth);
                         beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
+                //date.setTitle(dateFormatter.format(dateTime.getTime()));
                 date.show();
             }
         });
@@ -98,6 +93,7 @@ public class EventActivity extends Activity {
                         endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
+                //date.setTitle(dateFormatter.format(dateTime.getTime()));
                 date.show();
             }
         });
@@ -113,6 +109,7 @@ public class EventActivity extends Activity {
                         beginTime.setText(timeFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
+                time.setTitle(timeFormatter.format(dateTime.getTime()));
                 time.show();
             }
         });
@@ -128,6 +125,7 @@ public class EventActivity extends Activity {
                         endTime.setText(timeFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
+                time.setTitle(timeFormatter.format(dateTime.getTime()));
                 time.show();
             }
         });
@@ -161,6 +159,65 @@ public class EventActivity extends Activity {
                 alertDw2.show();
             }
         });
+
+        everyBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder build1 = new AlertDialog.Builder(EventActivity.this);
+                build1.setTitle("Select type");
+                build1.setSingleChoiceItems(everyWheel, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(!everyNum.getText().equals("1") && which == 0) everyBox.setText("days");
+                        else if(!everyNum.getText().equals("1") && which == 1) everyBox.setText("weeks");
+                        else if(!everyNum.getText().equals("1") && which == 2) everyBox.setText("months");
+                        else if(!everyNum.getText().equals("1") && which == 3) everyBox.setText("years");
+                        else everyBox.setText(everyWheel[which]);
+                    }
+                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog d1 = build1.create();
+                d1.show();
+            }
+        });
+
+        remindBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder build2 = new AlertDialog.Builder(EventActivity.this);
+                build2.setTitle("Select type");
+                build2.setSingleChoiceItems(remindWheel, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(!remindNum.getText().equals("1") && which == 0) remindBox.setText("mins before event");
+                        else if(!remindNum.getText().equals("1") && which == 1) remindBox.setText("hours before event");
+                        else if(!remindNum.getText().equals("1") && which == 2) remindBox.setText("days before event");
+                        else remindBox.setText(remindWheel[which]);
+                    }
+                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog d2 = build2.create();
+                d2.show();
+            }
+        });
     }
 
     // This method opens dialog for everyNum button.
@@ -183,9 +240,9 @@ public class EventActivity extends Activity {
         linearLayout.isClickable();
 
         alertBw1 = new AlertDialog.Builder(context);
-        alertBw1.setView(linearLayout);
+        alertBw1.setTitle("Select number");
 
-        alertBw1.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        alertBw1.setView(linearLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -194,6 +251,15 @@ public class EventActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 everyNum.setText(Integer.toString(numberPicker.getValue()));
+                if(everyNum.equals("1") && everyBox.getText().equals("days")) everyBox.setText("day");
+                else if(everyNum.equals("1") && everyBox.getText().equals("weeks")) everyBox.setText("week");
+                else if(everyNum.equals("1") && everyBox.getText().equals("months")) everyBox.setText("month");
+                else if(everyNum.equals("1") && everyBox.getText().equals("years")) everyBox.setText("year");
+
+                else if(!everyNum.equals("1") && everyBox.getText().equals("day")) everyBox.setText("days");
+                else if(!everyNum.equals("1") && everyBox.getText().equals("week")) everyBox.setText("weeks");
+                else if(!everyNum.equals("1") && everyBox.getText().equals("month")) everyBox.setText("months");
+                else if(!everyNum.equals("1") && everyBox.getText().equals("year")) everyBox.setText("years");
                 dialog.dismiss();
             }
         });
@@ -221,6 +287,8 @@ public class EventActivity extends Activity {
         linearLayout.isClickable();
 
         alertBw2 = new AlertDialog.Builder(context);
+        alertBw2.setTitle("Select number");
+
         alertBw2.setView(linearLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -230,6 +298,13 @@ public class EventActivity extends Activity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 remindNum.setText(Integer.toString(numberPicker.getValue()));
+                if(remindNum.equals("1") && remindBox.getText().equals("mins before event")) remindBox.setText("min before event");
+                else if(remindNum.equals("1") && remindBox.getText().equals("hours before event")) remindBox.setText("hour before event");
+                else if(remindNum.equals("1") && remindBox.getText().equals("days before event")) remindBox.setText("day before event");
+
+                else if(!remindNum.equals("1") && remindBox.getText().equals("min before event")) remindBox.setText("mins before event");
+                else if(!remindNum.equals("1") && remindBox.getText().equals("hour before event")) remindBox.setText("hours before event");
+                else if(!remindNum.equals("1") && remindBox.getText().equals("day before event")) remindBox.setText("days before event");
                 dialog.dismiss();
             }
         });
@@ -240,15 +315,6 @@ public class EventActivity extends Activity {
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.addAppointmentButton:
-                appointmentDatabase.open();
-                insertInDatabase();
-                //Close AppointmentController properly
-                appointmentDatabase.close();
-                appointmentDatabase = null;
-                //Inform user that appointment has been created and return to previous activity
-                Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
-                finish();
-                break;
         }
     }
 
@@ -258,83 +324,22 @@ public class EventActivity extends Activity {
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
         final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
 
-        if(beginDate == null || beginTime == null || endDate == null || endTime == null)
-        {
-            beginDate = (Button) findViewById(R.id.startD);
-            endDate = (Button) findViewById(R.id.endD);
-            beginTime = (Button) findViewById(R.id.startT);
-            endTime = (Button) findViewById(R.id.endT);
-        }
-
         //Data parsing begins here
         final String event = eventInput.getText().toString();
-        //Formatter for use later
-        final SimpleDateFormat formatter;
-        //Begin date and time. Format as e.g. 08 Jun 2015, Mon & 09:00 PM respectively
+        //Begin date and time
         final String beginD = beginDate.getText().toString();
         final String beginT = beginTime.getText().toString();
-        final long beginEventMillisecond = stringToMillisecond(beginD, beginT);
-
-        final String startProperDate = standardYearMonthDate(beginD, dateFormatter);
-
+        Log.i("TIME LOOKS LIKE THIS", "TIME LOOKS LIKE THIS: BeginD => " + beginD + "     BeginT => " + beginT);
+        final long beginEvent;
         //End date and time
         final String endD = endDate.getText().toString();
         final String endT = endTime.getText().toString();
-        final long endEventMillisecond = stringToMillisecond(endD, endT);
-
+        final long endEvent;
         final String location = locationInput.getText().toString();
         final String notes = notesInput.getText().toString();
 
-        //TODO: EVERY N DAY/WEEK/MONTH/YEAR
-        //BULK INSERT INTO DATABASE
-
-        //TODO: REMINDER - PARSE INTO DATE (NEXT: SET "DAEMON" FOR REMINDER)
-        int remind = 5;
-
-        //Insert into database
-        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind);
-    }
-
-    //Helper method to change strings to the corresponding millisecond
-    private long stringToMillisecond(String date, String time)
-    {
-        try
-        {
-            //Try-catch block placed here to prevent 'Unhandled ParseException' error
-            Date tempTime = timeFormatter.parse(time);
-            Date tempDate = dateFormatter.parse(date);
-            Calendar cal = Calendar.getInstance();
-            cal.set(
-                    tempDate.getYear(), tempDate.getMonth(), tempDate.getDay(),
-                    tempTime.getHours(), tempTime.getMinutes(), tempTime.getSeconds()
-            );
-
-            return cal.getTimeInMillis();
-        }
-        catch(ParseException e)
-        {
-            e.printStackTrace();
-        }
-
-        //Should not reach here
-        return -1;
-    }
-
-    //Helper method for converting date format to YYYY-MM-DD
-    private String standardYearMonthDate(String date, SimpleDateFormat formatter)
-    {
-        SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
-        try
-        {
-            Date tempDate = formatter.parse(date);
-            return standardFormat.format(tempDate);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        //Should not reach here
-        return "";
+        //TODO: FIND SUITABLE REPLACMENT FOR EDITTEXT FOR CHECKBOX
+        //final EditText remindInput = (EditText) findViewById(R.id.appointmentReminder);
     }
 
     @Override
@@ -357,16 +362,5 @@ public class EventActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-        if(appointmentDatabase != null)
-        {
-            appointmentDatabase.close();
-            appointmentDatabase = null;
-        }
     }
 }

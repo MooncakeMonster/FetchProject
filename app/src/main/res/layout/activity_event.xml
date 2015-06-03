@@ -26,7 +26,9 @@
         android:hint="Location"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/title" />
+        android:layout_below="@+id/title"
+        android:layout_alignRight="@+id/title"
+        android:layout_alignEnd="@+id/title" />
 
     <!-- Add button -->
     <Button
@@ -94,18 +96,6 @@
         android:layout_alignLeft="@+id/startT"
         android:layout_alignStart="@+id/startT" />
 
-    <!-- Checkbox to select range of days/week/month for event -->
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Every"
-        android:id="@+id/checkBox"
-        android:textSize="18dp"
-        android:layout_alignBottom="@+id/everynum"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-
     <!-- Reminder checkbox -->
 
     <CheckBox
@@ -119,7 +109,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <!-- Remind button -->
+    <!-- Reminder button -->
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -143,6 +133,17 @@
         android:layout_alignTop="@+id/remindnum"
         android:layout_toRightOf="@+id/remindnum"
         android:layout_toEndOf="@+id/remindnum" />
+
+    <!-- Checkbox to select range of days/week/month for event -->
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:text="Every"
+        android:id="@+id/checkBox"
+        android:textSize="18dp"
+        android:layout_alignBottom="@+id/everynum"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <!-- Every button -->
     <Button

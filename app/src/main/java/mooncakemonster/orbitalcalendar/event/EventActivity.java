@@ -18,11 +18,15 @@ import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.database.AppointmentController;
 
 public class EventActivity extends Activity {
 
@@ -31,6 +35,9 @@ public class EventActivity extends Activity {
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy, EEE");
     private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
     private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
+
+    //AppointmentController variable to control the SQLite database
+    private AppointmentController appointmentDatabase;
 
     final Context context = this;
     NumberPicker numberPicker;
@@ -49,6 +56,8 @@ public class EventActivity extends Activity {
         }
         setButtonFunction();
         setCheckBoxFunction();
+
+        appointmentDatabase = new AppointmentController(this);
     }
 
     // This method sets selected date by user on the button.
@@ -231,6 +240,15 @@ public class EventActivity extends Activity {
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.addAppointmentButton:
+                appointmentDatabase.open();
+                insertInDatabase();
+                //Close AppointmentController properly
+                appointmentDatabase.close();
+                appointmentDatabase = null;
+                //Inform user that appointment has been created and return to previous activity
+                Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
+                finish();
+                break;
         }
     }
 
@@ -240,22 +258,83 @@ public class EventActivity extends Activity {
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
         final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
 
+        if(beginDate == null || beginTime == null || endDate == null || endTime == null)
+        {
+            beginDate = (Button) findViewById(R.id.startD);
+            endDate = (Button) findViewById(R.id.endD);
+            beginTime = (Button) findViewById(R.id.startT);
+            endTime = (Button) findViewById(R.id.endT);
+        }
+
         //Data parsing begins here
         final String event = eventInput.getText().toString();
-        //Begin date and time
+        //Formatter for use later
+        final SimpleDateFormat formatter;
+        //Begin date and time. Format as e.g. 08 Jun 2015, Mon & 09:00 PM respectively
         final String beginD = beginDate.getText().toString();
         final String beginT = beginTime.getText().toString();
-        Log.i("TIME LOOKS LIKE THIS", "TIME LOOKS LIKE THIS: BeginD => " + beginD + "     BeginT => " + beginT);
-        final long beginEvent;
+        final long beginEventMillisecond = stringToMillisecond(beginD, beginT);
+
+        final String startProperDate = standardYearMonthDate(beginD, dateFormatter);
+
         //End date and time
         final String endD = endDate.getText().toString();
         final String endT = endTime.getText().toString();
-        final long endEvent;
+        final long endEventMillisecond = stringToMillisecond(endD, endT);
+
         final String location = locationInput.getText().toString();
         final String notes = notesInput.getText().toString();
 
-        //TODO: FIND SUITABLE REPLACMENT FOR EDITTEXT FOR CHECKBOX
-        //final EditText remindInput = (EditText) findViewById(R.id.appointmentReminder);
+        //TODO: EVERY N DAY/WEEK/MONTH/YEAR
+        //BULK INSERT INTO DATABASE
+
+        //TODO: REMINDER - PARSE INTO DATE (NEXT: SET "DAEMON" FOR REMINDER)
+        int remind = 5;
+
+        //Insert into database
+        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind);
+    }
+
+    //Helper method to change strings to the corresponding millisecond
+    private long stringToMillisecond(String date, String time)
+    {
+        try
+        {
+            //Try-catch block placed here to prevent 'Unhandled ParseException' error
+            Date tempTime = timeFormatter.parse(time);
+            Date tempDate = dateFormatter.parse(date);
+            Calendar cal = Calendar.getInstance();
+            cal.set(
+                    tempDate.getYear(), tempDate.getMonth(), tempDate.getDay(),
+                    tempTime.getHours(), tempTime.getMinutes(), tempTime.getSeconds()
+            );
+
+            return cal.getTimeInMillis();
+        }
+        catch(ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        //Should not reach here
+        return -1;
+    }
+
+    //Helper method for converting date format to YYYY-MM-DD
+    private String standardYearMonthDate(String date, SimpleDateFormat formatter)
+    {
+        SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
+        try
+        {
+            Date tempDate = formatter.parse(date);
+            return standardFormat.format(tempDate);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        //Should not reach here
+        return "";
     }
 
     @Override
@@ -278,5 +357,16 @@ public class EventActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        if(appointmentDatabase != null)
+        {
+            appointmentDatabase.close();
+            appointmentDatabase = null;
+        }
     }
 }

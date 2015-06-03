@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -25,6 +26,11 @@ public class AppointmentController
                                     DatabaseHelper.REMIND,
                                   };
 
+
+    public AppointmentController(Context context) {
+        dbHelper = DatabaseHelper.getInstance(context);
+    }
+
     public void open() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
@@ -33,7 +39,7 @@ public class AppointmentController
         dbHelper.close();
     }
 
-    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, String remind) {
+    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, int remind) {
         ContentValues values = new ContentValues();
         //Insert key-value in ContentValues
         values.put(DatabaseHelper.EVENT, event);

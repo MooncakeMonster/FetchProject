@@ -7,8 +7,10 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
-
-    public static final String DATABASE_NAME = "appointment.db";
+    //Allow only one instance of DatabaseHelper at any one time
+    private static DatabaseHelper sInstance;
+    //Name of database: appointment
+    public static final String DATABASE_NAME = "appointment";
     //Serial number of the rows
     public static final String COLUMN_ID = "_id";
     //What is this appointment about
@@ -26,17 +28,26 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public static final String REMIND = "remind";
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + "( " + COLUMN_ID + " INTEGER PRIMARY KEY, "
+    private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
                                                                                          + EVENT + " TEXT NOT NULL, "
-                                                                                         + STARTPROPERDATE + " TEXT NOT NULL"
+                                                                                         + STARTPROPERDATE + " TEXT NOT NULL "
                                                                                          + STARTDATE + " INTEGER NOT NULL, "
-                                                                                         + ENDDATE + "INTEGER, "
+                                                                                         + ENDDATE + " INTEGER, "
                                                                                          + LOCATION + " TEXT, "
                                                                                          + NOTES + " TEXT, "
                                                                                          + REMIND + " INTEGER NOT NULL"
-                                                                                  + " );";
+                                                                                  + ");";
 
-    public DatabaseHelper(Context context)
+    public static synchronized DatabaseHelper getInstance(Context context) {
+
+        // Use the application context, which will ensure that you don't accidentally leak an Activity's context.
+        if (sInstance == null) {
+            sInstance = new DatabaseHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
+    private DatabaseHelper(Context context)
     {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }

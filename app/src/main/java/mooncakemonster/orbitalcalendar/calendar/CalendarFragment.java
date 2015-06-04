@@ -35,7 +35,6 @@ public class CalendarFragment extends Fragment {
     String[] eventName = { "BBQ", "Birthday", "Meeting", "Sleep", "Slack" };
     String[] eventTime = { "1pm", "2pm", "3pm", "4am", "Whole day"};
 
-
     public CalendarFragment(){}
 
     @Override
@@ -55,7 +54,7 @@ public class CalendarFragment extends Fragment {
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         //Highlight today's date
-        caldroidFragment.setBackgroundResourceForDate(R.color.caldroid_holo_blue_light, cal.getTime());
+        caldroidFragment.setBackgroundResourceForDate(R.drawable.circle, cal.getTime());
         caldroidFragment.refreshView();
         //Make background transparent
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
@@ -73,16 +72,10 @@ public class CalendarFragment extends Fragment {
                 }
             }
             @Override
-            public void onSelectDate(Date date, View view) {
+            public void onSelectDate(final Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
-                //Get time to parse in long
-                long time = date.getTime();
-
-                //Open EventActivity for user to input their appointment
-                Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
-                intent.putExtra("date_passed", time);
-                startActivity(intent);
             }
+
             @Override
             public void onChangeMonth(int month, int year) {
                 String text = "month: " + month + " year: " + year;
@@ -91,6 +84,14 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onLongClickDate(Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), "Long click " + formatter.format(date), Toast.LENGTH_SHORT).show();
+
+                //Get time to parse in long
+                long time = date.getTime();
+
+                //Open EventActivity for user to input their appointment
+                Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
+                intent.putExtra("date_passed", time);
+                startActivity(intent);
             }
         };
         // Setup Caldroid
@@ -106,13 +107,12 @@ public class CalendarFragment extends Fragment {
         t.replace(R.id.cal_fragment, caldroidFragment);
         t.commit();
 
-        // listview
+        //Get selected date's event list
         listView = (ListView) rootView.findViewById(R.id.eventlistView);
         EventDayAdapter adapter = new EventDayAdapter(getActivity().getApplicationContext(), R.layout.row_layout);
         listView.setAdapter(adapter);
 
         int i = 0;
-
         for(String Name: eventName) {
             EventClass event = new EventClass(imgResource[i], Name, eventTime[i]);
             adapter.add(event);

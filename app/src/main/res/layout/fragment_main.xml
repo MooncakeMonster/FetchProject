@@ -38,9 +38,21 @@
         android:layout_width="@dimen/tap_h"
         android:layout_height="@dimen/tap_v"
         android:id="@+id/tap"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/tap"
         android:layout_below="@+id/login_button"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        android:text="LOGOUT"
+        android:textSize="10dp"
+        android:textColor="@color/caldroid_holo_blue_dark"
+        android:id="@+id/logout"
+        android:background="@color/caldroid_transparent"
+        android:layout_below="@+id/login_button"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

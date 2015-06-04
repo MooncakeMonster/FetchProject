@@ -12,21 +12,28 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.facebook.login.widget.LoginButton;
 
-import mooncakemonster.orbitalcalendar.menu.MenuActivity;
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.menu.MenuActivity;
+import mooncakemonster.orbitalcalendar.registeruser.LoginActivity;
+import mooncakemonster.orbitalcalendar.registeruser.UserLocalStore;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    UserLocalStore userLocalStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        userLocalStore = new UserLocalStore(this);
 
         setAnimationFadeIn();
         setTapAnywhereToContinue();
@@ -40,11 +47,22 @@ public class MainActivity extends ActionBarActivity {
                 slogan = (ImageView) findViewById(R.id.slogan),
                 tap = (ImageView) findViewById(R.id.tap);
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        Button bLogout = (Button) findViewById(R.id.logout);
 
         icon.startAnimation(animationFadeIn);
         slogan.startAnimation(animationFadeIn);
         loginButton.startAnimation(animationFadeIn);
+        bLogout.startAnimation(animationFadeIn);
         tap.startAnimation(animationAlpha);
+
+        bLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userLocalStore.clearUserData();
+                userLocalStore.setUserLoggedIn(false);
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        });
     }
 
     // This method sets "tap anywhere to continue" to next activity.
@@ -60,6 +78,22 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(authenticate() == true) {
+            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+            startActivity(intent);
+        }else {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        }
+    }
+
+    // This method checks if user is logged in or logged out.
+    private boolean authenticate() {
+        return userLocalStore.getUserLoggedIn();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

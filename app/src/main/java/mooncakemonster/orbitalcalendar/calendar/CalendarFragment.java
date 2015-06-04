@@ -61,6 +61,7 @@ public class CalendarFragment extends Fragment {
         //Build caldroidFragment with the above information and setting
         caldroidFragment.setArguments(args);
 
+
         // (2) Setup listener for caldroidFragment
         final CaldroidListener listener = new CaldroidListener() {
             @Override
@@ -74,6 +75,14 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onSelectDate(final Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
+
+                //Get time to parse in long
+                long time = date.getTime();
+
+                //Open EventActivity for user to input their appointment
+                Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
+                intent.putExtra("date_passed", time);
+                startActivity(intent);
             }
 
             @Override
@@ -84,14 +93,6 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onLongClickDate(Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), "Long click " + formatter.format(date), Toast.LENGTH_SHORT).show();
-
-                //Get time to parse in long
-                long time = date.getTime();
-
-                //Open EventActivity for user to input their appointment
-                Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
-                intent.putExtra("date_passed", time);
-                startActivity(intent);
             }
         };
         // Setup Caldroid

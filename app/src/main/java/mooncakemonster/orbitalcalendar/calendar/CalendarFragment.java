@@ -48,12 +48,15 @@ public class CalendarFragment extends Fragment {
         //(1) Create calendar
         caldroidFragment = new CaldroidFragment();
         //Get today's date and time using Java's Calendar class
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         //Bundle args will supply the information for caldroidFragment.setArguments(args) to build the calendar
         Bundle args = new Bundle();
         //Extract today's date to insert in bundle args
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+        //Highlight today's date
+        caldroidFragment.setBackgroundResourceForDate(R.color.caldroid_holo_blue_light, cal.getTime());
+        caldroidFragment.refreshView();
         //Make background transparent
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
         //Build caldroidFragment with the above information and setting
@@ -74,6 +77,7 @@ public class CalendarFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
                 //Get time to parse in long
                 long time = date.getTime();
+
                 //Open EventActivity for user to input their appointment
                 Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
                 intent.putExtra("date_passed", time);

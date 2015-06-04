@@ -7,12 +7,14 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -171,10 +173,14 @@ public class EventActivity extends Activity {
                 build1.setSingleChoiceItems(everyWheel, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(!everyNum.getText().equals("1") && which == 0) everyBox.setText("days event");
-                        else if(!everyNum.getText().equals("1") && which == 1) everyBox.setText("weeks event");
-                        else if(!everyNum.getText().equals("1") && which == 2) everyBox.setText("months event");
-                        else if(!everyNum.getText().equals("1") && which == 3) everyBox.setText("years event");
+                        if (!everyNum.getText().equals("1") && which == 0)
+                            everyBox.setText("days event");
+                        else if (!everyNum.getText().equals("1") && which == 1)
+                            everyBox.setText("weeks event");
+                        else if (!everyNum.getText().equals("1") && which == 2)
+                            everyBox.setText("months event");
+                        else if (!everyNum.getText().equals("1") && which == 3)
+                            everyBox.setText("years event");
                         else everyBox.setText(everyWheel[which]);
                     }
                 }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -255,15 +261,23 @@ public class EventActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 everyNum.setText(Integer.toString(numberPicker.getValue()));
                 //TODO: When user choose 1, remove 's' doesn't work
-                if(everyNum.equals("1") && everyBox.getText().equals("days event")) everyBox.setText("day event");
-                else if(everyNum.equals("1") && everyBox.getText().equals("weeks event")) everyBox.setText("week event");
-                else if(everyNum.equals("1") && everyBox.getText().equals("months event")) everyBox.setText("month event");
-                else if(everyNum.equals("1") && everyBox.getText().equals("years event")) everyBox.setText("year event");
+                if (everyNum.equals("1") && everyBox.getText().equals("days event"))
+                    everyBox.setText("day event");
+                else if (everyNum.equals("1") && everyBox.getText().equals("weeks event"))
+                    everyBox.setText("week event");
+                else if (everyNum.equals("1") && everyBox.getText().equals("months event"))
+                    everyBox.setText("month event");
+                else if (everyNum.equals("1") && everyBox.getText().equals("years event"))
+                    everyBox.setText("year event");
 
-                else if(!everyNum.equals("1") && everyBox.getText().equals("day event")) everyBox.setText("days event");
-                else if(!everyNum.equals("1") && everyBox.getText().equals("week event")) everyBox.setText("weeks event");
-                else if(!everyNum.equals("1") && everyBox.getText().equals("month event")) everyBox.setText("months event");
-                else if(!everyNum.equals("1") && everyBox.getText().equals("year event")) everyBox.setText("years event");
+                else if (!everyNum.equals("1") && everyBox.getText().equals("day event"))
+                    everyBox.setText("days event");
+                else if (!everyNum.equals("1") && everyBox.getText().equals("week event"))
+                    everyBox.setText("weeks event");
+                else if (!everyNum.equals("1") && everyBox.getText().equals("month event"))
+                    everyBox.setText("months event");
+                else if (!everyNum.equals("1") && everyBox.getText().equals("year event"))
+                    everyBox.setText("years event");
                 dialog.dismiss();
             }
         });
@@ -315,6 +329,20 @@ public class EventActivity extends Activity {
         });
 
         alertDw2 = alertBw2.create();
+    }
+
+    public void selectItem(View view) {
+        boolean checked = ((CheckBox) view).isChecked();
+        switch (view.getId()) {
+            case R.id.everybox:
+                break;
+            case R.id.remindbox:
+                if(checked) {
+                    Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, 1);
+                }
+                break;
+        }
     }
 
     public void onClick(View view){

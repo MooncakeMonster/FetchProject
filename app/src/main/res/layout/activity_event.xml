@@ -27,16 +27,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/title"
-        android:layout_alignRight="@+id/title"
-        android:layout_alignEnd="@+id/title" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <!-- Add button -->
     <Button
         android:layout_width="130dp"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         android:id="@+id/addAppointmentButton"
-        android:text="ADD"
-        android:background="@android:color/white"
+        android:text="CREATE EVENT"
+        android:background="@drawable/buttonborder"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -103,9 +103,10 @@
         android:layout_height="40dp"
         android:text="Remind me"
         android:textSize="18dp"
-        android:id="@+id/checkBox3"
+        android:id="@+id/remindbox"
+        android:onClick="selectItem"
         android:checked="false"
-        android:layout_below="@+id/checkBox"
+        android:layout_below="@+id/everybox"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -118,9 +119,9 @@
         android:id="@+id/remindnum"
         android:textSize="18dp"
         android:background="@android:color/transparent"
-        android:layout_alignBottom="@+id/checkBox3"
-        android:layout_toRightOf="@+id/checkBox3"
-        android:layout_toEndOf="@+id/checkBox3" />
+        android:layout_alignBottom="@+id/remindbox"
+        android:layout_toRightOf="@+id/remindbox"
+        android:layout_toEndOf="@+id/remindbox" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -134,12 +135,14 @@
         android:layout_toRightOf="@+id/remindnum"
         android:layout_toEndOf="@+id/remindnum" />
 
+
     <!-- Checkbox to select range of days/week/month for event -->
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="Every"
-        android:id="@+id/checkBox"
+        android:id="@+id/everybox"
+        android:onClick="selectItem"
         android:textSize="18dp"
         android:layout_alignBottom="@+id/everynum"
         android:layout_alignParentLeft="true"
@@ -155,8 +158,8 @@
         android:textSize="18dp"
         android:background="@android:color/transparent"
         android:layout_below="@+id/endD"
-        android:layout_toRightOf="@+id/checkBox3"
-        android:layout_toEndOf="@+id/checkBox3" />
+        android:layout_toRightOf="@+id/remindbox"
+        android:layout_toEndOf="@+id/remindbox" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -178,8 +181,19 @@
         android:ems="10"
         android:id="@+id/appointmentNotes"
         android:hint="Notes"
-        android:layout_below="@+id/checkBox3"
+        android:layout_below="@+id/participants"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:id="@+id/participants"
+        android:hint="Participants"
+        android:layout_below="@+id/remindbox"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/appointmentNotes"
+        android:layout_alignEnd="@+id/appointmentNotes" />
 
 </RelativeLayout>

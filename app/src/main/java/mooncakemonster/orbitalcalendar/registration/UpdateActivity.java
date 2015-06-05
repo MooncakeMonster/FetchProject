@@ -39,7 +39,7 @@ public class UpdateActivity extends Activity{
                 dop = new DatabaseOperations(context);
                 dop.updateUserInfo(dop, user_name, user_pass, new_user_name);
 
-                Toast.makeText(getBaseContext(), "Updation success...", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Update is successful!", Toast.LENGTH_LONG).show();
             }
         });
     }

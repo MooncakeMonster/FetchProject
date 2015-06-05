@@ -7,9 +7,7 @@ import android.provider.BaseColumns;
  */
 public class TableData {
 
-    public TableData() {
-
-    }
+    public TableData() { }
 
     public static abstract class TableInfo implements BaseColumns {
         public static final String USER_NAME = "user_name";

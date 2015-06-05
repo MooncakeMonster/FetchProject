@@ -14,7 +14,7 @@ import mooncakemonster.orbitalcalendar.registration.UpdateActivity;
 
 public class SettingFragment extends Fragment {
 
-    Button update, delete, logout;
+    Button update, logout;
     int status = 0;
 
     public SettingFragment(){}
@@ -25,8 +25,7 @@ public class SettingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_setting, container, false);
 

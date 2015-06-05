@@ -63,7 +63,7 @@ public class LoginActivity extends ActionBarActivity{
                     } while (CR.moveToNext());
 
                     if (loginstatus) {
-                        Toast.makeText(getBaseContext(), "Login Success!\n Welcome " + NAME, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), "Login Success!\nWelcome " + NAME, Toast.LENGTH_LONG).show();
                         startActivity(new Intent(LoginActivity.this, MenuActivity.class));
                     } else {
                         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);

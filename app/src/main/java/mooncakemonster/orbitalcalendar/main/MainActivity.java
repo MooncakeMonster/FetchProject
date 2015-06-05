@@ -7,8 +7,6 @@ package mooncakemonster.orbitalcalendar.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -26,6 +24,7 @@ import mooncakemonster.orbitalcalendar.registeruser.UserLocalStore;
 
 public class MainActivity extends ActionBarActivity {
 
+    Button bLogout;
     UserLocalStore userLocalStore;
 
     @Override
@@ -47,13 +46,15 @@ public class MainActivity extends ActionBarActivity {
                 slogan = (ImageView) findViewById(R.id.slogan),
                 tap = (ImageView) findViewById(R.id.tap);
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        Button bLogout = (Button) findViewById(R.id.logout);
+        bLogout = (Button) findViewById(R.id.logout);
 
         icon.startAnimation(animationFadeIn);
         slogan.startAnimation(animationFadeIn);
         loginButton.startAnimation(animationFadeIn);
         bLogout.startAnimation(animationFadeIn);
         tap.startAnimation(animationAlpha);
+
+        userLocalStore = new UserLocalStore(this);
 
         bLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,48 +73,24 @@ public class MainActivity extends ActionBarActivity {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                startActivity(intent);
+                if (authenticate() == true) {
+                    Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        if(authenticate() == true) {
-            Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-            startActivity(intent);
-        }else {
-            //startActivity(new Intent(MainActivity.this, LoginActivity.class));
-        }
-    }
-
     // This method checks if user is logged in or logged out.
     private boolean authenticate() {
-        return userLocalStore.getUserLoggedIn();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (userLocalStore.getLoggedInUser() == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            return false;
         }
-
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 }

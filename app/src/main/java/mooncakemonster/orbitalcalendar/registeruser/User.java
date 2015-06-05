@@ -13,8 +13,6 @@ public class User {
     }
 
     public User(String username, String password) {
-        this.name = "";
-        this.username = username;
-        this.password = password;
+        this("", username, password);
     }
 }

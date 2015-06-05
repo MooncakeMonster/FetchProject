@@ -3,6 +3,7 @@ package mooncakemonster.orbitalcalendar.registeruser;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -24,49 +25,45 @@ import java.util.ArrayList;
  * Created by BAOJUN on 4/6/15.
  */
 public class ServerRequest {
+    public static final int CONNECTION_TIMEOUT = 1000 * 15;
+    public static final String SERVER_ADDRESS = "jun159.netai.net";
 
     ProgressDialog progressDialog;
-
-    public static final int CONNECTION_TIMEOUT = 1000 * 15;
-    public static final String SERVER_ADDRESS = "http://jun159.netai.net";
 
     public ServerRequest(Context context) {
         progressDialog = new ProgressDialog(context);
         progressDialog.setCancelable(false);
-        progressDialog.setTitle("Processing");
+        progressDialog.setTitle("Processing...");
         progressDialog.setMessage("Please wait...");
     }
 
-    public void storeUserDataInBackground(User user, GetUserCallback callback) {
+    public void storeUserDataInBackground(User user, GetUserCallback userCallBack) {
         progressDialog.show();
-        new StoreUserDataAsycTask(user, callback).execute();
+        new StoreUserDataAsyncTask(user, userCallBack).execute();
     }
 
-    public void fetchUserDataInBackground(User user, GetUserCallback callback) {
+    public void fetchUserDataAsyncTask(User user, GetUserCallback userCallBack) {
         progressDialog.show();
-        new fetchUserDataAsyncTask(user, callback).execute();
-
+        new fetchUserDataAsyncTask(user, userCallBack).execute();
     }
 
-    public class StoreUserDataAsycTask extends AsyncTask<Void, Void, Void> {
+    public class StoreUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
         User user;
-        GetUserCallback userCallback;
+        GetUserCallback userCallBack;
 
-        public StoreUserDataAsycTask(User user, GetUserCallback callback) {
+        public StoreUserDataAsyncTask(User user, GetUserCallback userCallBack) {
             this.user = user;
-            this.userCallback = callback;
+            this.userCallBack = userCallBack;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
-            ArrayList<NameValuePair> dataToSend = new ArrayList<> ();
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("name", user.name));
             dataToSend.add(new BasicNameValuePair("username", user.username));
             dataToSend.add(new BasicNameValuePair("password", user.password));
 
-            HttpParams httpRequestParams = new BasicHttpParams();
-            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
-            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpParams httpRequestParams = getHttpRequestParams();
 
             HttpClient client = new DefaultHttpClient(httpRequestParams);
             HttpPost post = new HttpPost(SERVER_ADDRESS + "Register.php");
@@ -74,33 +71,41 @@ public class ServerRequest {
             try {
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
                 client.execute(post);
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            progressDialog.dismiss();
-            userCallback.done(null);
-            super.onPostExecute(aVoid);
+        private HttpParams getHttpRequestParams() {
+            HttpParams httpRequestParams = new BasicHttpParams();
+            HttpConnectionParams.setConnectionTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            HttpConnectionParams.setSoTimeout(httpRequestParams, CONNECTION_TIMEOUT);
+            return httpRequestParams;
         }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            progressDialog.dismiss();
+            userCallBack.done(null);
+        }
+
     }
 
     public class fetchUserDataAsyncTask extends AsyncTask<Void, Void, User> {
         User user;
-        GetUserCallback userCallback;
+        GetUserCallback userCallBack;
 
-        public fetchUserDataAsyncTask(User user, GetUserCallback callback) {
+        public fetchUserDataAsyncTask(User user, GetUserCallback userCallBack) {
             this.user = user;
-            this.userCallback = callback;
+            this.userCallBack = userCallBack;
         }
 
         @Override
         protected User doInBackground(Void... params) {
-            ArrayList<NameValuePair> dataToSend = new ArrayList<> ();
+            ArrayList<NameValuePair> dataToSend = new ArrayList<>();
             dataToSend.add(new BasicNameValuePair("username", user.username));
             dataToSend.add(new BasicNameValuePair("password", user.password));
 
@@ -111,7 +116,7 @@ public class ServerRequest {
             HttpClient client = new DefaultHttpClient(httpRequestParams);
             HttpPost post = new HttpPost(SERVER_ADDRESS + "FetchUserData.php");
 
-            User user = null;
+            User returnedUser = null;
 
             try {
                 post.setEntity(new UrlEncodedFormEntity(dataToSend));
@@ -119,28 +124,27 @@ public class ServerRequest {
 
                 HttpEntity entity = httpResponse.getEntity();
                 String result = EntityUtils.toString(entity);
-                JSONObject jsonObject = new JSONObject(result);
+                JSONObject jObject = new JSONObject(result);
 
-                if(jsonObject.length() == 0) {
-                    return null;
-                }else {
-                    String name = jsonObject.getString("name");
+                if (jObject.length() != 0){
+                    Log.v("happened", "2");
+                    String name = jObject.getString("name");
 
-                    user = new User(name, user.username, user.password);
+                    returnedUser = new User(name, user.username, user.password);
                 }
 
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
-            return user;
+            return returnedUser;
         }
 
         @Override
-        protected void onPostExecute(User user) {
+        protected void onPostExecute(User returnedUser) {
+            super.onPostExecute(returnedUser);
             progressDialog.dismiss();
-            userCallback.done(user);
-            super.onPostExecute(user);
+            userCallBack.done(returnedUser);
         }
     }
 }

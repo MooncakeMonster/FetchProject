@@ -10,32 +10,31 @@ import android.widget.EditText;
 import mooncakemonster.orbitalcalendar.R;
 
 public class RegisterActivity extends ActionBarActivity implements View.OnClickListener{
-
+    EditText etName, etUsername, etPassword;
     Button bRegister;
-    EditText etName, etUsername, etPassword, etRetypePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        bRegister = (Button) findViewById(R.id.register);
         etName = (EditText) findViewById(R.id.name);
         etUsername = (EditText) findViewById(R.id.username);
         etPassword = (EditText) findViewById(R.id.password);
+        bRegister = (Button) findViewById(R.id.register);
 
         bRegister.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()) {
+        switch (v.getId()) {
             case R.id.register:
                 String name = etName.getText().toString();
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
-                User user = new User(name, username, password);
 
+                User user = new User(name, username, password);
                 registerUser(user);
                 break;
         }
@@ -46,7 +45,8 @@ public class RegisterActivity extends ActionBarActivity implements View.OnClickL
         serverRequest.storeUserDataInBackground(user, new GetUserCallback() {
             @Override
             public void done(User returnedUser) {
-                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                Intent loginIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(loginIntent);
             }
         });
     }

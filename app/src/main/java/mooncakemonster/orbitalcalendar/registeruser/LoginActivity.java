@@ -10,13 +10,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.menu.MenuActivity;
+import mooncakemonster.orbitalcalendar.main.MainActivity;
 
 public class LoginActivity extends ActionBarActivity implements View.OnClickListener {
-
     Button bLogin;
-    EditText etUsername, etPassword;
     TextView registerLink;
+    EditText etUsername, etPassword;
 
     UserLocalStore userLocalStore;
 
@@ -29,39 +28,39 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
         etUsername = (EditText) findViewById(R.id.username);
         etPassword = (EditText) findViewById(R.id.password);
         registerLink = (TextView) findViewById(R.id.registerhere);
-        userLocalStore = new UserLocalStore(this);
 
         bLogin.setOnClickListener(this);
         registerLink.setOnClickListener(this);
+
+        userLocalStore = new UserLocalStore(this);
     }
 
     @Override
-    public void onClick(View v) {
-        switch(v.getId()) {
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.login:
                 String username = etUsername.getText().toString();
                 String password = etPassword.getText().toString();
 
-                User user = new User(null, null);
+                User user = new User(username, password);
 
                 authenticate(user);
-
                 break;
-
             case R.id.registerhere:
-                startActivity(new Intent(this, RegisterActivity.class));
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(registerIntent);
                 break;
         }
     }
 
     private void authenticate(User user) {
         ServerRequest serverRequest = new ServerRequest(this);
-        serverRequest.fetchUserDataInBackground(user, new GetUserCallback() {
+        serverRequest.fetchUserDataAsyncTask(user, new GetUserCallback() {
             @Override
             public void done(User returnedUser) {
-                if(returnedUser == null) {
+                if (returnedUser == null) {
                     showErrorMessage();
-                }else {
+                } else {
                     logUserIn(returnedUser);
                 }
             }
@@ -78,7 +77,6 @@ public class LoginActivity extends ActionBarActivity implements View.OnClickList
     private void logUserIn(User returnedUser) {
         userLocalStore.storeUserData(returnedUser);
         userLocalStore.setUserLoggedIn(true);
-
-        startActivity(new Intent(this, MenuActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

@@ -1,8 +1,9 @@
 package mooncakemonster.orbitalcalendar.registeruser;
 
 /**
- * Created by BAOJUN on 4/6/15.
+ * Invoked when background task is completed.
  */
+
 interface GetUserCallback {
     public abstract void done(User returnedUser);
 }

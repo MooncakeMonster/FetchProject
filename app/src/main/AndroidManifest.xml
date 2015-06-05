@@ -41,15 +41,15 @@
         <activity
             android:name=".event.EventActivity"
             android:label="@string/title_activity_event"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMenu" >
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".registeruser.LoginActivity"
+            android:name=".registration.LoginActivity"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name=".registeruser.RegisterActivity"
+            android:name=".registration.RegisterActivity"
             android:label="@string/title_activity_register" >
         </activity>
     </application>

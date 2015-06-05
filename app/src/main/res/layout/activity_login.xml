@@ -10,19 +10,19 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/username"
+        android:id="@+id/usernameL"
         android:hint="Username"
         android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/password"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignStart="@+id/password" />
+        android:layout_above="@+id/passwordL"
+        android:layout_alignLeft="@+id/passwordL"
+        android:layout_alignStart="@+id/passwordL" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/password"
+        android:id="@+id/passwordL"
         android:hint="Password"
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
@@ -36,7 +36,7 @@
         android:id="@+id/login"
         android:layout_marginBottom="10dp"
         android:background="@drawable/buttonborder"
-        android:layout_below="@+id/password"
+        android:layout_below="@+id/passwordL"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView1"
         android:background="@mipmap/red"
-        android:layout_above="@+id/username"
+        android:layout_above="@+id/usernameL"
         android:layout_toLeftOf="@+id/imageView5"
         android:layout_toStartOf="@+id/imageView5" />
 
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView3"
         android:background="@mipmap/cyan"
-        android:layout_above="@+id/username"
+        android:layout_above="@+id/usernameL"
         android:layout_centerHorizontal="true" />
 
     <ImageView
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView4"
         android:background="@mipmap/green"
-        android:layout_above="@+id/username"
+        android:layout_above="@+id/usernameL"
         android:layout_toLeftOf="@+id/imageView3"
         android:layout_toStartOf="@+id/imageView3" />
 
@@ -98,7 +98,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView6"
         android:background="@mipmap/purple"
-        android:layout_above="@+id/username"
+        android:layout_above="@+id/usernameL"
         android:layout_toRightOf="@+id/imageView7"
         android:layout_toEndOf="@+id/imageView7" />
 

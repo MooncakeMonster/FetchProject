@@ -16,22 +16,17 @@ import android.widget.RelativeLayout;
 import com.facebook.login.widget.LoginButton;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.menu.MenuActivity;
-import mooncakemonster.orbitalcalendar.registeruser.LoginActivity;
-import mooncakemonster.orbitalcalendar.registeruser.UserLocalStore;
+import mooncakemonster.orbitalcalendar.registration.LoginActivity;
 
 
 public class MainActivity extends ActionBarActivity {
 
-    //Button bLogout;
-    UserLocalStore userLocalStore;
+    int status = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        userLocalStore = new UserLocalStore(this);
 
         setAnimationFadeIn();
         setTapAnywhereToContinue();
@@ -45,26 +40,11 @@ public class MainActivity extends ActionBarActivity {
                 slogan = (ImageView) findViewById(R.id.slogan),
                 tap = (ImageView) findViewById(R.id.tap);
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        //bLogout = (Button) findViewById(R.id.logout);
 
         icon.startAnimation(animationFadeIn);
         slogan.startAnimation(animationFadeIn);
         loginButton.startAnimation(animationFadeIn);
-        //bLogout.startAnimation(animationFadeIn);
         tap.startAnimation(animationAlpha);
-
-        userLocalStore = new UserLocalStore(this);
-
-        /*
-        bLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                userLocalStore.clearUserData();
-                userLocalStore.setUserLoggedIn(false);
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            }
-        });
-        */
     }
 
     // This method sets "tap anywhere to continue" to next activity.
@@ -74,24 +54,15 @@ public class MainActivity extends ActionBarActivity {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (authenticate() == true) {
-                    Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                }
+                status = 1;
+                Bundle b = new Bundle();
+                b.putInt("status", status);
+
+                //TODO: when login is successful, redirect to MenuActivity
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
-    }
-
-    // This method checks if user is logged in or logged out.
-    private boolean authenticate() {
-        if (userLocalStore.getLoggedInUser() == null) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            return false;
-        }
-        return true;
     }
 }

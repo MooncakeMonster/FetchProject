@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
-import mooncakemonster.orbitalcalendar.fetchelp.FetchHelpFragment;
+import mooncakemonster.orbitalcalendar.fetchelp.SettingFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.timetable.TimetableFragment;
 import mooncakemonster.orbitalcalendar.voting.VotingFragment;
@@ -67,7 +67,7 @@ public class MenuActivity extends FragmentActivity {
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[2], navMenuIcons.getResourceId(2, -1)));    // Event
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[3], navMenuIcons.getResourceId(3, -1)));    // Timetable
         navDrawerItems.add(new NavDrawerItem(navMenuTitles[4], navMenuIcons.getResourceId(4, -1)));    // Voting
-        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));    // Fetch
+        navDrawerItems.add(new NavDrawerItem(navMenuTitles[5], navMenuIcons.getResourceId(5, -1)));    // Settings
         navMenuIcons.recycle();
 
         mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
@@ -145,7 +145,7 @@ public class MenuActivity extends FragmentActivity {
             case 2: fragment = new EventFragment(); break;
             case 3: fragment = new TimetableFragment(); break;
             case 4: fragment = new VotingFragment(); break;
-            case 5: fragment = new FetchHelpFragment(); break;
+            case 5: fragment = new SettingFragment(); break;
             default: break;
         }
 

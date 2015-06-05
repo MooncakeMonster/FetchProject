@@ -9,7 +9,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/name"
+        android:id="@+id/email"
         android:inputType="textEmailAddress"
         android:hint="Email"
         android:layout_gravity="center_horizontal"
@@ -44,7 +44,7 @@
         android:layout_height="50dp"
         android:inputType="textPassword"
         android:ems="10"
-        android:id="@+id/retypepassword"
+        android:id="@+id/confirmpassword"
         android:layout_marginBottom="10dp"
         android:hint="Confirm password"
         android:layout_gravity="center_horizontal"
@@ -58,7 +58,7 @@
         android:text="REGISTER"
         android:id="@+id/register"
         android:background="@drawable/buttonborder"
-        android:layout_below="@+id/retypepassword"
+        android:layout_below="@+id/confirmpassword"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -67,7 +67,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView1"
         android:background="@mipmap/red"
-        android:layout_above="@+id/name"
+        android:layout_above="@+id/email"
         android:layout_toLeftOf="@+id/imageView5"
         android:layout_toStartOf="@+id/imageView5" />
 
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView2"
-        android:layout_above="@+id/name"
+        android:layout_above="@+id/email"
         android:background="@mipmap/orange"
         android:layout_alignTop="@+id/imageView3"
         android:layout_toRightOf="@+id/imageView3"
@@ -85,7 +85,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView3"
-        android:layout_above="@+id/name"
+        android:layout_above="@+id/email"
         android:background="@mipmap/cyan"
         android:layout_centerHorizontal="true" />
 
@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView4"
         android:background="@mipmap/green"
-        android:layout_above="@+id/name"
+        android:layout_above="@+id/email"
         android:layout_toLeftOf="@+id/imageView3"
         android:layout_toStartOf="@+id/imageView3" />
 
@@ -103,7 +103,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView5"
         android:background="@mipmap/blue"
-        android:layout_above="@+id/name"
+        android:layout_above="@+id/email"
         android:layout_alignTop="@+id/imageView4"
         android:layout_toLeftOf="@+id/imageView4"
         android:layout_toStartOf="@+id/imageView4" />
@@ -113,7 +113,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView6"
         android:background="@mipmap/purple"
-        android:layout_above="@+id/name"
+        android:layout_above="@+id/email"
         android:layout_toRightOf="@+id/imageView7"
         android:layout_toEndOf="@+id/imageView7" />
 
@@ -121,7 +121,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView7"
-        android:layout_above="@+id/name"
+        android:layout_above="@+id/email"
         android:background="@mipmap/red"
         android:layout_alignTop="@+id/imageView2"
         android:layout_toRightOf="@+id/imageView2"

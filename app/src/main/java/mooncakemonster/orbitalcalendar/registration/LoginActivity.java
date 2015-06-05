@@ -1,5 +1,6 @@
 package mooncakemonster.orbitalcalendar.registration;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,7 +18,7 @@ import mooncakemonster.orbitalcalendar.menu.MenuActivity;
 /**
  * Created by BAOJUN on 5/6/15.
  */
-public class LoginActivity extends ActionBarActivity {
+public class LoginActivity extends ActionBarActivity{
 
     Button login;
     TextView registerhere;
@@ -40,8 +41,9 @@ public class LoginActivity extends ActionBarActivity {
             public void onClick(View v) {
                 Bundle b = getIntent().getExtras();
                 int status = b.getInt("status");
-                if(status == 1) {
-                    Toast.makeText(getBaseContext(), "Please wait..", Toast.LENGTH_LONG).show();
+
+                // Usual login activity
+                if (status == 1) {
                     username = USERNAME.getText().toString();
                     userpass = USERPASS.getText().toString();
                     DatabaseOperations dop = new DatabaseOperations(context);
@@ -54,24 +56,26 @@ public class LoginActivity extends ActionBarActivity {
 
                     do {
                         // Name -> column 0, password -> column 1
-                        if(username.equals(CR.getString(0)) && (userpass.equals(CR.getString(1)))) {
+                        if (username.equals(CR.getString(0)) && (userpass.equals(CR.getString(1)))) {
                             loginstatus = true;
                             NAME = CR.getString(0);
                         }
-                    }while(CR.moveToNext());
+                    } while (CR.moveToNext());
 
-                    if(loginstatus) {
-                        Toast.makeText(getBaseContext(), "Login Success----\n Welcome " + NAME, Toast.LENGTH_LONG).show();
+                    if (loginstatus) {
+                        Toast.makeText(getBaseContext(), "Login Success!\n Welcome ", Toast.LENGTH_LONG).show();
                         startActivity(new Intent(LoginActivity.this, MenuActivity.class));
-                        finish();
-                    }else {
-                        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-                        finish();
+                    } else {
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+                        dialogBuilder.setTitle("Incorrect user details");
+                        dialogBuilder.setMessage("Please try again!");
+                        dialogBuilder.setPositiveButton("Ok", null);
+                        dialogBuilder.show();
                     }
                 }
 
-                else if(status == 2) {
-                    Toast.makeText(getBaseContext(), "Please wait..", Toast.LENGTH_LONG).show();
+                // User must login again to change username
+                else if (status == 2) {
                     username = USERNAME.getText().toString();
                     userpass = USERPASS.getText().toString();
                     DatabaseOperations dop = new DatabaseOperations(context);
@@ -84,25 +88,26 @@ public class LoginActivity extends ActionBarActivity {
 
                     do {
                         // Name -> column 0, password -> column 1
-                        if(username.equals(CR.getString(0)) && (userpass.equals(CR.getString(1)))) {
+                        if (username.equals(CR.getString(0)) && (userpass.equals(CR.getString(1)))) {
                             loginstatus = true;
                             NAME = CR.getString(0);
                         }
-                    }while(CR.moveToNext());
+                    } while (CR.moveToNext());
 
-                    if(loginstatus) {
-                        Toast.makeText(getBaseContext(), "Login Success----\n Welcome " + NAME, Toast.LENGTH_LONG).show();
-
-                        Intent intent = new Intent(LoginActivity.this, UpdateActivity.class);
+                    if (loginstatus) {
                         Bundle BN = new Bundle();
                         BN.putString("user_name", NAME);
                         BN.putString("user_pass", userpass);
+
+                        Intent intent = new Intent(LoginActivity.this, UpdateActivity.class);
                         intent.putExtras(BN);
-                        startActivity(intent);
                         finish();
-                    }else {
-                        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-                        finish();
+                    } else {
+                        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+                        dialogBuilder.setTitle("Incorrect user details");
+                        dialogBuilder.setMessage("Please try again!");
+                        dialogBuilder.setPositiveButton("Ok", null);
+                        dialogBuilder.show();
                     }
                 }
             }

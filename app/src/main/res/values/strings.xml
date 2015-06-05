@@ -18,7 +18,7 @@
         <item>Events</item>
         <item>Timetable</item>
         <item>Voting Results</item>
-        <item >Get Fetch to Help</item>
+        <item >Account Settings</item>
     </string-array>
 
     <!-- Nav Drawer List Item Icons -->
@@ -38,4 +38,5 @@
     <string name="title_activity_event">Create New Event</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_register">RegisterActivity</string>
+    <string name="title_activity_update">UpdateActivity</string>
 </resources>

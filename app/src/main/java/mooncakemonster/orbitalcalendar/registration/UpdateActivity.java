@@ -24,12 +24,12 @@ public class UpdateActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_setting);
+        setContentView(R.layout.fragment_update);
 
         Bundle BN = getIntent().getExtras();
         user_name = BN.getString("user_name");
         user_pass = BN.getString("user_pass");
-        update = (Button) findViewById(R.id.update);
+        update = (Button) findViewById(R.id.updatebutton);
         newuser = (EditText) findViewById(R.id.updateuser);
 
         update.setOnClickListener(new View.OnClickListener() {

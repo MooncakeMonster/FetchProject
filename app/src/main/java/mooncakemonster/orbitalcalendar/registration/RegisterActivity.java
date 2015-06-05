@@ -1,6 +1,8 @@
 package mooncakemonster.orbitalcalendar.registration;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,11 +22,17 @@ public class RegisterActivity extends Activity{
     String user_email, user_name, user_pass, confirm_pass;
     Button REG;
     Context context = this;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        progressDialog = new ProgressDialog(context);
+        progressDialog.setCancelable(false);
+        progressDialog.setTitle("Processing...");
+        progressDialog.setMessage("Please wait...");
 
         USER_EMAIL = (EditText) findViewById(R.id.email);
         USER_NAME = (EditText) findViewById(R.id.username);
@@ -42,15 +50,21 @@ public class RegisterActivity extends Activity{
 
                 // Prevent users from logging in if password != confirm password
                 if(!(user_pass.equals(confirm_pass))) {
-                    Toast.makeText(getBaseContext(), "Passwords are not matching", Toast.LENGTH_LONG).show();
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
+                    dialogBuilder.setMessage("Passwords do not match.\n Please try again!");
+                    dialogBuilder.setPositiveButton("Ok", null);
+                    dialogBuilder.show();
+
                     // Reset texts
                     USER_PASS.setText("");
                     CONFIRM_PASS.setText("");
                 }else {
+                    progressDialog.show();
                     DatabaseOperations DB = new DatabaseOperations(context);
                     // insert users data
                     DB.putInformation(DB, user_name, user_pass);
-                    Toast.makeText(getBaseContext(), "Registration success", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), "Registration success!\nYou may login to Fetch.", Toast.LENGTH_LONG).show();
+
                     finish();
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 }

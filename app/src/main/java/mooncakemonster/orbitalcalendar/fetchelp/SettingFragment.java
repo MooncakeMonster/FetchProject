@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.registration.LoginActivity;
+import mooncakemonster.orbitalcalendar.registration.UpdateActivity;
 
 public class SettingFragment extends Fragment {
 
@@ -38,7 +39,7 @@ public class SettingFragment extends Fragment {
                 status = 2;
                 Bundle b = new Bundle();
                 b.putInt("status", status);
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Intent intent = new Intent(getActivity(), UpdateActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
             }

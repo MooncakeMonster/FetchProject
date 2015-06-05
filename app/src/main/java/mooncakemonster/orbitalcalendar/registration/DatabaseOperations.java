@@ -52,9 +52,9 @@ public class DatabaseOperations extends SQLiteOpenHelper {
         String[] columns = {TableData.TableInfo.USER_NAME, TableData.TableInfo.USER_PASS };
 
         // Get data
-        Cursor CR = SQ.query(TableData.TableInfo.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = SQ.query(TableData.TableInfo.TABLE_NAME, columns, null, null, null, null, null);
 
-        return CR;
+        return cursor;
     }
 
     // Update new username changed by user

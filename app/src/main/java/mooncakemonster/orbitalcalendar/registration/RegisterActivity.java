@@ -100,7 +100,7 @@ public class RegisterActivity extends Activity{
                 else {
                     DatabaseOperations DB = new DatabaseOperations(context);
                     // insert users data
-                    DB.putInformation(DB, user_email, user_name, user_pass);
+                    DB.putInformation(DB, user_name, user_pass);
                     Toast.makeText(getBaseContext(), "Registration success!\nYou may login to Fetch.", Toast.LENGTH_LONG).show();
                     finish();
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));

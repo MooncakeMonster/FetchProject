@@ -13,7 +13,7 @@ import android.util.Log;
 public class DatabaseOperations extends SQLiteOpenHelper {
 
     public static final int database_version = 1;
-    public String CREATE_QUERY = "CREATE TABLE " + TableData.TableInfo.TABLE_NAME + " (" + TableData.TableInfo.USER_EMAIL + " TEXT," + TableData.TableInfo.USER_NAME + " TEXT," + TableData.TableInfo.USER_PASS + " TEXT );";
+    public String CREATE_QUERY = "CREATE TABLE " + TableData.TableInfo.TABLE_NAME + TableData.TableInfo.USER_NAME + " TEXT," + TableData.TableInfo.USER_PASS + " TEXT );";
 
     public DatabaseOperations(Context context) {
         super(context, TableData.TableInfo.DATABASE_NAME, null, database_version);
@@ -32,13 +32,12 @@ public class DatabaseOperations extends SQLiteOpenHelper {
 
     }
 
-    public void putInformation (DatabaseOperations dop, String useremail, String username, String password) {
+    public void putInformation (DatabaseOperations dop, String username, String password) {
         // Write data into database
         SQLiteDatabase SQ = dop.getWritableDatabase();
 
         // Add each value into column
         ContentValues cv = new ContentValues();
-        cv.put(TableData.TableInfo.USER_EMAIL, useremail);
         cv.put(TableData.TableInfo.USER_NAME, username);
         cv.put(TableData.TableInfo.USER_PASS, password);
 
@@ -50,7 +49,7 @@ public class DatabaseOperations extends SQLiteOpenHelper {
     public Cursor getInformation(DatabaseOperations dop) {
         // Get data from SQLite
         SQLiteDatabase SQ = dop.getReadableDatabase();
-        String[] columns = { TableData.TableInfo.USER_EMAIL, TableData.TableInfo.USER_NAME, TableData.TableInfo.USER_PASS };
+        String[] columns = { TableData.TableInfo.USER_NAME, TableData.TableInfo.USER_PASS };
 
         // Get data
         Cursor cursor = SQ.query(TableData.TableInfo.TABLE_NAME, columns, null, null, null, null, null);

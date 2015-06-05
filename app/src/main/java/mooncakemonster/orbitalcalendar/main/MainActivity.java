@@ -73,6 +73,9 @@ public class MainActivity extends ActionBarActivity {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                //startActivity(intent);
+
                 if (authenticate() == true) {
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                     startActivity(intent);
@@ -80,6 +83,7 @@ public class MainActivity extends ActionBarActivity {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
+
             }
         });
     }

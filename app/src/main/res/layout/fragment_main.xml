@@ -49,7 +49,7 @@
         android:layout_height="15dp"
         android:text="LOGOUT"
         android:textSize="10dp"
-        android:textColor="@color/caldroid_holo_blue_dark"
+        android:textColor="@color/caldroid_transparent"
         android:id="@+id/logout"
         android:background="@color/caldroid_transparent"
         android:layout_below="@+id/login_button"

@@ -26,7 +26,7 @@ import java.util.ArrayList;
  */
 public class ServerRequest {
     public static final int CONNECTION_TIMEOUT = 1000 * 15;
-    public static final String SERVER_ADDRESS = "jun159.netai.net";
+    public static final String SERVER_ADDRESS = "http://jun1598.site11.com/";
 
     ProgressDialog progressDialog;
 

@@ -29,11 +29,6 @@ public class RegisterActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setCancelable(false);
-        progressDialog.setTitle("Processing...");
-        progressDialog.setMessage("Please wait...");
-
         USER_EMAIL = (EditText) findViewById(R.id.email);
         USER_NAME = (EditText) findViewById(R.id.username);
         USER_PASS = (EditText) findViewById(R.id.password);
@@ -59,7 +54,6 @@ public class RegisterActivity extends Activity{
                     USER_PASS.setText("");
                     CONFIRM_PASS.setText("");
                 }else {
-                    progressDialog.show();
                     DatabaseOperations DB = new DatabaseOperations(context);
                     // insert users data
                     DB.putInformation(DB, user_name, user_pass);

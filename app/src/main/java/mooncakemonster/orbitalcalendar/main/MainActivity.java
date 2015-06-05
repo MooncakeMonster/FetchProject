@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -24,7 +23,7 @@ import mooncakemonster.orbitalcalendar.registeruser.UserLocalStore;
 
 public class MainActivity extends ActionBarActivity {
 
-    Button bLogout;
+    //Button bLogout;
     UserLocalStore userLocalStore;
 
     @Override
@@ -46,16 +45,17 @@ public class MainActivity extends ActionBarActivity {
                 slogan = (ImageView) findViewById(R.id.slogan),
                 tap = (ImageView) findViewById(R.id.tap);
         LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
-        bLogout = (Button) findViewById(R.id.logout);
+        //bLogout = (Button) findViewById(R.id.logout);
 
         icon.startAnimation(animationFadeIn);
         slogan.startAnimation(animationFadeIn);
         loginButton.startAnimation(animationFadeIn);
-        bLogout.startAnimation(animationFadeIn);
+        //bLogout.startAnimation(animationFadeIn);
         tap.startAnimation(animationAlpha);
 
         userLocalStore = new UserLocalStore(this);
 
+        /*
         bLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,6 +64,7 @@ public class MainActivity extends ActionBarActivity {
                 startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
+        */
     }
 
     // This method sets "tap anywhere to continue" to next activity.
@@ -73,9 +74,6 @@ public class MainActivity extends ActionBarActivity {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(MainActivity.this, MenuActivity.class);
-                //startActivity(intent);
-
                 if (authenticate() == true) {
                     Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                     startActivity(intent);
@@ -83,7 +81,6 @@ public class MainActivity extends ActionBarActivity {
                     Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
-
             }
         });
     }

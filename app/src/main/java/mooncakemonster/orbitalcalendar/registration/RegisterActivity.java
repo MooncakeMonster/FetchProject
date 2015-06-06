@@ -25,6 +25,7 @@ public class RegisterActivity extends Activity{
     String user_email, user_name, user_pass, confirm_pass;
     Button registration;
     Context context = this;
+    DatabaseAdapter DB = new DatabaseAdapter(context);
 
     private static final Pattern LOWER_CASE = Pattern.compile("\\p{Lu}");
     private static final Pattern UPPER_CASE = Pattern.compile("\\p{Ll}");
@@ -40,6 +41,7 @@ public class RegisterActivity extends Activity{
         USER_PASS = (EditText) findViewById(R.id.password);
         CONFIRM_PASS = (EditText) findViewById(R.id.confirmpassword);
 
+        // Register user when user click "Register" button
         registration = (Button) findViewById(R.id.register);
         registration.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,15 +53,21 @@ public class RegisterActivity extends Activity{
                 confirm_pass = CONFIRM_PASS.getText().toString();
 
                 // Prevent duplicate email by users
-                // TODO: Check duplicate email in database
-
-                // Prevent duplicate username by users and limit username length to be at least 5
-                // TODO: Check duplicate username in database
+                if (DB.checkDuplicate(DB, user_email, user_name) == 1) {
+                    alertUser("This email is registered!", "Please try again.");
+                    resetDetails(1);
+                }
 
                 // Prevent users from creating account with invalid email address
-                if(!isValidEmailAddress(user_email)) {
+                else if(!isValidEmailAddress(user_email)) {
                     alertUser("Invalid email address!", "Please try again.");
                     resetDetails(1);
+                }
+
+                // Prevent duplicate username by users
+                else if (DB.checkDuplicate(DB, user_email, user_name) == 2) {
+                    alertUser("This username exist!", "Please try again.");
+                    resetDetails(2);
                 }
 
                 // Prevent users from creating account with username < 5 characters
@@ -70,7 +78,7 @@ public class RegisterActivity extends Activity{
 
                 // Prevent users from creating account with less than 8 characters, no upper and lowercase letters and no digits.
                 else if(!isValidPassword(user_pass)) {
-                    alertUser("Invalid password!","Password must contain at least 8 characters, including:\n\n-Uppercase letters\n-Lowercase letters\n-At least 1 digit");
+                    alertUser("Invalid password!", "Password must contain at least 8 characters, including:\n\n-Uppercase letters\n-Lowercase letters\n-At least 1 digit");
                     resetDetails(0);
                 }
 
@@ -82,12 +90,15 @@ public class RegisterActivity extends Activity{
 
                 // Successfully registered
                 else {
-                    DatabaseOperations DB = new DatabaseOperations(context);
                     // insert users data
-                    DB.putInformation(DB, user_name, user_pass);
-                    Toast.makeText(getBaseContext(), "Registration success!\nYou may login to Fetch.", Toast.LENGTH_LONG).show();
-                    finish();
-                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    long id = DB.insertData(DB, user_email, user_name, user_pass);
+
+                    // If id is negative, it is not inserted.
+                    if (id > 0) {
+                        Toast.makeText(getBaseContext(), "Registration success!\nYou may login to Fetch.", Toast.LENGTH_LONG).show();
+                        finish();
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    }
                 }
             }
         });

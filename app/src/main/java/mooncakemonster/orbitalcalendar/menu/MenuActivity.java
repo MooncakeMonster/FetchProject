@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
-import mooncakemonster.orbitalcalendar.fetchelp.SettingFragment;
+import mooncakemonster.orbitalcalendar.accountsettings.SettingFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.timetable.TimetableFragment;
 import mooncakemonster.orbitalcalendar.voting.VotingFragment;

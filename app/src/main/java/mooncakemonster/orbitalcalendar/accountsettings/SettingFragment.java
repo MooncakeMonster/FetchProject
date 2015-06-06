@@ -1,7 +1,6 @@
-package mooncakemonster.orbitalcalendar.fetchelp;
+package mooncakemonster.orbitalcalendar.accountsettings;
 
 import android.app.Fragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.registration.LoginActivity;
-import mooncakemonster.orbitalcalendar.registration.UpdateActivity;
 
 public class SettingFragment extends Fragment {
 
     Button update, logout;
-    int status = 0;
 
     public SettingFragment(){}
 
@@ -35,24 +31,14 @@ public class SettingFragment extends Fragment {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status = 2;
-                Bundle b = new Bundle();
-                b.putInt("status", status);
-                Intent intent = new Intent(getActivity(), UpdateActivity.class);
-                intent.putExtras(b);
-                startActivity(intent);
+
             }
         });
 
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                status = 3;
-                Bundle b = new Bundle();
-                b.putInt("status", status);
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.putExtras(b);
-                startActivity(intent);
+
             }
         });
 

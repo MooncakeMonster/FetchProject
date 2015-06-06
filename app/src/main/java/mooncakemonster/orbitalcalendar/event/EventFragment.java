@@ -12,9 +12,6 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 
-/**
- * Created by BAOJUN on 4/6/15.
- */
 public class EventFragment extends Fragment{
 
     //Set database to allow user to retrieve data to populate EventFragment.java

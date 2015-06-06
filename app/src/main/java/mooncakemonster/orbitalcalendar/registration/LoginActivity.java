@@ -16,15 +16,16 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.menu.MenuActivity;
 
 /**
- * Created by BAOJUN on 5/6/15.
+ * This program allows users to login upon registration.
  */
 public class LoginActivity extends ActionBarActivity{
 
-    Button login;
+    Button login, details;
     TextView registerhere;
     String username, userpass;
     EditText USERNAME, USERPASS;
     Context context = this;
+    DatabaseAdapter dop = new DatabaseAdapter(context);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class LoginActivity extends ActionBarActivity{
         setContentView(R.layout.activity_login);
 
         login = (Button) findViewById(R.id.login);
+        details = (Button) findViewById(R.id.details);
         registerhere = (TextView) findViewById(R.id.registerhere);
         USERNAME = (EditText) findViewById(R.id.usernameL);
         USERPASS = (EditText) findViewById(R.id.passwordL);
@@ -46,8 +48,7 @@ public class LoginActivity extends ActionBarActivity{
                 if (status == 1) {
                     username = USERNAME.getText().toString();
                     userpass = USERPASS.getText().toString();
-                    DatabaseOperations dop = new DatabaseOperations(context);
-                    Cursor CR = dop.getInformation(dop);
+                    Cursor CR = dop.getCursor(dop);
                     CR.moveToFirst();
 
                     boolean loginstatus = false;
@@ -55,10 +56,10 @@ public class LoginActivity extends ActionBarActivity{
                     String NAME = "";
 
                     do {
-                        // Name -> column 0, password -> column 1
-                        if (username.equals(CR.getString(0)) && (userpass.equals(CR.getString(1)))) {
+                        // Email -> column 0, Name -> column 1, password -> column 2
+                        if (username.equals(CR.getString(1)) && (userpass.equals(CR.getString(2)))) {
                             loginstatus = true;
-                            NAME = CR.getString(0);
+                            NAME = CR.getString(1);
                         }
                     } while (CR.moveToNext());
 
@@ -82,5 +83,11 @@ public class LoginActivity extends ActionBarActivity{
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
+    }
+
+    // This method shows all the user details. TODO: Remove once app is up.
+    public void viewAllDetails(View view) {
+        String data = DatabaseAdapter.getAllUsers(dop);
+        Toast.makeText(getBaseContext(), data, Toast.LENGTH_LONG).show();
     }
 }

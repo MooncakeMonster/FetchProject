@@ -19,7 +19,7 @@ public class UpdateActivity extends Activity{
     Button update;
     EditText newuser;
     Context context = this;
-    DatabaseOperations dop;
+    DatabaseAdapter dop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class UpdateActivity extends Activity{
             @Override
             public void onClick(View v) {
                 new_user_name = newuser.getText().toString();
-                dop = new DatabaseOperations(context);
+                dop = new DatabaseAdapter(context);
                 dop.updateUserInfo(dop, user_name, user_pass, new_user_name);
 
                 Toast.makeText(getBaseContext(), "Update is successful!", Toast.LENGTH_LONG).show();

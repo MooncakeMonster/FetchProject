@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import com.facebook.login.widget.LoginButton;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.registration.LoginActivity;
+import mooncakemonster.orbitalcalendar.menu.MenuActivity;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity {
                 b.putInt("status", status);
 
                 //TODO: when login is successful, redirect to MenuActivity
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
                 intent.putExtras(b);
                 startActivity(intent);
             }

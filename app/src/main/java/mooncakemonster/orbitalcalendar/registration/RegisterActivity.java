@@ -28,7 +28,7 @@ public class RegisterActivity extends Activity{
 
     private static final Pattern LOWER_CASE = Pattern.compile("\\p{Lu}");
     private static final Pattern UPPER_CASE = Pattern.compile("\\p{Ll}");
-    private static final Pattern DECIMAL_DIGIT = Pattern.compile("\\p{Nd}");
+    private static final Pattern DIGIT = Pattern.compile("\\p{Nd}");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,41 +58,25 @@ public class RegisterActivity extends Activity{
 
                 // Prevent users from creating account with invalid email address
                 if(!isValidEmailAddress(user_email)) {
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialogBuilder.setTitle("Invalid email address!");
-                    dialogBuilder.setMessage("Please try again.");
-                    dialogBuilder.setPositiveButton("Ok", null);
-                    dialogBuilder.show();
+                    alertUser("Invalid email address!", "Please try again.");
                     resetDetails(1);
                 }
 
                 // Prevent users from creating account with username < 5 characters
                 else if(user_name.length() < 5) {
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialogBuilder.setTitle("Invalid username!");
-                    dialogBuilder.setMessage("Username must contain at least 5 characters.");
-                    dialogBuilder.setPositiveButton("Ok", null);
-                    dialogBuilder.show();
+                    alertUser("Invalid username!", "Username must contain at least 5 characters.");
                     resetDetails(2);
                 }
 
                 // Prevent users from creating account with less than 8 characters, no upper and lowercase letters and no digits.
                 else if(!isValidPassword(user_pass)) {
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialogBuilder.setTitle("Invalid password!");
-                    dialogBuilder.setMessage("Password must contain at least 8 characters, including:\n\n-Uppercase letters\n-Lowercase letters\n-At least 1 digit");
-                    dialogBuilder.setPositiveButton("Ok", null);
-                    dialogBuilder.show();
+                    alertUser("Invalid password!","Password must contain at least 8 characters, including:\n\n-Uppercase letters\n-Lowercase letters\n-At least 1 digit");
                     resetDetails(0);
                 }
 
                 // Prevent users from logging in if password != confirm password
                 else if(!(user_pass.equals(confirm_pass))) {
-                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialogBuilder.setTitle("Passwords do not match.");
-                    dialogBuilder.setMessage("Please try again!");
-                    dialogBuilder.setPositiveButton("Ok", null);
-                    dialogBuilder.show();
+                    alertUser("Passwords do not match!", "Please try again.");
                     resetDetails(0);
                 }
 
@@ -107,6 +91,15 @@ public class RegisterActivity extends Activity{
                 }
             }
         });
+    }
+
+    // This method calls alert dialog to inform users a message.
+    private void alertUser(String title, String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setMessage(message);
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.show();
     }
 
     // This method resets the details keyed in by user.
@@ -136,7 +129,7 @@ public class RegisterActivity extends Activity{
 
     // This method ensures that password contains at least 1 digit.
     private boolean hasDigit(final String password) {
-        return DECIMAL_DIGIT.matcher(password).find();
+        return DIGIT.matcher(password).find();
     }
 
     // This method ensures that password contains at least 1 uppercase letter.

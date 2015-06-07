@@ -79,9 +79,7 @@ public class RegisterUser extends Activity {
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
                     registerUser(name, email, password);
                 } else {
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter your details!", Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -102,16 +100,14 @@ public class RegisterUser extends Activity {
      * Function to store user in MySQL database will post params(tag, name,
      * email, password) to register url
      * */
-    private void registerUser(final String name, final String email,
-                              final String password) {
+    private void registerUser(final String name, final String email, final String password) {
         // Tag used to cancel the request
         String tag_string_req = "req_register";
 
         pDialog.setMessage("Registering ...");
         showDialog();
 
-        StringRequest strReq = new StringRequest(Method.POST,
-                ServerConfiguration.URL_REGISTER, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Method.POST, ServerConfiguration.URL_REGISTER, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -136,7 +132,9 @@ public class RegisterUser extends Activity {
                         db.addUser(name, email, uid, created_at);
 
                         // Launch login activity
-                        Intent intent = new Intent(RegisterUser.this, LoginUser.class);
+                        Intent intent = new Intent(
+                                RegisterUser.this,
+                                LoginUser.class);
                         startActivity(intent);
                         finish();
                     } else {
@@ -157,8 +155,7 @@ public class RegisterUser extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Registration Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {
@@ -178,7 +175,7 @@ public class RegisterUser extends Activity {
         };
 
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        ServerController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private void showDialog() {

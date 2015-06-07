@@ -29,6 +29,7 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.menu.MenuActivity;
 
 public class LoginUser extends Activity {
+    // LogCat tag
     private static final String TAG = RegisterUser.class.getSimpleName();
     private Button btnLogin;
     private TextView btnLinkToRegister;
@@ -42,10 +43,10 @@ public class LoginUser extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        inputEmail = (EditText) findViewById(R.id.usernameL);
+        inputPassword = (EditText) findViewById(R.id.passwordL);
         btnLogin = (Button) findViewById(R.id.login);
         btnLinkToRegister = (TextView) findViewById(R.id.registerhere);
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -75,9 +76,7 @@ public class LoginUser extends Activity {
                     checkLogin(email, password);
                 } else {
                     // Prompt user to enter credentials
-                    Toast.makeText(getApplicationContext(),
-                            "Please enter the credentials!", Toast.LENGTH_LONG)
-                            .show();
+                    Toast.makeText(getApplicationContext(), "Please enter the credentials!", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -87,7 +86,8 @@ public class LoginUser extends Activity {
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(), RegisterUser.class);
+                Intent i = new Intent(getApplicationContext(),
+                        RegisterUser.class);
                 startActivity(i);
                 finish();
             }
@@ -105,8 +105,7 @@ public class LoginUser extends Activity {
         pDialog.setMessage("Logging in ...");
         showDialog();
 
-        StringRequest strReq = new StringRequest(Method.POST,
-                ServerConfiguration.URL_REGISTER, new Response.Listener<String>() {
+        StringRequest strReq = new StringRequest(Method.POST, ServerConfiguration.URL_REGISTER, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
@@ -130,8 +129,7 @@ public class LoginUser extends Activity {
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     // JSON error
@@ -144,8 +142,7 @@ public class LoginUser extends Activity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Login Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
                 hideDialog();
             }
         }) {
@@ -164,7 +161,7 @@ public class LoginUser extends Activity {
         };
 
         // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        ServerController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
     private void showDialog() {
@@ -177,3 +174,4 @@ public class LoginUser extends Activity {
             pDialog.dismiss();
     }
 }
+

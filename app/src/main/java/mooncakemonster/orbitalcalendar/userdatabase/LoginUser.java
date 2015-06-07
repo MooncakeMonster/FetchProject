@@ -29,7 +29,7 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.menu.MenuActivity;
 
 public class LoginUser extends Activity {
-    // LogCat tag
+
     private static final String TAG = RegisterUser.class.getSimpleName();
     private Button btnLogin;
     private TextView btnLinkToRegister;
@@ -48,16 +48,13 @@ public class LoginUser extends Activity {
         btnLogin = (Button) findViewById(R.id.login);
         btnLinkToRegister = (TextView) findViewById(R.id.registerhere);
 
-        // Progress dialog
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
-        // Session manager
         session = new SessionManager(getApplicationContext());
 
-        // Check if user is already logged in or not
+        // Check if user is already logged in with SQLite database
         if (session.isLoggedIn()) {
-            // User is already logged in. Take him to main activity
             Intent intent = new Intent(LoginUser.this, MenuActivity.class);
             startActivity(intent);
             finish();
@@ -72,7 +69,6 @@ public class LoginUser extends Activity {
 
                 // Check for empty data in the form
                 if (email.trim().length() > 0 && password.trim().length() > 0) {
-                    // login user
                     checkLogin(email, password);
                 } else {
                     // Prompt user to enter credentials
@@ -82,12 +78,11 @@ public class LoginUser extends Activity {
 
         });
 
-        // Link to Register Screen
+        // This button links user to registration activity.
         btnLinkToRegister.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent i = new Intent(getApplicationContext(),
-                        RegisterUser.class);
+                Intent i = new Intent(getApplicationContext(), RegisterUser.class);
                 startActivity(i);
                 finish();
             }
@@ -95,11 +90,8 @@ public class LoginUser extends Activity {
 
     }
 
-    /**
-     * function to verify login details in mysql db
-     * */
+    // This method verifies login details in mysql database.
     private void checkLogin(final String email, final String password) {
-        // Tag used to cancel the request
         String tag_string_req = "req_login";
 
         pDialog.setMessage("Logging in ...");
@@ -116,23 +108,16 @@ public class LoginUser extends Activity {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
 
-                    // Check for error node in json
                     if (!error) {
-                        // user successfully logged in
-                        // Create login session
                         session.setLogin(true);
-
-                        // Launch main activity
                         Intent intent = new Intent(LoginUser.this, MenuActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
                         Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
-                    // JSON error
                     e.printStackTrace();
                 }
 
@@ -149,18 +134,16 @@ public class LoginUser extends Activity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting parameters to login url
+                // Pass to index.php
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("tag", "login");
                 params.put("email", email);
                 params.put("password", password);
-
                 return params;
             }
 
         };
 
-        // Adding request to request queue
         ServerController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 

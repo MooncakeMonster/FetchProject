@@ -5,7 +5,9 @@ package mooncakemonster.orbitalcalendar.userdatabase;
  */
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,20 +27,30 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.menu.MenuActivity;
+import mooncakemonster.orbitalcalendar.registration.DatabaseAdapter;
 
 public class RegisterUser extends Activity {
+    private static final Pattern LOWER_CASE = Pattern.compile("\\p{Lu}");
+    private static final Pattern UPPER_CASE = Pattern.compile("\\p{Ll}");
+    private static final Pattern DIGIT = Pattern.compile("\\p{Nd}");
+
     private static final String TAG = RegisterUser.class.getSimpleName();
     private Button btnRegister;
     private TextView btnLinkToLogin;
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
+    private EditText confirmPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
-    private SQLiteHandler db;
+    private SQLiteHelper db;
+    Context context = this;
+    DatabaseAdapter DB = new DatabaseAdapter(context);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +60,7 @@ public class RegisterUser extends Activity {
         inputFullName = (EditText) findViewById(R.id.username);
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
+        confirmPassword = (EditText) findViewById(R.id.confirmpassword);
         btnRegister = (Button) findViewById(R.id.register);
         btnLinkToLogin = (TextView) findViewById(R.id.rlogin);
 
@@ -59,7 +72,7 @@ public class RegisterUser extends Activity {
         session = new SessionManager(getApplicationContext());
 
         // SQLite database handler
-        db = new SQLiteHandler(getApplicationContext());
+        db = new SQLiteHelper(getApplicationContext());
 
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
@@ -75,11 +88,35 @@ public class RegisterUser extends Activity {
                 String name = inputFullName.getText().toString();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
+                String confirmPass = confirmPassword.getText().toString();
 
-                if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
+                // Prevent users from creating account with invalid email address
+                if(!isValidEmailAddress(email)) {
+                    alertUser("Invalid email address!", "Please try again.");
+                    resetDetails(1);
+                }
+
+                // Prevent users from creating account with username < 5 characters
+                else if(name.length() < 5) {
+                    alertUser("Invalid username!", "Username must contain at least 5 characters.");
+                    resetDetails(2);
+                }
+
+                // Prevent users from creating account with less than 8 characters, no upper and lowercase letters and no digits.
+                else if(!isValidPassword(password)) {
+                    alertUser("Invalid password!", "Password must contain at least 8 characters, including:\n\n-Uppercase letters\n-Lowercase letters\n-At least 1 digit");
+                    resetDetails(0);
+                }
+
+                // Prevent users from logging in if password != confirm password
+                else if(!(password.equals(confirmPass))) {
+                    alertUser("Passwords do not match!", "Please try again.");
+                    resetDetails(0);
+                }
+
+                // Successfully registered
+                else {
                     registerUser(name, email, password);
-                } else {
-                    Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -132,9 +169,7 @@ public class RegisterUser extends Activity {
                         db.addUser(name, email, uid, created_at);
 
                         // Launch login activity
-                        Intent intent = new Intent(
-                                RegisterUser.this,
-                                LoginUser.class);
+                        Intent intent = new Intent(RegisterUser.this, LoginUser.class);
                         startActivity(intent);
                         finish();
                     } else {
@@ -142,8 +177,7 @@ public class RegisterUser extends Activity {
                         // Error occurred in registration. Get the error
                         // message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getApplicationContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -162,7 +196,6 @@ public class RegisterUser extends Activity {
 
             @Override
             protected Map<String, String> getParams() {
-                // Posting params to register url
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("tag", "register");
                 params.put("name", name);
@@ -186,6 +219,55 @@ public class RegisterUser extends Activity {
     private void hideDialog() {
         if (pDialog.isShowing())
             pDialog.dismiss();
+    }
+
+    // This method calls alert dialog to inform users a message.
+    private void alertUser(String title, String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterUser.this);
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setMessage(message);
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.show();
+    }
+
+    // This method resets the details keyed in by user.
+    private void resetDetails(int num) {
+        if(num == 1) inputEmail.setText("");
+        if(num == 1 || num == 2) inputFullName.setText("");
+        inputPassword.setText("");
+        confirmPassword.setText("");
+    }
+
+    // This method ensures that email keyed in by user is valid (but can't ensure it exist)
+    public boolean isValidEmailAddress(String email) {
+        Pattern pattern = Pattern.compile("^.+@.+\\..+$");
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
+    // This method ensures that password contains at least 1 digit with both uppercase and lowercase letters.
+    public boolean isValidPassword(final String password) {
+        return hasEightChar(password) && hasDigit(password) && hasUpperCase(password) && hasLowerCase(password);
+    }
+
+    // This method ensures that password contains at least 8 characters and no more than 20 characters.
+    private boolean hasEightChar(final String password) {
+        return (password.length() >= 8 && password.length() <= 20);
+    }
+
+    // This method ensures that password contains at least 1 digit.
+    private boolean hasDigit(final String password) {
+        return DIGIT.matcher(password).find();
+    }
+
+    // This method ensures that password contains at least 1 uppercase letter.
+    private boolean hasUpperCase(final String password) {
+        return UPPER_CASE.matcher(password).find();
+    }
+
+    // This method ensures that password contains at least 1 lowercase letter.
+    private boolean hasLowerCase(final String password) {
+        return LOWER_CASE.matcher(password).find();
     }
 }
 

@@ -68,23 +68,17 @@ public class CalendarFragment extends Fragment {
             public void onCaldroidViewCreated() {
                 //Ensure days of the week displayed (e.g. Sun, Mon, Tues,...) are black
                 WeekdayArrayAdapter.textColor = Color.BLACK;
-                if (caldroidFragment.getLeftArrowButton() != null) {
-                    Toast.makeText(getActivity().getApplicationContext(), "Caldroid view is created", Toast.LENGTH_SHORT).show();
-                }
             }
             @Override
             public void onSelectDate(final Date date, View view) {
                 Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
-
                 //Get time to parse in long
                 long time = date.getTime();
-
                 //Open EventActivity for user to input their appointment
                 Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
                 intent.putExtra("date_passed", time);
                 startActivity(intent);
             }
-
             @Override
             public void onChangeMonth(int month, int year) {
                 String text = "month: " + month + " year: " + year;

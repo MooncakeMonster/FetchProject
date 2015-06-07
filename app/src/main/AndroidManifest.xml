@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".key.KeyActivity"
+        android:name="mooncakemonster.orbitalcalendar.userdatabase.AppController"
         android:allowBackup="true"
         android:icon="@drawable/bearicon"
         android:label="@string/app_name"
@@ -45,11 +45,11 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".registration.LoginActivity"
+            android:name=".userdatabase.LoginUser"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name=".registration.RegisterActivity"
+            android:name=".userdatabase.RegisterUser"
             android:label="@string/title_activity_register" >
         </activity>
         <activity

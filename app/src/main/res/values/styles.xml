@@ -5,7 +5,6 @@
     </style>
 
     <style name="AppThemeMenu" parent="android:Theme.Holo.Light">
-        <item name="android:windowTitleSize">54dip</item>
     </style>
 
     <!--Beginning of modification for Caldroid calendar: Make background transparent-->

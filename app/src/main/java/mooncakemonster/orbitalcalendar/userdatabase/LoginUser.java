@@ -37,6 +37,7 @@ public class LoginUser extends Activity {
     private EditText inputPassword;
     private ProgressDialog pDialog;
     private SessionManager session;
+    private SQLiteHelper db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class LoginUser extends Activity {
         btnLogin = (Button) findViewById(R.id.login);
         btnLinkToRegister = (TextView) findViewById(R.id.registerhere);
 
+        db = new SQLiteHelper(getApplicationContext());
         pDialog = new ProgressDialog(this);
         pDialog.setCancelable(false);
 
@@ -110,6 +112,17 @@ public class LoginUser extends Activity {
 
                     if (!error) {
                         session.setLogin(true);
+
+                        String uid = jObj.getString("uid");
+
+                        JSONObject user = jObj.getJSONObject("user");
+                        String name = user.getString("name");
+                        String email = user.getString("email");
+                        String created_at = user.getString("created_at");
+
+                        // Inserting row in users table
+                        db.addUser(name, email, uid, created_at);
+
                         Intent intent = new Intent(LoginUser.this, MenuActivity.class);
                         startActivity(intent);
                         finish();

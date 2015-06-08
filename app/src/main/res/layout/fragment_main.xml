@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/clouds"
+    android:background="@color/background"
     tools:context=".MainActivity"
     android:id="@+id/main_layout">
 
@@ -10,8 +10,9 @@
         android:layout_width="@dimen/icon_horizontal_margin"
         android:layout_height="@dimen/icon_vertical_margin"
         android:id="@+id/icon"
-        android:background="@drawable/bearicon"
+        android:background="@mipmap/ic_launcher"
         android:layout_above="@+id/slogan"
+        android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true" />
 
     <ImageView

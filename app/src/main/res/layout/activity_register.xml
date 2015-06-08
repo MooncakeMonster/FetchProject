@@ -1,52 +1,63 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:background="@drawable/clouds"
+    android:padding="20dp"
+    android:background="@color/background"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:id="@+id/email"
         android:inputType="textEmailAddress"
         android:hint="Email Address"
+        android:layout_marginBottom="10dp"
+        android:background="@color/caldroid_white"
+        android:padding="10dp"
         android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/username"
+        android:layout_below="@+id/imageView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:id="@+id/username"
         android:hint="Username"
+        android:background="@color/caldroid_white"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
-        android:layout_above="@+id/password"
+        android:layout_below="@+id/email"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
+        android:background="@color/caldroid_white"
+        android:layout_marginBottom="10dp"
+        android:padding="10dp"
         android:id="@+id/password"
         android:hint="Password"
         android:layout_gravity="center_horizontal"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_below="@+id/username"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/confirmpassword"
-        android:layout_marginBottom="10dp"
         android:hint="Confirm password"
+        android:background="@color/caldroid_white"
+        android:layout_marginBottom="20dp"
+        android:padding="10dp"
         android:layout_gravity="center_horizontal"
         android:layout_below="@+id/password"
         android:layout_alignParentLeft="true"
@@ -56,83 +67,31 @@
         android:layout_width="356dp"
         android:layout_height="wrap_content"
         android:text="REGISTER"
+        android:textColor="@color/caldroid_white"
         android:id="@+id/register"
+        android:padding="10dp"
         android:layout_marginBottom="10dp"
-        android:background="@drawable/buttonborder"
+        android:background="@color/button_green"
         android:layout_below="@+id/confirmpassword"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView1"
-        android:background="@mipmap/red"
-        android:layout_above="@+id/email"
-        android:layout_toLeftOf="@+id/imageView5"
-        android:layout_toStartOf="@+id/imageView5" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView2"
-        android:layout_above="@+id/email"
-        android:background="@mipmap/orange"
-        android:layout_alignTop="@+id/imageView3"
-        android:layout_toRightOf="@+id/imageView3"
-        android:layout_toEndOf="@+id/imageView3" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView3"
-        android:layout_above="@+id/email"
-        android:background="@mipmap/cyan"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView4"
-        android:background="@mipmap/green"
-        android:layout_above="@+id/email"
-        android:layout_toLeftOf="@+id/imageView3"
-        android:layout_toStartOf="@+id/imageView3" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView5"
-        android:background="@mipmap/blue"
-        android:layout_above="@+id/email"
-        android:layout_alignTop="@+id/imageView4"
-        android:layout_toLeftOf="@+id/imageView4"
-        android:layout_toStartOf="@+id/imageView4" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView6"
-        android:background="@mipmap/purple"
-        android:layout_above="@+id/email"
-        android:layout_toRightOf="@+id/imageView7"
-        android:layout_toEndOf="@+id/imageView7" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView7"
-        android:layout_above="@+id/email"
-        android:background="@mipmap/red"
-        android:layout_alignTop="@+id/imageView2"
-        android:layout_toRightOf="@+id/imageView2"
-        android:layout_toEndOf="@+id/imageView2" />
+        android:layout_width="230dp"
+        android:layout_height="70dp"
+        android:id="@+id/imageView"
+        android:background="@drawable/welcome"
+        android:layout_marginBottom="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="45dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already registered! Login Me."
+        android:text="Already registered? Login here."
         android:id="@+id/rlogin"
+        android:textColor="@color/caldroid_white"
         android:layout_below="@+id/register"
         android:layout_centerHorizontal="true" />
 

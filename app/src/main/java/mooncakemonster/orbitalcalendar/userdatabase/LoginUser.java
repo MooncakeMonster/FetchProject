@@ -43,7 +43,7 @@ public class LoginUser extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        inputEmail = (EditText) findViewById(R.id.usernameL);
+        inputEmail = (EditText) findViewById(R.id.emailL);
         inputPassword = (EditText) findViewById(R.id.passwordL);
         btnLogin = (Button) findViewById(R.id.login);
         btnLinkToRegister = (TextView) findViewById(R.id.registerhere);

@@ -32,7 +32,6 @@ import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.menu.MenuActivity;
-import mooncakemonster.orbitalcalendar.registration.DatabaseAdapter;
 
 public class RegisterUser extends Activity {
     private static final Pattern LOWER_CASE = Pattern.compile("\\p{Lu}");
@@ -50,7 +49,6 @@ public class RegisterUser extends Activity {
     private SessionManager session;
     private SQLiteHelper db;
     Context context = this;
-    DatabaseAdapter DB = new DatabaseAdapter(context);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

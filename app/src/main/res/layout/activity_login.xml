@@ -10,8 +10,9 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:id="@+id/usernameL"
-        android:hint="Username"
+        android:id="@+id/emailL"
+        android:hint="Email Address"
+        android:inputType="textEmailAddress"
         android:layout_gravity="center_horizontal"
         android:layout_above="@+id/passwordL"
         android:layout_alignLeft="@+id/passwordL"
@@ -24,6 +25,7 @@
         android:ems="10"
         android:id="@+id/passwordL"
         android:hint="Password"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="center_horizontal"
         android:layout_centerVertical="true"
         android:layout_alignLeft="@+id/login"
@@ -54,7 +56,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView1"
         android:background="@mipmap/red"
-        android:layout_above="@+id/usernameL"
+        android:layout_above="@+id/emailL"
         android:layout_toLeftOf="@+id/imageView5"
         android:layout_toStartOf="@+id/imageView5" />
 
@@ -72,7 +74,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView3"
         android:background="@mipmap/cyan"
-        android:layout_above="@+id/usernameL"
+        android:layout_above="@+id/emailL"
         android:layout_centerHorizontal="true" />
 
     <ImageView
@@ -80,7 +82,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView4"
         android:background="@mipmap/green"
-        android:layout_above="@+id/usernameL"
+        android:layout_above="@+id/emailL"
         android:layout_toLeftOf="@+id/imageView3"
         android:layout_toStartOf="@+id/imageView3" />
 
@@ -98,7 +100,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView6"
         android:background="@mipmap/purple"
-        android:layout_above="@+id/usernameL"
+        android:layout_above="@+id/emailL"
         android:layout_toRightOf="@+id/imageView7"
         android:layout_toEndOf="@+id/imageView7" />
 
@@ -110,16 +112,5 @@
         android:layout_alignTop="@+id/imageView2"
         android:layout_toRightOf="@+id/imageView2"
         android:layout_toEndOf="@+id/imageView2" />
-
-    <Button
-        android:layout_width="356dp"
-        android:layout_height="wrap_content"
-        android:text="VIEW DETAILS"
-        android:id="@+id/details"
-        android:onClick="viewAllDetails"
-        android:background="@drawable/buttonborder"
-        android:layout_below="@+id/registerhere"
-        android:layout_alignRight="@+id/login"
-        android:layout_alignEnd="@+id/login" />
 
 </RelativeLayout>

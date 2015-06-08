@@ -46,23 +46,12 @@
         </activity>
         <activity
             android:name=".userdatabase.LoginUser"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
             android:name=".userdatabase.RegisterUser"
-            android:label="@string/title_activity_register" >
-        </activity>
-        <activity
-            android:name=".registration.UpdateActivity"
-            android:label="@string/title_activity_update" >
-        </activity>
-
-        <activity
-            android:name=".registration.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
-        <activity
-            android:name=".registration.RegisterActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_register" >
         </activity>
     </application>

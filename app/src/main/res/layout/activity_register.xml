@@ -11,7 +11,7 @@
         android:layout_height="50dp"
         android:id="@+id/email"
         android:inputType="textEmailAddress"
-        android:hint="Email"
+        android:hint="Email Address"
         android:layout_gravity="center_horizontal"
         android:layout_above="@+id/username"
         android:layout_alignParentLeft="true"

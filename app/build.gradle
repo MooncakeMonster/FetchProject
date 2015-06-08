@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.facebook.android:facebook-android-sdk:4.0.0'
     compile 'com.roomorama:caldroid:2.0.0'
+    compile files('libs/volley.jar')
 }

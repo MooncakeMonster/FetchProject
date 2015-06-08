@@ -44,8 +44,6 @@
         android:layout_alignEnd="@+id/endT"
         android:onClick="onClick" />
 
-    <!--Notes-->
-
     <!--Start and End Date-->
     <Button
         android:layout_width="150dp"
@@ -97,7 +95,6 @@
         android:layout_alignStart="@+id/startT" />
 
     <!-- Reminder checkbox -->
-
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="40dp"

@@ -119,8 +119,11 @@ public class MenuActivity extends FragmentActivity {
 
         // Handle action bar actions click
         switch (item.getItemId()) {
-            case R.id.action_settings: return true;
-            default: return super.onOptionsItemSelected(item);
+            case R.id.action_settings:
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 

@@ -40,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     public static synchronized DatabaseHelper getInstance(Context context) {
 
-        // Use the application context, which will ensure that you don't accidentally leak an Activity's context.
+        // Use the application context, ensuring no accidental leakage an Activity's context.
         if (sInstance == null) {
             sInstance = new DatabaseHelper(context.getApplicationContext());
         }

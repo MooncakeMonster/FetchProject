@@ -60,6 +60,10 @@ public class EventActivity extends Activity {
         }
         setButtonFunction();
         setCheckBoxFunction();
+
+        //Intialise and open database
+        appointmentDatabase = new AppointmentController(this);
+        appointmentDatabase.open();
     }
 
     // This method sets selected date by user on the button.
@@ -363,11 +367,7 @@ public class EventActivity extends Activity {
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.addAppointmentButton:
-                appointmentDatabase.open();
                 insertInDatabase();
-                //Close AppointmentController properly
-                appointmentDatabase.close();
-                appointmentDatabase = null;
                 //Inform user that appointment has been created and return to previous activity
                 Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
                 finish();

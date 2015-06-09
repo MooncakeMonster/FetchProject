@@ -1,6 +1,7 @@
 package mooncakemonster.orbitalcalendar.menudrawer;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.accountsettings.SettingActivity;
 import mooncakemonster.orbitalcalendar.userdatabase.SQLiteHelper;
 
 public class FragmentDrawer extends Fragment {
@@ -31,6 +34,7 @@ public class FragmentDrawer extends Fragment {
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
+    private Button userIcon;
     private TextView displayUsername;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
@@ -67,6 +71,14 @@ public class FragmentDrawer extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
+
+        userIcon = (Button) layout.findViewById(R.id.usericon);
+        userIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity().getApplicationContext(), SettingActivity.class));
+            }
+        });
 
         displayUsername = (TextView) layout.findViewById(R.id.displayusername);
         db = new SQLiteHelper(getActivity().getApplicationContext());

@@ -10,8 +10,8 @@
     <color name="background">#26ae90</color>
     <color name="button_green">#179177</color>
 
-    <color name="colorPrimary">#179177</color>
-    <color name="colorPrimaryDark">#0E6B57</color>
+    <color name="colorPrimary">#137F67</color>
+    <color name="colorPrimaryDark">#0B5F4D</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>

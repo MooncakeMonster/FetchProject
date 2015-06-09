@@ -15,7 +15,6 @@ import android.view.View;
 import java.util.Calendar;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.accountsettings.SettingFragment;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
@@ -89,10 +88,6 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
             case 4:
                 fragment = new VotingFragment();
                 title = "Voting Results";
-                break;
-            case 5:
-                fragment = new SettingFragment();
-                title = "Account Settings";
                 break;
             default: break;
         }

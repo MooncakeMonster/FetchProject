@@ -13,8 +13,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.facebook.login.widget.LoginButton;
-
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
@@ -37,17 +35,17 @@ public class MainActivity extends ActionBarActivity {
         ImageView icon = (ImageView) findViewById(R.id.icon),
                 slogan = (ImageView) findViewById(R.id.slogan),
                 tap = (ImageView) findViewById(R.id.tap);
-        LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
+        //LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
 
         icon.startAnimation(animationFadeIn);
         slogan.startAnimation(animationFadeIn);
-        loginButton.startAnimation(animationFadeIn);
+        //loginButton.startAnimation(animationFadeIn);
         tap.startAnimation(animationAlpha);
     }
 
     // This method sets "tap anywhere to continue" to next activity.
     private void setTapAnywhereToContinue() {
-        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.fragment);
+        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.main_layout);
 
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
                 //TODO: When login is successful, redirect to MenuActivity
                 Intent intent = new Intent(MainActivity.this, MenuDrawer.class);
                 startActivity(intent);
+                finish();
             }
         });
     }

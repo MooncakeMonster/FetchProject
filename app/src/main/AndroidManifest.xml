@@ -54,6 +54,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/MyMaterialTheme" >
         </activity>
+        <activity android:name=".accountsettings.SettingActivity"
+            android:label="Account Settings"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMenu">
+        </activity>
 
     </application>
 

@@ -18,18 +18,7 @@
         <item>Events</item>
         <item>Timetable</item>
         <item>Voting Results</item>
-        <item >Account Settings</item>
     </string-array>
-
-    <!-- Nav Drawer List Item Icons -->
-    <array name="nav_drawer_icons">
-        <item>@mipmap/red</item>
-        <item>@mipmap/blue</item>
-        <item>@mipmap/green</item>
-        <item>@mipmap/cyan</item>
-        <item>@mipmap/purple</item>
-        <item>@mipmap/orange</item>
-    </array>
 
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>

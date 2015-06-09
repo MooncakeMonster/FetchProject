@@ -4,7 +4,7 @@
     android:paddingRight="15dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/clouds">
+    android:background="@color/background">
 
     <Button
         android:layout_width="wrap_content"

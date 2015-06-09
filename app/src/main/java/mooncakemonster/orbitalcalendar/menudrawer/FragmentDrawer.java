@@ -13,11 +13,14 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.userdatabase.SQLiteHelper;
 
 public class FragmentDrawer extends Fragment {
 
@@ -28,8 +31,10 @@ public class FragmentDrawer extends Fragment {
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
+    private TextView displayUsername;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
+    private SQLiteHelper db;
 
     public FragmentDrawer() {
 
@@ -41,7 +46,6 @@ public class FragmentDrawer extends Fragment {
 
     public static List<NavDrawerItem> getData() {
         List<NavDrawerItem> data = new ArrayList<>();
-
 
         // preparing navigation drawer items
         for (int i = 0; i < titles.length; i++) {
@@ -56,17 +60,22 @@ public class FragmentDrawer extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // drawer labels
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_items);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
-        recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
+        displayUsername = (TextView) layout.findViewById(R.id.displayusername);
+        db = new SQLiteHelper(getActivity().getApplicationContext());
+
+        // Fetch user details from sqlite TODO: Check why is it stored wrongly
+        HashMap<String, String> user = db.getUserDetails();
+        displayUsername.setText("Hello " + user.get("email") + "!");
+
+        recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
         adapter = new NavigationDrawerAdapter(getActivity(), getData());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -122,7 +131,6 @@ public class FragmentDrawer extends Fragment {
 
     public static interface ClickListener {
         public void onClick(View view, int position);
-
         public void onLongClick(View view, int position);
     }
 

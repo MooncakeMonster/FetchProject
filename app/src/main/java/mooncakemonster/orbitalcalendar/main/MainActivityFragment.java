@@ -25,7 +25,7 @@ import com.facebook.login.widget.LoginButton;
 import java.util.Arrays;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.menu.MenuActivity;
+import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -44,7 +44,7 @@ public class MainActivityFragment extends Fragment {
 
             // Get to next activity
             if(profile != null) {
-                Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MenuDrawer.class);
                 startActivity(intent);
             }
 

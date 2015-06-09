@@ -8,7 +8,7 @@
     <application
         android:name=".userdatabase.ServerController"
         android:allowBackup="true"
-        android:icon="@drawable/bearicon"
+        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
@@ -54,6 +54,13 @@
             android:screenOrientation="portrait"
             android:label="@string/title_activity_register" >
         </activity>
+        <activity
+            android:name=".menudrawer.MenuDrawer"
+            android:label="Fetch"
+            android:screenOrientation="portrait"
+            android:theme="@style/MyMaterialTheme" >
+        </activity>
+
     </application>
 
 </manifest>

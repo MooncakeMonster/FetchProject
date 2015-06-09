@@ -31,7 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.menu.MenuActivity;
+import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 public class RegisterUser extends Activity {
     private static final Pattern LOWER_CASE = Pattern.compile("\\p{Lu}");
@@ -75,7 +75,7 @@ public class RegisterUser extends Activity {
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
             // User is already logged in. Take him to main activity
-            Intent intent = new Intent(RegisterUser.this, MenuActivity.class);
+            Intent intent = new Intent(RegisterUser.this, MenuDrawer.class);
             startActivity(intent);
             finish();
         }

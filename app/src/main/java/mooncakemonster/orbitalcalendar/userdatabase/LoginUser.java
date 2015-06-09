@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.menu.MenuActivity;
+import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 public class LoginUser extends Activity {
 
@@ -57,7 +57,7 @@ public class LoginUser extends Activity {
 
         // Check if user is already logged in with SQLite database
         if (session.isLoggedIn()) {
-            Intent intent = new Intent(LoginUser.this, MenuActivity.class);
+            Intent intent = new Intent(LoginUser.this, MenuDrawer.class);
             startActivity(intent);
             finish();
         }
@@ -123,7 +123,7 @@ public class LoginUser extends Activity {
                         // Inserting row in users table
                         db.addUser(name, email, uid, created_at);
 
-                        Intent intent = new Intent(LoginUser.this, MenuActivity.class);
+                        Intent intent = new Intent(LoginUser.this, MenuDrawer.class);
                         startActivity(intent);
                         finish();
                     } else {

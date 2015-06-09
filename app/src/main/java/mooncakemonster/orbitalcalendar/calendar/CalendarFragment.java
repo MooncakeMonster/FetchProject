@@ -54,7 +54,7 @@ public class CalendarFragment extends Fragment {
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         //Highlight today's date
-        caldroidFragment.setBackgroundResourceForDate(R.drawable.circle, cal.getTime());
+        caldroidFragment.setBackgroundResourceForDate(R.color.button_green, cal.getTime());
         caldroidFragment.refreshView();
         //Make background transparent
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
@@ -67,7 +67,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onCaldroidViewCreated() {
                 //Ensure days of the week displayed (e.g. Sun, Mon, Tues,...) are black
-                WeekdayArrayAdapter.textColor = Color.BLACK;
+                WeekdayArrayAdapter.textColor = Color.WHITE;
             }
             @Override
             public void onSelectDate(final Date date, View view) {

@@ -10,6 +10,9 @@
     <!--Beginning of modification for Caldroid calendar: Make background transparent-->
     <style name="CaldroidDefaultTransparent" parent="CaldroidDefault">
         <item name="styleCaldroidViewLayout">@style/CaldroidDefaultTransparentCalendarViewLayout</item>
+        <item name="styleCaldroidLeftArrow">@style/CaldroidDefaultLeftButton</item>
+        <item name="styleCaldroidRightArrow">@style/CaldroidDefaultRightButton</item>
+        <item name="styleCaldroidMonthName">@style/CaldroidDefaultMonthName</item>
         <item name="styleCaldroidNormalCell">@style/CaldroidDefaultTransparentNormalCell</item>
         <item name="styleCaldroidSquareCell">@style/CaldroidDefaultTransparentSquareCell</item>
          <item name="styleCaldroidGridView">@style/CaldroidDefaultTransparentGridView</item>
@@ -19,15 +22,45 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="CaldroidDefaultLeftButton" parent="CaldroidDefaultArrowButton">
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:background">@drawable/left_arrow</item>
+    </style>
+
+    <style name="CaldroidDefaultRightButton" parent="CaldroidDefaultArrowButton">
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:background">@drawable/right_arrow</item>
+    </style>
+
+    <style name="CaldroidDefaultMonthName">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">21sp</item>
+    </style>
+
     <style name="CaldroidDefaultTransparentGridView" parent="CaldroidDefaultGridView">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:listSelector">@null</item>
+        <item name="android:background">@color/button_green</item>
+        <item name="android:horizontalSpacing">1dp</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:verticalSpacing">1dp</item>
     </style>
 
     <style name="CaldroidDefaultTransparentCell" parent="CaldroidDefaultCell">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textColor">@color/cell_text_color_dark</item>
+        <item name="android:background">@color/background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
-    <style name="CaldroidDefaultTransparentNormalCell" parent="CaldroidDefaultTransparentCell" />
+    <style name="CaldroidDefaultTransparentNormalCell" parent="CaldroidDefaultTransparentCell" >
+        <item name="android:padding">2dp</item>
+    </style>
+
     <style name="CaldroidDefaultTransparentSquareCell" parent="CaldroidDefaultTransparentCell" />
     <!--End of modification for Caldroid calendar-->
 </resources>

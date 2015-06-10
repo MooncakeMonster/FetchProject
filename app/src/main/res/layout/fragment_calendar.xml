@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
+    android:clipToPadding="false"
     android:orientation="vertical">
 
     <!--For CalendarFragment.java-->
@@ -11,7 +12,8 @@
         android:id="@+id/cal_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="5dp"
+        android:paddingTop="10dp"
+        android:elevation="30dp"
         android:layout_centerHorizontal="true"
         android:orientation="vertical" />
 

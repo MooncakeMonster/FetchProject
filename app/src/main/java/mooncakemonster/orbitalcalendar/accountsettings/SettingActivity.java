@@ -32,6 +32,8 @@ public class SettingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_setting);
 
+        getSupportActionBar().setElevation(0);
+
         user_email = (TextView) findViewById(R.id.useremail);
         user_name = (TextView) findViewById(R.id.updateuser);
         facebook = (Button) findViewById(R.id.login_button);
@@ -73,12 +75,20 @@ public class SettingActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu_sample, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_close) {
+            finish();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 }

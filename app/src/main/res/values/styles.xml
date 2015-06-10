@@ -13,36 +13,35 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:windowBackground">@color/windowBackground</item>
     </style>
 
     <!--Beginning of modification for Caldroid calendar: Make background transparent-->
     <style name="CaldroidDefaultTransparent" parent="CaldroidDefault">
         <item name="styleCaldroidViewLayout">@style/CaldroidDefaultTransparentCalendarViewLayout</item>
-        <item name="styleCaldroidLeftArrow">@style/CaldroidDefaultLeftButton</item>
-        <item name="styleCaldroidRightArrow">@style/CaldroidDefaultRightButton</item>
-        <item name="styleCaldroidMonthName">@style/CaldroidDefaultMonthName</item>
+        <item name="styleCaldroidLeftArrow">@style/CaldroidDefaultTransparentLeftButton</item>
+        <item name="styleCaldroidRightArrow">@style/CaldroidDefaultTransparentRightButton</item>
+        <item name="styleCaldroidMonthName">@style/CaldroidDefaultTransparentMonthName</item>
         <item name="styleCaldroidNormalCell">@style/CaldroidDefaultTransparentNormalCell</item>
         <item name="styleCaldroidSquareCell">@style/CaldroidDefaultTransparentSquareCell</item>
          <item name="styleCaldroidGridView">@style/CaldroidDefaultTransparentGridView</item>
     </style>
 
     <style name="CaldroidDefaultTransparentCalendarViewLayout">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@color/background</item>
     </style>
 
-    <style name="CaldroidDefaultLeftButton" parent="CaldroidDefaultArrowButton">
+    <style name="CaldroidDefaultTransparentLeftButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:background">@drawable/left_arrow</item>
     </style>
 
-    <style name="CaldroidDefaultRightButton" parent="CaldroidDefaultArrowButton">
+    <style name="CaldroidDefaultTransparentRightButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:background">@drawable/right_arrow</item>
     </style>
 
-    <style name="CaldroidDefaultMonthName">
+    <style name="CaldroidDefaultTransparentMonthName">
         <item name="android:textColor">@android:color/white</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

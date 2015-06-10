@@ -35,7 +35,7 @@
         <activity
             android:name=".event.EventActivity"
             android:label="@string/title_activity_event"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppThemeMenu"
             android:screenOrientation="portrait">
         </activity>
         <activity

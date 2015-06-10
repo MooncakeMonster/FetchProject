@@ -12,6 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.roomorama.caldroid.CaldroidFragment;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import mooncakemonster.orbitalcalendar.R;
@@ -25,6 +28,8 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
 
     private static String TAG = MenuDrawer.class.getSimpleName();
     private Calendar cal = Calendar.getInstance();
+    private CaldroidFragment caldroidFragment = new CaldroidFragment();
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM yyyy");
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
@@ -68,10 +73,12 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
     private void displayView(int position) {
         Fragment fragment = null;
         String title = getString(R.string.app_name);
+
         switch (position) {
             case 0:
                 fragment = new CalendarFragment();
-                title = "Calendar";
+                // get current month and year
+                title = dateFormatter.format(cal.getTime());
                 break;
             case 1:
                 fragment = new NotificationFragment();

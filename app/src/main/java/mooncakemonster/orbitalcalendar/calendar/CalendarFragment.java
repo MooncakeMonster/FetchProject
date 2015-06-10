@@ -1,10 +1,10 @@
 package mooncakemonster.orbitalcalendar.calendar;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +41,7 @@ public class CalendarFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         //Creating Caldroid calendar here
         //Variable formatter for setting up listener later
         final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
@@ -48,6 +49,7 @@ public class CalendarFragment extends Fragment {
         caldroidFragment = new CaldroidFragment();
         //Get today's date and time using Java's Calendar class
         final Calendar cal = Calendar.getInstance();
+
         //Bundle args will supply the information for caldroidFragment.setArguments(args) to build the calendar
         Bundle args = new Bundle();
         //Extract today's date to insert in bundle args
@@ -60,7 +62,6 @@ public class CalendarFragment extends Fragment {
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
         //Build caldroidFragment with the above information and setting
         caldroidFragment.setArguments(args);
-
 
         // (2) Setup listener for caldroidFragment
         final CaldroidListener listener = new CaldroidListener() {
@@ -97,6 +98,7 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
+
         //Ensure caldroidFragment will be attached to the activity
         android.support.v4.app.FragmentTransaction t = myContext.getSupportFragmentManager().beginTransaction();
         t.replace(R.id.cal_fragment, caldroidFragment);

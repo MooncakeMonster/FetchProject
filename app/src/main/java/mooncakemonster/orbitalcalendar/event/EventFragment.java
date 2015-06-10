@@ -25,6 +25,8 @@ public class EventFragment extends ListFragment{
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        super.onCreate(savedInstanceState);
+
         //Get all the appointment
         appointmentDatabase = new AppointmentController(getActivity());
         appointmentDatabase.open();
@@ -41,12 +43,14 @@ public class EventFragment extends ListFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        return inflater.inflate(R.layout.fragment_setting, container, false);
+        return inflater.inflate(R.layout.fragment_listfragment, container, false);
     }
 
     @Override
     public void onPause()
     {
+        super.onPause();
+
         if(appointmentDatabase != null)
         {
             appointmentDatabase.close();

@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
-        android:background="@color/button_green">
+        android:background="@color/colorPrimary">
 
         <Button
             android:layout_width="80dp"

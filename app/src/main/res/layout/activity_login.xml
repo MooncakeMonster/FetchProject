@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="@color/background"
+    android:background="@drawable/cloudy"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
@@ -42,6 +42,7 @@
         android:text="LOGIN"
         android:textColor="@color/caldroid_white"
         android:id="@+id/login"
+        android:textSize="16dp"
         android:layout_marginBottom="10dp"
         android:background="@color/button_green"
         android:layout_below="@+id/passwordL"
@@ -53,7 +54,7 @@
         android:id="@+id/registerhere"
         android:layout_marginBottom="10dp"
         android:textStyle="bold"
-        android:textColor="@color/caldroid_white"
+        android:textColor="@color/colorPrimary"
         android:text="Register Here"
         android:layout_below="@+id/login"
         android:layout_centerHorizontal="true" />

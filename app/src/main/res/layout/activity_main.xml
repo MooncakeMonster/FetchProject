@@ -3,7 +3,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background"
+    android:background="@drawable/cloudy"
     tools:context=".MainActivity">
 
     <ImageView
@@ -13,7 +13,7 @@
         android:layout_above="@+id/slogan"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
-        android:background="@mipmap/ic_launcher" />
+        android:background="@drawable/bearicon" />
 
     <ImageView
         android:id="@+id/slogan"

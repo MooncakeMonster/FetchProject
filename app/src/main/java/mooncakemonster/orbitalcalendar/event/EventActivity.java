@@ -66,7 +66,7 @@ public class EventActivity extends ActionBarActivity {
 
         //Intialise and open database
         appointmentDatabase = new AppointmentController(this);
-        appointmentDatabase.open();
+        //appointmentDatabase.open();
     }
 
     // This method sets selected date by user on the button.

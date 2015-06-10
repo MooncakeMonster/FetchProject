@@ -7,13 +7,13 @@
     <color name="counter_text_bg">#626262</color>
     <color name="counter_text_color">#c5c4c4</color>
 
-    <color name="background">#26ae90</color>
-    <color name="button_green">#179177</color>
+    <color name="background">#C2DFFF</color>
+    <color name="button_green">#6698FF</color>
 
-    <color name="colorPrimary">#137F67</color>
-    <color name="colorPrimaryDark">#0B5F4D</color>
+    <color name="colorPrimary">#6698FF</color>
+    <color name="colorPrimaryDark">#6698FF</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#179177</color>
+    <color name="colorAccent">#6698FF</color>
 </resources>

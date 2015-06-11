@@ -46,8 +46,8 @@
         android:onClick="onClick"
         android:textSize="16dp"
         android:layout_below="@+id/appointmentNotes"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <!--Start and End Date-->
     <Button

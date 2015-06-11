@@ -28,7 +28,7 @@
     </style>
 
     <style name="CaldroidDefaultTransparentCalendarViewLayout">
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/caldroid_transparent</item>
     </style>
 
     <style name="CaldroidDefaultTransparentLeftButton" parent="CaldroidDefaultArrowButton">
@@ -52,7 +52,7 @@
 
     <style name="CaldroidDefaultTransparentGridView" parent="CaldroidDefaultGridView">
         <item name="android:listSelector">@null</item>
-        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:background">@color/caldroid_transparent</item>
         <item name="android:horizontalSpacing">1dp</item>
         <item name="android:padding">0dp</item>
         <item name="android:verticalSpacing">1dp</item>
@@ -60,7 +60,7 @@
 
     <style name="CaldroidDefaultTransparentCell" parent="CaldroidDefaultCell">
         <item name="android:textColor">@color/cell_text_color</item>
-        <item name="android:background">@color/background</item>
+        <item name="android:background">@color/caldroid_transparent</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textStyle">normal</item>

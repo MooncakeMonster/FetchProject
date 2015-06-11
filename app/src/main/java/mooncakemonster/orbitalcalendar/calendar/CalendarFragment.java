@@ -56,7 +56,7 @@ public class CalendarFragment extends Fragment {
         args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
         args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
         //Highlight today's date
-        caldroidFragment.setBackgroundResourceForDate(R.color.caldroid_sky_blue, cal.getTime());
+        caldroidFragment.setBackgroundResourceForDate(R.drawable.circle, cal.getTime());
         caldroidFragment.refreshView();
         //Make background transparent
         args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);

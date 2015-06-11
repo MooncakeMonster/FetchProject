@@ -20,6 +20,16 @@
         <item>Voting Results</item>
     </string-array>
 
+    <!-- Colours for Event List -->
+    <string-array name="event_bg">
+        <item>#24c6d5</item>
+        <item>#57dd86</item>
+        <item>#ad7dcf</item>
+        <item>#ff484d</item>
+        <item>#fcba59</item>
+        <item>#24c6d5</item>
+    </string-array>
+
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
 

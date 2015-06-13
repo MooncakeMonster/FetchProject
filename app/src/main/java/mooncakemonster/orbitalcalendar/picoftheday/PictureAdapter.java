@@ -21,7 +21,7 @@ import mooncakemonster.orbitalcalendar.R;
  */
 public class PictureAdapter extends ArrayAdapter {
 
-    LayoutInflater inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater inflator;
     private List list = new ArrayList();
     private Context context;
 
@@ -57,6 +57,8 @@ public class PictureAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         ImageHolder holder;
+
+        if(inflator == null) inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         if(convertView == null) {
             row = inflator.inflate(R.layout.row_feed, parent, false);

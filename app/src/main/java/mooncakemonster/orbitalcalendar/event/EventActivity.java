@@ -93,7 +93,7 @@ public class EventActivity extends ActionBarActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         dateTime.set(year, monthOfYear, dayOfMonth);
-                        beginDate.setText("From     " + dateFormat);
+                        beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
                 date.show();
@@ -107,7 +107,7 @@ public class EventActivity extends ActionBarActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         dateTime.set(year, monthOfYear, dayOfMonth);
-                        endDate.setText("To         " + dateFormat);
+                        endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
                 date.show();
@@ -122,7 +122,7 @@ public class EventActivity extends ActionBarActivity {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         dateTime.set(Calendar.MINUTE, minute);
-                        beginTime.setText(timeFormat);
+                        beginTime.setText(timeFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
                 time.show();
@@ -137,7 +137,7 @@ public class EventActivity extends ActionBarActivity {
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         dateTime.set(Calendar.MINUTE, minute);
-                        endTime.setText(timeFormat);
+                        endTime.setText(timeFormatter.format(dateTime.getTime()));
                     }
                 }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
                 time.show();

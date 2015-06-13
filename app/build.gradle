@@ -31,5 +31,6 @@ dependencies {
     compile 'com.roomorama:caldroid:2.0.0'
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.soundcloud.android:android-crop:1.0.0@aar'
+    compile "com.squareup.picasso:picasso:2.4.0"
     compile files('libs/volley.jar')
 }

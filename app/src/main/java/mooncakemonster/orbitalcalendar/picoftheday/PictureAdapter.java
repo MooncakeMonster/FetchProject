@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +20,14 @@ import mooncakemonster.orbitalcalendar.R;
  * This method creates ArrayAdapter for PictureItem.
  */
 public class PictureAdapter extends ArrayAdapter {
-    private List list = new ArrayList();
-    LayoutInflater inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-    public PictureAdapter(Context context, int resource) {
-        super(context, resource);
+    LayoutInflater inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    private List list = new ArrayList();
+    private Context context;
+
+    public PictureAdapter(Context context, int resources) {
+        super(context, resources);
+        this.context = context;
     }
 
     public void add(PictureItem object) {
@@ -30,7 +35,7 @@ public class PictureAdapter extends ArrayAdapter {
         super.add(object);
     }
 
-    static class ImgHolder {
+    static class ImageHolder {
         ImageView pic_icon;
         TextView pic_title;
         TextView pic_date;
@@ -51,11 +56,11 @@ public class PictureAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        ImgHolder holder;
+        ImageHolder holder;
 
-        if(row == null) {
+        if(convertView == null) {
             row = inflator.inflate(R.layout.row_feed, parent, false);
-            holder = new ImgHolder();
+            holder = new ImageHolder();
 
             holder.pic_icon = (ImageView) row.findViewById(R.id.pic_icon);
             holder.pic_title = (TextView) row.findViewById(R.id.pic_title);
@@ -66,14 +71,16 @@ public class PictureAdapter extends ArrayAdapter {
             row.setTag(holder);
         }
 
-        else holder = (ImgHolder) row.getTag();
+        else holder = (ImageHolder) row.getTag();
 
         PictureItem picture = (PictureItem) getItem(position);
         holder.pic_icon.setImageResource(picture.getID());
         holder.pic_title.setText(picture.getTitle());
         holder.pic_date.setText(picture.getDate());
         holder.pic_caption.setText(picture.getCaption());
-        holder.pic_image.setImageURI(Uri.parse(picture.getImage()));
+
+        // Cache image to prevent out of memory
+        Picasso.with(context).load(Uri.parse(picture.getImage())).into(holder.pic_image);
 
         return row;
     }

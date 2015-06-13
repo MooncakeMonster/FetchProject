@@ -2,10 +2,10 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="mooncakemonster.orbitalcalendar.event.EventActivity">
+    tools:context="mooncakemonster.orbitalcalendar.picoftheday.CreatePicture">
     <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+        android:id="@+id/action_ok"
+        android:title="Done"
+        android:icon="@drawable/tick"
+        app:showAsAction="ifRoom" />
 </menu>

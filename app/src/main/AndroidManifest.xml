@@ -4,7 +4,10 @@
     android:screenOrientation="portrait">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    
     <application
         android:name=".userdatabase.ServerController"
         android:allowBackup="true"
@@ -59,6 +62,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeMenu">
         </activity>
+        <activity android:name=".picoftheday.CreatePicture"
+            android:label="Add New Picture"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMenu">
+        </activity>
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
     </application>
 

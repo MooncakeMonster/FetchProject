@@ -1,7 +1,7 @@
 package mooncakemonster.orbitalcalendar.picoftheday;
 
 /**
- * Created by BAOJUN on 11/6/15.
+ * This class creates items for image storage.
  */
 public class PictureItem {
     private int id, image;
@@ -11,11 +11,20 @@ public class PictureItem {
 
     }
 
-    public PictureItem(String title, String date, String caption, int image) {
+    public PictureItem(int id, String title, String date, String caption, int image) {
+        this.id = id;
         this.title = title;
         this.date = date;
         this.caption = caption;
         this.image = image;
+    }
+
+    public int getID() {
+        return id;
+    }
+    
+    public void setID() {
+        this.id = id;
     }
 
     public String getTitle() {

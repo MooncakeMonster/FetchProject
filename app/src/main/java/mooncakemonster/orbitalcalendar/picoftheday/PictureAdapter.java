@@ -14,9 +14,9 @@ import java.util.List;
 import mooncakemonster.orbitalcalendar.R;
 
 /**
- * Created by BAOJUN on 11/6/15.
+ * This method creates ArrayAdapter for PictureItem.
  */
-public class PictureAdapter extends ArrayAdapter{
+public class PictureAdapter extends ArrayAdapter {
     private List list = new ArrayList();
 
     public PictureAdapter(Context context, int resource) {
@@ -56,7 +56,7 @@ public class PictureAdapter extends ArrayAdapter{
             row = inflator.inflate(R.layout.row_feed, parent, false);
             holder = new ImgHolder();
 
-            //holder.pic_icon = (ImageView) row.findViewById(R.id.pic_icon);
+            holder.pic_icon = (ImageView) row.findViewById(R.id.pic_icon);
             holder.pic_title = (TextView) row.findViewById(R.id.pic_title);
             holder.pic_date = (TextView) row.findViewById(R.id.pic_timestamp);
             holder.pic_caption = (TextView) row.findViewById(R.id.pic_caption);
@@ -68,11 +68,11 @@ public class PictureAdapter extends ArrayAdapter{
         else holder = (ImgHolder) row.getTag();
 
         PictureItem picture = (PictureItem) getItem(position);
-        //holder.pic_icon.setImageResource(picture.getImage());
-        holder.pic_image.setImageResource(picture.getImage());
+        holder.pic_icon.setImageResource(picture.getID());
         holder.pic_title.setText(picture.getTitle());
         holder.pic_date.setText(picture.getDate());
         holder.pic_caption.setText(picture.getCaption());
+        holder.pic_image.setImageResource(picture.getImage());
 
         return row;
     }

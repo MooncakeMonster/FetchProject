@@ -83,7 +83,7 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
                 break;
             case 1:
                 fragment = new PictureFragment();
-                title = "Pictures";
+                title = "Picture of the Day";
                 break;
             case 2:
                 fragment = new NotificationFragment();

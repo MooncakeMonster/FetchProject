@@ -1,25 +1,28 @@
 package mooncakemonster.orbitalcalendar.picoftheday;
 
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import mooncakemonster.orbitalcalendar.R;
 
 /**
- * Created by BAOJUN on 11/6/15.
+ * This class displays the images uploaded by users in listview.
  */
 public class PictureFragment extends Fragment{
 
     private ListView listView;
-    //int[] imgResource1 = { R.mipmap.red, R.mipmap.blue, R.mipmap.green, R.mipmap.purple, R.mipmap.orange };
-    String[] picTitle = { "Good day", "Good day", "Good day", "Good day", "Good day" };
-    String[] picDate = { "1pm", "2pm", "3pm", "4am", "Whole day"};
-    String[] picCaption = { "BBQ", "Birthday", "Meeting", "Sleep", "Slack" };
-    int[] imgResource2 = { R.drawable.purplesky, R.drawable.purplesky, R.drawable.purplesky, R.drawable.purplesky, R.drawable.purplesky };
+    int smiley_id, image_id;
+    String title, date, caption;
+
+
+    private ImageButton addPicButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -27,23 +30,41 @@ public class PictureFragment extends Fragment{
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_picture, container, false);
 
-        //Get selected date's event list
+        //Set listview
         listView = (ListView) rootView.findViewById(R.id.piclistView);
         PictureAdapter adapter = new PictureAdapter(getActivity().getApplicationContext(), R.layout.row_feed);
         listView.setAdapter(adapter);
 
-        int i = 0;
-        for(String Name: picTitle) {
-            PictureItem event = new PictureItem(Name, picDate[i], picCaption[i], imgResource2[i]);
-            adapter.add(event);
-            i++;
+        // Retrieve data from database
+        TableDatabase tableDatabase = new TableDatabase(getActivity());
+
+        // Get rows of database
+        Cursor cursor = tableDatabase.getInformation(tableDatabase);
+
+        // Check for existing rows
+        while(cursor.moveToNext()) {
+            // Get items from each column
+            smiley_id = cursor.getInt(0);
+            title = cursor.getString(1);
+            date = cursor.getString(2);
+            caption = cursor.getString(3);
+
+            // Saves images added by user into listview
+            PictureItem pictureItem = new PictureItem(smiley_id, title, date, caption, R.drawable.purplesky);
+            adapter.add(pictureItem);
         }
 
+        addPicButton = (ImageButton) rootView.findViewById(R.id.addPictureButton);
+        addPicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity().getApplicationContext(), CreatePicture.class));
+            }
+        });
 
         return rootView;
     }

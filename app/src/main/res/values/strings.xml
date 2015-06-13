@@ -43,4 +43,7 @@
     <string name="title_activity_register">RegisterActivity</string>
     <string name="title_activity_update">UpdateActivity</string>
     <string name="title_friends">Friends</string>
+
+    <!--fragment_listfragment.xml-->
+    <string name="no_appointment_label">You've not set any appointment so far.</string>
 </resources>

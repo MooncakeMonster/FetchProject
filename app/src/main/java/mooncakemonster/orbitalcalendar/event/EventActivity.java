@@ -28,6 +28,7 @@ import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
+import mooncakemonster.orbitalcalendar.database.Constant;
 
 public class EventActivity extends ActionBarActivity {
 
@@ -395,14 +396,14 @@ public class EventActivity extends ActionBarActivity {
         //Begin date and time. Format as e.g. 08 Jun 2015, Mon & 09:00 PM respectively
         final String beginD = beginDate.getText().toString();
         final String beginT = beginTime.getText().toString();
-        final long beginEventMillisecond = stringToMillisecond(beginD, beginT);
+        final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, dateFormatter, timeFormatter);
 
-        final String startProperDate = standardYearMonthDate(beginD, dateFormatter);
+        final String startProperDate = Constant.standardYearMonthDate(beginD, dateFormatter);
 
         //End date and time
         final String endD = endDate.getText().toString();
         final String endT = endTime.getText().toString();
-        final long endEventMillisecond = stringToMillisecond(endD, endT);
+        final long endEventMillisecond = Constant.stringToMillisecond(endD, endT, dateFormatter, timeFormatter);
 
         final String location = locationInput.getText().toString();
         final String notes = notesInput.getText().toString();
@@ -415,49 +416,6 @@ public class EventActivity extends ActionBarActivity {
 
         //Insert into database
         appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind);
-    }
-
-    //Helper Method to convert text to millisecond
-    //Helper method to change strings to the corresponding millisecond
-    private long stringToMillisecond(String date, String time)
-    {
-        try
-        {
-            //Try-catch block placed here to prevent 'Unhandled ParseException' error
-            Date tempTime = timeFormatter.parse(time);
-            Date tempDate = dateFormatter.parse(date);
-            Calendar cal = Calendar.getInstance();
-            cal.set(
-                    tempDate.getYear(), tempDate.getMonth(), tempDate.getDay(),
-                    tempTime.getHours(), tempTime.getMinutes(), tempTime.getSeconds()
-            );
-
-            return cal.getTimeInMillis();
-        }
-        catch(ParseException e)
-        {
-            e.printStackTrace();
-        }
-
-        //Should not reach here
-        return -1;
-    }
-
-    //Helper method for converting date format to YYYY-MM-DD
-    private String standardYearMonthDate(String date, SimpleDateFormat formatter)
-    {
-        SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
-        try
-        {
-            Date tempDate = formatter.parse(date);
-            return standardFormat.format(tempDate);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        //Should not reach here
-        return "";
     }
 
     @Override

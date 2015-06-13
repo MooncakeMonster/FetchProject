@@ -14,7 +14,7 @@ public class TableData {
         public static final String TITLE = "title";
         public static final String DATE = "date";
         public static final String CAPTION = "caption";
-        //public static final String IMAGE = "image";
+        public static final String IMAGE = "image";
 
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_NAME = "image_storage";

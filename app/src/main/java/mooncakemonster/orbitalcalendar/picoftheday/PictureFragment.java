@@ -18,8 +18,8 @@ import mooncakemonster.orbitalcalendar.R;
 public class PictureFragment extends Fragment{
 
     private ListView listView;
-    int smiley_id, image_id;
-    String title, date, caption;
+    int smiley_id;
+    String title, date, caption, image;
 
 
     private ImageButton addPicButton;
@@ -52,9 +52,10 @@ public class PictureFragment extends Fragment{
             title = cursor.getString(1);
             date = cursor.getString(2);
             caption = cursor.getString(3);
+            image = cursor.getString(4);
 
             // Saves images added by user into listview
-            PictureItem pictureItem = new PictureItem(smiley_id, title, date, caption, R.drawable.purplesky);
+            PictureItem pictureItem = new PictureItem(smiley_id, title, date, caption, image);
             adapter.add(pictureItem);
         }
 

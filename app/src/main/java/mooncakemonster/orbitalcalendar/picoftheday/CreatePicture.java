@@ -31,10 +31,11 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 
     EditText pic_title, pic_caption;
     ImageView picture;
+    String uriPicture = "";    // Save uri in string format to store image as text format in database
     Button smiley1, smiley2, smiley3, smiley4, smiley5, selected_smiley;
 
     // To store in database
-    int smiley_id = R.drawable.smile1; // Set default smiley as first smiley if not choosen
+    int smiley_id = R.drawable.smile1; // Set default smiley as first smiley if not chosen
     String title, date, caption;
 
     @Override
@@ -88,11 +89,15 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
                 alertUser("Upload failed!", "Please enter caption.");
             }
 
-            // Save data when title and caption are not null.
+            else if(uriPicture.isEmpty()) {
+                alertUser("Upload failed!", "Please upload an image.");
+            }
+
+            // Save data when title, caption and image are not empty
             else {
                 // Add information into database
                 TableDatabase tableDatabase = new TableDatabase(this);
-                tableDatabase.putInformation(tableDatabase, smiley_id, title, date, caption);
+                tableDatabase.putInformation(tableDatabase, smiley_id, title, date, caption, uriPicture);
                 Toast.makeText(getBaseContext(), "Details successfully saved", Toast.LENGTH_LONG).show();
                 finish();
             }
@@ -177,6 +182,7 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
     private void handleCrop(int resultCode, Intent result) {
         if(resultCode == RESULT_OK) {
             picture.setImageURI(Crop.getOutput(result));
+            uriPicture = Crop.getOutput(result).toString();
         } else if(resultCode == Crop.RESULT_ERROR) {
             Toast.makeText(this, Crop.getError(result).getMessage(), Toast.LENGTH_SHORT).show();
         }

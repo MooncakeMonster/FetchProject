@@ -4,14 +4,14 @@ package mooncakemonster.orbitalcalendar.picoftheday;
  * This class creates items for image storage.
  */
 public class PictureItem {
-    private int id, image;
-    private String title, date, caption;
+    private int id;
+    private String title, date, caption, image;
 
     public PictureItem() {
 
     }
 
-    public PictureItem(int id, String title, String date, String caption, int image) {
+    public PictureItem(int id, String title, String date, String caption, String image) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -51,7 +51,7 @@ public class PictureItem {
         this.caption = caption;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 

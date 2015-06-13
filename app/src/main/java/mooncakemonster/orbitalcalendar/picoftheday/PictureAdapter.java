@@ -1,6 +1,7 @@
 package mooncakemonster.orbitalcalendar.picoftheday;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import mooncakemonster.orbitalcalendar.R;
  */
 public class PictureAdapter extends ArrayAdapter {
     private List list = new ArrayList();
+    LayoutInflater inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     public PictureAdapter(Context context, int resource) {
         super(context, resource);
@@ -51,8 +53,7 @@ public class PictureAdapter extends ArrayAdapter {
         View row = convertView;
         ImgHolder holder;
 
-        if(convertView == null) {
-            LayoutInflater inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(row == null) {
             row = inflator.inflate(R.layout.row_feed, parent, false);
             holder = new ImgHolder();
 
@@ -72,7 +73,7 @@ public class PictureAdapter extends ArrayAdapter {
         holder.pic_title.setText(picture.getTitle());
         holder.pic_date.setText(picture.getDate());
         holder.pic_caption.setText(picture.getCaption());
-        holder.pic_image.setImageResource(picture.getImage());
+        holder.pic_image.setImageURI(Uri.parse(picture.getImage()));
 
         return row;
     }

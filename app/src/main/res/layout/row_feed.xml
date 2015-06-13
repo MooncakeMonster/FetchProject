@@ -71,7 +71,7 @@
             android:id="@+id/pic_image"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
-            android:scaleType="centerInside"
+            android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:visibility="visible" />
 

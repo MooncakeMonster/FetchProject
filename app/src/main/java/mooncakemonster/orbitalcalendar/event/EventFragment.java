@@ -37,12 +37,12 @@ public class EventFragment extends ListFragment{
 
         //Add every appointment in
         adapter.addAll(allAppointment);
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         return inflater.inflate(R.layout.fragment_listfragment, container, false);
     }
 

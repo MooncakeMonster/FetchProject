@@ -45,5 +45,5 @@
     <string name="title_friends">Friends</string>
 
     <!--fragment_listfragment.xml-->
-    <string name="no_appointment_label">You've not set any appointment so far.</string>
+    <string name="no_appointment_label">You have not set any appointment so far.</string>
 </resources>

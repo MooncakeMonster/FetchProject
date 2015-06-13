@@ -12,7 +12,7 @@
         android:id="@+id/cal_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:elevation="30dp"
+        android:elevation="@dimen/padd_left"
         android:layout_centerHorizontal="true"
         android:orientation="vertical" />
 

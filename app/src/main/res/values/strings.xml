@@ -8,12 +8,11 @@
     <string name="logout_desc">Logout From Facebook</string>
     <string name="title_activity_menu">MenuActivity</string>
 
-    <string name="drawer_open">Slider Menu Opened</string>
-    <string name="drawer_close">Slider Menu Closed</string>
-
-    <string name="gallery">Choose image from gallery</string>
-    <string name="camera">Take photo using camera</string>
-    <string name="image">Choose your image</string>
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    <string name="title_activity_event">Create New Event</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
 
     <!-- Nav Drawer Menu Items -->
     <string-array name="nav_drawer_items">
@@ -25,6 +24,9 @@
         <item>Voting Results</item>
     </string-array>
 
+    <string name="drawer_open">Slider Menu Opened</string>
+    <string name="drawer_close">Slider Menu Closed</string>
+
     <!-- Colours for Event List -->
     <string-array name="event_bg">
         <item>#24c6d5</item>
@@ -35,14 +37,37 @@
         <item>#24c6d5</item>
     </string-array>
 
-    <!-- Content Description -->
-    <string name="desc_list_item_icon">Item Icon</string>
+    <!-- activity_event.xml -->
+    <string name="event_title">Title</string>
+    <string name="event_location">Location</string>
+    <string name="event_every">Every</string>
+    <string name="event_remind">Remind me</string>
+    <string name="event_notes">Notes</string>
+    <string name="event_participants">Participants</string>
+    <string name="create_event">CREATE EVENT</string>
 
-    <string name="title_activity_event">Create New Event</string>
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_register">RegisterActivity</string>
-    <string name="title_activity_update">UpdateActivity</string>
-    <string name="title_friends">Friends</string>
+    <!-- activity_login.xml -->
+    <string name="login_email">Email Address</string>
+    <string name="login_password">Password</string>
+    <string name="login_button">LOGIN</string>
+    <string name="login_registration">Register Here</string>
+
+    <!-- activity_logout.xml -->
+    <string name="logout">LOGOUT</string>
+    <string name="logout_email">Show useremail</string>
+    <string name="logout_username">Show username</string>
+    <string name="logout_account">MY ACCOUNT</string>
+    <string name="logout_facebook">SYNC WITH FACEBOOK EVENTS</string>
+
+    <!-- activity_picture.xml -->
+    <string name="picture_caption">Caption</string>
+    <string name="picture_empty">Empty</string>
+
+    <!-- activity_register.xml -->
+    <string name="register_username">Username</string>
+    <string name="register_confirm_password">Confirm Password</string>
+    <string name="register_button">REGISTER</string>
+    <string name="register_login">Already registered? Login here.</string>
 
     <!--fragment_listfragment.xml-->
     <string name="no_appointment_label">You have not set any appointment so far.</string>

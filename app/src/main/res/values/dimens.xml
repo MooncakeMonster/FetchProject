@@ -3,38 +3,44 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="name_horizontal_margin">300dp</dimen>
-    <dimen name="name_vertical_margin">100dp</dimen>
+    <!-- Commonly used -->
+    <dimen name="standard_layout_size">16dp</dimen>
+    <dimen name="standard_icon_size">50dp</dimen>
+    <dimen name="standard_padding_size">10dp</dimen>
+    <dimen name="standard_margin_size">10dp</dimen>
+    <dimen name="standard_text_size">16sp</dimen>
 
-    <dimen name="layout_horizontal_margin">75dp</dimen>
-    <dimen name="layout_vertical_margin">75dp</dimen>
+    <!-- activity_event.xml -->
+    <dimen name="event_text_size">18sp</dimen>
+    <dimen name="date_button_size">150dp</dimen>
+    <dimen name="time_button_size">120dp</dimen>
+    <dimen name="event_button_size">40dp</dimen>
 
-    <dimen name="button_h">80dp</dimen>
-    <dimen name="button_v">90dp</dimen>
+    <!-- activity_login.xml -->
+    <dimen name="login_margin_size">20dp</dimen>
 
-    <dimen name="slogan_h">350dp</dimen>
-    <dimen name="slogan_v">35dp</dimen>
+    <!--activity_main.xml -->
+    <dimen name="icon_horizontal">200dp</dimen>
+    <dimen name="icon_vertical">180dp</dimen>
+    <dimen name="slogan_horizontal">350dp</dimen>
+    <dimen name="slogan_vertical">35dp</dimen>
+    <dimen name="tap_horizontal">220dp</dimen>
+    <dimen name="tap_vertical">25dp</dimen>
+    <dimen name="main_margin_size">100dp</dimen>
 
-    <dimen name="tap_h">220dp</dimen>
-    <dimen name="tap_v">25dp</dimen>
+    <!-- drawer_row.xml -->
+    <dimen name="padd_left">30dp</dimen>
 
-    <dimen name="icon_horizontal_margin">200dp</dimen>
-    <dimen name="icon_vertical_margin">180dp</dimen>
+    <!-- fragment_navigation.xml -->
+    <dimen name="nav_layout">200dp</dimen>
+    <dimen name="nav_icon">80dp</dimen>
 
-    <dimen name="text">15dp</dimen>
+    <!-- fragment_picture.xml -->
+    <dimen name="picture_button_size">60dp</dimen>
+    <dimen name="picture_button_margin">15dp</dimen>
+    <dimen name="picture_elevation">1dp</dimen>
 
-    <dimen name="image_w">500dp</dimen>
-    <dimen name="image_h">200dp</dimen>
-
-    <dimen name="bear_w">280dp</dimen>
-    <dimen name="bear_h">550dp</dimen>
-
-    <dimen name="upcomingEvent_w">280dp</dimen>
-    <dimen name="upcomingEvent_h">200dp</dimen>
-
-    <dimen name="upevent_w">280dp</dimen>
-    <dimen name="upevent_h">45dp</dimen>
-
+    <!-- row_feed.xml -->
     <dimen name="feed_item_margin">10dp</dimen>
     <dimen name="feed_item_padding_top_bottom">20dp</dimen>
     <dimen name="feed_item_padding_left_right">15dp</dimen>
@@ -46,4 +52,5 @@
     <dimen name="feed_item_status_pad_top">13dp</dimen>
     <dimen name="feed_item_corner_radius">3dp</dimen>
     <dimen name="feed_item_border_width">1dp</dimen>
+
 </resources>

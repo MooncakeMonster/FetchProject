@@ -7,55 +7,63 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:background="@drawable/cloudy"
-    android:padding="10dp"
+    android:padding="@dimen/standard_layout_size"
     tools:context="mooncakemonster.orbitalcalendar.event.EventActivity">
 
     <!-- Event title -->
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/standard_icon_size"
         android:id="@+id/title"
-        android:hint="Title"
-        android:layout_marginBottom="5dp"
-        android:padding="10dp"
+        android:hint="@string/event_title"
+        android:layout_marginBottom="@dimen/standard_margin_size"
+        android:padding="@dimen/standard_padding_size"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <!-- Location -->
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/standard_icon_size"
         android:id="@+id/appointmentLocation"
-        android:hint="Location"
-        android:padding="10dp"
-        android:layout_marginBottom="5dp"
+        android:hint="@string/event_location"
+        android:padding="@dimen/standard_padding_size"
+        android:layout_marginBottom="@dimen/standard_margin_size"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/title"
-        android:layout_toLeftOf="@+id/button"
-        android:layout_toStartOf="@+id/button" />
+        android:layout_toLeftOf="@+id/location_button"
+        android:layout_toStartOf="@+id/location_button" />
 
-    <!-- Add button -->
+    <Button
+        android:layout_width="@dimen/event_button_size"
+        android:layout_height="@dimen/event_button_size"
+        android:background="@drawable/location"
+        android:id="@+id/location_button"
+        android:layout_below="@+id/title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <!-- Create Event button -->
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/addAppointmentButton"
-        android:text="CREATE EVENT"
+        android:text="@string/create_event"
         android:textColor="@color/caldroid_white"
-        android:background="@color/button_green"
+        android:background="@color/button"
         android:onClick="onClick"
-        android:textSize="16dp"
+        android:textSize="@dimen/standard_text_size"
         android:layout_below="@+id/appointmentNotes"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <!--Start and End Date-->
     <Button
-        android:layout_width="150dp"
+        android:layout_width="@dimen/date_button_size"
         android:layout_height="wrap_content"
-        android:text="Start Date"
         android:id="@+id/startD"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:textColor="@color/caldroid_black"
         android:inputType="textCapCharacters"
         android:background="@android:color/transparent"
@@ -66,11 +74,10 @@
         android:layout_toStartOf="@+id/startT" />
 
     <Button
-        android:layout_width="150dp"
+        android:layout_width="@dimen/date_button_size"
         android:layout_height="wrap_content"
-        android:text="End Date"
         android:id="@+id/endD"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:textColor="@color/caldroid_black"
         android:inputType="textCapCharacters"
         android:background="@android:color/transparent"
@@ -82,11 +89,10 @@
 
     <!--Start and End Time-->
     <Button
-        android:layout_width="120dp"
+        android:layout_width="@dimen/time_button_size"
         android:layout_height="wrap_content"
-        android:text="Start Time"
         android:id="@+id/startT"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:textColor="@color/caldroid_black"
         android:inputType="textCapCharacters"
         android:background="@android:color/transparent"
@@ -95,11 +101,10 @@
         android:layout_alignParentEnd="true" />
 
     <Button
-        android:layout_width="120dp"
+        android:layout_width="@dimen/time_button_size"
         android:layout_height="wrap_content"
-        android:text="End Time"
         android:id="@+id/endT"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:textColor="@color/caldroid_black"
         android:inputType="textCapCharacters"
         android:background="@android:color/transparent"
@@ -112,7 +117,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="Remind me"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:id="@+id/remindbox"
         android:onClick="selectItem"
         android:textStyle="bold"
@@ -127,9 +132,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="3"
         android:id="@+id/remindnum"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:textColor="@color/caldroid_black"
         android:background="@android:color/transparent"
         android:layout_alignBottom="@+id/remindbox"
@@ -140,9 +144,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:text="mins before event"
         android:id="@+id/remindweek"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:textColor="@color/caldroid_black"
         android:inputType="textCapCharacters"
         android:background="@android:color/transparent"
@@ -158,7 +161,7 @@
         android:text="Every"
         android:id="@+id/everybox"
         android:onClick="selectItem"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:textStyle="bold"
         android:textColor="@color/caldroid_black"
         android:layout_alignBottom="@+id/everynum"
@@ -169,11 +172,10 @@
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="5"
+        android:layout_height="@dimen/event_button_size"
         android:textColor="@color/caldroid_black"
         android:id="@+id/everynum"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:background="@android:color/transparent"
         android:layout_below="@+id/endD"
         android:layout_toRightOf="@+id/remindbox"
@@ -182,11 +184,10 @@
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="days event"
+        android:layout_height="@dimen/event_button_size"
         android:id="@+id/everyweek"
         android:textColor="@color/caldroid_black"
-        android:textSize="18dp"
+        android:textSize="@dimen/event_text_size"
         android:inputType="textCapCharacters"
         android:background="@android:color/transparent"
         android:layout_below="@+id/endD"
@@ -196,38 +197,29 @@
     <!-- Notes -->
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/standard_icon_size"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/appointmentNotes"
-        android:hint="Notes"
-        android:layout_marginBottom="5dp"
-        android:padding="10dp"
+        android:hint="@string/event_notes"
+        android:layout_marginBottom="@dimen/standard_margin_size"
+        android:padding="@dimen/standard_padding_size"
         android:layout_below="@+id/participants"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <!-- Participants -->
     <EditText
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/standard_icon_size"
         android:id="@+id/participants"
-        android:hint="Participants"
-        android:layout_marginBottom="5dp"
-        android:padding="10dp"
+        android:hint="@string/event_participants"
+        android:layout_marginBottom="@dimen/standard_margin_size"
+        android:padding="@dimen/standard_padding_size"
         android:layout_below="@+id/remindbox"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/appointmentNotes"
         android:layout_alignEnd="@+id/appointmentNotes" />
-
-    <Button
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/location"
-        android:id="@+id/button"
-        android:layout_below="@+id/title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
 
 </RelativeLayout>

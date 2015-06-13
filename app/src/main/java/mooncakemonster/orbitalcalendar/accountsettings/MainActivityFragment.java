@@ -86,7 +86,7 @@ public class MainActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.activity_logout, container, false);
 
         loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setFragment(this);

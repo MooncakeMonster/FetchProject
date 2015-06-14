@@ -71,7 +71,7 @@ public class EventActivity extends ActionBarActivity {
 
         //Intialise and open database
         appointmentDatabase = new AppointmentController(this);
-        //appointmentDatabase.open();
+        appointmentDatabase.open();
     }
 
     // This method sets selected date by user on the button.
@@ -440,6 +440,7 @@ public class EventActivity extends ActionBarActivity {
 
         //Default value for reminder
         long remind = 0;
+        /*
         if(reminderCheckBox.isChecked())
         {
             //Get number
@@ -463,6 +464,7 @@ public class EventActivity extends ActionBarActivity {
             //Set reminder in milliseconds
             remind = endEventMillisecond - num;
         }
+        */
 
 
         //(2) Start Validity Check

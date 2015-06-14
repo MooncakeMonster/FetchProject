@@ -98,4 +98,24 @@ public abstract class Constant
             edittext.setError("Please key in at least " + length + " characters.");
         }
     }
+
+    //Toggle on/off
+    /*
+     * Convert a TextView/EditText into a EditText/TextView respectively
+     */
+    public static void toggle(EditText edittext)
+    {
+        //Find if there is condition to check if edittext is on/off
+        if(true)
+        {
+            edittext.setFocusable(false);
+            edittext.setFocusableInTouchMode(false);
+        }
+
+        else
+        {
+            edittext.setFocusable(true);
+            edittext.setFocusableInTouchMode(true);
+        }
+    }
 }

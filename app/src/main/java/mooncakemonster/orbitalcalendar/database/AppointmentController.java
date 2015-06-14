@@ -59,9 +59,9 @@ public class AppointmentController
         return newAppt;
     }
 
-    public void deleteComment(Appointment comment) {
-        long id = comment.getId();
-        System.out.println("Comment deleted with id: " + id);
+    public void deleteAppointment(Appointment appointment) {
+        long id = appointment.getId();
+        //System.out.println("Comment deleted with id: " + id);
         database.delete(DatabaseHelper.DATABASE_NAME, DatabaseHelper.COLUMN_ID + " = " + id, null);
     }
 

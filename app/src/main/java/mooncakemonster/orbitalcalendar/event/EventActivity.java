@@ -277,24 +277,32 @@ public class EventActivity extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 everyNum.setText(Integer.toString(numberPicker.getValue()));
-                //TODO: When user choose 1, remove 's' doesn't work
-                if (everyNum.equals("1") && everyBox.getText().equals("days event"))
-                    everyBox.setText("day event");
-                else if (everyNum.equals("1") && everyBox.getText().equals("weeks event"))
-                    everyBox.setText("week event");
-                else if (everyNum.equals("1") && everyBox.getText().equals("months event"))
-                    everyBox.setText("month event");
-                else if (everyNum.equals("1") && everyBox.getText().equals("years event"))
-                    everyBox.setText("year event");
+                //Remove 's' from days, weeks, months and years when 1 is selected.
+                //Conversely, append 's' to day, week, month, and year when value greater than 1 selected.
+                if(everyNum.getText().toString().equals("1"))
+                {
+                    String frequencyOfAppointment = everyBox.getText().toString();
+                    switch(frequencyOfAppointment)
+                    {
+                        case "days event":      everyBox.setText("day event");      break;
+                        case "weeks event":     everyBox.setText("week event");     break;
+                        case "months event":    everyBox.setText("month event");    break;
+                        case "years event":     everyBox.setText("year event");     break;
+                    }
+                }
 
-                else if (!everyNum.equals("1") && everyBox.getText().equals("day event"))
-                    everyBox.setText("days event");
-                else if (!everyNum.equals("1") && everyBox.getText().equals("week event"))
-                    everyBox.setText("weeks event");
-                else if (!everyNum.equals("1") && everyBox.getText().equals("month event"))
-                    everyBox.setText("months event");
-                else if (!everyNum.equals("1") && everyBox.getText().equals("year event"))
-                    everyBox.setText("years event");
+                else if(!everyNum.getText().toString().equals("1"))
+                {
+                    String frequencyOfAppointment = everyBox.getText().toString();
+                    switch(frequencyOfAppointment)
+                    {
+                        case "day event":      everyBox.setText("days event");      break;
+                        case "week event":     everyBox.setText("weeks event");     break;
+                        case "month event":    everyBox.setText("months event");    break;
+                        case "year event":     everyBox.setText("years event");     break;
+                    }
+                }
+
                 dialog.dismiss();
             }
         });
@@ -333,20 +341,30 @@ public class EventActivity extends ActionBarActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 remindNum.setText(Integer.toString(numberPicker.getValue()));
-                //TODO: When user choose 1, remove 's' doesn't work
-                if (remindNum.equals("1") && remindBox.getText().equals("mins before event"))
-                    remindBox.setText("min before event");
-                else if (remindNum.equals("1") && remindBox.getText().equals("hours before event"))
-                    remindBox.setText("hour before event");
-                else if (remindNum.equals("1") && remindBox.getText().equals("days before event"))
-                    remindBox.setText("day before event");
+                //Remove 's' from mins, hours, and days when 1 is selected.
+                //Conversely, append 's' to min, hour, and day when value greater than 1 selected.
+                if(remindNum.getText().toString().equals("1"))
+                {
+                    String reminderOption = remindBox.getText().toString();
+                    switch(reminderOption)
+                    {
+                        case "mins before event":     remindBox.setText("min before event");     break;
+                        case "hours before event":    remindBox.setText("hour before event");    break;
+                        case "days before event":     remindBox.setText("day before event");     break;
+                    }
+                }
 
-                else if (!remindNum.equals("1") && remindBox.getText().equals("min before event"))
-                    remindBox.setText("mins before event");
-                else if (!remindNum.equals("1") && remindBox.getText().equals("hour before event"))
-                    remindBox.setText("hours before event");
-                else if (!remindNum.equals("1") && remindBox.getText().equals("day before event"))
-                    remindBox.setText("days before event");
+                else if(!remindNum.getText().toString().equals("1"))
+                {
+                    String reminderOption = remindBox.getText().toString();
+                    switch(reminderOption)
+                    {
+                        case "min before event":     remindBox.setText("mins before event");     break;
+                        case "hour before event":    remindBox.setText("hours before event");    break;
+                        case "day before event":     remindBox.setText("days before event");     break;
+                    }
+                }
+
                 dialog.dismiss();
             }
         });

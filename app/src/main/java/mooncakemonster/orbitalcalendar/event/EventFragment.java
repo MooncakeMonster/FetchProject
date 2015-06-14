@@ -1,6 +1,10 @@
 package mooncakemonster.orbitalcalendar.event;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,16 +43,41 @@ public class EventFragment extends ListFragment{
         //Initialise ArrayAdapter adapter for view
         adapter = new ArrayAdapter<Appointment>(getActivity(), R.layout.fragment_eventfragment, allAppointment );
         setListAdapter(adapter);
-        //Add every appointment in
-        adapter.addAll(allAppointment);
-        adapter.notifyDataSetChanged();
 
-        //TODO: Set onLongClick
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
+            public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id)
             {
+                //Get Appointment from ArrayAdapter
+                final Appointment appointmentToDelete = adapter.getItem(position);
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setMessage("Are you sure you would like to delete the appointment: " + appointmentToDelete.toString() + " ?");
+
+                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        //Delete from SQLite database
+                        appointmentDatabase.deleteAppointment(appointmentToDelete);
+                        //Delete from ArrayAdapter & allAppointment
+                        adapter.remove(appointmentToDelete);
+                        allAppointment.remove(appointmentToDelete);
+                        adapter.notifyDataSetChanged();
+                        //Remove dialog after execution of the above
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                public void onClick(DialogInterface dialog, int id)
+                    {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
                 return true;
             }
         });
@@ -64,12 +93,13 @@ public class EventFragment extends ListFragment{
     public void onListItemClick(ListView l, View v, int position, long id)
     {
         super.onListItemClick(l, v, position, id);
-        Appointment selectedAppt = allAppointment.get(position);
-
+        Appointment selectedAppt = adapter.getItem(position);
+        //Instantiate EventView.java for viewing of appointment (and editing)
+        DialogFragment dialogfragment = EventView.newInstance(selectedAppt);
+        dialogfragment.show(getFragmentManager(), null);
         //Update ArrayAdapter
         allAppointment = appointmentDatabase.getAllAppointment();
         adapter.notifyDataSetChanged();
-
     }
 
     @Override

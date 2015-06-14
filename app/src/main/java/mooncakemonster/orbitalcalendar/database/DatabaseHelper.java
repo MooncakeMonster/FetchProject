@@ -30,7 +30,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
                                                                                          + EVENT + " TEXT NOT NULL, "
-                                                                                         + STARTPROPERDATE + " TEXT NOT NULL "
+                                                                                         + STARTPROPERDATE + " TEXT NOT NULL, "
                                                                                          + STARTDATE + " INTEGER NOT NULL, "
                                                                                          + ENDDATE + " INTEGER, "
                                                                                          + LOCATION + " TEXT, "

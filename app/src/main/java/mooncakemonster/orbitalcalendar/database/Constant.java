@@ -6,14 +6,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Abstract Constant class to store all helper method that will most likely be used across the app
  * as well as all the constants.
  *
- * N.B. Do not instatiate
+ * N.B. Do not instantiate
  */
 public abstract class Constant
 {

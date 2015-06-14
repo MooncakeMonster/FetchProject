@@ -1,6 +1,5 @@
 package mooncakemonster.orbitalcalendar.event;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;

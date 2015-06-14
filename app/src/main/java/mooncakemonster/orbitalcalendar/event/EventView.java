@@ -15,11 +15,16 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
  */
 public class EventView extends DialogFragment
 {
+    public EventView()
+    {
+        //Nothing
+    }
+
     //Allow only one instance of EventView at any one time
     static EventView newInstance(Appointment appt)
     {
         EventView eventview = new EventView();
-        //TODO: Import all the data into an xml file that is uneditable
+
         // Have data
         // Put in textview -> java to xml (how?)
         // hint @ textView.setText

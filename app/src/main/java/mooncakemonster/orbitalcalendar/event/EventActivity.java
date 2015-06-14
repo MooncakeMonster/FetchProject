@@ -403,6 +403,9 @@ public class EventActivity extends ActionBarActivity {
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
         final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
 
+        final CheckBox repeatAppointment = (CheckBox) findViewById(R.id.everybox);
+        final CheckBox reminderCheckBox = (CheckBox) findViewById(R.id.remindbox);
+
         if(beginDate == null || beginTime == null || endDate == null || endTime == null)
         {
             beginDate = (Button) findViewById(R.id.startD);
@@ -429,16 +432,45 @@ public class EventActivity extends ActionBarActivity {
         //Get any miscellaneous notes
         final String notes = notesInput.getText().toString();
         //TODO: EVERY N DAY/WEEK/MONTH/YEAR
-        //BULK INSERT INTO DATABASE
-        //TODO: REMINDER - PARSE INTO DATE (NEXT: SET "DAEMON" FOR REMINDER)
-        int remind = 5;
+        if(repeatAppointment.isChecked())
+        {
+            //If checkbox, sent dialogbox, asking when is the limit date
+            //BULK INSERT INTO DATABASE
+        }
+
+        //Default value for reminder
+        long remind = 0;
+        if(reminderCheckBox.isChecked())
+        {
+            //Get number
+            Button numberSetForReminder = (Button) findViewById(R.id.remindnum);
+            long num = Long.getLong(numberSetForReminder.getText().toString());
+            //Get "quantity"
+            Button quantifyNumberSetForReminder = (Button) findViewById(R.id.remindweek);
+            String value = quantifyNumberSetForReminder.getText().toString();
+            switch(value)
+            {
+                case "min before event":case "mins before event":
+                    num = num * Constant.MIN_IN_MILLISECOND;
+                    break;
+                case "hour before event":case "hours before event":
+                    num = num * Constant.HOUR_IN_MILLISECOND;
+                    break;
+                case "day before event":case "days before event":
+                    num = num * Constant.DAY_IN_MILLISECOND;
+                    break;
+            }
+            //Set reminder in milliseconds
+            remind = endEventMillisecond - num;
+        }
+
 
         //(2) Start Validity Check
         // Ensure inputs are not of null value: (a) event, (b) startProperDate, (c) startDate, (d) remind
 
         // Check length of input: (a) event, (b) location, (c) notes
 
-        // Ensure data integrity, that is integer input are integer, strings
+        // Ensure data integrity, that is integer input are integer, and that strings
         // do not contain unusual characters: Applicable to all
 
 
@@ -459,13 +491,11 @@ public class EventActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_close) {
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

@@ -38,7 +38,7 @@ public class AppointmentController
         dbHelper.close();
     }
 
-    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, int remind) {
+    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, long remind) {
         ContentValues values = new ContentValues();
         //Insert key-value in ContentValues
         values.put(DatabaseHelper.EVENT, event);

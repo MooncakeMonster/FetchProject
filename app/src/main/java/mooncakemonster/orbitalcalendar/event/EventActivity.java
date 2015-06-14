@@ -21,14 +21,18 @@ import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
+
+
+/*
+ * Purpose: EventActivity.java is the interface which the user may input their
+ * Access via: Clicking on any dates in the CaldroidFragment
+ */
 
 public class EventActivity extends ActionBarActivity {
 
@@ -389,30 +393,39 @@ public class EventActivity extends ActionBarActivity {
             endTime = (Button) findViewById(R.id.endT);
         }
 
-        //Data parsing begins here
+        //(1) Data Extraction Begins Here
+        //Get Event Name
         final String event = eventInput.getText().toString();
-        //Formatter for use later
-        final SimpleDateFormat formatter;
-        //Begin date and time. Format as e.g. 08 Jun 2015, Mon & 09:00 PM respectively
+        //Begin date and time
         final String beginD = beginDate.getText().toString();
         final String beginT = beginTime.getText().toString();
         final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, dateFormatter, timeFormatter);
-
+        //Standardised format for event's starting date: YYYY-MM-DD
         final String startProperDate = Constant.standardYearMonthDate(beginD, dateFormatter);
-
         //End date and time
         final String endD = endDate.getText().toString();
         final String endT = endTime.getText().toString();
         final long endEventMillisecond = Constant.stringToMillisecond(endD, endT, dateFormatter, timeFormatter);
-
+        //Get Event's location
         final String location = locationInput.getText().toString();
+        //Get any miscellaneous notes
         final String notes = notesInput.getText().toString();
-
         //TODO: EVERY N DAY/WEEK/MONTH/YEAR
         //BULK INSERT INTO DATABASE
-
         //TODO: REMINDER - PARSE INTO DATE (NEXT: SET "DAEMON" FOR REMINDER)
         int remind = 5;
+
+        //(2) Start Validity Check
+        // Ensure inputs are not of null value: (a) event, (b) startProperDate, (c) startDate, (d) remind
+
+        // Check length of input: (a) event, (b) location, (c) notes
+
+        // Ensure data integrity, that is integer input are integer, strings
+        // do not contain unusual characters: Applicable to all
+
+
+
+
 
         //Insert into database
         appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind);

@@ -31,12 +31,12 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 
     EditText pic_title, pic_caption;
     ImageView picture;
-    String uriPicture = "";    // Save uri in string format to store image as text format in database
     Button smiley1, smiley2, smiley3, smiley4, smiley5, selected_smiley;
 
     // To store in database
     int smiley_id = R.drawable.smile1; // Set default smiley as first smiley if not chosen
     String title, date, caption;
+    String uriPicture;    // Save uri in string format to store image as text format in database
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +98,7 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
                 // Add information into database
                 TableDatabase tableDatabase = new TableDatabase(this);
                 tableDatabase.putInformation(tableDatabase, smiley_id, title, date, caption, uriPicture);
+
                 Toast.makeText(getBaseContext(), "Details successfully saved", Toast.LENGTH_LONG).show();
                 finish();
             }

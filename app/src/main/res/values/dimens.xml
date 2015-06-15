@@ -15,12 +15,14 @@
     <dimen name="date_button_size">150dp</dimen>
     <dimen name="time_button_size">120dp</dimen>
     <dimen name="event_button_size">40dp</dimen>
+    <dimen name="event_icon_size">44dp</dimen>
+    <dimen name="event_margin_size">5dp</dimen>
 
     <!-- activity_login.xml -->
     <dimen name="login_margin_size">20dp</dimen>
 
     <!--activity_main.xml -->
-    <dimen name="icon_horizontal">200dp</dimen>
+    <dimen name="icon_horizontal">210dp</dimen>
     <dimen name="icon_vertical">180dp</dimen>
     <dimen name="slogan_horizontal">350dp</dimen>
     <dimen name="slogan_vertical">35dp</dimen>

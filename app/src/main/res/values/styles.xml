@@ -33,12 +33,12 @@
 
     <style name="CaldroidDefaultTransparentLeftButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentLeft">true</item>
-        <item name="android:background">@drawable/left_arrow</item>
+        <item name="android:background">@color/caldroid_transparent</item>
     </style>
 
     <style name="CaldroidDefaultTransparentRightButton" parent="CaldroidDefaultArrowButton">
         <item name="android:layout_alignParentRight">true</item>
-        <item name="android:background">@drawable/right_arrow</item>
+        <item name="android:background">@color/caldroid_transparent</item>
     </style>
 
     <style name="CaldroidDefaultTransparentMonthName">

@@ -23,6 +23,7 @@ public class AppointmentController
                                     DatabaseHelper.LOCATION,
                                     DatabaseHelper.NOTES,
                                     DatabaseHelper.REMIND,
+                                    DatabaseHelper.COLOUR
                                   };
 
 
@@ -38,7 +39,7 @@ public class AppointmentController
         dbHelper.close();
     }
 
-    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, long remind) {
+    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, long remind, int colour) {
         ContentValues values = new ContentValues();
         //Insert key-value in ContentValues
         values.put(DatabaseHelper.EVENT, event);
@@ -48,6 +49,7 @@ public class AppointmentController
         values.put(DatabaseHelper.LOCATION, location);
         values.put(DatabaseHelper.NOTES, notes);
         values.put(DatabaseHelper.REMIND, remind);
+        values.put(DatabaseHelper.COLOUR, colour);
 
         long insertId = database.insert(DatabaseHelper.DATABASE_NAME, null, values);
         Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME, allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
@@ -94,6 +96,7 @@ public class AppointmentController
         appt.setLocation(cursor.getString(5));
         appt.setNotes(cursor.getString(6));
         appt.setRemind(cursor.getInt(7));
+        appt.setColour(cursor.getInt(8));
 
         return appt;
     }

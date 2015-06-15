@@ -1,6 +1,5 @@
 package mooncakemonster.orbitalcalendar.event;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.List;
@@ -30,7 +28,7 @@ public class EventFragment extends ListFragment{
     private AppointmentController appointmentDatabase;
     //List to get all the appointments
     private List<Appointment> allAppointment;
-    ArrayAdapter<Appointment> adapter;
+    EventAdapter adapter;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -41,7 +39,7 @@ public class EventFragment extends ListFragment{
         appointmentDatabase.open();
         allAppointment = appointmentDatabase.getAllAppointment();
         //Initialise ArrayAdapter adapter for view
-        adapter = new ArrayAdapter<Appointment>(getActivity(), R.layout.fragment_eventfragment, allAppointment );
+        adapter = new EventAdapter(getActivity(), R.layout.row_event, allAppointment);
         setListAdapter(adapter);
 
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

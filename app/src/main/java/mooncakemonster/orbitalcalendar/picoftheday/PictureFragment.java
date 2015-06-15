@@ -2,6 +2,7 @@ package mooncakemonster.orbitalcalendar.picoftheday;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -59,7 +60,7 @@ public class PictureFragment extends Fragment implements SwipeRefreshLayout.OnRe
                 image = cursor.getString(4);
 
                 // Saves images added by user into listview
-                PictureItem pictureItem = new PictureItem(smiley_id, title, date, caption, image);
+                PictureItem pictureItem = new PictureItem(smiley_id, title, date, caption, Uri.parse(image));
                 adapter.add(pictureItem);
             } while (cursor.moveToPrevious());
         }

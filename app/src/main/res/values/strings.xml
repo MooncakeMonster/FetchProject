@@ -45,6 +45,7 @@
     <string name="event_notes">Notes</string>
     <string name="event_participants">Participants</string>
     <string name="create_event">CREATE EVENT</string>
+    <string name="event_empty">X</string>
 
     <!-- activity_login.xml -->
     <string name="login_email">Email Address</string>

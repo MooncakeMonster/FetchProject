@@ -1,7 +1,6 @@
 package mooncakemonster.orbitalcalendar.picoftheday;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,9 +79,10 @@ public class PictureAdapter extends ArrayAdapter {
         holder.pic_title.setText(picture.getTitle());
         holder.pic_date.setText(picture.getDate());
         holder.pic_caption.setText(picture.getCaption());
+        holder.pic_image.setImageURI(picture.getImage());
 
         // Cache image to prevent out of memory
-        Picasso.with(context).load(Uri.parse(picture.getImage())).into(holder.pic_image);
+        Picasso.with(context).load(picture.getImage()).into(holder.pic_image);
 
         return row;
     }

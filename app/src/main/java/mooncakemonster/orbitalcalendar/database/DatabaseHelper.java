@@ -26,6 +26,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public static final String NOTES = "notes";
     //Send reminder on N many minutes before the event; if zero, no notification
     public static final String REMIND = "remind";
+    //Get ID of the colour bear chosen by user
+    public static final String COLOUR = "colour";
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
@@ -35,7 +37,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
                                                                                          + ENDDATE + " INTEGER, "
                                                                                          + LOCATION + " TEXT, "
                                                                                          + NOTES + " TEXT, "
-                                                                                         + REMIND + " INTEGER NOT NULL"
+                                                                                         + REMIND + " INTEGER NOT NULL, "
+                                                                                         + COLOUR + " INTEGER NOT NULL "
                                                                                   + ");";
 
     public static synchronized DatabaseHelper getInstance(Context context) {

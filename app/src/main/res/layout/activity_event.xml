@@ -54,7 +54,7 @@
         android:background="@color/button"
         android:onClick="onClick"
         android:textSize="@dimen/standard_text_size"
-        android:layout_below="@+id/appointmentNotes"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -117,6 +117,7 @@
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:text="Remind me"
+        android:layout_marginBottom="@dimen/standard_margin_size"
         android:textSize="@dimen/event_text_size"
         android:id="@+id/remindbox"
         android:onClick="selectItem"
@@ -197,29 +198,90 @@
     <!-- Notes -->
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="@dimen/standard_icon_size"
+        android:layout_height="fill_parent"
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/appointmentNotes"
         android:hint="@string/event_notes"
+        android:background="@drawable/back_button"
         android:layout_marginBottom="@dimen/standard_margin_size"
         android:padding="@dimen/standard_padding_size"
-        android:layout_below="@+id/participants"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/remindbox"
+        android:layout_above="@+id/imageButton" />
+
+
+    <!-- Bear colours -->
+    <Button
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:id="@+id/imageButton"
+        android:onClick="onClick"
+        android:background="@drawable/beared"
+        android:layout_above="@+id/addAppointmentButton"
+        android:layout_marginBottom="@dimen/standard_margin_size"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <!-- Participants -->
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/standard_icon_size"
-        android:id="@+id/participants"
-        android:hint="@string/event_participants"
-        android:layout_marginBottom="@dimen/standard_margin_size"
-        android:padding="@dimen/standard_padding_size"
-        android:layout_below="@+id/remindbox"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/appointmentNotes"
-        android:layout_alignEnd="@+id/appointmentNotes" />
+    <Button
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:id="@+id/imageButton2"
+        android:onClick="onClick"
+        android:background="@drawable/bearyellow"
+        android:layout_alignTop="@+id/imageButton"
+        android:layout_toRightOf="@+id/imageButton"
+        android:layout_toEndOf="@+id/imageButton" />
+
+    <Button
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:id="@+id/imageButton3"
+        android:onClick="onClick"
+        android:background="@drawable/beargreen"
+        android:layout_alignTop="@+id/imageButton2"
+        android:layout_toRightOf="@+id/imageButton2"
+        android:layout_toEndOf="@+id/imageButton2" />
+
+    <Button
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:id="@+id/imageButton4"
+        android:onClick="onClick"
+        android:background="@drawable/bearblue"
+        android:layout_alignBottom="@+id/imageButton3"
+        android:layout_toRightOf="@+id/imageButton3"
+        android:layout_toEndOf="@+id/imageButton3" />
+
+    <Button
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:id="@+id/imageButton5"
+        android:onClick="onClick"
+        android:background="@drawable/beargrey"
+        android:layout_alignBottom="@+id/imageButton4"
+        android:layout_toRightOf="@+id/imageButton4"
+        android:layout_toEndOf="@+id/imageButton4" />
+
+    <Button
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:id="@+id/imageButton6"
+        android:onClick="onClick"
+        android:background="@drawable/bearpurple"
+        android:layout_alignBottom="@+id/imageButton5"
+        android:layout_toRightOf="@+id/imageButton5"
+        android:layout_toEndOf="@+id/imageButton5" />
+
+    <Button
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:id="@+id/selected_bear"
+        android:textSize="@dimen/event_text_size"
+        android:background="@color/caldroid_transparent"
+        android:layout_alignBottom="@+id/imageButton6"
+        android:layout_toRightOf="@+id/imageButton6"
+        android:layout_toEndOf="@+id/imageButton6" />
 
 </RelativeLayout>

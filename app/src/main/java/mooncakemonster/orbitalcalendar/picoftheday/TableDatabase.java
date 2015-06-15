@@ -12,12 +12,12 @@ import android.util.Log;
  */
 public class TableDatabase extends SQLiteOpenHelper {
 
-    public String query = "CREATE TABLE " + TableData.TableInfo.TABLE_NAME + " ( " +
+    public String query = "CREATE TABLE " + TableData.TableInfo.TABLE_NAME + " (" +
                                             TableData.TableInfo.SMILEY + " INTEGER NOT NULL, " +
                                             TableData.TableInfo.TITLE + " TEXT, " +
                                             TableData.TableInfo.DATE + " TEXT, " +
                                             TableData.TableInfo.CAPTION + " TEXT, " +
-                                            TableData.TableInfo.IMAGE + " TEXT ); ";
+                                            TableData.TableInfo.IMAGE + " TEXT);";
 
     public TableDatabase(Context context) {
         super(context, TableData.TableInfo.DATABASE_NAME, null, TableData.TableInfo.DATABASE_VERSION);
@@ -38,7 +38,7 @@ public class TableDatabase extends SQLiteOpenHelper {
     }
 
     // Insert user information into the database
-    public long putInformation(TableDatabase data, int smiley, String title, String date, String caption, String image) {
+    public void putInformation(TableDatabase data, int smiley, String title, String date, String caption, String image) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -51,10 +51,8 @@ public class TableDatabase extends SQLiteOpenHelper {
         contentValues.put(TableData.TableInfo.IMAGE, image);
 
         // Insert into sqlite database
-        long id = sqLiteDatabase.insert(TableData.TableInfo.TABLE_NAME, null, contentValues);
+        sqLiteDatabase.insert(TableData.TableInfo.TABLE_NAME, null, contentValues);
         Log.d("Database operations", "One row inserted");
-
-        return id;
     }
 
     // Retrieve data from database

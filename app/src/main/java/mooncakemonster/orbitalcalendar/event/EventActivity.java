@@ -50,6 +50,10 @@ public class EventActivity extends ActionBarActivity {
     AlertDialog.Builder alertBw1, alertBw2;
     AlertDialog alertDw1, alertDw2;
 
+    // Select bear colours
+    Button colourInput;
+    int selected_colour = 0;
+
     CharSequence[] everyWheel = { "day event", "week event", "month event", "year event"};
     CharSequence[] remindWheel = { "min before event", "hour before event", "day before event" };
 
@@ -72,6 +76,9 @@ public class EventActivity extends ActionBarActivity {
         //Intialise and open database
         appointmentDatabase = new AppointmentController(this);
         appointmentDatabase.open();
+
+        // Initialise bear button
+        colourInput = (Button) findViewById(R.id.selected_bear);
     }
 
     // This method sets selected date by user on the button.
@@ -279,27 +286,37 @@ public class EventActivity extends ActionBarActivity {
                 everyNum.setText(Integer.toString(numberPicker.getValue()));
                 //Remove 's' from days, weeks, months and years when 1 is selected.
                 //Conversely, append 's' to day, week, month, and year when value greater than 1 selected.
-                if(everyNum.getText().toString().equals("1"))
-                {
+                if (everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
-                    switch(frequencyOfAppointment)
-                    {
-                        case "days event":      everyBox.setText("day event");      break;
-                        case "weeks event":     everyBox.setText("week event");     break;
-                        case "months event":    everyBox.setText("month event");    break;
-                        case "years event":     everyBox.setText("year event");     break;
+                    switch (frequencyOfAppointment) {
+                        case "days event":
+                            everyBox.setText("day event");
+                            break;
+                        case "weeks event":
+                            everyBox.setText("week event");
+                            break;
+                        case "months event":
+                            everyBox.setText("month event");
+                            break;
+                        case "years event":
+                            everyBox.setText("year event");
+                            break;
                     }
-                }
-
-                else if(!everyNum.getText().toString().equals("1"))
-                {
+                } else if (!everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
-                    switch(frequencyOfAppointment)
-                    {
-                        case "day event":      everyBox.setText("days event");      break;
-                        case "week event":     everyBox.setText("weeks event");     break;
-                        case "month event":    everyBox.setText("months event");    break;
-                        case "year event":     everyBox.setText("years event");     break;
+                    switch (frequencyOfAppointment) {
+                        case "day event":
+                            everyBox.setText("days event");
+                            break;
+                        case "week event":
+                            everyBox.setText("weeks event");
+                            break;
+                        case "month event":
+                            everyBox.setText("months event");
+                            break;
+                        case "year event":
+                            everyBox.setText("years event");
+                            break;
                     }
                 }
 
@@ -386,17 +403,6 @@ public class EventActivity extends ActionBarActivity {
         }
     }
 
-    public void onClick(View view){
-        switch (view.getId()) {
-            case R.id.addAppointmentButton:
-                insertInDatabase();
-                //Inform user that appointment has been created and return to previous activity
-                Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
-                finish();
-                break;
-        }
-    }
-
     protected void insertInDatabase()
     {
         final EditText eventInput = (EditText) findViewById(R.id.title);
@@ -431,6 +437,8 @@ public class EventActivity extends ActionBarActivity {
         final String location = locationInput.getText().toString();
         //Get any miscellaneous notes
         final String notes = notesInput.getText().toString();
+
+
         //TODO: EVERY N DAY/WEEK/MONTH/YEAR
         if(repeatAppointment.isChecked())
         {
@@ -480,7 +488,45 @@ public class EventActivity extends ActionBarActivity {
 
 
         //Insert into database
-        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind);
+        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+    }
+
+    public void onClick(View view){
+        switch (view.getId()) {
+            case R.id.addAppointmentButton:
+                insertInDatabase();
+                //Inform user that appointment has been created and return to previous activity
+                Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
+                finish();
+                break;
+
+            case R.id.imageButton:
+                colourInput.setBackgroundResource(R.color.redbear);
+                selected_colour = R.drawable.beared;
+                break;
+            case R.id.imageButton2:
+                colourInput.setBackgroundResource(R.color.yellowbear);
+                selected_colour = R.drawable.bearyellow;
+                break;
+            case R.id.imageButton3:
+                colourInput.setBackgroundResource(R.color.greenbear);
+                selected_colour = R.drawable.beargreen;
+                break;
+            case R.id.imageButton4:
+                colourInput.setBackgroundResource(R.color.bluebear);
+                selected_colour = R.drawable.bearblue;
+                break;
+            case R.id.imageButton5:
+                colourInput.setBackgroundResource(R.color.greybear);
+                selected_colour = R.drawable.beargrey;
+                break;
+            case R.id.imageButton6:
+                colourInput.setBackgroundResource(R.color.purplebear);
+                selected_colour = R.drawable.bearpurple;
+                break;
+
+            default: break;
+        }
     }
 
     @Override

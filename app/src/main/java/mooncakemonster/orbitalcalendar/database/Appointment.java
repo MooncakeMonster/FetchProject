@@ -23,6 +23,7 @@ public class Appointment implements Comparable<Appointment> {
     private String location;
     private String notes;
     private int remind;
+    private int colour;
 
     //ID of the entry in SQLite table
     public long getId() {
@@ -86,6 +87,14 @@ public class Appointment implements Comparable<Appointment> {
     }
     public void setRemind(int remind) {
         this.remind = remind;
+    }
+
+    //Get ID of colour bear choosen by user
+    public int getColour() {
+        return colour;
+    }
+    public void setColour(int colour) {
+        this.colour = colour;
     }
 
     // Used by ArrayAdapter in the ListView

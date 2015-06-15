@@ -1,17 +1,20 @@
 package mooncakemonster.orbitalcalendar.picoftheday;
 
+import android.net.Uri;
+
 /**
  * This class creates items for image storage.
  */
 public class PictureItem {
     private int id;
-    private String title, date, caption, image;
+    private String title, date, caption;
+    Uri image;
 
     public PictureItem() {
 
     }
 
-    public PictureItem(int id, String title, String date, String caption, String image) {
+    public PictureItem(int id, String title, String date, String caption, Uri image) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -51,7 +54,7 @@ public class PictureItem {
         this.caption = caption;
     }
 
-    public String getImage() {
+    public Uri getImage() {
         return image;
     }
 

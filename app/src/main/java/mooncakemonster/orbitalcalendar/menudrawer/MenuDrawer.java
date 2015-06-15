@@ -12,11 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.roomorama.caldroid.CaldroidFragment;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
@@ -28,9 +23,6 @@ import mooncakemonster.orbitalcalendar.voting.VotingFragment;
 public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
 
     private static String TAG = MenuDrawer.class.getSimpleName();
-    private Calendar cal = Calendar.getInstance();
-    private CaldroidFragment caldroidFragment = new CaldroidFragment();
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("MMMM yyyy");
 
     private Toolbar mToolbar;
     private FragmentDrawer drawerFragment;
@@ -78,8 +70,7 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
         switch (position) {
             case 0:
                 fragment = new CalendarFragment();
-                // get current month and year
-                title = dateFormatter.format(cal.getTime());
+                title = "Calendar";
                 break;
             case 1:
                 fragment = new PictureFragment();

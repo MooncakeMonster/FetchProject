@@ -11,11 +11,11 @@
     <color name="button">#6698FF</color>
 
     <color name="colorPrimary">#6698FF</color>
-    <color name="colorPrimaryDark">#6698FF</color>
+    <color name="colorPrimaryDark">#2B60DE</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#6698FF</color>
+    <color name="colorAccent">#2B60DE</color>
 
     <color name="white">#FFFFFF</color>
     <color name="feed_bg">#C3DEFC</color>
@@ -40,4 +40,12 @@
     <color name="lightgreen">#336666</color>
     <color name="orrange">#e33d1b</color>
     <color name="darkorrange">#cc2303</color>
+
+    <!-- Bear colours -->
+    <color name="redbear">#FFFB6E72</color>
+    <color name="yellowbear">#FFE3FE1A</color>
+    <color name="greenbear">#FF44FE57</color>
+    <color name="bluebear">#FF76D5FD</color>
+    <color name="greybear">#FFA6A6A6</color>
+    <color name="purplebear">#FFB78DFD</color>
 </resources>

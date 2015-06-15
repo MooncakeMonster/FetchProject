@@ -229,7 +229,7 @@
         android:layout_height="@dimen/event_icon_size"
         android:id="@+id/imageButton2"
         android:onClick="onClick"
-        android:background="@drawable/bearyellow"
+        android:background="@drawable/bearicon"
         android:layout_alignTop="@+id/imageButton"
         android:layout_toRightOf="@+id/imageButton"
         android:layout_toEndOf="@+id/imageButton" />
@@ -257,9 +257,9 @@
     <Button
         android:layout_width="@dimen/standard_icon_size"
         android:layout_height="@dimen/event_icon_size"
-        android:id="@+id/imageButton5"
+        android:id="@+id/imageButton6"
         android:onClick="onClick"
-        android:background="@drawable/beargrey"
+        android:background="@drawable/bearpurple"
         android:layout_alignBottom="@+id/imageButton4"
         android:layout_toRightOf="@+id/imageButton4"
         android:layout_toEndOf="@+id/imageButton4" />
@@ -267,21 +267,12 @@
     <Button
         android:layout_width="@dimen/standard_icon_size"
         android:layout_height="@dimen/event_icon_size"
-        android:id="@+id/imageButton6"
-        android:onClick="onClick"
-        android:background="@drawable/bearpurple"
-        android:layout_alignBottom="@+id/imageButton5"
-        android:layout_toRightOf="@+id/imageButton5"
-        android:layout_toEndOf="@+id/imageButton5" />
-
-    <Button
-        android:layout_width="@dimen/standard_icon_size"
-        android:layout_height="@dimen/event_icon_size"
+        android:gravity="center"
         android:id="@+id/selected_bear"
-        android:textSize="@dimen/event_text_size"
+        android:layout_marginRight="20dp"
         android:background="@color/caldroid_transparent"
-        android:layout_alignBottom="@+id/imageButton6"
-        android:layout_toRightOf="@+id/imageButton6"
-        android:layout_toEndOf="@+id/imageButton6" />
+        android:layout_alignTop="@+id/imageButton6"
+        android:layout_alignRight="@+id/addAppointmentButton"
+        android:layout_alignEnd="@+id/addAppointmentButton" />
 
 </RelativeLayout>

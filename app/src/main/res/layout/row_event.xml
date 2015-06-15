@@ -2,79 +2,83 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/feed_bg"
+    android:background="@color/caldroid_transparent"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_marginLeft="@dimen/feed_item_margin"
-        android:layout_marginRight="@dimen/feed_item_margin"
-        android:layout_marginTop="@dimen/feed_item_margin"
-        android:background="@drawable/bg_parent_rounded_corner"
-        android:orientation="vertical"
-        android:paddingBottom="@dimen/feed_item_padding_top_bottom">
+        android:id="@+id/event_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/event_list_margin"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/event_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/standard_padding_size"
-            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:text="28 May 2015, Saturday"
-            android:background="@color/colorPrimaryDark"
-            android:layout_marginBottom="@dimen/standard_margin_size"
-            android:gravity="center"
-            android:textColor="@color/caldroid_white"
-            android:textSize="@dimen/standard_text_size" />
+        <RelativeLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/standard_margin_size">
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/feed_item_padding_left_right"
-            android:paddingRight="@dimen/feed_item_padding_left_right">
+            <TextView
+                android:id="@+id/event_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="20"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/caldroid_black"
+                android:textSize="45dp" />
 
-            <Button
-                android:id="@+id/event_colour"
-                android:layout_width="65dp"
-                android:layout_height="59dp"
-                android:scaleType="fitCenter"></Button>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/event_month_year"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingLeft="@dimen/feed_item_profile_info_padd">
+                android:text="JAN 2015"
+                android:textSize="12dp"
+                android:gravity="center"
+                android:layout_below="@id/event_day"
+                android:textColor="@color/caldroid_black" />
 
-                <TextView
-                    android:id="@+id/event_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Title"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="@dimen/standard_text_size" />
+        </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/event_location"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Singapore"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="@dimen/feed_item_profile_name" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/standard_padding_size"
+            android:paddingBottom="@dimen/standard_padding_size"
+            android:paddingLeft="@dimen/feed_item_profile_info_padd"
+            android:paddingRight="@dimen/feed_item_profile_info_padd"
+            android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
+            android:layout_marginRight="@dimen/feed_item_profile_info_padd"
+            android:id="@+id/event_set_colour">
 
-                <TextView
-                    android:id="@+id/event_start_end_time"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="28 May 2015, Saturday"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="@dimen/feed_item_profile_name" />
-            </LinearLayout>
-        </LinearLayout>
+            <TextView
+                android:id="@+id/event_title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Title"
+                android:textStyle="bold"
+                android:textColor="@color/caldroid_black"
+                android:textSize="@dimen/standard_text_size" />
 
+            <TextView
+                android:id="@+id/event_location"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Singapore"
+                android:layout_below="@id/event_title"
+                android:textColor="@color/caldroid_black"
+                android:textSize="@dimen/feed_item_profile_name" />
 
+            <TextView
+                android:id="@+id/event_start_end_time"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/event_location"
+                android:text="28 May 2015, Saturday"
+                android:textColor="@color/caldroid_black"
+                android:textSize="@dimen/feed_item_profile_name" />
+        </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>
+

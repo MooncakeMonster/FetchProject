@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class AppointmentController
@@ -15,6 +14,8 @@ public class AppointmentController
     // Database fields
     private SQLiteDatabase database;
     private DatabaseHelper dbHelper;
+
+    //TODO: Remove the last 3 if redundant
     private String[] allColumns = { DatabaseHelper.COLUMN_ID,
                                     DatabaseHelper.EVENT,
                                     DatabaseHelper.STARTPROPERDATE,
@@ -23,7 +24,10 @@ public class AppointmentController
                                     DatabaseHelper.LOCATION,
                                     DatabaseHelper.NOTES,
                                     DatabaseHelper.REMIND,
-                                    DatabaseHelper.COLOUR
+                                    DatabaseHelper.COLOUR,
+                                    DatabaseHelper.DATE,
+                                    DatabaseHelper.STARTTIME,
+                                    DatabaseHelper.ENDTIME
                                   };
 
 
@@ -39,7 +43,9 @@ public class AppointmentController
         dbHelper.close();
     }
 
-    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, long remind, int colour) {
+
+    // TODO: Remove last 3 if redundant
+    public Appointment createAppointment(String event, String startproperdate, long startdate, long enddate, String location, String notes, long remind, int colour, String date, String startTime, String endTime) {
         ContentValues values = new ContentValues();
         //Insert key-value in ContentValues
         values.put(DatabaseHelper.EVENT, event);
@@ -50,6 +56,9 @@ public class AppointmentController
         values.put(DatabaseHelper.NOTES, notes);
         values.put(DatabaseHelper.REMIND, remind);
         values.put(DatabaseHelper.COLOUR, colour);
+        values.put(DatabaseHelper.DATE, date);
+        values.put(DatabaseHelper.STARTTIME, startTime);
+        values.put(DatabaseHelper.ENDTIME, endTime);
 
         long insertId = database.insert(DatabaseHelper.DATABASE_NAME, null, values);
         Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME, allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
@@ -80,8 +89,8 @@ public class AppointmentController
         }
         // Note! Close cursor after use
         cursor.close();
-        //Sort list of appointments
-        Collections.sort(appointments);
+        //Sort list of appointments TODO: Remove comment if needed
+        //Collections.sort(appointments);
         return appointments;
     }
 
@@ -97,6 +106,11 @@ public class AppointmentController
         appt.setNotes(cursor.getString(6));
         appt.setRemind(cursor.getInt(7));
         appt.setColour(cursor.getInt(8));
+
+        //TODO: Remove if redundant
+        appt.setDate(cursor.getString(9));
+        appt.setStartTime(cursor.getString(10));
+        appt.setEndTime(cursor.getString(11));
 
         return appt;
     }

@@ -25,6 +25,10 @@ public class Appointment implements Comparable<Appointment> {
     private int remind;
     private int colour;
 
+    //TODO: Remove if redundant
+    private String date;
+    private String startTime, endTime;
+
     //ID of the entry in SQLite table
     public long getId() {
         return id;
@@ -95,6 +99,26 @@ public class Appointment implements Comparable<Appointment> {
     }
     public void setColour(int colour) {
         this.colour = colour;
+    }
+
+    //TODO: Remove if redundant
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+    public String getStartTime() {
+        return startTime;
+    }
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+    public String getEndTime() {
+        return endTime;
+    }
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     // Used by ArrayAdapter in the ListView

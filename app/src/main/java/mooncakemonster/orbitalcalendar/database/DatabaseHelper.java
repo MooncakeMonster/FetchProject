@@ -29,6 +29,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
     //Get ID of the colour bear chosen by user
     public static final String COLOUR = "colour";
 
+    //TODO: Remove if redundant
+    public static final String DATE = "date";
+    public static final String STARTTIME = "starttime";
+    public static final String ENDTIME = "endtime";
+
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
                                                                                          + EVENT + " TEXT NOT NULL, "
@@ -38,7 +43,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
                                                                                          + LOCATION + " TEXT, "
                                                                                          + NOTES + " TEXT, "
                                                                                          + REMIND + " INTEGER NOT NULL, "
-                                                                                         + COLOUR + " INTEGER NOT NULL "
+                                                                                         + COLOUR + " INTEGER NOT NULL, "
+                                                                                         + DATE + " TEXT NOT NULL, "
+                                                                                         + STARTTIME + " TEXT NOT NULL, "
+                                                                                         + ENDTIME + " TEXT NOT NULL "
                                                                                   + ");";
 
     public static synchronized DatabaseHelper getInstance(Context context) {

@@ -42,6 +42,9 @@
     <dimen name="picture_button_margin">15dp</dimen>
     <dimen name="picture_elevation">1dp</dimen>
 
+    <!-- row_event.xml -->
+    <dimen name="event_list_margin">15dp</dimen>
+
     <!-- row_feed.xml -->
     <dimen name="feed_item_margin">10dp</dimen>
     <dimen name="feed_item_padding_top_bottom">20dp</dimen>

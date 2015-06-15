@@ -43,9 +43,9 @@
 
     <!-- Bear colours -->
     <color name="redbear">#FFFB6E72</color>
-    <color name="yellowbear">#FFE3FE1A</color>
-    <color name="greenbear">#FF44FE57</color>
-    <color name="bluebear">#FF76D5FD</color>
-    <color name="greybear">#FFA6A6A6</color>
+    <color name="yellowbear">#fcba59</color>
+    <color name="greenbear">#57dd86</color>
+    <color name="bluebear">#24c6d5</color>
     <color name="purplebear">#FFB78DFD</color>
+
 </resources>

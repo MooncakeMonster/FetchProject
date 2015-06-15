@@ -488,7 +488,7 @@ public class EventActivity extends ActionBarActivity {
 
 
         //Insert into database
-        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour, beginD, beginT, endT);
     }
 
     public void onClick(View view){
@@ -501,28 +501,24 @@ public class EventActivity extends ActionBarActivity {
                 break;
 
             case R.id.imageButton:
-                colourInput.setBackgroundResource(R.color.redbear);
-                selected_colour = R.drawable.beared;
+                colourInput.setBackgroundResource(R.drawable.beared);
+                selected_colour = R.color.redbear;
                 break;
             case R.id.imageButton2:
-                colourInput.setBackgroundResource(R.color.yellowbear);
-                selected_colour = R.drawable.bearyellow;
+                colourInput.setBackgroundResource(R.drawable.bearyellow);
+                selected_colour = R.color.yellowbear;
                 break;
             case R.id.imageButton3:
-                colourInput.setBackgroundResource(R.color.greenbear);
-                selected_colour = R.drawable.beargreen;
+                colourInput.setBackgroundResource(R.drawable.beargreen);
+                selected_colour = R.color.greenbear;
                 break;
             case R.id.imageButton4:
-                colourInput.setBackgroundResource(R.color.bluebear);
-                selected_colour = R.drawable.bearblue;
-                break;
-            case R.id.imageButton5:
-                colourInput.setBackgroundResource(R.color.greybear);
-                selected_colour = R.drawable.beargrey;
+                colourInput.setBackgroundResource(R.drawable.bearblue);
+                selected_colour = R.color.bluebear;
                 break;
             case R.id.imageButton6:
-                colourInput.setBackgroundResource(R.color.purplebear);
-                selected_colour = R.drawable.bearpurple;
+                colourInput.setBackgroundResource(R.drawable.bearpurple);
+                selected_colour = R.color.purplebear;
                 break;
 
             default: break;

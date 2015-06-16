@@ -416,31 +416,28 @@ public class EventActivity extends ActionBarActivity {
 
         //Default value for reminder
         long remind = 0;
-        /*
         if(reminderCheckBox.isChecked())
         {
-            //Get number
-            Button numberSetForReminder = (Button) findViewById(R.id.remindnum);
-            long num = Long.getLong(numberSetForReminder.getText().toString());
+            //Get number, removing any whitespace
+            long num = Long.parseLong(remindNum.getText().toString().replaceAll("\\s+",""));
             //Get "quantity"
-            Button quantifyNumberSetForReminder = (Button) findViewById(R.id.remindweek);
-            String value = quantifyNumberSetForReminder.getText().toString();
+            String value = remindBox.getText().toString();
+
             switch(value)
             {
                 case "min before event":case "mins before event":
-                    num = num * Constant.MIN_IN_MILLISECOND;
-                    break;
+                num = num * Constant.MIN_IN_MILLISECOND;
+                break;
                 case "hour before event":case "hours before event":
-                    num = num * Constant.HOUR_IN_MILLISECOND;
-                    break;
+                num = num * Constant.HOUR_IN_MILLISECOND;
+                break;
                 case "day before event":case "days before event":
-                    num = num * Constant.DAY_IN_MILLISECOND;
-                    break;
+                num = num * Constant.DAY_IN_MILLISECOND;
+                break;
             }
             //Set reminder in milliseconds
             remind = endEventMillisecond - num;
         }
-        */
 
 
         //(2) Start Validity Check
@@ -519,6 +516,18 @@ public class EventActivity extends ActionBarActivity {
         {
             appointmentDatabase.close();
             appointmentDatabase = null;
+        }
+    }
+
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        if(appointmentDatabase == null)
+        {
+            appointmentDatabase = new AppointmentController(this);
+            appointmentDatabase.open();
         }
     }
 }

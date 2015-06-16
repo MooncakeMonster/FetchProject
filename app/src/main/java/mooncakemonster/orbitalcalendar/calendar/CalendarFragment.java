@@ -20,6 +20,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
@@ -80,7 +81,6 @@ public class CalendarFragment extends ListFragment {
         appointmentDatabase = new AppointmentController(getActivity());
         appointmentDatabase.open();
 
-        // Highlight all dates with events
         highlightEventDates();
 
         // (2) Setup listener for caldroidFragment
@@ -129,20 +129,25 @@ public class CalendarFragment extends ListFragment {
         allAppointment = appointmentDatabase.getAllAppointment();
         adapter = new EventDayAdapter(getActivity(), R.layout.row_layout, allAppointment);
 
-        for(int i = 0; i < allAppointment.size(); i++) {
+        int size = allAppointment.size();
+        for(int i = 0; i < size; i++) {
             // Change date format to the same as date in database
             Date finalDate = Constant.stringToDate(allAppointment.get(i).getStartProperDate(), new SimpleDateFormat("yyyy MM dd"));
 
-            // Only display date when list is not empty
-            if (!allAppointment.isEmpty()) {
-                //Highlight dates with events
-                caldroidFragment.setBackgroundResourceForDate(R.drawable.flower, finalDate);
-            }
+            //Highlight dates with events
+            caldroidFragment.setTextColorForDate(R.color.colorPrimary, finalDate);
         }
 
         //Highlight today's date (overwrite above)
-        caldroidFragment.setBackgroundResourceForDate(R.drawable.flowercoloured, cal.getTime());
+        caldroidFragment.setBackgroundResourceForDate(R.drawable.circle, cal.getTime());
         caldroidFragment.refreshView();
+    }
+
+    // This method gets the event colours selected by users
+    private HashMap<Date, Integer> getDateColours(Date date, Integer colour) {
+        HashMap<Date, Integer> hashMap = new HashMap<>();
+        hashMap.put(date, colour);
+        return hashMap;
     }
 
     // This method displays the list of events for selected date

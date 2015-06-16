@@ -229,7 +229,7 @@
         android:layout_height="@dimen/event_icon_size"
         android:id="@+id/imageButton2"
         android:onClick="onClick"
-        android:background="@drawable/bearicon"
+        android:background="@drawable/bearyellow"
         android:layout_alignTop="@+id/imageButton"
         android:layout_toRightOf="@+id/imageButton"
         android:layout_toEndOf="@+id/imageButton" />

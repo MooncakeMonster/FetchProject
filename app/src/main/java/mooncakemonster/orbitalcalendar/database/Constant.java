@@ -84,6 +84,23 @@ public abstract class Constant
         return "";
     }
 
+    /*
+    * Helper method for converting date format to YYYY-MM-DD
+    */
+    public static Date stringToDate(String date, SimpleDateFormat standardFormat)
+    {
+        try
+        {
+            return standardFormat.parse(date);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        //Should not reach here
+        return new Date();
+    }
+
     //Validity check
     public static void maxStringLength(String input, int length, EditText edittext)
     {

@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="Event Name"
         android:id="@+id/eventName"
-        android:textSize="@dimen/standard_text_size"
+        android:textSize="15dp"
         android:textColor="@android:color/black"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/eventIcon"
@@ -37,7 +37,7 @@
         android:layout_alignParentRight="true"
         android:text="Event Time"
         android:id="@+id/eventTime"
-        android:textSize="@dimen/standard_text_size"
+        android:textSize="15dp"
         android:textColor="@android:color/black"
         android:layout_centerVertical="true" />
 </RelativeLayout>

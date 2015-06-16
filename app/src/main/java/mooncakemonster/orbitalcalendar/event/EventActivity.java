@@ -267,18 +267,18 @@ public class EventActivity extends ActionBarActivity {
                 if (everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
                     switch (frequencyOfAppointment) {
-                        case "days event": everyBox.setText("day event"); break;
-                        case "weeks event": everyBox.setText("week event"); break;
-                        case "months event": everyBox.setText("month event"); break;
-                        case "years event": everyBox.setText("year event"); break;
+                        case "days event":      everyBox.setText("day event");      break;
+                        case "weeks event":     everyBox.setText("week event");     break;
+                        case "months event":    everyBox.setText("month event");    break;
+                        case "years event":     everyBox.setText("year event");     break;
                     }
                 } else if (!everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
                     switch (frequencyOfAppointment) {
-                        case "day event": everyBox.setText("days event"); break;
-                        case "week event": everyBox.setText("weeks event"); break;
-                        case "month event": everyBox.setText("months event"); break;
-                        case "year event": everyBox.setText("years event"); break;
+                        case "day event":       everyBox.setText("days event");     break;
+                        case "week event":      everyBox.setText("weeks event");    break;
+                        case "month event":     everyBox.setText("months event");   break;
+                        case "year event":      everyBox.setText("years event");    break;
                     }
                 }
 
@@ -496,7 +496,7 @@ public class EventActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sample, menu);
+        getMenuInflater().inflate(R.menu.menu_cross, menu);
         return true;
     }
 

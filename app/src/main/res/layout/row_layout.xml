@@ -2,6 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:paddingLeft="@dimen/event_list_margin"
+    android:paddingRight="@dimen/event_list_margin"
+    android:paddingTop="@dimen/standard_padding_size"
+    android:paddingBottom="@dimen/standard_padding_size"
     android:layout_marginTop="0dp"
     android:layout_marginBottom="0dp"
     android:focusableInTouchMode="true">
@@ -9,24 +13,23 @@
     <ImageView
         android:id="@+id/eventIcon"
         android:src="@mipmap/red"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:layout_marginRight="@dimen/standard_margin_size"
         android:layout_centerVertical="true"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        android:paddingLeft="10dp"
         android:scaleType="centerCrop"/>
-
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Event Name"
         android:id="@+id/eventName"
-        android:paddingTop="10dp"
+        android:textSize="@dimen/standard_text_size"
+        android:textColor="@android:color/black"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/eventIcon"
-        android:layout_toEndOf="@+id/eventIcon" />
+        android:layout_toLeftOf="@+id/eventTime"
+        android:layout_toStartOf="@+id/eventTime" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -34,7 +37,7 @@
         android:layout_alignParentRight="true"
         android:text="Event Time"
         android:id="@+id/eventTime"
-        android:paddingTop="10dp"
-        android:paddingRight="10dp"
+        android:textSize="@dimen/standard_text_size"
+        android:textColor="@android:color/black"
         android:layout_centerVertical="true" />
 </RelativeLayout>

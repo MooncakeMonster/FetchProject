@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/event_list_margin"
+        android:layout_marginBottom="@dimen/event_list_margin"
         android:orientation="horizontal">
 
         <RelativeLayout

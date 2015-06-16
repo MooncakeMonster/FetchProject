@@ -33,6 +33,9 @@
     <!-- drawer_row.xml -->
     <dimen name="padd_left">30dp</dimen>
 
+    <!-- fragment_listfragment.xml -->
+    <dimen name="eventlist_icon_size">110dp</dimen>
+
     <!-- fragment_navigation.xml -->
     <dimen name="nav_layout">200dp</dimen>
     <dimen name="nav_icon">80dp</dimen>
@@ -41,6 +44,7 @@
     <dimen name="picture_button_size">60dp</dimen>
     <dimen name="picture_button_margin">15dp</dimen>
     <dimen name="picture_elevation">1dp</dimen>
+    <dimen name="picture_icon_size">100dp</dimen>
 
     <!-- row_event.xml -->
     <dimen name="event_list_margin">15dp</dimen>

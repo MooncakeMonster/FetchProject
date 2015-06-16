@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AppointmentController
@@ -68,6 +69,7 @@ public class AppointmentController
         database.delete(DatabaseHelper.DATABASE_NAME, DatabaseHelper.COLUMN_ID + " = " + id, null);
     }
 
+    // This method retrieves all appointments.
     public List<Appointment> getAllAppointment() {
         List<Appointment> appointments = new ArrayList<Appointment>();
 
@@ -81,8 +83,26 @@ public class AppointmentController
         }
         // Note! Close cursor after use
         cursor.close();
-        //Sort list of appointments TODO: Remove comment if needed
-        //Collections.sort(appointments);
+        Collections.sort(appointments);
+        return appointments;
+    }
+
+    // This method allows retrieval of current selected date' event list.
+    public List<Appointment> getSelectedDateAppointment(String date) {
+        List<Appointment> appointments = new ArrayList<Appointment>();
+
+        Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME,allColumns, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            Appointment appointment = cursorToAppointment(cursor);
+            if(appointment.getStartProperDate().equals(date)) appointments.add(appointment);
+            cursor.moveToNext();
+        }
+        // Note! Close cursor after use
+        cursor.close();
+        //Sort list of appointments in descending order to show latest date first
+        Collections.sort(appointments);
         return appointments;
     }
 

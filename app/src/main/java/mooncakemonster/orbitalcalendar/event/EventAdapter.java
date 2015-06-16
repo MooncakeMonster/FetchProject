@@ -44,7 +44,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
 
         Appointment appointment = objects.get(position);
 
-        if(appointment != null) {
+        if (appointment != null) {
             holder = new Holder();
             holder.event_colour = (RelativeLayout) row.findViewById(R.id.event_set_colour);
             holder.event_title = (TextView) row.findViewById(R.id.event_title);
@@ -56,6 +56,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             holder.event_colour.setBackgroundResource(appointment.getColour());
             holder.event_title.setText(appointment.getEvent());
             holder.event_location.setText(appointment.getLocation());
+
 
             // Get date
             SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");

@@ -11,10 +11,11 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.userdatabase.LoginUser;
 import mooncakemonster.orbitalcalendar.userdatabase.SQLiteHelper;
 import mooncakemonster.orbitalcalendar.userdatabase.SessionManager;
+
+import mooncakemonster.orbitalcalendar.R;
 
 public class SettingActivity extends ActionBarActivity {
 
@@ -75,7 +76,7 @@ public class SettingActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_sample, menu);
+        getMenuInflater().inflate(R.menu.menu_cross, menu);
         return true;
     }
 

@@ -67,7 +67,7 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_event, menu);
+        getMenuInflater().inflate(R.menu.menu_plus, menu);
         return true;
     }
 
@@ -75,7 +75,7 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_ok) {
+        if (id == R.id.action_add) {
             title = pic_title.getText().toString();
             date = dateFormatter.format(cal.getTime());
             caption = pic_caption.getText().toString();

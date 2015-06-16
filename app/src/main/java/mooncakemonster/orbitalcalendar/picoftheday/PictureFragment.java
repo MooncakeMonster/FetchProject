@@ -17,7 +17,7 @@ import mooncakemonster.orbitalcalendar.R;
 /**
  * This class displays the images uploaded by users in listview.
  */
-public class PictureFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class PictureFragment extends Fragment {
 
     private ListView listView;
     private int smiley_id;
@@ -65,16 +65,7 @@ public class PictureFragment extends Fragment implements SwipeRefreshLayout.OnRe
             } while (cursor.moveToPrevious());
         }
 
-        // Swipe on refresh
-        swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-                fetchImage();
-            }
-        });
+        cursor.close();
 
         // Lead user to CreatePicture activity to insert image to listview
         addPicButton = (ImageButton) rootView.findViewById(R.id.addPictureButton);
@@ -88,16 +79,4 @@ public class PictureFragment extends Fragment implements SwipeRefreshLayout.OnRe
         return rootView;
     }
 
-    @Override
-    public void onRefresh() {
-        fetchImage();
-    }
-
-    // This method fetches new images to listview when user refreshes.
-    private void fetchImage() {
-        swipeRefreshLayout.setRefreshing(true);
-        adapter.notifyDataSetChanged();
-        // Stop swipe refresh
-        swipeRefreshLayout.setRefreshing(false);
-    }
 }

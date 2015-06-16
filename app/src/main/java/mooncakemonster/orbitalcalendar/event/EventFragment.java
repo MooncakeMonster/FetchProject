@@ -51,9 +51,10 @@ public class EventFragment extends ListFragment{
                 final Appointment appointmentToDelete = adapter.getItem(position);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setMessage("Are you sure you would like to delete the appointment: " + appointmentToDelete.toString() + " ?");
+                alert.setTitle("Delete appointment");
+                alert.setMessage("Are you sure you want to delete \"" + appointmentToDelete.toString() + "\" appointment?");
 
-                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id)
                     {
@@ -68,7 +69,7 @@ public class EventFragment extends ListFragment{
                     }
                 });
 
-                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                 public void onClick(DialogInterface dialog, int id)
                     {

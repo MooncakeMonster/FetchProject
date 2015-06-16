@@ -73,11 +73,11 @@ public class EventActivity extends ActionBarActivity {
         setButtonFunction();
         setCheckBoxFunction();
 
-        //Intialise and open database
+        //Initialise and open database
         appointmentDatabase = new AppointmentController(this);
         appointmentDatabase.open();
 
-        // Initialise bear button
+        //Initialise bear button
         colourInput = (Button) findViewById(R.id.selected_bear);
     }
 
@@ -194,14 +194,10 @@ public class EventActivity extends ActionBarActivity {
                 build1.setSingleChoiceItems(everyWheel, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!everyNum.getText().equals("1") && which == 0)
-                            everyBox.setText("days event");
-                        else if (!everyNum.getText().equals("1") && which == 1)
-                            everyBox.setText("weeks event");
-                        else if (!everyNum.getText().equals("1") && which == 2)
-                            everyBox.setText("months event");
-                        else if (!everyNum.getText().equals("1") && which == 3)
-                            everyBox.setText("years event");
+                        if (!everyNum.getText().equals("1") && which == 0) everyBox.setText("days event");
+                        else if (!everyNum.getText().equals("1") && which == 1) everyBox.setText("weeks event");
+                        else if (!everyNum.getText().equals("1") && which == 2) everyBox.setText("months event");
+                        else if (!everyNum.getText().equals("1") && which == 3) everyBox.setText("years event");
                         else everyBox.setText(everyWheel[which]);
                     }
                 }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -228,12 +224,9 @@ public class EventActivity extends ActionBarActivity {
                 build2.setSingleChoiceItems(remindWheel, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!remindNum.getText().equals("1") && which == 0)
-                            remindBox.setText("mins before event");
-                        else if (!remindNum.getText().equals("1") && which == 1)
-                            remindBox.setText("hours before event");
-                        else if (!remindNum.getText().equals("1") && which == 2)
-                            remindBox.setText("days before event");
+                        if (!remindNum.getText().equals("1") && which == 0) remindBox.setText("mins before event");
+                        else if (!remindNum.getText().equals("1") && which == 1) remindBox.setText("hours before event");
+                        else if (!remindNum.getText().equals("1") && which == 2) remindBox.setText("days before event");
                         else remindBox.setText(remindWheel[which]);
                     }
                 }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -255,27 +248,12 @@ public class EventActivity extends ActionBarActivity {
 
     // This method opens dialog for everyNum button.
     private void setAlert1() {
-        //TODO: Reduce similar codes as compared to setAlert2()
-        numberPicker = new NumberPicker(context);
-        numberPicker.setClickable(false);
-        numberPicker.setEnabled(true);
-        numberPicker.setWrapSelectorWheel(true);
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(100);
-
-        final RelativeLayout linearLayout = new RelativeLayout(context);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
-        RelativeLayout.LayoutParams numPickerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        numPickerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        linearLayout.setLayoutParams(params);
-        linearLayout.addView(numberPicker, numPickerParams);
-        linearLayout.isClickable();
+        RelativeLayout relativeLayout = setNumberPicker();
 
         alertBw1 = new AlertDialog.Builder(context);
         alertBw1.setTitle("Select number");
 
-        alertBw1.setView(linearLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        alertBw1.setView(relativeLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -289,34 +267,18 @@ public class EventActivity extends ActionBarActivity {
                 if (everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
                     switch (frequencyOfAppointment) {
-                        case "days event":
-                            everyBox.setText("day event");
-                            break;
-                        case "weeks event":
-                            everyBox.setText("week event");
-                            break;
-                        case "months event":
-                            everyBox.setText("month event");
-                            break;
-                        case "years event":
-                            everyBox.setText("year event");
-                            break;
+                        case "days event": everyBox.setText("day event"); break;
+                        case "weeks event": everyBox.setText("week event"); break;
+                        case "months event": everyBox.setText("month event"); break;
+                        case "years event": everyBox.setText("year event"); break;
                     }
                 } else if (!everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
                     switch (frequencyOfAppointment) {
-                        case "day event":
-                            everyBox.setText("days event");
-                            break;
-                        case "week event":
-                            everyBox.setText("weeks event");
-                            break;
-                        case "month event":
-                            everyBox.setText("months event");
-                            break;
-                        case "year event":
-                            everyBox.setText("years event");
-                            break;
+                        case "day event": everyBox.setText("days event"); break;
+                        case "week event": everyBox.setText("weeks event"); break;
+                        case "month event": everyBox.setText("months event"); break;
+                        case "year event": everyBox.setText("years event"); break;
                     }
                 }
 
@@ -329,27 +291,12 @@ public class EventActivity extends ActionBarActivity {
 
     // This method opens dialog for remindNum button.
     private void setAlert2() {
-        //TODO: Reduce similar codes as compared to setAlert1()
-        numberPicker = new NumberPicker(context);
-        numberPicker.setClickable(false);
-        numberPicker.setEnabled(true);
-        numberPicker.setWrapSelectorWheel(true);
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(100);
-
-        final RelativeLayout linearLayout = new RelativeLayout(context);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
-        RelativeLayout.LayoutParams numPickerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        numPickerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        linearLayout.setLayoutParams(params);
-        linearLayout.addView(numberPicker, numPickerParams);
-        linearLayout.isClickable();
+        RelativeLayout relativeLayout = setNumberPicker();
 
         alertBw2 = new AlertDialog.Builder(context);
         alertBw2.setTitle("Select number");
 
-        alertBw2.setView(linearLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+        alertBw2.setView(relativeLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -389,6 +336,27 @@ public class EventActivity extends ActionBarActivity {
         alertDw2 = alertBw2.create();
     }
 
+    // This method initialize number picker.
+    private RelativeLayout setNumberPicker() {
+        numberPicker = new NumberPicker(context);
+        numberPicker.setClickable(false);
+        numberPicker.setEnabled(true);
+        numberPicker.setWrapSelectorWheel(true);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(100);
+
+        final RelativeLayout linearLayout = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
+        RelativeLayout.LayoutParams numPickerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        numPickerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        linearLayout.setLayoutParams(params);
+        linearLayout.addView(numberPicker, numPickerParams);
+        linearLayout.isClickable();
+
+        return linearLayout;
+    }
+
     public void selectItem(View view) {
         boolean checked = ((CheckBox) view).isChecked();
         switch (view.getId()) {
@@ -424,13 +392,13 @@ public class EventActivity extends ActionBarActivity {
         //Get Event Name
         final String event = eventInput.getText().toString();
         //Begin date and time
-        final String beginD = beginDate.getText().toString();
+        String beginD = beginDate.getText().toString().replace("From     ", "");
         final String beginT = beginTime.getText().toString();
         final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, dateFormatter, timeFormatter);
         //Standardised format for event's starting date: YYYY-MM-DD
-        final String startProperDate = Constant.standardYearMonthDate(beginD, dateFormatter);
+        final String startProperDate = Constant.standardYearMonthDate(beginD, dateFormatter, new SimpleDateFormat("yyyy MM dd"));
         //End date and time
-        final String endD = endDate.getText().toString();
+        final String endD = endDate.getText().toString().replace("To         ", "");
         final String endT = endTime.getText().toString();
         final long endEventMillisecond = Constant.stringToMillisecond(endD, endT, dateFormatter, timeFormatter);
         //Get Event's location
@@ -488,7 +456,7 @@ public class EventActivity extends ActionBarActivity {
 
 
         //Insert into database
-        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour, beginD, beginT, endT);
+        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
     }
 
     public void onClick(View view){

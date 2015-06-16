@@ -13,11 +13,11 @@ import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
+import mooncakemonster.orbitalcalendar.database.Constant;
 
 public class EventAdapter extends ArrayAdapter<Appointment> {
 
     private List<Appointment> objects;
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd\n MMM\n yyyy");
 
     public EventAdapter(Context context, int resources, List<Appointment> objects) {
         super(context, resources, objects);
@@ -56,15 +56,19 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             holder.event_colour.setBackgroundResource(appointment.getColour());
             holder.event_title.setText(appointment.getEvent());
             holder.event_location.setText(appointment.getLocation());
-            holder.event_start_end_time.setText("" + appointment.getStartTime() + " - " + appointment.getEndTime());
 
             // Get date
-            String[] date = appointment.getDate().split(" ");
-            date[5] = date[5].replace(",", "");
-            String[] splitDate = date[5].split("/");
+            SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
+            String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), standardFormat, new SimpleDateFormat("yyyy MMM dd"));
 
-            holder.event_day.setText(splitDate[0]);
-            holder.event_month_year.setText(getMonth(splitDate[1]) + " " + splitDate[2]);
+            String[] date = finalDate.split(" ");
+            holder.event_day.setText(date[2]);
+            holder.event_month_year.setText(date[1] + " " + date[0]);
+
+            // Get time
+            String startTime = Constant.getDate(appointment.getStartDate(), "hh:mm a");
+            String endTime = Constant.getDate(appointment.getEndDate(), "hh:mm a");
+            holder.event_start_end_time.setText(startTime + " - " + endTime);
 
             row.setTag(holder);
         }
@@ -72,21 +76,5 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
         return row;
     }
 
-    private String getMonth(String month) {
-        switch (month) {
-            case "01": return "JAN";
-            case "02": return "FEB";
-            case "03": return "MAR";
-            case "04": return "APR";
-            case "05": return "MAY";
-            case "06": return "JUN";
-            case "07": return "JUL";
-            case "08": return "AUG";
-            case "09": return "SEP";
-            case "10": return "OCT";
-            case "11": return "NOV";
-            case "12": return "DEC";
-        }
-        return "NULL";
-    }
+
 }

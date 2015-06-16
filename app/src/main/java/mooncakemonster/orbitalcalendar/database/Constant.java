@@ -34,8 +34,8 @@ public abstract class Constant
         try
         {
             //Try-catch block placed here to prevent 'Unhandled ParseException' error
-            Date tempTime = formatterForDate.parse(time);
-            Date tempDate = formatterForTime.parse(date);
+            Date tempDate = formatterForDate.parse(date);
+            Date tempTime = formatterForTime.parse(time);
             Calendar cal = Calendar.getInstance();
             cal.set(
                     tempDate.getYear(), tempDate.getMonth(), tempDate.getDay(),
@@ -54,11 +54,23 @@ public abstract class Constant
     }
 
     /*
+     * Helper method to convert millisecond back to strings
+     */
+    public static String getDate(long milliSeconds, String dateFormat)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliSeconds);
+
+        return formatter.format(calendar.getTime());
+    }
+
+    /*
      * Helper method for converting date format to YYYY-MM-DD
      */
-    public static String standardYearMonthDate(String date, SimpleDateFormat formatter)
+    public static String standardYearMonthDate(String date, SimpleDateFormat formatter, SimpleDateFormat standardFormat)
     {
-        SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
         try
         {
             Date tempDate = formatter.parse(date);

@@ -194,10 +194,14 @@ public class EventActivity extends ActionBarActivity {
                 build1.setSingleChoiceItems(everyWheel, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!everyNum.getText().equals("1") && which == 0) everyBox.setText("days event");
-                        else if (!everyNum.getText().equals("1") && which == 1) everyBox.setText("weeks event");
-                        else if (!everyNum.getText().equals("1") && which == 2) everyBox.setText("months event");
-                        else if (!everyNum.getText().equals("1") && which == 3) everyBox.setText("years event");
+                        if (!everyNum.getText().equals("1") && which == 0)
+                            everyBox.setText("days event");
+                        else if (!everyNum.getText().equals("1") && which == 1)
+                            everyBox.setText("weeks event");
+                        else if (!everyNum.getText().equals("1") && which == 2)
+                            everyBox.setText("months event");
+                        else if (!everyNum.getText().equals("1") && which == 3)
+                            everyBox.setText("years event");
                         else everyBox.setText(everyWheel[which]);
                     }
                 }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -307,25 +311,19 @@ public class EventActivity extends ActionBarActivity {
                 remindNum.setText(Integer.toString(numberPicker.getValue()));
                 //Remove 's' from mins, hours, and days when 1 is selected.
                 //Conversely, append 's' to min, hour, and day when value greater than 1 selected.
-                if(remindNum.getText().toString().equals("1"))
-                {
+                if (remindNum.getText().toString().equals("1")) {
                     String reminderOption = remindBox.getText().toString();
-                    switch(reminderOption)
-                    {
-                        case "mins before event":     remindBox.setText("min before event");     break;
-                        case "hours before event":    remindBox.setText("hour before event");    break;
-                        case "days before event":     remindBox.setText("day before event");     break;
+                    switch (reminderOption) {
+                        case "mins before event":   remindBox.setText("min before event");      break;
+                        case "hours before event":  remindBox.setText("hour before event");     break;
+                        case "days before event":   remindBox.setText("day before event");      break;
                     }
-                }
-
-                else if(!remindNum.getText().toString().equals("1"))
-                {
+                } else if (!remindNum.getText().toString().equals("1")) {
                     String reminderOption = remindBox.getText().toString();
-                    switch(reminderOption)
-                    {
-                        case "min before event":     remindBox.setText("mins before event");     break;
-                        case "hour before event":    remindBox.setText("hours before event");    break;
-                        case "day before event":     remindBox.setText("days before event");     break;
+                    switch (reminderOption) {
+                        case "min before event":    remindBox.setText("mins before event");     break;
+                        case "hour before event":   remindBox.setText("hours before event");    break;
+                        case "day before event":    remindBox.setText("days before event");     break;
                     }
                 }
 
@@ -371,8 +369,7 @@ public class EventActivity extends ActionBarActivity {
         }
     }
 
-    protected void insertInDatabase()
-    {
+    protected boolean insertInDatabase() {
         final EditText eventInput = (EditText) findViewById(R.id.title);
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
         final EditText notesInput = (EditText) findViewById(R.id.appointmentNotes);
@@ -380,8 +377,7 @@ public class EventActivity extends ActionBarActivity {
         final CheckBox repeatAppointment = (CheckBox) findViewById(R.id.everybox);
         final CheckBox reminderCheckBox = (CheckBox) findViewById(R.id.remindbox);
 
-        if(beginDate == null || beginTime == null || endDate == null || endTime == null)
-        {
+        if (beginDate == null || beginTime == null || endDate == null || endTime == null) {
             beginDate = (Button) findViewById(R.id.startD);
             endDate = (Button) findViewById(R.id.endD);
             beginTime = (Button) findViewById(R.id.startT);
@@ -406,64 +402,78 @@ public class EventActivity extends ActionBarActivity {
         //Get any miscellaneous notes
         final String notes = notesInput.getText().toString();
 
-
-        //TODO: EVERY N DAY/WEEK/MONTH/YEAR
-        if(repeatAppointment.isChecked())
-        {
-            //If checkbox, sent dialogbox, asking when is the limit date
-            //BULK INSERT INTO DATABASE
-        }
-
         //Default value for reminder
         long remind = 0;
-        if(reminderCheckBox.isChecked())
-        {
+        if (reminderCheckBox.isChecked()) {
             //Get number, removing any whitespace
-            long num = Long.parseLong(remindNum.getText().toString().replaceAll("\\s+",""));
+            long num = Long.parseLong(remindNum.getText().toString().replaceAll("\\s+", ""));
             //Get "quantity"
             String value = remindBox.getText().toString();
 
-            switch(value)
-            {
-                case "min before event":case "mins before event":
-                num = num * Constant.MIN_IN_MILLISECOND;
-                break;
-                case "hour before event":case "hours before event":
-                num = num * Constant.HOUR_IN_MILLISECOND;
-                break;
-                case "day before event":case "days before event":
-                num = num * Constant.DAY_IN_MILLISECOND;
-                break;
+            switch (value) {
+                case "min before event":
+                case "mins before event":
+                    num = num * Constant.MIN_IN_MILLISECOND;
+                    break;
+                case "hour before event":
+                case "hours before event":
+                    num = num * Constant.HOUR_IN_MILLISECOND;
+                    break;
+                case "day before event":
+                case "days before event":
+                    num = num * Constant.DAY_IN_MILLISECOND;
+                    break;
             }
             //Set reminder in milliseconds
             remind = endEventMillisecond - num;
         }
 
-
         //(2) Start Validity Check
-        // Ensure inputs are not of null value: (a) event, (b) startProperDate, (c) startDate, (d) remind
-
+        // Ensure inputs are not of null value: (a) event
+        if(Constant.minStringLength(event, 1, eventInput, null) == false)
+            return false;
         // Check length of input: (a) event, (b) location, (c) notes
+        else if(Constant.maxStringLength(event, 20, eventInput, "No more than 20 characters for event.") == false)
+            return false;
+        else if(Constant.maxStringLength(location, 20, locationInput, "No more than 20 characters for location.") == false)
+            return false;
+        else if(Constant.maxStringLength(notes, 100, notesInput, "No more than 100 characters for notes.") == false)
+            return false;
+        // Ensure the dates selected make sense: (a) startDate, (b) endDate
+        if(beginEventMillisecond < endEventMillisecond)
+        {
+            //If starting time occurs before ending time
+            Toast.makeText(this.getApplicationContext(), "Please check the starting and ending date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
 
-        // Ensure data integrity, that is integer input are integer, and that strings
-        // do not contain unusual characters: Applicable to all
+        if (repeatAppointment.isChecked())
+        {
+            //TODO: If checkbox, sent dialogbox, asking when is the limit date
+            //BULK INSERT INTO DATABASE
+            /*DatePickerDialog.Builder alert = new DatePickerDialog.Builder(this);
+            alert.setTitle("Set Recurring Event");
+            alert.setMessage("Pick the maximum date for the event: ");
 
+            alert.show();*/
+        }
+        else
+        {
+            //Insert into database
+            appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+        }
 
-
-
-
-        //Insert into database
-        appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+        return true;
     }
-
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.addAppointmentButton:
-                insertInDatabase();
-                //Inform user that appointment has been created and return to previous activity
-                Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
-                finish();
-                break;
+                if(insertInDatabase()) {
+                    //Inform user that appointment has been created and return to previous activity
+                    Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
+                    finish();
+                    break;
+                }
 
             case R.id.imageButton:
                 colourInput.setBackgroundResource(R.drawable.beared);
@@ -518,7 +528,6 @@ public class EventActivity extends ActionBarActivity {
             appointmentDatabase = null;
         }
     }
-
 
     @Override
     protected void onResume()

@@ -102,31 +102,51 @@ public abstract class Constant
     }
 
     //Validity check
-    public static void maxStringLength(String input, int length, EditText edittext)
+    public static boolean maxStringLength(String input, int length, EditText edittext, String errorMessage)
     {
-        if(input.length() > length)
-        {
-            edittext.setError("" + length + " characters or less.");
+        if(length <= 0){
+            //Erronous input
+            return false;
         }
+        if(input.length() > length) {
+            if (errorMessage == null && input.length() > length) {
+                edittext.setError("" + length + " characters or less.");
+                return false;
+            } else
+            {
+                edittext.setError(errorMessage);
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    public static void minStringLength(String input, int length, EditText edittext)
+    public static boolean minStringLength(String input, int length, EditText edittext, String errorMessage)
     {
-        if(length == 0)
-        {
-            return;
+        if(length <= 0){
+            return false;
         }
 
-        else if(length == 1 && (input.length() == 0 || input == null))
-        {
+        else if((input.length() == 0 || input == null)) {
             edittext.setError("Please do not leave this empty.");
+            return false;
         }
 
-        else if(length > 1 && input.length() < length)
-        {
-            edittext.setError("Please key in at least " + length + " characters.");
+        else if(input.length() < length){
+            if(errorMessage == null) {
+                edittext.setError("Please key in at least " + length + " characters.");
+                return false;
+            }
+            else{
+                edittext.setError(errorMessage);
+                return false;
+            }
         }
+
+        return true;
     }
+
 
     //Toggle on/off
     /*

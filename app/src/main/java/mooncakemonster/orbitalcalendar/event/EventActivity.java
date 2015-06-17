@@ -433,11 +433,14 @@ public class EventActivity extends ActionBarActivity {
         if(Constant.minStringLength(event, 1, eventInput, null) == false)
             return false;
         // Check length of input: (a) event, (b) location, (c) notes
-        else if(Constant.maxStringLength(event, 20, eventInput, "No more than 20 characters for event.") == false)
+        else if(Constant.maxStringLength(event, Constant.EVENT_TITLE_MAX_LENGTH, eventInput,
+                "No more than " + Constant.EVENT_TITLE_MAX_LENGTH + " characters for event.") == false)
             return false;
-        else if(Constant.maxStringLength(location, 20, locationInput, "No more than 20 characters for location.") == false)
+        else if(Constant.maxStringLength(location, Constant.LOCATION_MAX_LENGTH, locationInput,
+                "No more than " + Constant.LOCATION_MAX_LENGTH + " characters for location.") == false)
             return false;
-        else if(Constant.maxStringLength(notes, 100, notesInput, "No more than 100 characters for notes.") == false)
+        else if(Constant.maxStringLength(notes, Constant.NOTES_MAX_LENGTH, notesInput,
+                "No more than " + Constant.NOTES_MAX_LENGTH + " characters for notes.") == false)
             return false;
         // Ensure the dates selected make sense: (a) startDate, (b) endDate
         if(beginEventMillisecond < endEventMillisecond)

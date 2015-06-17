@@ -98,12 +98,12 @@ public class CalendarFragment extends ListFragment {
             }
             @Override
             public void onChangeMonth(int month, int year) {
-                String text = "month: " + month + " year: " + year;
-                Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT).show();
+                //String text = "month: " + month + " year: " + year;
+                //Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onLongClickDate(Date date, View view) {
-                Toast.makeText(getActivity().getApplicationContext(), "Long click " + formatter.format(date), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity().getApplicationContext(), "Long click " + formatter.format(date), Toast.LENGTH_SHORT).show();
                 //Get time to parse in long
                 long time = date.getTime();
                 //Open EventActivity for user to input their appointment

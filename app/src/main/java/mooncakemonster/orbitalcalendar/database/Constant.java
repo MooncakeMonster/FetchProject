@@ -22,6 +22,8 @@ public abstract class Constant
     public static final long WEEK_IN_MILLISECOND = 604800000L;
 
     public static final int EVENT_TITLE_MAX_LENGTH = 50;
+    public static final int LOCATION_MAX_LENGTH = 50;
+    public static final int NOTES_MAX_LENGTH = 200;
 
 
     //Conversion methods

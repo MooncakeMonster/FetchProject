@@ -5,6 +5,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
@@ -15,6 +17,8 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
  */
 public class EventView extends DialogFragment
 {
+    private Appointment eventViewAppointment;
+
     public EventView()
     {
         //Nothing
@@ -25,10 +29,12 @@ public class EventView extends DialogFragment
     {
         EventView eventview = new EventView();
 
-        // Have data
-        // Put in textview -> java to xml (how?)
-        // hint @ textView.setText
-        // set as uneditable
+        Bundle bundle = new Bundle();
+        //TODO: Replace with parcable interface once app becomes viable
+        bundle.putSerializable("appointment", appt);
+
+        eventview.setArguments(bundle);
+
         //TODO: Tentatively use the available xml file and set everything as toggle off
         // (1) Can one inherit the xml file and then add an "edit" button inside?
         // (20 on clicking the edit button, toggle again
@@ -38,12 +44,42 @@ public class EventView extends DialogFragment
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        //Reference: http://stackoverflow.com/questions/7041621/fragments-oncreateview-bundle-where-does-it-come-from
+        Bundle bundle = getArguments();
+        eventViewAppointment = (Appointment) bundle.getSerializable("appointment");
+    }
+
+    //TODO: Implement onCreateView properly
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState)
     {
+        //Set Title for DialogFragment
+        getDialog().setTitle("View/Edit Event");
+
         View view = inflater.inflate(R.layout.activity_event, container, false);
 
-        //Get all the data from
+        //Extract data from eventViewAppointment
+        String event = eventViewAppointment.getEvent();
+        long startDate = eventViewAppointment.getStartDate();
+        long endDate = eventViewAppointment.getEndDate();
+        String location = eventViewAppointment.getLocation();
+        String notes = eventViewAppointment.getNotes();
+        int remind = eventViewAppointment.getRemind();
+        int colour = eventViewAppointment.getColour();
 
+        //Set Text and other miscellaneous setting
+        EditText eventLabel = (EditText) view.findViewById(R.id.title);
+        EditText locationLabel = (EditText) view.findViewById(R.id.appointmentLocation);
+        EditText notesLabel = (EditText) view.findViewById(R.id.appointmentNotes);
+        CheckBox reminderCheckBox = (CheckBox) view.findViewById(R.id.remindbox);
+
+        //Return values previously input
+        eventLabel.setText(event);
+        locationLabel.setText(location);
+        notesLabel.setText(notes);
 
         return view;
     }

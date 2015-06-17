@@ -5,15 +5,22 @@ package mooncakemonster.orbitalcalendar.database;
  * Adapted from: http://www.vogella.com/tutorials/AndroidSQLite/article.html#sqliteoverview_sqliteopenhelper
  */
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+
+import java.io.Serializable;
 
 /*
  * Appointment's member variable will not be accessed directly.
  * Instead, getter and setter methods (e.g. getID, setID) will be used to modify values of
  * an instance of Appointment class.
+ *
+ * Serializable implemented to allow passing of Appointment between Activities
+ * May implement Parceble in place of Serializable in optimization phrase
  */
 
-public class Appointment implements Comparable<Appointment> {
+public class Appointment implements Comparable<Appointment>, Serializable {
 
     private long id;
     private String event;

@@ -1,5 +1,10 @@
 package mooncakemonster.orbitalcalendar.database;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.view.View;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 import java.text.ParseException;
@@ -7,15 +12,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
+/****************************************************************************************************
  * Abstract Constant class to store all helper method that will most likely be used across the app
  * as well as all the constants.
  *
  * N.B. Do not instantiate
- */
+ ****************************************************************************************************/
 public abstract class Constant
 {
-    //Constants
+    /****************************************************************************************************
+     * (1) CONSTANTS
+     ****************************************************************************************************/
     public static final long MIN_IN_MILLISECOND = 60000L;
     public static final long HOUR_IN_MILLISECOND = 3600000L;
     public static final long DAY_IN_MILLISECOND = 86400000L;
@@ -25,12 +32,16 @@ public abstract class Constant
     public static final int LOCATION_MAX_LENGTH = 50;
     public static final int NOTES_MAX_LENGTH = 200;
 
+    public static SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("dd/MM/yyyy, EEE");
+    public static SimpleDateFormat TIMEFORMATTER = new SimpleDateFormat("hh:mm a");
 
-    //Conversion methods
+    /****************************************************************************************************
+     * (2) CONVERSION METHODS
+     ****************************************************************************************************/
 
-    /*
-     * Helper method to change strings to the corresponding millisecond
-     */
+    /****************************************************************************************************
+     * Change strings (date and time) to corresponding millisecond
+     ****************************************************************************************************/
     public static long stringToMillisecond(String date, String time, SimpleDateFormat formatterForDate, SimpleDateFormat formatterForTime)
     {
         try
@@ -55,9 +66,9 @@ public abstract class Constant
         return -1;
     }
 
-    /*
-     * Helper method to convert millisecond back to strings
-     */
+    /****************************************************************************************************
+     * Convert millisecond back to strings
+     ****************************************************************************************************/
     public static String getDate(long milliSeconds, String dateFormat)
     {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -68,9 +79,9 @@ public abstract class Constant
         return formatter.format(calendar.getTime());
     }
 
-    /*
-     * Helper method for converting date format to YYYY-MM-DD
-     */
+    /****************************************************************************************************
+     * Convert any string date to standardised string date format: YYYY-MM-DD
+     ****************************************************************************************************/
     public static String standardYearMonthDate(String date, SimpleDateFormat formatter, SimpleDateFormat standardFormat)
     {
         try
@@ -86,24 +97,14 @@ public abstract class Constant
         return "";
     }
 
-    /*
-    * Helper method for converting date format to YYYY-MM-DD
-    */
-    public static Date stringToDate(String date, SimpleDateFormat standardFormat)
-    {
-        try
-        {
-            return standardFormat.parse(date);
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        //Should not reach here
-        return new Date();
-    }
+    /****************************************************************************************************
+     * (3) VALIDITY CHECK
+     ****************************************************************************************************/
 
-    //Validity check
+    /****************************************************************************************************
+     * Ensure string extracted from an EditText widget is less than a certain length.
+     * Otherwise, warn user through a custom error message, or a default error message.
+     ****************************************************************************************************/
     public static boolean maxStringLength(String input, int length, EditText edittext, String errorMessage)
     {
         if(length <= 0){
@@ -124,6 +125,10 @@ public abstract class Constant
         return true;
     }
 
+    /****************************************************************************************************
+     * Ensure string extracted from an EditText widget is more than a certain length.
+     * Otherwise, warn user through a custom error message, or a default error message.
+     ****************************************************************************************************/
     public static boolean minStringLength(String input, int length, EditText edittext, String errorMessage)
     {
         if(length <= 0){
@@ -149,24 +154,12 @@ public abstract class Constant
         return true;
     }
 
+    /****************************************************************************************************
+     * (4) WIDGET INTERACTIVITY
+     ****************************************************************************************************/
 
-    //Toggle on/off
-    /*
-     * Convert a TextView/EditText into a EditText/TextView respectively
-     */
-    public static void toggle(EditText edittext)
-    {
-        //Find if there is condition to check if edittext is on/off
-        if(true)
-        {
-            edittext.setFocusable(false);
-            edittext.setFocusableInTouchMode(false);
-        }
+    /****************************************************************************************************
+     * Set Button as DatePicker
+     ****************************************************************************************************/
 
-        else
-        {
-            edittext.setFocusable(true);
-            edittext.setFocusableInTouchMode(true);
-        }
-    }
 }

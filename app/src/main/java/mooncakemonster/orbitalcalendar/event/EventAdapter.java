@@ -95,7 +95,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                     //Instantiate EventView.java for viewing of appointment (and editing)
                     DialogFragment dialogfragment = EventView.newInstance(appointment);
                     dialogfragment.show(((FragmentActivity) getContext()).getSupportFragmentManager(), null);
-                    //TODO: unable to update adapter
+                    //TODO: Unable to update adapter
                 }
             });
 
@@ -123,7 +123,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                             appointmentDatabase.deleteAppointment(appointment);
                             //Delete from ArrayAdapter & allAppointment
                             objects.remove(appointment);
-                            //TODO: unable to remove and update adapter
+                            //TODO: Unable to remove and update adapter
                             //Remove dialog after execution of the above
                             dialog.dismiss();
                         }

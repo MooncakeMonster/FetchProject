@@ -96,7 +96,7 @@ public class CreatePicture extends ActionBarActivity implements View.OnClickList
             // Save data when title, caption and image are not empty
             else {
                 // Add information into database
-                TableDatabase tableDatabase = new TableDatabase(this);
+                PictureDatabase tableDatabase = new PictureDatabase(this);
                 tableDatabase.putInformation(tableDatabase, smiley_id, title, date, caption, uriPicture);
 
                 Toast.makeText(getBaseContext(), "Details successfully saved", Toast.LENGTH_LONG).show();

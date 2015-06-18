@@ -20,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
@@ -81,14 +80,13 @@ public class CalendarFragment extends ListFragment {
         appointmentDatabase = new AppointmentController(getActivity());
         appointmentDatabase.open();
 
-        highlightEventDates();
-
         // (2) Setup listener for caldroidFragment
         final CaldroidListener listener = new CaldroidListener() {
             @Override
             public void onCaldroidViewCreated() {
                 //Ensure days of the week displayed (e.g. Sun, Mon, Tues,...) are black
                 WeekdayArrayAdapter.textColor = Color.BLACK;
+                highlightEventDates();
                 displayEventList(cal.getTime());
             }
             @Override
@@ -136,18 +134,12 @@ public class CalendarFragment extends ListFragment {
 
             //Highlight dates with events
             caldroidFragment.setTextColorForDate(R.color.colorPrimary, finalDate);
+            caldroidFragment.setBackgroundResourceForDate(R.drawable.array, finalDate);
         }
 
         //Highlight today's date (overwrite above)
-        caldroidFragment.setBackgroundResourceForDate(R.drawable.circle, cal.getTime());
+        caldroidFragment.setBackgroundResourceForDate(R.drawable.circlewhite, cal.getTime());
         caldroidFragment.refreshView();
-    }
-
-    // This method gets the event colours selected by users
-    private HashMap<Date, Integer> getDateColours(Date date, Integer colour) {
-        HashMap<Date, Integer> hashMap = new HashMap<>();
-        hashMap.put(date, colour);
-        return hashMap;
     }
 
     // This method displays the list of events for selected date

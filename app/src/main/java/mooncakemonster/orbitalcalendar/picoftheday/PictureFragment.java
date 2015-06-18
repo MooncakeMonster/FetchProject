@@ -25,7 +25,7 @@ public class PictureFragment extends Fragment {
     private ImageButton addPicButton;
     private SwipeRefreshLayout swipeRefreshLayout;
     private PictureAdapter adapter;
-    private TableDatabase tableDatabase;
+    private PictureDatabase tableDatabase;
     private Cursor cursor;
 
     @Override
@@ -44,7 +44,7 @@ public class PictureFragment extends Fragment {
         listView.setAdapter(adapter);
 
         // Retrieve data from database
-        tableDatabase = new TableDatabase(getActivity());
+        tableDatabase = new PictureDatabase(getActivity());
         // Get rows of database
         cursor = tableDatabase.getInformation(tableDatabase);
 

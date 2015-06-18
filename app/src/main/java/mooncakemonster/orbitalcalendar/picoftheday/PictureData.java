@@ -5,9 +5,9 @@ import android.provider.BaseColumns;
 /**
  * This class stores the title of the columns.
  */
-public class TableData {
+public class PictureData {
 
-    public TableData() { }
+    public PictureData() { }
 
     public static abstract class TableInfo implements BaseColumns {
         public static final String SMILEY = "smiley";

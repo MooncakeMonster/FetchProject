@@ -29,6 +29,7 @@ public class EventFragment extends ListFragment{
     //List to get all the appointments
     private List<Appointment> allAppointment;
     EventAdapter adapter;
+    Appointment selected_appointment;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState)
@@ -52,7 +53,7 @@ public class EventFragment extends ListFragment{
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                 alert.setTitle("Delete appointment");
-                alert.setMessage("Are you sure you want to delete \"" + appointmentToDelete.toString() + "\" appointment?");
+                alert.setMessage("Are you sure you want to delete \"" + appointmentToDelete.toString() + "\"?");
 
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
@@ -93,6 +94,7 @@ public class EventFragment extends ListFragment{
     {
         super.onListItemClick(l, v, position, id);
         Appointment selectedAppt = adapter.getItem(position);
+        selected_appointment = adapter.getItem(position);
         //Instantiate EventView.java for viewing of appointment (and editing)
         DialogFragment dialogfragment = EventView.newInstance(selectedAppt);
         dialogfragment.show(getFragmentManager(), null);
@@ -111,6 +113,11 @@ public class EventFragment extends ListFragment{
             appointmentDatabase.close();
             appointmentDatabase = null;
         }
+    }
+
+    // This method retrieves selected appointment for voting
+    public Appointment getEventPostition() {
+        return selected_appointment;
     }
 
 }

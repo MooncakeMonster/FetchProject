@@ -106,6 +106,17 @@ public class AppointmentController
         return appointments;
     }
 
+    // This method allows latest retrieval of event
+    public Appointment getLatestEvent() {
+        Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME,allColumns, null, null, null, null, null);
+
+        cursor.moveToLast();
+        Appointment appointment = cursorToAppointment(cursor);
+        cursor.close();
+
+        return appointment;
+    }
+
     private Appointment cursorToAppointment(Cursor cursor) {
         Appointment appt = new Appointment();
         //Get values from cursor to create appointment

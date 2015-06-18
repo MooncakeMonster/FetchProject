@@ -81,5 +81,38 @@
                 android:textSize="@dimen/feed_item_profile_name" />
         </RelativeLayout>
     </LinearLayout>
+
+    <!-- Expandable view that is initially hidden and will slide out when the more button is pressed -->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal"
+        android:id="@+id/expandable">
+
+        <Button
+            android:id="@+id/expand_edit_event"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:layout_weight="0.33"
+            android:background="@color/colorPrimary"
+            android:text="Edit Event" />
+
+        <Button
+            android:id="@+id/expand_vote_event"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:layout_weight="0.33"
+            android:background="@color/colorPrimary"
+            android:text="Vote Event"/>
+
+        <Button
+            android:id="@+id/remove_event"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:layout_weight="0.33"
+            android:background="@color/colorPrimary"
+            android:text="Delete"/>
+
+    </LinearLayout>
 </LinearLayout>
 

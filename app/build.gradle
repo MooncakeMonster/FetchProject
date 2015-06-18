@@ -31,6 +31,7 @@ dependencies {
     compile 'com.roomorama:caldroid:2.0.0'
     compile 'com.android.support:recyclerview-v7:21.0.+'
     compile 'com.soundcloud.android:android-crop:1.0.0@aar'
-    compile "com.squareup.picasso:picasso:2.4.0"
+    compile 'com.squareup.picasso:picasso:2.4.0'
+    compile (group: 'it.sephiroth.android.library.fork.slideexpandable', name: 'slideexpandable', version: '1.0.3.1', ext: 'aar')
     compile files('libs/volley.jar')
 }

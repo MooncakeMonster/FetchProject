@@ -153,17 +153,12 @@ public class CalendarFragment extends ListFragment {
         allAppointment = appointmentDatabase.getSelectedDateAppointment(finalDate);
         adapter = new EventDayAdapter(getActivity(), R.layout.row_layout, allAppointment);
 
-        // Only display date when list is not empty
-        if(!allAppointment.isEmpty()) {
-            // Change date format to the same as date in database
-            dateFormat = new SimpleDateFormat("dd MMM yyyy, EEEE");
-            finalDate = dateFormat.format(date);
-            dateDisplay.setBackgroundResource(R.color.colorPrimary);
-            dateDisplay.setText(finalDate);
-        } else {
-            dateDisplay.setBackgroundResource(R.color.caldroid_transparent);
-            dateDisplay.setText("");
-        }
+        // Change date format to the same as date in database
+        dateFormat = new SimpleDateFormat("dd MMM yyyy, EEEE");
+        finalDate = dateFormat.format(date);
+        dateDisplay.setBackgroundResource(R.color.colorPrimary);
+        dateDisplay.setText(finalDate);
+
         setListAdapter(adapter);
     }
 

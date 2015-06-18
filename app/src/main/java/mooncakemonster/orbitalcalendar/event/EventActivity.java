@@ -27,7 +27,6 @@ import java.util.Calendar;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
-import mooncakemonster.orbitalcalendar.voting.VotingActivity;
 
 
 /*
@@ -476,7 +475,6 @@ public class EventActivity extends ActionBarActivity {
                     //Inform user that appointment has been created and return to previous activity
                     Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
                     finish();
-                    startActivity(new Intent(this, VotingActivity.class).putExtra("from", "EventActivity"));
                     break;
                 }
 

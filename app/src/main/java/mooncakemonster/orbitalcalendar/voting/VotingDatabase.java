@@ -13,6 +13,8 @@ import android.util.Log;
 public class VotingDatabase extends SQLiteOpenHelper {
 
     public String query = "CREATE TABLE " + VotingData.VotingInfo.TABLE_NAME + " (" +
+                                            VotingData.VotingInfo.EVENT_TITLE + " TEXT, " +
+                                            VotingData.VotingInfo.EVENT_LOCATION + " TEXT, " +
                                             VotingData.VotingInfo.START_DATE + " TEXT, " +
                                             VotingData.VotingInfo.START_TIME + " TEXT);";
 

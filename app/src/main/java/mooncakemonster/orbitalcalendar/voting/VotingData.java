@@ -10,7 +10,7 @@ public class VotingData {
     public VotingData() { }
 
     public static abstract class VotingInfo implements BaseColumns {
-        public static final String EVENT_NAME = "event_name";
+        public static final String EVENT_TITLE = "event_name";
         public static final String EVENT_LOCATION = "event_location";
 
         public static final String START_DATE = "start_date";

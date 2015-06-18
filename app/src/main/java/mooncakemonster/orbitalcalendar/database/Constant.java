@@ -98,6 +98,23 @@ public abstract class Constant
     }
 
     /****************************************************************************************************
+     * Convert string date to date object
+     ****************************************************************************************************/
+    public static Date stringToDate(String date, SimpleDateFormat standardFormat)
+    {
+        try
+        {
+            return standardFormat.parse(date);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        //Should not reach here
+        return new Date();
+    }
+
+    /****************************************************************************************************
      * (3) VALIDITY CHECK
      ****************************************************************************************************/
 

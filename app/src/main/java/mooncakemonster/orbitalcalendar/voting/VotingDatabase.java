@@ -17,7 +17,9 @@ public class VotingDatabase extends SQLiteOpenHelper {
                                             VotingData.VotingInfo.EVENT_LOCATION + " TEXT, " +
                                             VotingData.VotingInfo.EVENT_PARTICIPANTS + " TEXT, " +
                                             VotingData.VotingInfo.START_DATE + " TEXT, " +
-                                            VotingData.VotingInfo.START_TIME + " TEXT);";
+                                            VotingData.VotingInfo.END_DATE + " TEXT, " +
+                                            VotingData.VotingInfo.START_TIME + " TEXT, " +
+                                            VotingData.VotingInfo.END_TIME + " TEXT); ";
 
     public VotingDatabase(Context context) {
         super(context, VotingData.VotingInfo.DATABASE_NAME, null, VotingData.VotingInfo.DATABASE_VERSION);
@@ -37,7 +39,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database
-    public void putInformation(VotingDatabase data, String event_title, String event_location, String event_participants, String start_date, String start_time) {
+    public void putInformation(VotingDatabase data, String event_title, String event_location, String event_participants, String start_date, String start_time, String end_date, String end_time) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -47,7 +49,9 @@ public class VotingDatabase extends SQLiteOpenHelper {
         contentValues.put(VotingData.VotingInfo.EVENT_LOCATION, event_location);
         contentValues.put(VotingData.VotingInfo.EVENT_PARTICIPANTS, event_participants);
         contentValues.put(VotingData.VotingInfo.START_DATE, start_date);
+        contentValues.put(VotingData.VotingInfo.END_DATE, end_date);
         contentValues.put(VotingData.VotingInfo.START_TIME, start_time);
+        contentValues.put(VotingData.VotingInfo.END_TIME, end_time);
 
         // Insert into sqlite database
         sqLiteDatabase.insert(VotingData.VotingInfo.TABLE_NAME, null, contentValues);
@@ -58,7 +62,13 @@ public class VotingDatabase extends SQLiteOpenHelper {
     public Cursor getInformation(VotingDatabase data) {
         // Read data from sqlite database
         SQLiteDatabase sqLiteDatabase = data.getReadableDatabase();
-        String[] columns = {VotingData.VotingInfo.START_DATE, VotingData.VotingInfo.START_TIME };
+        String[] columns = { VotingData.VotingInfo.EVENT_TITLE,
+                             VotingData.VotingInfo.EVENT_LOCATION,
+                             VotingData.VotingInfo.EVENT_PARTICIPANTS,
+                             VotingData.VotingInfo.START_DATE,
+                             VotingData.VotingInfo.END_DATE,
+                             VotingData.VotingInfo.START_TIME,
+                             VotingData.VotingInfo.END_TIME };
 
         // Points to first row of table
         return sqLiteDatabase.query(VotingData.VotingInfo.TABLE_NAME, columns, null, null, null, null, null);

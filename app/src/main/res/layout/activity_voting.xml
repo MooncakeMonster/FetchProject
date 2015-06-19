@@ -1,43 +1,43 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="@dimen/standard_layout_size"
-    android:background="@drawable/cloudy"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_width="fill_parent">
+    android:background="@drawable/cloudy"
+    android:orientation="vertical"
+    android:padding="@dimen/standard_layout_size">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BBQ Party @ Pasir Ris"
         android:id="@+id/vote_title"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:layout_marginTop="30dp"
-        android:layout_gravity="center_horizontal" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BBQ Party @ Pasir Ris"
-        android:id="@+id/vote_location"
-        android:textSize="15sp"
-        android:textColor="@color/black"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
         android:gravity="center"
-        android:layout_gravity="center_horizontal" />
+        android:text="BBQ Party"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/vote_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:text=" @ Pasir Ris"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
 
     <EditText
+        android:id="@+id/vote_participants"
         android:layout_width="match_parent"
         android:layout_height="@dimen/standard_icon_size"
-        android:id="@+id/vote_participants"
-        android:hint="Participants"
-        android:padding="@dimen/standard_padding_size"
-        android:layout_below="@+id/vote_title"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="@dimen/standard_margin_size"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/vote_title"
+        android:layout_marginBottom="@dimen/standard_margin_size"
+        android:layout_marginTop="30dp"
+        android:hint="Participants"
+        android:padding="@dimen/standard_padding_size" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -45,40 +45,40 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <Button
-            android:layout_width="@dimen/date_button_size"
-            android:layout_height="wrap_content"
-            android:id="@+id/vote_day"
-            android:text="1 day event"
-            android:textSize="@dimen/event_text_size"
-            android:textColor="@color/caldroid_black"
-            android:inputType="textCapCharacters"
-            android:background="@android:color/transparent"
-            android:layout_weight="0.20" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:orientation="horizontal"
+            android:layout_weight="0.8">
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="textCapCharacters"
+                android:text="Insert Option"
+                android:textColor="@color/caldroid_black"
+                android:textSize="@dimen/event_text_size"
+                android:id="@+id/add_option" />
+        </LinearLayout>
 
         <Button
-            android:layout_width="@dimen/time_button_size"
-            android:layout_height="wrap_content"
-            android:id="@+id/vote_duration"
-            android:text="1 hour event"
-            android:textSize="@dimen/event_text_size"
-            android:textColor="@color/caldroid_black"
-            android:inputType="textCapCharacters"
-            android:background="@android:color/transparent"
-            android:layout_weight="0.68" />
-
-        <Button
-            android:id="@+id/add_option"
-            android:background="@drawable/crossred"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:scaleType="centerCrop" />
+            android:background="@drawable/crossred" />
     </LinearLayout>
 
     <ListView
-        android:id="@android:id/list"
-        android:layout_height="wrap_content"
+        android:id="@+id/option_list"
         android:layout_width="match_parent"
-        android:divider="@color/caldroid_transparent"/>
+        android:layout_height="wrap_content"
+        android:divider="@color/caldroid_transparent" />
+
+    <Button
+        android:id="@+id/send_vote"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="SEND VOTE" />
 
 </LinearLayout>

@@ -1,11 +1,13 @@
 package mooncakemonster.orbitalcalendar.database;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TimePicker;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -34,6 +36,8 @@ public abstract class Constant
 
     public static SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("dd/MM/yyyy, EEE");
     public static SimpleDateFormat TIMEFORMATTER = new SimpleDateFormat("hh:mm a");
+
+    public static Calendar calendar = Calendar.getInstance();
 
     /****************************************************************************************************
      * (2) CONVERSION METHODS
@@ -178,5 +182,64 @@ public abstract class Constant
     /****************************************************************************************************
      * Set Button as DatePicker
      ****************************************************************************************************/
+    public static void setButtonDatePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString)
+    {
+        if(timeInMillisecond > 0) {
+            calendar.setTimeInMillis(timeInMillisecond);
+        }
+        else
+        {
+            calendar.setTimeInMillis(System.currentTimeMillis());
+        }
+
+        final String dateFormat = Constant.DATEFORMATTER.format(calendar.getTime());
+        button.setText(additionalString + dateFormat);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final DatePickerDialog date = new DatePickerDialog(context.getApplicationContext(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(year, monthOfYear, dayOfMonth);
+                        button.setText(additionalString + Constant.DATEFORMATTER.format(calendar.getTime()));
+                    }
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+                date.show();
+            }
+        });
+    }
+
+    /****************************************************************************************************
+     * Set Button as TimePicker
+     ****************************************************************************************************/
+    public static void setButtonTimePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString)
+    {
+        if(timeInMillisecond > 0) {
+            calendar.setTimeInMillis(timeInMillisecond);
+        }
+        else
+        {
+            calendar.setTimeInMillis(System.currentTimeMillis());
+        }
+
+        final String timeFormat = Constant.TIMEFORMATTER.format(calendar.getTime());
+        button.setText(additionalString + timeFormat);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerDialog time = new TimePickerDialog(context, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+                        button.setText(additionalString + Constant.TIMEFORMATTER.format(calendar.getTime()));
+                    }
+                }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
+                time.show();
+            }
+        });
+    }
 
 }

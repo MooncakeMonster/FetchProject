@@ -5,8 +5,6 @@ package mooncakemonster.orbitalcalendar.database;
  * Adapted from: http://www.vogella.com/tutorials/AndroidSQLite/article.html#sqliteoverview_sqliteopenhelper
  */
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
 import java.io.Serializable;

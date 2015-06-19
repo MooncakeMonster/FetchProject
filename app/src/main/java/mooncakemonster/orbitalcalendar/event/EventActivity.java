@@ -1,9 +1,7 @@
 package mooncakemonster.orbitalcalendar.event;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,11 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -38,8 +34,7 @@ public class EventActivity extends ActionBarActivity {
 
     //Variable for extracting date from incoming intent. Default is current time.
     private Calendar dateTime = Calendar.getInstance();
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy, EEE");
-    private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+    private long datePassedInMillisecond = 0;
     private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
 
     //AppointmentController variable to control the SQLite database
@@ -68,9 +63,10 @@ public class EventActivity extends ActionBarActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null)
         {
-            dateTime.setTimeInMillis(extras.getLong("date_passed", -1L));
+            datePassedInMillisecond = extras.getLong("date_passed", -1L);
         }
-        setButtonFunction();
+
+        setButtonFunction(datePassedInMillisecond);
         setCheckBoxFunction();
 
         //Initialise and open database
@@ -82,7 +78,7 @@ public class EventActivity extends ActionBarActivity {
     }
 
     // This method sets selected date by user on the button.
-    protected Dialog setButtonFunction() {
+    protected Dialog setButtonFunction(long datePassedInMillisecond) {
 
         // NullPointer if the following is not coded in this method:
         beginDate = (Button) findViewById(R.id.startD);
@@ -90,71 +86,11 @@ public class EventActivity extends ActionBarActivity {
         beginTime = (Button) findViewById(R.id.startT);
         endTime = (Button) findViewById(R.id.endT);
 
-        final String dateFormat = dateFormatter.format(dateTime.getTime());
-        final String timeFormat = timeFormatter.format(dateTime.getTime());
+        Constant.setButtonDatePicker(EventActivity.this, beginDate, datePassedInMillisecond, "From     " );
+        Constant.setButtonDatePicker(EventActivity.this, endDate, datePassedInMillisecond,   "To         ");
 
-        beginDate.setText("From     " + dateFormat);
-        endDate.setText("To         " + dateFormat);
-        beginTime.setText(timeFormat);
-        endTime.setText(timeFormat);
-
-        beginDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final DatePickerDialog date = new DatePickerDialog(EventActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        dateTime.set(year, monthOfYear, dayOfMonth);
-                        beginDate.setText("From     " + dateFormatter.format(dateTime.getTime()));
-                    }
-                }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
-                date.show();
-            }
-        });
-
-        endDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerDialog date = new DatePickerDialog(EventActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        dateTime.set(year, monthOfYear, dayOfMonth);
-                        endDate.setText("To         " + dateFormatter.format(dateTime.getTime()));
-                    }
-                }, dateTime.get(Calendar.YEAR), dateTime.get(Calendar.MONTH), dateTime.get(Calendar.DAY_OF_MONTH));
-                date.show();
-            }
-        });
-
-        beginTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog time = new TimePickerDialog(EventActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        dateTime.set(Calendar.MINUTE, minute);
-                        beginTime.setText(timeFormatter.format(dateTime.getTime()));
-                    }
-                }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
-                time.show();
-            }
-        });
-
-        endTime.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimePickerDialog time = new TimePickerDialog(EventActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        dateTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-                        dateTime.set(Calendar.MINUTE, minute);
-                        endTime.setText(timeFormatter.format(dateTime.getTime()));
-                    }
-                }, dateTime.get(Calendar.HOUR_OF_DAY), dateTime.get(Calendar.MINUTE), false);
-                time.show();
-            }
-        });
+        Constant.setButtonTimePicker(EventActivity.this, beginTime, datePassedInMillisecond, "");
+        Constant.setButtonTimePicker(EventActivity.this, endTime, datePassedInMillisecond,   "");
 
         return null;
     }
@@ -390,13 +326,13 @@ public class EventActivity extends ActionBarActivity {
         //Begin date and time
         String beginD = beginDate.getText().toString().replace("From     ", "");
         final String beginT = beginTime.getText().toString();
-        final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, dateFormatter, timeFormatter);
+        final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
         //Standardised format for event's starting date: YYYY-MM-DD
-        final String startProperDate = Constant.standardYearMonthDate(beginD, dateFormatter, new SimpleDateFormat("yyyy MM dd"));
+        final String startProperDate = Constant.standardYearMonthDate(beginD, Constant.DATEFORMATTER, new SimpleDateFormat("yyyy MM dd"));
         //End date and time
         final String endD = endDate.getText().toString().replace("To         ", "");
         final String endT = endTime.getText().toString();
-        final long endEventMillisecond = Constant.stringToMillisecond(endD, endT, dateFormatter, timeFormatter);
+        final long endEventMillisecond = Constant.stringToMillisecond(endD, endT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
         //Get Event's location
         final String location = locationInput.getText().toString();
         //Get any miscellaneous notes
@@ -432,7 +368,7 @@ public class EventActivity extends ActionBarActivity {
         // Ensure inputs are not of null value: (a) event
         if(Constant.minStringLength(event, 1, eventInput, null) == false)
             return false;
-        // Check length of input: (a) event, (b) location, (c) notes
+            // Check length of input: (a) event, (b) location, (c) notes
         else if(Constant.maxStringLength(event, Constant.EVENT_TITLE_MAX_LENGTH, eventInput,
                 "No more than " + Constant.EVENT_TITLE_MAX_LENGTH + " characters for event.") == false)
             return false;

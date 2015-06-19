@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 import com.roomorama.caldroid.WeekdayArrayAdapter;
 
@@ -31,7 +30,7 @@ import mooncakemonster.orbitalcalendar.event.EventActivity;
 public class CalendarFragment extends ListFragment {
 
     //Caldroid Calendar
-    private CaldroidFragment caldroidFragment;
+    private CaldroidFragmentModified caldroidFragment;
     private FragmentActivity myContext;
     private SimpleDateFormat formatter;
     private Calendar cal;
@@ -55,17 +54,17 @@ public class CalendarFragment extends ListFragment {
         //Variable formatter for setting up listener later
         formatter = new SimpleDateFormat("dd MMM yyyy");
         //(1) Create calendar
-        caldroidFragment = new CaldroidFragment();
+        caldroidFragment = new CaldroidFragmentModified();
         //Get today's date and time using Java's Calendar class
         cal = Calendar.getInstance();
 
         //Bundle args will supply the information for caldroidFragment.setArguments(args) to build the calendar
         Bundle args = new Bundle();
         //Extract today's date to insert in bundle args
-        args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
-        args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+        args.putInt(CaldroidFragmentModified.MONTH, cal.get(Calendar.MONTH) + 1);
+        args.putInt(CaldroidFragmentModified.YEAR, cal.get(Calendar.YEAR));
         //Make background transparent
-        args.putInt(CaldroidFragment.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
+        args.putInt(CaldroidFragmentModified.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
         //Build caldroidFragment with the above information and setting
         caldroidFragment.setArguments(args);
     }

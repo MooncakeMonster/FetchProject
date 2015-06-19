@@ -11,11 +11,10 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
+import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.userdatabase.LoginUser;
 import mooncakemonster.orbitalcalendar.userdatabase.SQLiteHelper;
 import mooncakemonster.orbitalcalendar.userdatabase.SessionManager;
-
-import mooncakemonster.orbitalcalendar.R;
 
 public class SettingActivity extends ActionBarActivity {
 

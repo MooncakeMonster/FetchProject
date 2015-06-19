@@ -67,6 +67,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeMenu">
         </activity>
+        <activity
+            android:name=".voting.VotingActivity"
+            android:label="Vote Event"
+            android:theme="@style/AppThemeMenu"
+            android:screenOrientation="portrait">
+        </activity>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
     </application>

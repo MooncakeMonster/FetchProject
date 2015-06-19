@@ -198,7 +198,7 @@ public abstract class Constant
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final DatePickerDialog date = new DatePickerDialog(context.getApplicationContext(), new DatePickerDialog.OnDateSetListener() {
+                final DatePickerDialog date = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(year, monthOfYear, dayOfMonth);

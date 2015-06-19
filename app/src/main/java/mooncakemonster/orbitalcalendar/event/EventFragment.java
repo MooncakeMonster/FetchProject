@@ -105,7 +105,6 @@ public class EventFragment extends ListFragment {
         adapter.notifyDataSetChanged();
     }
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -115,4 +114,17 @@ public class EventFragment extends ListFragment {
             appointmentDatabase = null;
         }
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        if(appointmentDatabase == null)
+        {
+            appointmentDatabase = new AppointmentController(getActivity());
+            appointmentDatabase.open();
+        }
+    }
+
+
 }

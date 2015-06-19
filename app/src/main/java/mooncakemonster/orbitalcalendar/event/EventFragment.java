@@ -44,7 +44,7 @@ public class EventFragment extends ListFragment {
         adapter = new EventAdapter(getActivity(), R.layout.row_event, allAppointment);
         setListAdapter(new SlideExpandableListAdapter(adapter, R.id.event_layout, R.id.expandable));
 
-        //TODO: TAKE NOTE - Code had been moved to EventAdapter but unable to update adapter from there
+        //TODO: TAKE NOTE - Code had been moved to EventAdapter
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
@@ -89,7 +89,7 @@ public class EventFragment extends ListFragment {
         return rootView;
     }
 
-    //TODO: TAKE NOTE - Code had been moved to EventAdapter but unable to update adapter from there
+    //TODO: TAKE NOTE - Code had been moved to EventAdapter
     //TODO: on selection of event
 
     @Override

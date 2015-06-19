@@ -87,6 +87,7 @@ public class AppointmentController
         return appointments;
     }
 
+
     // This method allows retrieval of current selected date' event list.
     public List<Appointment> getSelectedDateAppointment(String date) {
         List<Appointment> appointments = new ArrayList<Appointment>();

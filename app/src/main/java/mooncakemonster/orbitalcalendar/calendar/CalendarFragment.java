@@ -160,6 +160,7 @@ public class CalendarFragment extends ListFragment {
         dateDisplay.setText(finalDate);
 
         setListAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

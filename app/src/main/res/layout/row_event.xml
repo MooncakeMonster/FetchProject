@@ -112,7 +112,6 @@
             android:layout_weight="0.33"
             android:background="@color/colorPrimary"
             android:text="Delete"/>
-
     </LinearLayout>
 </LinearLayout>
 

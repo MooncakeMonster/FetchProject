@@ -3,8 +3,8 @@ package mooncakemonster.orbitalcalendar.event;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +44,7 @@ public class EventFragment extends ListFragment {
         adapter = new EventAdapter(getActivity(), R.layout.row_event, allAppointment);
         setListAdapter(new SlideExpandableListAdapter(adapter, R.id.event_layout, R.id.expandable));
 
-        //TODO: Code had been moved to EventAdapter but unable to update adapter from there
+        //TODO: TAKE NOTE - Code had been moved to EventAdapter but unable to update adapter from there
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
@@ -80,7 +80,6 @@ public class EventFragment extends ListFragment {
                 return true;
             }
         });
-
     }
 
     @Override
@@ -90,7 +89,7 @@ public class EventFragment extends ListFragment {
         return rootView;
     }
 
-    //TODO: Code had been moved to EventAdapter but unable to update adapter from there
+    //TODO: TAKE NOTE - Code had been moved to EventAdapter but unable to update adapter from there
     //TODO: on selection of event
 
     @Override
@@ -116,10 +115,4 @@ public class EventFragment extends ListFragment {
             appointmentDatabase = null;
         }
     }
-
-    // This method retrieves selected appointment for voting
-    public Appointment getEventPostition() {
-        return selected_appointment;
-    }
-
 }

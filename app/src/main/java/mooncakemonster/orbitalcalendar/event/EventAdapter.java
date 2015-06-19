@@ -1,10 +1,10 @@
 package mooncakemonster.orbitalcalendar.event;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
+import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +41,16 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
         TextView event_day, event_month_year;
         RelativeLayout event_colour;
         Button edit_event, vote_event, remove_event;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        super.notifyDataSetChanged();
+    }
+
+    @Override
+    public void remove(Appointment object) {
+        super.remove(object);
     }
 
     @Override
@@ -88,6 +98,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
 
             final View view = row;
 
+
             // Lead users to edit event
             holder.edit_event.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,7 +106,8 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                     //Instantiate EventView.java for viewing of appointment (and editing)
                     DialogFragment dialogfragment = EventView.newInstance(appointment);
                     dialogfragment.show(((FragmentActivity) getContext()).getSupportFragmentManager(), null);
-                    //TODO: Unable to update adapter
+                    objects = appointmentDatabase.getAllAppointment();
+                    notifyDataSetChanged();
                 }
             });
 
@@ -123,7 +135,8 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                             appointmentDatabase.deleteAppointment(appointment);
                             //Delete from ArrayAdapter & allAppointment
                             objects.remove(appointment);
-                            //TODO: Unable to remove and update adapter
+                            remove(appointment);
+                            notifyDataSetChanged();
                             //Remove dialog after execution of the above
                             dialog.dismiss();
                         }
@@ -139,8 +152,10 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                 }
             });
 
+
             row.setTag(holder);
         }
+
 
         return row;
     }

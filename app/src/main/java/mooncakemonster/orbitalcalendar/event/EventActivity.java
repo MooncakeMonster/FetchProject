@@ -443,7 +443,7 @@ public class EventActivity extends ActionBarActivity {
                 "No more than " + Constant.NOTES_MAX_LENGTH + " characters for notes.") == false)
             return false;
         // Ensure the dates selected make sense: (a) startDate, (b) endDate
-        if(beginEventMillisecond < endEventMillisecond)
+        if(beginEventMillisecond > endEventMillisecond)
         {
             //If starting time occurs before ending time
             Toast.makeText(this.getApplicationContext(), "Please check the starting and ending date", Toast.LENGTH_SHORT).show();

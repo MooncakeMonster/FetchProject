@@ -9,12 +9,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="BBQ Party @ Pasir Ris"
-        android:id="@+id/vote_title_location"
-        android:textSize="31sp"
+        android:id="@+id/vote_title"
+        android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:gravity="center"
         android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="BBQ Party @ Pasir Ris"
+        android:id="@+id/vote_location"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:gravity="center"
         android:layout_gravity="center_horizontal" />
 
     <EditText

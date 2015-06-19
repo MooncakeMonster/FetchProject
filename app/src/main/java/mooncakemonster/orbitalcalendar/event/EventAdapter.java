@@ -3,6 +3,7 @@ package mooncakemonster.orbitalcalendar.event;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
@@ -88,17 +89,16 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             // Get date
             SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
             String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), standardFormat, new SimpleDateFormat("yyyy MMM dd"));
-            String[] date = finalDate.split(" ");
+            final String[] date = finalDate.split(" ");
             holder.event_day.setText(date[2]);
             holder.event_month_year.setText(date[1] + " " + date[0]);
 
             // Get time
-            String startTime = Constant.getDate(appointment.getStartDate(), "hh:mm a");
+            final String startTime = Constant.getDate(appointment.getStartDate(), "hh:mm a");
             String endTime = Constant.getDate(appointment.getEndDate(), "hh:mm a");
             holder.event_start_end_time.setText(startTime + " - " + endTime);
 
             final View view = row;
-
 
             // Lead users to edit event
             holder.edit_event.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +116,23 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             holder.vote_event.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    view.getContext().startActivity(new Intent(getContext(), VotingActivity.class));
+                    Intent intent = new Intent(getContext(), VotingActivity.class);
+                    Bundle bundle = new Bundle();
+
+                    // Get start date in proper format
+                    SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
+                    String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), standardFormat, new SimpleDateFormat("dd/MM/yyyy, EEE"));
+
+                    // Storing date into bundle
+                    bundle.putString("event_title", appointment.getEvent());
+                    bundle.putString("event_location", appointment.getLocation());
+                    bundle.putString("event_start_date", finalDate);
+                    bundle.putString("event_start_time", startTime);
+
+                    // Store bundle into intent
+                    intent.putExtras(bundle);
+                    view.getContext().startActivity(intent);
+
                 }
             });
 

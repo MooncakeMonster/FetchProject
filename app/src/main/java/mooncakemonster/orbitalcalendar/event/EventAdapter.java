@@ -65,6 +65,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
         }
 
         final Appointment appointment = objects.get(position);
+        appointmentDatabase.open();
 
         if (appointment != null) {
             holder = new Holder();
@@ -131,7 +132,6 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                         @Override
                         public void onClick(DialogInterface dialog, int id) {
                             //Delete from SQLite database
-                            appointmentDatabase.open();
                             appointmentDatabase.deleteAppointment(appointment);
                             //Delete from ArrayAdapter & allAppointment
                             objects.remove(appointment);

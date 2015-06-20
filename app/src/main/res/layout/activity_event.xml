@@ -44,19 +44,43 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
-    <!-- Create Event button -->
-    <Button
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/buttonHolder"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addAppointmentButton"
-        android:text="@string/create_event"
-        android:textColor="@color/caldroid_white"
-        android:background="@color/button"
-        android:onClick="onClick"
-        android:textSize="@dimen/standard_text_size"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true">
+
+    <!-- Create Event button -->
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/addAppointmentButton"
+                android:text="@string/create_event"
+                android:textColor="@color/caldroid_white"
+                android:background="@color/button"
+                android:onClick="onClick"
+                android:layout_margin="10dp"
+                android:textSize="@dimen/standard_text_size" />
+
+            <!--WIP Cancel Button-->
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/cancelButton"
+                android:text="CANCEL"
+                android:textColor="@color/caldroid_white"
+                android:background="@color/button"
+                android:onClick="onClick"
+                android:layout_margin="10dp"
+                android:textSize="@dimen/standard_text_size"
+                android:layout_toLeftOf="@+id/addAppointmentButton" />
+
+    </LinearLayout>
 
     <!--Start and End Date-->
     <Button
@@ -219,7 +243,7 @@
         android:id="@+id/imageButton"
         android:onClick="onClick"
         android:background="@drawable/beared"
-        android:layout_above="@+id/addAppointmentButton"
+        android:layout_above="@+id/buttonHolder"
         android:layout_marginBottom="@dimen/standard_margin_size"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -272,7 +296,7 @@
         android:layout_marginRight="20dp"
         android:background="@color/caldroid_transparent"
         android:layout_alignTop="@+id/imageButton6"
-        android:layout_alignRight="@+id/addAppointmentButton"
-        android:layout_alignEnd="@+id/addAppointmentButton" />
+        android:layout_alignRight="@+id/buttonHolder"
+        android:layout_alignEnd="@+id/buttonHolder" />
 
 </RelativeLayout>

@@ -1,9 +1,9 @@
-package mooncakemonster.orbitalcalendar.voting;
+package mooncakemonster.orbitalcalendar.votesend;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,21 +25,18 @@ import mooncakemonster.orbitalcalendar.database.Constant;
  * This class allows users to send a list of date
  * and time options to participants for voting an event.
  */
-public class VotingActivity extends AppCompatActivity {
+public class VotingActivity extends ActionBarActivity {
 
     //List to get all the appointments
     private ListView listView;
-    private List<VoteItem> items = new ArrayList<VoteItem>();
-    VoteAdapter adapter;
+    private List<OptionItem> items = new ArrayList<OptionItem>();
+    OptionAdapter adapter;
 
     TextView vote_title, vote_location;
     EditText vote_participants;
     Button add_option;
     String start_date, end_date, start_time, end_time;
-
-    // Get intent that started this activity
-    Intent intent = getIntent();
-    final Bundle bundle = intent.getExtras();
+    int colour;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,13 +45,18 @@ public class VotingActivity extends AppCompatActivity {
 
         getSupportActionBar().setElevation(0);
 
+        // Get intent that started this activity
+        Intent intent = getIntent();
+        final Bundle bundle = intent.getExtras();
+        colour = bundle.getInt("event_colour");
+
         // Initialise ArrayAdapter adapter for view
         listView = (ListView) findViewById(R.id.option_list);
         // Add default first item to List
-        items.add(new VoteItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
+        items.add(new OptionItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
                 bundle.getString("event_start_time"), bundle.getString("event_end_time")));
 
-        adapter = new VoteAdapter(this, R.layout.row_vote, items);
+        adapter = new OptionAdapter(this, R.layout.row_vote, items);
         listView.setAdapter(adapter);
 
         vote_title = (TextView) findViewById(R.id.vote_title);
@@ -70,7 +72,7 @@ public class VotingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d("Button pressed", "Add option");
-                adapter.add(new VoteItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
+                adapter.add(new OptionItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
                         bundle.getString("event_start_time"), bundle.getString("event_end_time")));
                 adapter.notifyDataSetChanged();
             }
@@ -125,7 +127,7 @@ public class VotingActivity extends AppCompatActivity {
                 // Add information into database
                 collateDateTime();
                 VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
-                votingDatabase.putInformation(votingDatabase, bundle.getInt("event_colour"), vote_title.getText().toString(), vote_location.getText().toString(), vote_participants.getText().toString(), start_date, end_date, start_time, end_time);
+                votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(), vote_location.getText().toString(), vote_participants.getText().toString(), start_date, end_date, start_time, end_time);
 
                 Toast.makeText(getBaseContext(), "Details successfully saved", Toast.LENGTH_SHORT).show();
                 finish();

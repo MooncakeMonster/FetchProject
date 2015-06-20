@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.voting;
+package mooncakemonster.orbitalcalendar.votesend;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,11 +12,11 @@ import java.util.List;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
-public class VoteAdapter extends ArrayAdapter<VoteItem> {
+public class OptionAdapter extends ArrayAdapter<OptionItem> {
 
-    private List<VoteItem> objects;
+    private List<OptionItem> objects;
 
-    public VoteAdapter(Context context, int resources, List<VoteItem> objects) {
+    public OptionAdapter(Context context, int resources, List<OptionItem> objects) {
         super(context, resources, objects);
         this.objects = objects;
     }
@@ -37,7 +37,7 @@ public class VoteAdapter extends ArrayAdapter<VoteItem> {
         View row = convertView;
         final Holder holder;
 
-        final VoteItem voteItem =  objects.get(position);
+        final OptionItem optionItem =  objects.get(position);
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -51,10 +51,10 @@ public class VoteAdapter extends ArrayAdapter<VoteItem> {
         holder.vote_end_time = (Button) row.findViewById(R.id.option_end_time);
         holder.remove_option = (Button) row.findViewById(R.id.remove_option);
 
-        holder.vote_start_date.setText(voteItem.getEvent_start_date());
-        holder.vote_end_date.setText(voteItem.getEvent_end_date());
-        holder.vote_start_time.setText(voteItem.getEvent_start_time());
-        holder.vote_end_time.setText(voteItem.getEvent_end_time());
+        holder.vote_start_date.setText(optionItem.getEvent_start_date());
+        holder.vote_end_date.setText(optionItem.getEvent_end_date());
+        holder.vote_start_time.setText(optionItem.getEvent_start_time());
+        holder.vote_end_time.setText(optionItem.getEvent_end_time());
 
         // Date and time picker
         Constant.setButtonDatePicker(getContext(), holder.vote_start_date, 0, "");
@@ -66,7 +66,7 @@ public class VoteAdapter extends ArrayAdapter<VoteItem> {
         holder.remove_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                remove(voteItem);
+                remove(optionItem);
                 notifyDataSetChanged();
             }
         });

@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.voting;
+package mooncakemonster.orbitalcalendar.votesend;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,6 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import mooncakemonster.orbitalcalendar.votereceive.VoteItem;
 
 /**
  * This class creates table for database.
@@ -75,5 +80,21 @@ public class VotingDatabase extends SQLiteOpenHelper {
 
         // Points to first row of table
         return sqLiteDatabase.query(VotingData.VotingInfo.TABLE_NAME, columns, null, null, null, null, null);
+    }
+
+    // This method retrieves all votings.
+    public List<VoteItem> getAllVotings(VotingDatabase data) {
+        List<VoteItem> votings = new ArrayList<VoteItem>();
+        Cursor cursor = getInformation(data);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            VoteItem voteItem = new VoteItem(cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
+            votings.add(voteItem);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return votings;
     }
 }

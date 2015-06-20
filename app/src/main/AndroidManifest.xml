@@ -68,7 +68,7 @@
             android:theme="@style/AppThemeMenu">
         </activity>
         <activity
-            android:name=".voting.VotingActivity"
+            android:name=".votesend.VotingActivity"
             android:label="Vote Event"
             android:theme="@style/AppThemeMenu"
             android:screenOrientation="portrait">

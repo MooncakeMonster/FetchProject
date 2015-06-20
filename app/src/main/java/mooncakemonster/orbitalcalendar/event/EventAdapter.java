@@ -22,7 +22,7 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
-import mooncakemonster.orbitalcalendar.voting.VotingActivity;
+import mooncakemonster.orbitalcalendar.votesend.VotingActivity;
 
 public class EventAdapter extends ArrayAdapter<Appointment> {
 

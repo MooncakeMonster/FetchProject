@@ -18,7 +18,7 @@ import mooncakemonster.orbitalcalendar.event.EventFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.picoftheday.PictureFragment;
 import mooncakemonster.orbitalcalendar.timetable.TimetableFragment;
-import mooncakemonster.orbitalcalendar.voting.VotingFragment;
+import mooncakemonster.orbitalcalendar.votereceive.VotingFragment;
 
 public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
 

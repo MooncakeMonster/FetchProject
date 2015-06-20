@@ -1,6 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_marginLeft="@dimen/feed_item_margin"
+    android:layout_marginRight="@dimen/feed_item_margin"
+    android:layout_marginTop="@dimen/feed_item_margin"
+    android:background="@drawable/bg_parent_rounded_corner"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/feed_item_padding_top_bottom"
+    android:paddingTop="@dimen/feed_item_padding_top_bottom">
+
+    <TextView
+        android:id="@+id/history_title"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Title"
+        android:textColor="@color/caldroid_black"
+        android:textSize="@dimen/feed_item_profile_name"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/history_location"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Singapore"
+        android:textColor="@color/caldroid_black"
+        android:textSize="@dimen/feed_item_profile_name"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/history_start_end_date"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="28 May 2015, Saturday"
+        android:textColor="@color/timestamp"
+        android:textSize="@dimen/feed_item_timestamp" />
+
+    <TextView
+        android:id="@+id/history_start_end_time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="03:00pm - 09:00pm"
+        android:textColor="@color/timestamp"
+        android:textSize="@dimen/feed_item_timestamp" />
 
 </LinearLayout>

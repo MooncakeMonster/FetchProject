@@ -35,7 +35,7 @@ public abstract class Constant
     public static final int NOTES_MAX_LENGTH = 200;
 
     public static SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("dd/MM/yyyy, EEE");
-    public static SimpleDateFormat TIMEFORMATTER = new SimpleDateFormat("hh:mm a");
+    public static SimpleDateFormat TIMEFORMATTER = new SimpleDateFormat("hh:mma");
 
     public static Calendar calendar = Calendar.getInstance();
 

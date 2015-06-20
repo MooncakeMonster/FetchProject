@@ -124,7 +124,7 @@ public class CalendarFragment extends ListFragment {
     private void highlightEventDates() {
         //Get all the appointment
         allAppointment = appointmentDatabase.getAllAppointment();
-        adapter = new EventDayAdapter(getActivity(), R.layout.row_layout, allAppointment);
+        adapter = new EventDayAdapter(getActivity(), R.layout.row_event_day, allAppointment);
 
         int size = allAppointment.size();
         for(int i = 0; i < size; i++) {
@@ -150,7 +150,7 @@ public class CalendarFragment extends ListFragment {
 
         //Get all the appointment
         allAppointment = appointmentDatabase.getSelectedDateAppointment(finalDate);
-        adapter = new EventDayAdapter(getActivity(), R.layout.row_layout, allAppointment);
+        adapter = new EventDayAdapter(getActivity(), R.layout.row_event_day, allAppointment);
 
         // Change date format to the same as date in database
         dateFormat = new SimpleDateFormat("dd MMM yyyy, EEEE");

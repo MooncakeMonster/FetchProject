@@ -13,6 +13,7 @@ import android.util.Log;
 public class VotingDatabase extends SQLiteOpenHelper {
 
     public String query = "CREATE TABLE " + VotingData.VotingInfo.TABLE_NAME + " (" +
+                                            VotingData.VotingInfo.EVENT_COLOUR + " INTEGER NOT NULL, " +
                                             VotingData.VotingInfo.EVENT_TITLE + " TEXT, " +
                                             VotingData.VotingInfo.EVENT_LOCATION + " TEXT, " +
                                             VotingData.VotingInfo.EVENT_PARTICIPANTS + " TEXT, " +
@@ -39,12 +40,13 @@ public class VotingDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database
-    public void putInformation(VotingDatabase data, String event_title, String event_location, String event_participants, String start_date, String start_time, String end_date, String end_time) {
+    public void putInformation(VotingDatabase data, int event_colour, String event_title, String event_location, String event_participants, String start_date, String start_time, String end_date, String end_time) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         // Add value from each column into contentvalue
+        contentValues.put(VotingData.VotingInfo.EVENT_COLOUR, event_colour);
         contentValues.put(VotingData.VotingInfo.EVENT_TITLE, event_title);
         contentValues.put(VotingData.VotingInfo.EVENT_LOCATION, event_location);
         contentValues.put(VotingData.VotingInfo.EVENT_PARTICIPANTS, event_participants);
@@ -62,7 +64,8 @@ public class VotingDatabase extends SQLiteOpenHelper {
     public Cursor getInformation(VotingDatabase data) {
         // Read data from sqlite database
         SQLiteDatabase sqLiteDatabase = data.getReadableDatabase();
-        String[] columns = { VotingData.VotingInfo.EVENT_TITLE,
+        String[] columns = {VotingData.VotingInfo.EVENT_COLOUR,
+                             VotingData.VotingInfo.EVENT_TITLE,
                              VotingData.VotingInfo.EVENT_LOCATION,
                              VotingData.VotingInfo.EVENT_PARTICIPANTS,
                              VotingData.VotingInfo.START_DATE,

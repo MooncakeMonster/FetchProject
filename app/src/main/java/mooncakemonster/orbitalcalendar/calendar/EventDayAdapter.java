@@ -36,7 +36,7 @@ public class EventDayAdapter extends ArrayAdapter<Appointment>{
 
         if(row == null) {
             LayoutInflater inflator = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflator.inflate(R.layout.row_layout, parent, false);
+            row = inflator.inflate(R.layout.row_event_day, parent, false);
         }
 
         Appointment appointment = objects.get(position);

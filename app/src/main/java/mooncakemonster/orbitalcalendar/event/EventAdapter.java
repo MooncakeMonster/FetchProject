@@ -95,7 +95,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
 
             // Get time
             final String startTime = Constant.getDate(appointment.getStartDate(), "hh:mm a");
-            String endTime = Constant.getDate(appointment.getEndDate(), "hh:mm a");
+            final String endTime = Constant.getDate(appointment.getEndDate(), "hh:mm a");
             holder.event_start_end_time.setText(startTime + " - " + endTime);
 
             final View view = row;
@@ -121,13 +121,17 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
 
                     // Get start date in proper format
                     SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
-                    String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), standardFormat, new SimpleDateFormat("dd/MM/yyyy, EEE"));
+                    String startDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), standardFormat, new SimpleDateFormat("dd/MM/yyyy, EEE"));
+                    String endDate = Constant.standardYearMonthDate(Constant.getDate(appointment.getEndDate(), "yyyy MM dd"), standardFormat, new SimpleDateFormat("dd/MM/yyyy, EEE"));
 
                     // Storing date into bundle
                     bundle.putString("event_title", appointment.getEvent());
                     bundle.putString("event_location", appointment.getLocation());
-                    bundle.putString("event_start_date", finalDate);
+                    bundle.putString("event_start_date", startDate);
+                    bundle.putString("event_end_date", endDate);
                     bundle.putString("event_start_time", startTime);
+                    bundle.putString("event_end_time", endTime);
+                    bundle.putInt("event_colour", appointment.getColour());
 
                     // Store bundle into intent
                     intent.putExtras(bundle);

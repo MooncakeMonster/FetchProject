@@ -404,6 +404,7 @@ public class EventActivity extends ActionBarActivity {
 
         return true;
     }
+
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.addAppointmentButton:
@@ -411,8 +412,11 @@ public class EventActivity extends ActionBarActivity {
                     //Inform user that appointment has been created and return to previous activity
                     Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
                     finish();
-                    break;
                 }
+                break;
+            case R.id.cancelButton:
+                finish();
+                break;
 
             case R.id.imageButton:
                 colourInput.setBackgroundResource(R.drawable.beared);

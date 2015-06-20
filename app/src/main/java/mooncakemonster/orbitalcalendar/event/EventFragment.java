@@ -97,9 +97,12 @@ public class EventFragment extends ListFragment {
         super.onListItemClick(l, v, position, id);
         Appointment selectedAppt = adapter.getItem(position);
         selected_appointment = adapter.getItem(position);
+
         //Instantiate EventView.java for viewing of appointment (and editing)
+        //TODO: Error occurs when user click on edit event, then cancel successively on the same list item. Resolve this bug!
         DialogFragment dialogfragment = EventView.newInstance(selectedAppt);
         dialogfragment.show(getFragmentManager(), null);
+
         //Update ArrayAdapter
         allAppointment = appointmentDatabase.getAllAppointment();
         adapter.notifyDataSetChanged();

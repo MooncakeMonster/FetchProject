@@ -130,14 +130,13 @@ public class EventView extends DialogFragment
         //(6) Modify the create button, such that it shows "Edit" -> "Set New Appointment" when clicked on
         final Button editButton = (Button) view.findViewById(R.id.addAppointmentButton);
         editButton.setText("EDIT");
-
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(editButton.getText().toString().equals("EDIT")) {
                     toggle(true);
-                    editButton.setText("SET NEW APPOINTMENT");
+                    editButton.setText("SAVE");
                     //Initialise and open database
                     appointmentDatabase = new AppointmentController(getActivity());
                     appointmentDatabase.open();
@@ -233,7 +232,13 @@ public class EventView extends DialogFragment
         });
 
         //(7) Cancel button to be added
-
+        final Button cancelButton = (Button) view.findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getDialog().dismiss();
+            }
+        });
 
         return view;
     }

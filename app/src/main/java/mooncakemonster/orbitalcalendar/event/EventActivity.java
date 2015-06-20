@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
@@ -33,9 +32,11 @@ import mooncakemonster.orbitalcalendar.database.Constant;
 public class EventActivity extends ActionBarActivity {
 
     //Variable for extracting date from incoming intent. Default is current time.
-    private Calendar dateTime = Calendar.getInstance();
-    private long datePassedInMillisecond = 0;
     private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
+
+    //String value for "From" and "To" in the interface
+    private String fromStringValue = "From     ";
+    private String toStringValue = "To         ";
 
     //AppointmentController variable to control the SQLite database
     private AppointmentController appointmentDatabase;
@@ -59,6 +60,8 @@ public class EventActivity extends ActionBarActivity {
 
         getSupportActionBar().setElevation(0);
 
+        //To store the date passed from intent in millisecond
+        long datePassedInMillisecond = 0;
         //Extract date from intent
         Bundle extras = getIntent().getExtras();
         if (extras != null)
@@ -86,8 +89,8 @@ public class EventActivity extends ActionBarActivity {
         beginTime = (Button) findViewById(R.id.startT);
         endTime = (Button) findViewById(R.id.endT);
 
-        Constant.setButtonDatePicker(EventActivity.this, beginDate, datePassedInMillisecond, "From     " );
-        Constant.setButtonDatePicker(EventActivity.this, endDate, datePassedInMillisecond,   "To         ");
+        Constant.setButtonDatePicker(EventActivity.this, beginDate, datePassedInMillisecond, fromStringValue );
+        Constant.setButtonDatePicker(EventActivity.this, endDate, datePassedInMillisecond,   toStringValue);
 
         Constant.setButtonTimePicker(EventActivity.this, beginTime, datePassedInMillisecond, "");
         Constant.setButtonTimePicker(EventActivity.this, endTime, datePassedInMillisecond,   "");
@@ -324,13 +327,13 @@ public class EventActivity extends ActionBarActivity {
         //Get Event Name
         final String event = eventInput.getText().toString();
         //Begin date and time
-        String beginD = beginDate.getText().toString().replace("From     ", "");
+        final String beginD = beginDate.getText().toString().replace(fromStringValue, "");
         final String beginT = beginTime.getText().toString();
         final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
         //Standardised format for event's starting date: YYYY-MM-DD
         final String startProperDate = Constant.standardYearMonthDate(beginD, Constant.DATEFORMATTER, new SimpleDateFormat("yyyy MM dd"));
         //End date and time
-        final String endD = endDate.getText().toString().replace("To         ", "");
+        final String endD = endDate.getText().toString().replace(toStringValue, "");
         final String endT = endTime.getText().toString();
         final long endEventMillisecond = Constant.stringToMillisecond(endD, endT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
         //Get Event's location

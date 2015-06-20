@@ -51,15 +51,13 @@ public abstract class Constant
         try
         {
             //Try-catch block placed here to prevent 'Unhandled ParseException' error
-            Date tempDate = formatterForDate.parse(date);
             Date tempTime = formatterForTime.parse(time);
-            Calendar cal = Calendar.getInstance();
-            cal.set(
-                    tempDate.getYear(), tempDate.getMonth(), tempDate.getDay(),
-                    tempTime.getHours(), tempTime.getMinutes(), tempTime.getSeconds()
-            );
+            Date tempDate = formatterForDate.parse(date);
 
-            return cal.getTimeInMillis();
+            long timeMillisecond = (tempTime.getHours() * HOUR_IN_MILLISECOND) + (tempTime.getMinutes() * MIN_IN_MILLISECOND);
+            long dateMillisecond = tempDate.getTime();
+
+            return (dateMillisecond + timeMillisecond);
         }
         catch(ParseException e)
         {
@@ -77,7 +75,6 @@ public abstract class Constant
     {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 
-        Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliSeconds);
 
         return formatter.format(calendar.getTime());
@@ -192,7 +189,7 @@ public abstract class Constant
             calendar.setTimeInMillis(System.currentTimeMillis());
         }
 
-        final String dateFormat = Constant.DATEFORMATTER.format(calendar.getTime());
+        final String dateFormat = DATEFORMATTER.format(calendar.getTime());
         button.setText(additionalString + dateFormat);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -202,7 +199,7 @@ public abstract class Constant
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         calendar.set(year, monthOfYear, dayOfMonth);
-                        button.setText(additionalString + Constant.DATEFORMATTER.format(calendar.getTime()));
+                        button.setText(additionalString + DATEFORMATTER.format(calendar.getTime()));
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
                 date.show();
@@ -223,7 +220,7 @@ public abstract class Constant
             calendar.setTimeInMillis(System.currentTimeMillis());
         }
 
-        final String timeFormat = Constant.TIMEFORMATTER.format(calendar.getTime());
+        final String timeFormat = TIMEFORMATTER.format(calendar.getTime());
         button.setText(additionalString + timeFormat);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -234,7 +231,7 @@ public abstract class Constant
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                         calendar.set(Calendar.MINUTE, minute);
-                        button.setText(additionalString + Constant.TIMEFORMATTER.format(calendar.getTime()));
+                        button.setText(additionalString + TIMEFORMATTER.format(calendar.getTime()));
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false);
                 time.show();

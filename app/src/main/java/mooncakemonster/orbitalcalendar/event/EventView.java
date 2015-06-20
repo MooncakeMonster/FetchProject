@@ -143,7 +143,10 @@ public class EventView extends DialogFragment
                 }
 
                 else if(editButton.getText().toString().equals("SET NEW APPOINTMENT")) {
-                    //Insert into database
+                    //Delete current appointment
+                    appointmentDatabase.deleteAppointment(eventViewAppointment);
+
+                    //Insert new appointment into database
                     //(1) Data Extraction Begins Here
                     //Get Event Name
                     final String event = eventLabel.getText().toString();

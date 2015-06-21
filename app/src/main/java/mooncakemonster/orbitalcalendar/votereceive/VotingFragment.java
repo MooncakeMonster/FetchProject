@@ -1,93 +1,58 @@
 package mooncakemonster.orbitalcalendar.votereceive;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
-
-import java.util.List;
+import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
+import com.squareup.picasso.Picasso;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 public class VotingFragment extends ListFragment {
 
-    //Set database to allow user to retrieve data
-    private VotingDatabase votingDatabase;
-    //List to get all the appointments
-    private List<VoteItem> allVoteItem;
+    private VotingAdapter adapter;
     //Set unfoldable effect
     private View listTouchInterceptor;
-    private FrameLayout detailsLayout;
+    private View detailsLayout;
+    private View rootView;
     private UnfoldableView unfoldableView;
-    VotingAdapter adapter;
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        votingDatabase = new VotingDatabase(getActivity());
-        allVoteItem = votingDatabase.getAllVotings(votingDatabase);
-        //Initialise ArrayAdapter adapter for view
-        adapter = new VotingAdapter(getActivity(), R.layout.row_vote_history, allVoteItem);
-        setListAdapter(adapter);
-
-        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
-                //Get Appointment from ArrayAdapter
-                final VoteItem voteItem = adapter.getItem(position);
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Delete vote result");
-                alert.setMessage("Are you sure you want to delete \"" + voteItem.getEvent_title() + "\"?");
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Delete from SQLite database
-                        //appointmentDatabase.deleteAppointment(appointmentToDelete);
-                        //Delete from ArrayAdapter & allAppointment
-                        adapter.remove(voteItem);
-                        allVoteItem.remove(voteItem);
-                        adapter.notifyDataSetChanged();
-                        //Remove dialog after execution of the above
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
-                return true;
-            }
-        });
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_voting, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        rootView = inflater.inflate(R.layout.fragment_voting, container, false);
+
+        adapter = new VotingAdapter(getActivity());
+        setListAdapter(adapter);
 
         listTouchInterceptor = rootView.findViewById(R.id.touch_interceptor_view);
         listTouchInterceptor.setClickable(false);
 
-        detailsLayout = (FrameLayout) rootView.findViewById(R.id.details_layout);
+        detailsLayout = rootView.findViewById(R.id.details_layout);
         detailsLayout.setVisibility(View.INVISIBLE);
 
         unfoldableView = (UnfoldableView) rootView.findViewById(R.id.unfoldable_view);
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unfold_glance);
+        unfoldableView.setFoldShading(new GlanceFoldShading(getActivity(), bitmap));
+
 
         unfoldableView.setOnFoldingListener(new UnfoldableView.OnFoldingListener() {
             @Override
@@ -118,14 +83,27 @@ public class VotingFragment extends ListFragment {
             }
         });
 
-
         return rootView;
+
     }
 
     @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        //super.onListItemClick(l, v, position, id);
-        //unfoldableView.unfold(v, detailsLayout);
-    }
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ImageView image = Views.find(detailsLayout, R.id.details_image);
+                TextView title = Views.find(detailsLayout, R.id.details_title);
+                TextView location = Views.find(detailsLayout, R.id.details_location);
+
+                Picasso.with(getActivity()).load(adapter.getItem(position).getImageId()).into(image);
+                title.setText(adapter.getItem(position).getEvent_title());
+                location.setText(adapter.getItem(position).getEvent_location());
+
+                unfoldableView.unfold(parent, detailsLayout);
+            }
+        });
+    }
 }

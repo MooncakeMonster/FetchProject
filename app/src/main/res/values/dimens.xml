@@ -46,6 +46,9 @@
     <dimen name="picture_elevation">1dp</dimen>
     <dimen name="picture_icon_size">100dp</dimen>
 
+    <!-- fragment_voting.xml -->
+    <dimen name="default_margin">12dp</dimen>
+
     <!-- row_event.xml -->
     <dimen name="event_list_margin">15dp</dimen>
 

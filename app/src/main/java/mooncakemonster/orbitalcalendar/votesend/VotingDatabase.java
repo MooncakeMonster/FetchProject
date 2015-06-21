@@ -12,6 +12,7 @@ import java.util.List;
 
 import mooncakemonster.orbitalcalendar.votereceive.VoteItem;
 
+import mooncakemonster.orbitalcalendar.R;
 /**
  * This class creates table for database.
  */
@@ -89,7 +90,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            VoteItem voteItem = new VoteItem(cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
+            VoteItem voteItem = new VoteItem(R.drawable.cloudy, cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
             votings.add(voteItem);
             cursor.moveToNext();
         }

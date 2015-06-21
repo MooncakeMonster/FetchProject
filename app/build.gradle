@@ -34,5 +34,6 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile (group: 'it.sephiroth.android.library.fork.slideexpandable', name: 'slideexpandable', version: '1.0.3.1', ext: 'aar')
     compile 'com.alexvasilkov:foldable-layout:1.0.1'
+    compile 'com.alexvasilkov:android-commons:1.2.3'
     compile files('libs/volley.jar')
 }

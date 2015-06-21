@@ -1,51 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:layout_marginLeft="@dimen/feed_item_margin"
-    android:layout_marginRight="@dimen/feed_item_margin"
-    android:layout_marginTop="@dimen/feed_item_margin"
-    android:background="@drawable/bg_parent_rounded_corner"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/feed_item_padding_top_bottom"
-    android:paddingTop="@dimen/feed_item_padding_top_bottom">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:background="#fff"
+    android:padding="4dp">
 
-    <TextView
-        android:id="@+id/history_title"
-        android:layout_width="fill_parent"
+    <ImageView
+        android:id="@+id/history_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40sp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/image_text_shadow" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Title"
-        android:textColor="@color/caldroid_black"
-        android:textSize="@dimen/feed_item_profile_name"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
-    <TextView
-        android:id="@+id/history_location"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Singapore"
-        android:textColor="@color/caldroid_black"
-        android:textSize="@dimen/feed_item_profile_name"
-        android:textStyle="bold" />
+        <TextView
+            android:id="@+id/history_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Title"
+            android:textColor="@color/caldroid_black"
+            android:textSize="@dimen/feed_item_profile_name"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/history_start_end_date"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="28 May 2015, Saturday"
-        android:textColor="@color/timestamp"
-        android:textSize="@dimen/feed_item_timestamp" />
+        <TextView
+            android:id="@+id/history_location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Singapore"
+            android:textColor="@color/caldroid_black"
+            android:textSize="@dimen/feed_item_profile_name"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/history_start_end_time"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="03:00pm - 09:00pm"
-        android:textColor="@color/timestamp"
-        android:textSize="@dimen/feed_item_timestamp" />
+        <TextView
+            android:id="@+id/history_start_end_date"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="28 May 2015, Saturday"
+            android:textColor="@color/timestamp"
+            android:textSize="@dimen/feed_item_timestamp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/history_start_end_time"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="03:00pm - 09:00pm"
+            android:textColor="@color/timestamp"
+            android:textSize="@dimen/feed_item_timestamp" />
+    </LinearLayout>
+
+</FrameLayout>

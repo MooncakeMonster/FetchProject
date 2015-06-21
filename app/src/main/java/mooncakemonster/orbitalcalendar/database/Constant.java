@@ -37,7 +37,7 @@ public abstract class Constant
     public static SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("dd/MM/yyyy, EEE");
     public static SimpleDateFormat TIMEFORMATTER = new SimpleDateFormat("hh:mma");
 
-    public static Calendar calendar = Calendar.getInstance();
+    private static Calendar calendar = Calendar.getInstance();
 
     /****************************************************************************************************
      * (2) CONVERSION METHODS

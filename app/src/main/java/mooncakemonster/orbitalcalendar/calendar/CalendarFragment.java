@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.roomorama.caldroid.CaldroidListener;
 import com.roomorama.caldroid.WeekdayArrayAdapter;
 
 import java.text.DateFormat;
@@ -80,7 +78,7 @@ public class CalendarFragment extends ListFragment {
         appointmentDatabase.open();
 
         // (2) Setup listener for caldroidFragment
-        final CaldroidListener listener = new CaldroidListener() {
+        final CaldroidListenerModified listener = new CaldroidListenerModified() {
             @Override
             public void onCaldroidViewCreated() {
                 //Ensure days of the week displayed (e.g. Sun, Mon, Tues,...) are black
@@ -88,25 +86,32 @@ public class CalendarFragment extends ListFragment {
                 highlightEventDates();
                 displayEventList(cal.getTime());
             }
+
             @Override
             public void onSelectDate(final Date date, View view) {
-                Toast.makeText(getActivity().getApplicationContext(), formatter.format(date), Toast.LENGTH_SHORT).show();
                 displayEventList(date);
             }
+
             @Override
-            public void onChangeMonth(int month, int year) {
-                //String text = "month: " + month + " year: " + year;
-                //Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onLongClickDate(Date date, View view) {
-                //Toast.makeText(getActivity().getApplicationContext(), "Long click " + formatter.format(date), Toast.LENGTH_SHORT).show();
+            public void onSelectDateTwice(final Date date, View view)
+            {
+                onSelectDate(date, view);
+
                 //Get time to parse in long
                 long time = date.getTime();
                 //Open EventActivity for user to input their appointment
                 Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
                 intent.putExtra("date_passed", time);
                 startActivity(intent);
+            }
+
+            @Override
+            public void onChangeMonth(int month, int year) {
+            }
+
+            @Override
+            public void onLongClickDate(Date date, View view) {
+
             }
         };
         // Setup Caldroid

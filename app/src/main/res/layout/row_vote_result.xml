@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:focusableInTouchMode="true"
+    android:paddingBottom="@dimen/standard_padding_size"
+    android:paddingLeft="@dimen/event_list_margin"
+    android:paddingRight="@dimen/event_list_margin"
+    android:paddingTop="@dimen/standard_padding_size">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/result_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Date"
+        android:textColor="@color/black"
+        android:textSize="@dimen/standard_text_size" />
+
+    <TextView
+        android:id="@+id/result_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Time"
+        android:textColor="@color/black"
+        android:textSize="@dimen/standard_text_size" />
+
+    <TextView
+        android:id="@+id/result_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Username"
+        android:textColor="@color/black"
+        android:textSize="@dimen/standard_text_size" />
+
+    <TextView
+        android:id="@+id/result_total"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="Total"
+        android:textColor="@color/black"
+        android:textSize="@dimen/standard_text_size" />
+    </LinearLayout>
+
+</FrameLayout>

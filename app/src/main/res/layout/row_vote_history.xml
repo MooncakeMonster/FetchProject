@@ -1,28 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:background="#fff"
+    android:layout_height="250dp"
     android:padding="4dp">
 
     <ImageView
         android:id="@+id/history_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
-
+        android:scaleType="centerCrop"
+        android:background="@color/caldroid_transparent"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="40sp"
+        android:background="@drawable/image_text_shadow"
         android:layout_gravity="bottom"
-        android:background="@drawable/image_text_shadow" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:id="@+id/linearLayout">
 
         <TextView
             android:id="@+id/history_title"
@@ -30,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Title"
             android:textColor="@color/caldroid_black"
             android:textSize="@dimen/feed_item_profile_name"
             android:textStyle="bold" />
@@ -41,7 +43,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Singapore"
             android:textColor="@color/caldroid_black"
             android:textSize="@dimen/feed_item_profile_name"
             android:textStyle="bold" />
@@ -52,8 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="28 May 2015, Saturday"
-            android:textColor="@color/timestamp"
+            android:textColor="@color/caldroid_black"
             android:textSize="@dimen/feed_item_timestamp" />
 
         <TextView
@@ -61,8 +61,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="03:00pm - 09:00pm"
-            android:textColor="@color/timestamp"
+            android:textColor="@color/caldroid_black"
             android:textSize="@dimen/feed_item_timestamp" />
     </LinearLayout>
 

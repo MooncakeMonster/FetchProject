@@ -35,7 +35,7 @@ public class VotingActivity extends ActionBarActivity {
     TextView vote_title, vote_location;
     EditText vote_participants;
     Button add_option;
-    String start_date, end_date, start_time, end_time;
+    String start_date = "", end_date = "", start_time = "", end_time = "";
     int colour;
 
     @Override
@@ -82,9 +82,9 @@ public class VotingActivity extends ActionBarActivity {
     private void collateDateTime() {
         int size = adapter.getCount();
 
-        for(int i = 0; i < size; i++) {
-            String startDate = Constant.standardYearMonthDate(adapter.getItem(i).getEvent_start_date(), new SimpleDateFormat("dd MMM yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
-            String endDate = Constant.standardYearMonthDate(adapter.getItem(i).getEvent_end_date(), new SimpleDateFormat("dd MMM yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
+        for (int i = 0; i < size; i++) {
+            String startDate = Constant.standardYearMonthDate(adapter.getItem(i).getEvent_start_date(), new SimpleDateFormat("dd/MM/yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
+            String endDate = Constant.standardYearMonthDate(adapter.getItem(i).getEvent_end_date(), new SimpleDateFormat("dd/MM/yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
 
             // Space to split all dates later when retrieving
             start_date += startDate + " ";

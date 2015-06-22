@@ -17,18 +17,21 @@ import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 /**
  * Created by BAOJUN on 20/6/15.
  */
+
 public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClickListener {
 
+    VotingFragment votingFragment;
     VotingDatabase votingDatabase = new VotingDatabase(getContext());
 
-    public VotingAdapter(Context context) {
+    public VotingAdapter(Context context, VotingFragment votingFragment) {
         super(context);
+        this.votingFragment = votingFragment;
         setItemsList(votingDatabase.getAllVotings(votingDatabase));
     }
 
     @Override
     public void onClick(View v) {
-
+        votingFragment.openDetails(v, (VoteItem) v.getTag());
     }
 
     static class Holder {
@@ -49,6 +52,8 @@ public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClic
         holder.event_location = Views.find(view, R.id.history_location);
         holder.event_start_end_date = Views.find(view, R.id.history_start_end_date);
         holder.event_start_end_time = Views.find(view, R.id.history_start_end_time);
+
+        holder.event_image.setOnClickListener(this);
         view.setTag(holder);
 
         return view;
@@ -59,10 +64,38 @@ public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClic
         Holder holder = (Holder) view.getTag();
 
         holder.event_image.setTag(voteItem);
-        Picasso.with(view.getContext());
+        Picasso.with(view.getContext()).load(getBackgroundResource(voteItem)).fit().noFade().into(holder.event_image);
+        holder.event_image.setBackgroundResource(voteItem.getImageId());
         holder.event_title.setText(voteItem.getEvent_title());
         holder.event_location.setText(voteItem.getEvent_location());
-        holder.event_start_end_date.setText(voteItem.getEvent_start_date() + " - " + voteItem.getEvent_end_date());
-        holder.event_start_end_time.setText(voteItem.getEvent_start_time() + " - " + voteItem.getEvent_end_time());
+
+        // TODO Update if statement when possible
+        // Only show final confirmed date, else show number of votes response received
+        if(false) {
+            holder.event_start_end_date.setText(voteItem.getEvent_start_date() + " - " + voteItem.getEvent_end_date());
+            holder.event_start_end_time.setText(voteItem.getEvent_start_time() + " - " + voteItem.getEvent_end_time());
+        } else {
+            holder.event_start_end_date.setText("Votes received: 3");
+            holder.event_start_end_time.setText("No responses yet: 7");
+        }
     }
+
+    private int getBackgroundResource(VoteItem voteItem) {
+        switch (voteItem.getImageId()) {
+            case R.color.redbear:
+                return R.drawable.backgroundred;
+            case R.color.yellowbear:
+                return R.drawable.backgroundyellow;
+            case R.color.greenbear:
+                return R.drawable.backgroundgreen;
+            case R.color.bluebear:
+                return R.drawable.backgroundblue;
+            case R.color.purplebear:
+                return R.drawable.backgroundpurple;
+        }
+
+        // Should not reach here
+        return -1;
+    }
+
 }

@@ -112,8 +112,8 @@ public class Appointment implements Comparable<Appointment>, Serializable {
     // Sorted according to the starting date. If two appointments carry the same starting date
     // and time, then sort the events in alphabetical order.
     public int compareTo(@NonNull Appointment that) {
-        if (this.getStartDate() < that.getStartDate()) return -1;
-        if (this.getStartDate() > that.getStartDate()) return 1;
+        if (this.getStartDate() < that.getStartDate()) return 1;
+        if (this.getStartDate() > that.getStartDate()) return -1;
 
         else
             return this.getEvent().compareTo(that.getEvent());

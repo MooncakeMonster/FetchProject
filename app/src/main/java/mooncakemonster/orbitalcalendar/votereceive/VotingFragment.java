@@ -1,30 +1,30 @@
 package mooncakemonster.orbitalcalendar.votereceive;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
-import com.squareup.picasso.Picasso;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
-public class VotingFragment extends ListFragment {
+public class VotingFragment extends BaseFragment {
 
-    private VotingAdapter adapter;
+    VotingAdapter votingAdapter;
+    private VotingDatabase votingDatabase;
     //Set unfoldable effect
     private View listTouchInterceptor;
     private View detailsLayout;
-    private View rootView;
     private UnfoldableView unfoldableView;
 
     @Override
@@ -37,10 +37,10 @@ public class VotingFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_voting, container, false);
-
-        adapter = new VotingAdapter(getActivity());
-        setListAdapter(adapter);
+        View rootView = inflater.inflate(R.layout.fragment_voting, container, false);
+        votingDatabase = new VotingDatabase(getActivity());
+        votingAdapter = new VotingAdapter(getActivity(), this);
+        setListAdapter(votingAdapter);
 
         listTouchInterceptor = rootView.findViewById(R.id.touch_interceptor_view);
         listTouchInterceptor.setClickable(false);
@@ -53,8 +53,7 @@ public class VotingFragment extends ListFragment {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.unfold_glance);
         unfoldableView.setFoldShading(new GlanceFoldShading(getActivity(), bitmap));
 
-
-        unfoldableView.setOnFoldingListener(new UnfoldableView.OnFoldingListener() {
+        unfoldableView.setOnFoldingListener(new UnfoldableView.SimpleFoldingListener() {
             @Override
             public void onUnfolding(UnfoldableView unfoldableView) {
                 listTouchInterceptor.setClickable(true);
@@ -76,11 +75,6 @@ public class VotingFragment extends ListFragment {
                 listTouchInterceptor.setClickable(false);
                 detailsLayout.setVisibility(View.INVISIBLE);
             }
-
-            @Override
-            public void onFoldProgress(UnfoldableView unfoldableView, float v) {
-
-            }
         });
 
         return rootView;
@@ -91,19 +85,46 @@ public class VotingFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ImageView image = Views.find(detailsLayout, R.id.details_image);
-                TextView title = Views.find(detailsLayout, R.id.details_title);
-                TextView location = Views.find(detailsLayout, R.id.details_location);
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final VoteItem voteItem = votingAdapter.getItem(position);
 
-                Picasso.with(getActivity()).load(adapter.getItem(position).getImageId()).into(image);
-                title.setText(adapter.getItem(position).getEvent_title());
-                location.setText(adapter.getItem(position).getEvent_location());
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Delete voting result");
+                alert.setMessage("Are you sure you want to delete \"" + voteItem.getEvent_title() + "\"'s voting result?");
 
-                unfoldableView.unfold(parent, detailsLayout);
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Delete from SQLite database TODO
+                        //Delete from ArrayAdapter & allAppointment
+                        votingAdapter.notifyDataSetChanged();
+                        //Remove dialog after execution of the above
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                alert.show();
+                return true;
             }
         });
     }
+
+    public void openDetails(View coverview, VoteItem voteItem) {
+        TextView title = Views.find(detailsLayout, R.id.details_title);
+        TextView location = Views.find(detailsLayout, R.id.details_location);
+
+        title.setText(voteItem.getEvent_title());
+        location.setText(voteItem.getEvent_location());
+
+        unfoldableView.unfold(coverview, detailsLayout);
+    }
+
 }

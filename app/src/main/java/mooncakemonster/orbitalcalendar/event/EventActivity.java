@@ -31,6 +31,10 @@ import mooncakemonster.orbitalcalendar.database.Constant;
 
 public class EventActivity extends ActionBarActivity {
 
+    //REquest Code
+    public static final int APPOINTMENT_SET = 9;
+    public static final int APPOINTMENT_NOT_SET = 8;
+
     //Variable for extracting date from incoming intent. Default is current time.
     private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
 
@@ -414,6 +418,13 @@ public class EventActivity extends ActionBarActivity {
                 if(insertInDatabase()) {
                     //Inform user that appointment has been created and return to previous activity
                     Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
+
+                    if (getParent() == null) {
+                        setResult(EventActivity.APPOINTMENT_SET);
+                    } else {
+                        getParent().setResult(EventActivity.APPOINTMENT_SET);
+                    }
+
                     finish();
                 }
                 break;
@@ -464,6 +475,7 @@ public class EventActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /*
     @Override
     protected void onPause()
     {
@@ -485,4 +497,5 @@ public class EventActivity extends ActionBarActivity {
             appointmentDatabase.open();
         }
     }
+    */
 }

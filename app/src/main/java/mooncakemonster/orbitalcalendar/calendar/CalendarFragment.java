@@ -43,6 +43,9 @@ public class CalendarFragment extends ListFragment {
     //Display selected date
     private TextView dateDisplay;
 
+    //Request for creating appointment interface
+    public static final int CREATE_APPOINTMENT_REQUEST = 1;
+
     //For attaching fragment to Activity
     FragmentTransaction ft;
 
@@ -99,13 +102,7 @@ public class CalendarFragment extends ListFragment {
                 //Open EventActivity for user to input their appointment
                 Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
                 intent.putExtra("date_passed", time);
-                startActivity(intent);
-
-                //Reload current fragment after any possible appointments have been made
-                Fragment currentFragement = myContext.getSupportFragmentManager().findFragmentByTag("caldroidFragment");
-                ft.detach(currentFragement);
-                ft.attach(currentFragement);
-                ft.commit();
+                startActivityForResult(intent, CREATE_APPOINTMENT_REQUEST);
             }
 
             @Override
@@ -184,5 +181,26 @@ public class CalendarFragment extends ListFragment {
     {
         myContext = (FragmentActivity) activity;
         super.onAttach(activity);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == CalendarFragment.CREATE_APPOINTMENT_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == EventActivity.APPOINTMENT_SET) {
+                //Reload current fragment after any possible appointments have been made
+                ft = myContext.getSupportFragmentManager().beginTransaction();
+                Fragment currentFragement = myContext.getSupportFragmentManager().findFragmentById(R.id.cal_fragment);
+                ft.detach(currentFragement);
+                ft.attach(currentFragement);
+                ft.commit();
+            }
+
+            else if(resultCode == EventActivity.APPOINTMENT_NOT_SET)
+            {
+                //Do Nothing
+            }
+        }
     }
 }

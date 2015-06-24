@@ -7,7 +7,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    
+
+
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".userdatabase.ServerController"
         android:allowBackup="true"
@@ -76,5 +79,19 @@
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
     </application>
+
+    <receiver android:name="AlarmReceiver">
+        <intent-filter>
+            <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION"/>
+            <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION2"/>
+        </intent-filter>
+    </receiver>
+
+    <receiver android:name="AlarmSetter" >
+        <intent-filter>
+            <action
+                android:name="android.intent.action.BOOT_COMPLETED" />
+        </intent-filter>
+    </receiver>
 
 </manifest>

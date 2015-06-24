@@ -44,7 +44,7 @@ public class CalendarFragment extends ListFragment {
     public CalendarFragment(){}
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    public void onActivityCreated(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
@@ -65,15 +65,7 @@ public class CalendarFragment extends ListFragment {
         args.putInt(CaldroidFragmentModified.THEME_RESOURCE, R.style.CaldroidDefaultTransparent);
         //Build caldroidFragment with the above information and setting
         caldroidFragment.setArguments(args);
-    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        final View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
-
-        // Get selected date
-        dateDisplay = (TextView) rootView.findViewById(R.id.date_display);
         appointmentDatabase = new AppointmentController(getActivity());
         appointmentDatabase.open();
 
@@ -121,6 +113,15 @@ public class CalendarFragment extends ListFragment {
         android.support.v4.app.FragmentTransaction t = myContext.getSupportFragmentManager().beginTransaction();
         t.replace(R.id.cal_fragment, caldroidFragment);
         t.commit();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        final View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
+
+        // Get selected date
+        dateDisplay = (TextView) rootView.findViewById(R.id.date_display);
 
         return rootView;
     }

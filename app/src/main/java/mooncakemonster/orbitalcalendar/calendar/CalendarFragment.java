@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,10 +43,13 @@ public class CalendarFragment extends ListFragment {
     //Display selected date
     private TextView dateDisplay;
 
+    //For attaching fragment to Activity
+    FragmentTransaction ft;
+
     public CalendarFragment(){}
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState)
+    public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
@@ -95,6 +100,12 @@ public class CalendarFragment extends ListFragment {
                 Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
                 intent.putExtra("date_passed", time);
                 startActivity(intent);
+
+                //Reload current fragment after any possible appointments have been made
+                Fragment currentFragement = myContext.getSupportFragmentManager().findFragmentByTag("caldroidFragment");
+                ft.detach(currentFragement);
+                ft.attach(currentFragement);
+                ft.commit();
             }
 
             @Override
@@ -110,9 +121,9 @@ public class CalendarFragment extends ListFragment {
         caldroidFragment.setCaldroidListener(listener);
 
         //Ensure caldroidFragment will be attached to the activity
-        android.support.v4.app.FragmentTransaction t = myContext.getSupportFragmentManager().beginTransaction();
-        t.replace(R.id.cal_fragment, caldroidFragment);
-        t.commit();
+        ft = myContext.getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.cal_fragment, caldroidFragment);
+        ft.commit();
     }
 
     @Override

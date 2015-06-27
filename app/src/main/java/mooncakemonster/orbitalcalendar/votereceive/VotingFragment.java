@@ -16,12 +16,10 @@ import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 public class VotingFragment extends BaseFragment {
 
     VotingAdapter votingAdapter;
-    private VotingDatabase votingDatabase;
     //Set unfoldable effect
     private View listTouchInterceptor;
     private View detailsLayout;
@@ -38,7 +36,6 @@ public class VotingFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_voting, container, false);
-        votingDatabase = new VotingDatabase(getActivity());
         votingAdapter = new VotingAdapter(getActivity(), this);
         setListAdapter(votingAdapter);
 

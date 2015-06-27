@@ -1,302 +1,390 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/cloudy"
+    android:padding="@dimen/standard_layout_size"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:background="@drawable/cloudy"
-    android:padding="@dimen/standard_layout_size"
     tools:context="mooncakemonster.orbitalcalendar.event.EventActivity">
 
-    <!-- Event title -->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/standard_icon_size"
-        android:id="@+id/title"
-        android:hint="@string/event_title"
-        android:layout_marginBottom="@dimen/standard_margin_size"
-        android:padding="@dimen/standard_padding_size"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
-    <!-- Location -->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/standard_icon_size"
-        android:id="@+id/appointmentLocation"
-        android:hint="@string/event_location"
-        android:padding="@dimen/standard_padding_size"
-        android:layout_marginBottom="@dimen/standard_margin_size"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/title"
-        android:layout_toLeftOf="@+id/location_button"
-        android:layout_toStartOf="@+id/location_button" />
-
-    <Button
-        android:layout_width="@dimen/event_button_size"
-        android:layout_height="@dimen/event_button_size"
-        android:background="@drawable/location"
-        android:id="@+id/location_button"
-        android:layout_below="@+id/title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <LinearLayout
-        android:id="@+id/buttonHolder"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:orientation="vertical">
 
-    <!-- Create Event button -->
+        <!-- Event title -->
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/standard_margin_size"
+            android:layout_weight="1"
+            android:hint="@string/event_title"
+            android:padding="@dimen/standard_padding_size" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <!-- Location -->
+            <EditText
+                android:id="@+id/appointmentLocation"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/standard_icon_size"
+                android:layout_marginBottom="@dimen/standard_margin_size"
+                android:layout_weight="0.9"
+                android:hint="@string/event_location"
+                android:padding="@dimen/standard_padding_size" />
+
             <Button
+                android:id="@+id/location_button"
+                android:layout_width="@dimen/event_button_size"
+                android:layout_height="@dimen/event_button_size"
+                android:layout_weight="0.1"
+                android:background="@drawable/location" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/text_left_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/from"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="left"
+                    android:inputType="textCapCharacters"
+                    android:padding="@dimen/standard_padding_size"
+                    android:text="From"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="17dp" />
+
+
+                <Button
+                    android:id="@+id/to"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="left"
+                    android:inputType="textCapCharacters"
+                    android:padding="@dimen/standard_padding_size"
+                    android:text="To"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/text_left_date"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/startD"
+                    android:layout_width="170dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_horizontal"
+                    android:inputType="textCapCharacters"
+                    android:padding="@dimen/standard_padding_size"
+                    android:text="Start Date"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="17dp" />
+
+
+                <Button
+                    android:id="@+id/endD"
+                    android:layout_width="170dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_horizontal"
+                    android:inputType="textCapCharacters"
+                    android:padding="@dimen/standard_padding_size"
+                    android:text="End Date"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/startT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_horizontal"
+                    android:inputType="textCapCharacters"
+                    android:padding="@dimen/standard_padding_size"
+                    android:text="Start time"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="17dp" />
+
+                <Button
+                    android:id="@+id/endT"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_horizontal"
+                    android:inputType="textCapCharacters"
+                    android:padding="@dimen/standard_padding_size"
+                    android:text="End time"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Checkbox to select range of days/week/month for event -->
+                <CheckBox
+                    android:id="@+id/everybox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:onClick="selectItem"
+                    android:text="Every"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/event_text_size"
+                    android:textStyle="bold" />
+
+                <!-- Reminder checkbox -->
+                <CheckBox
+                    android:id="@+id/remindbox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="@dimen/standard_margin_size"
+                    android:layout_weight="1"
+                    android:checked="false"
+                    android:onClick="selectItem"
+                    android:text="Remind me"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/event_text_size"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Every button -->
+                <Button
+                    android:id="@+id/everynum"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/event_button_size"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/event_text_size" />
+
+
+                <!-- Reminder button -->
+                <Button
+                    android:id="@+id/remindnum"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/event_text_size" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:weightSum="1">
+
+                <Button
+                    android:id="@+id/everyweek"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/event_button_size"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="start|center_vertical"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/event_text_size" />
+
+
+                <Button
+                    android:id="@+id/remindweek"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_vertical"
+                    android:background="@android:color/transparent"
+                    android:inputType="textCapCharacters"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/event_text_size" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Notes -->
+        <EditText
+            android:id="@+id/appointmentNotes"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginBottom="@dimen/standard_margin_size"
+            android:layout_weight="1"
+            android:background="@drawable/back_button"
+            android:ems="10"
+            android:hint="@string/event_notes"
+            android:inputType="textMultiLine"
+            android:padding="@dimen/standard_padding_size" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Bear colours -->
+            <Button
+                android:id="@+id/imageButton"
+                android:layout_width="@dimen/standard_icon_size"
+                android:layout_height="@dimen/event_icon_size"
+                android:layout_above="@+id/buttonHolder"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginBottom="@dimen/standard_margin_size"
+                android:background="@drawable/beared"
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/imageButton2"
+                android:layout_width="@dimen/standard_icon_size"
+                android:layout_height="@dimen/event_icon_size"
+                android:layout_alignTop="@+id/imageButton"
+                android:layout_toEndOf="@+id/imageButton"
+                android:layout_toRightOf="@+id/imageButton"
+                android:layout_weight="1"
+                android:background="@drawable/bearyellow"
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/imageButton3"
+                android:layout_width="@dimen/standard_icon_size"
+                android:layout_height="@dimen/event_icon_size"
+                android:layout_alignTop="@+id/imageButton2"
+                android:layout_toEndOf="@+id/imageButton2"
+                android:layout_toRightOf="@+id/imageButton2"
+                android:layout_weight="1"
+                android:background="@drawable/beargreen"
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/imageButton4"
+                android:layout_width="@dimen/standard_icon_size"
+                android:layout_height="@dimen/event_icon_size"
+                android:layout_alignBottom="@+id/imageButton3"
+                android:layout_toEndOf="@+id/imageButton3"
+                android:layout_toRightOf="@+id/imageButton3"
+                android:layout_weight="1"
+                android:background="@drawable/bearblue"
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/imageButton6"
+                android:layout_width="@dimen/standard_icon_size"
+                android:layout_height="@dimen/event_icon_size"
+                android:layout_alignBottom="@+id/imageButton4"
+                android:layout_toEndOf="@+id/imageButton4"
+                android:layout_toRightOf="@+id/imageButton4"
+                android:layout_weight="1"
+                android:background="@drawable/bearpurple"
+                android:onClick="onClick" />
+
+            <Button
+                android:id="@+id/selected_bear"
+                android:layout_width="@dimen/standard_icon_size"
+                android:layout_height="@dimen/event_icon_size"
+                android:layout_alignEnd="@+id/buttonHolder"
+                android:layout_alignRight="@+id/buttonHolder"
+                android:layout_alignTop="@+id/imageButton6"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/none"
+                android:gravity="center" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/buttonHolder"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <!-- Create Event button -->
+            <Button
+                android:id="@+id/addAppointmentButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:id="@+id/addAppointmentButton"
-                android:text="@string/create_event"
-                android:textColor="@color/caldroid_white"
                 android:background="@color/button"
                 android:onClick="onClick"
-                android:layout_margin="10dp"
+                android:text="@string/create_event"
+                android:textColor="@color/caldroid_white"
                 android:textSize="@dimen/standard_text_size" />
 
             <!--WIP Cancel Button-->
             <Button
+                android:id="@+id/cancelButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_toLeftOf="@+id/addAppointmentButton"
                 android:layout_weight="1"
-                android:id="@+id/cancelButton"
-                android:text="CANCEL"
-                android:textColor="@color/caldroid_white"
                 android:background="@color/button"
                 android:onClick="onClick"
-                android:layout_margin="10dp"
-                android:textSize="@dimen/standard_text_size"
-                android:layout_toLeftOf="@+id/addAppointmentButton" />
+                android:text="CANCEL"
+                android:textColor="@color/caldroid_white"
+                android:textSize="@dimen/standard_text_size" />
 
+        </LinearLayout>
     </LinearLayout>
-
-    <!--Start and End Date-->
-    <Button
-        android:layout_width="@dimen/date_button_size"
-        android:layout_height="wrap_content"
-        android:id="@+id/startD"
-        android:textSize="@dimen/event_text_size"
-        android:textColor="@color/caldroid_black"
-        android:inputType="textCapCharacters"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/appointmentLocation"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/startT"
-        android:layout_toStartOf="@+id/startT" />
-
-    <Button
-        android:layout_width="@dimen/date_button_size"
-        android:layout_height="wrap_content"
-        android:id="@+id/endD"
-        android:textSize="@dimen/event_text_size"
-        android:textColor="@color/caldroid_black"
-        android:inputType="textCapCharacters"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/startD"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/startT"
-        android:layout_toStartOf="@+id/startT" />
-
-    <!--Start and End Time-->
-    <Button
-        android:layout_width="@dimen/time_button_size"
-        android:layout_height="wrap_content"
-        android:id="@+id/startT"
-        android:textSize="@dimen/event_text_size"
-        android:textColor="@color/caldroid_black"
-        android:inputType="textCapCharacters"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/appointmentLocation"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="@dimen/time_button_size"
-        android:layout_height="wrap_content"
-        android:id="@+id/endT"
-        android:textSize="@dimen/event_text_size"
-        android:textColor="@color/caldroid_black"
-        android:inputType="textCapCharacters"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/startT"
-        android:layout_alignLeft="@+id/startT"
-        android:layout_alignStart="@+id/startT" />
-
-    <!-- Reminder checkbox -->
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Remind me"
-        android:layout_marginBottom="@dimen/standard_margin_size"
-        android:textSize="@dimen/event_text_size"
-        android:id="@+id/remindbox"
-        android:onClick="selectItem"
-        android:textStyle="bold"
-        android:checked="false"
-        android:textColor="@color/caldroid_black"
-        android:layout_below="@+id/everybox"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <!-- Reminder button -->
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:id="@+id/remindnum"
-        android:textSize="@dimen/event_text_size"
-        android:textColor="@color/caldroid_black"
-        android:background="@android:color/transparent"
-        android:layout_alignBottom="@+id/remindbox"
-        android:layout_toRightOf="@+id/remindbox"
-        android:layout_toEndOf="@+id/remindbox" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:id="@+id/remindweek"
-        android:textSize="@dimen/event_text_size"
-        android:textColor="@color/caldroid_black"
-        android:inputType="textCapCharacters"
-        android:background="@android:color/transparent"
-        android:layout_alignTop="@+id/remindnum"
-        android:layout_toRightOf="@+id/remindnum"
-        android:layout_toEndOf="@+id/remindnum" />
-
-
-    <!-- Checkbox to select range of days/week/month for event -->
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:text="Every"
-        android:id="@+id/everybox"
-        android:onClick="selectItem"
-        android:textSize="@dimen/event_text_size"
-        android:textStyle="bold"
-        android:textColor="@color/caldroid_black"
-        android:layout_alignBottom="@+id/everynum"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <!-- Every button -->
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/event_button_size"
-        android:textColor="@color/caldroid_black"
-        android:id="@+id/everynum"
-        android:textSize="@dimen/event_text_size"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/endD"
-        android:layout_toRightOf="@+id/remindbox"
-        android:layout_toEndOf="@+id/remindbox" />
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/event_button_size"
-        android:id="@+id/everyweek"
-        android:textColor="@color/caldroid_black"
-        android:textSize="@dimen/event_text_size"
-        android:inputType="textCapCharacters"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/endD"
-        android:layout_alignLeft="@+id/remindweek"
-        android:layout_alignStart="@+id/remindweek" />
-
-    <!-- Notes -->
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/appointmentNotes"
-        android:hint="@string/event_notes"
-        android:background="@drawable/back_button"
-        android:layout_marginBottom="@dimen/standard_margin_size"
-        android:padding="@dimen/standard_padding_size"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/remindbox"
-        android:layout_above="@+id/imageButton" />
-
-
-    <!-- Bear colours -->
-    <Button
-        android:layout_width="@dimen/standard_icon_size"
-        android:layout_height="@dimen/event_icon_size"
-        android:id="@+id/imageButton"
-        android:onClick="onClick"
-        android:background="@drawable/beared"
-        android:layout_above="@+id/buttonHolder"
-        android:layout_marginBottom="@dimen/standard_margin_size"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="@dimen/standard_icon_size"
-        android:layout_height="@dimen/event_icon_size"
-        android:id="@+id/imageButton2"
-        android:onClick="onClick"
-        android:background="@drawable/bearyellow"
-        android:layout_alignTop="@+id/imageButton"
-        android:layout_toRightOf="@+id/imageButton"
-        android:layout_toEndOf="@+id/imageButton" />
-
-    <Button
-        android:layout_width="@dimen/standard_icon_size"
-        android:layout_height="@dimen/event_icon_size"
-        android:id="@+id/imageButton3"
-        android:onClick="onClick"
-        android:background="@drawable/beargreen"
-        android:layout_alignTop="@+id/imageButton2"
-        android:layout_toRightOf="@+id/imageButton2"
-        android:layout_toEndOf="@+id/imageButton2" />
-
-    <Button
-        android:layout_width="@dimen/standard_icon_size"
-        android:layout_height="@dimen/event_icon_size"
-        android:id="@+id/imageButton4"
-        android:onClick="onClick"
-        android:background="@drawable/bearblue"
-        android:layout_alignBottom="@+id/imageButton3"
-        android:layout_toRightOf="@+id/imageButton3"
-        android:layout_toEndOf="@+id/imageButton3" />
-
-    <Button
-        android:layout_width="@dimen/standard_icon_size"
-        android:layout_height="@dimen/event_icon_size"
-        android:id="@+id/imageButton6"
-        android:onClick="onClick"
-        android:background="@drawable/bearpurple"
-        android:layout_alignBottom="@+id/imageButton4"
-        android:layout_toRightOf="@+id/imageButton4"
-        android:layout_toEndOf="@+id/imageButton4" />
-
-    <Button
-        android:layout_width="@dimen/standard_icon_size"
-        android:layout_height="@dimen/event_icon_size"
-        android:gravity="center"
-        android:id="@+id/selected_bear"
-        android:layout_marginRight="20dp"
-        android:background="@color/caldroid_transparent"
-        android:layout_alignTop="@+id/imageButton6"
-        android:layout_alignRight="@+id/buttonHolder"
-        android:layout_alignEnd="@+id/buttonHolder" />
-
-</RelativeLayout>
+</ScrollView>

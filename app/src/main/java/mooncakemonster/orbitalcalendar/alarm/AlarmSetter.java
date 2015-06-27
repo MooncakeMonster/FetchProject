@@ -1,11 +1,10 @@
 package mooncakemonster.orbitalcalendar.alarm;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-
-import java.util.Map;
 
 /*
  * Receiver for resetting alarms whenever phone has been shut down.
@@ -13,24 +12,52 @@ import java.util.Map;
  */
 public class AlarmSetter extends BroadcastReceiver {
 
-    private static final String PREF_FILENAME = "appointmentAlarm";
-
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Get preference
-        SharedPreferences alarmSchedule = context.getSharedPreferences(PREF_FILENAME, 0);
-        Map<String, ?> scheduleData = alarmSchedule.getAll();
-
-        // Set the schedule time
-        if(scheduleData.containsKey("fromHour") && scheduleData.containsKey("toHour")) {
-            int fromHour = (Integer) scheduleData.get("fromHour");
-            int fromMinute = (Integer) scheduleData.get("fromMinute");
-
-            int toHour = (Integer) scheduleData.get("toHour");
-            int toMinute = (Integer) scheduleData.get("toMinute");
-
-            //Do some action
+        // Start Service
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            Intent serviceIntent = new Intent(context, AlarmIntentService.class);
+            context.startService(serviceIntent);
         }
     }
+
+    /****************************************************************************************************
+     * SET ALARM - After boot up of Android Phone
+     ****************************************************************************************************/
+    public static void setAlarm(Context context, long millisecond)
+    {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.setAction(AlarmReceiver.SOMEACTION);
+
+        int uniqueID = (int)((millisecond >> 32) ^ millisecond);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, uniqueID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarm.set(AlarmManager.RTC_WAKEUP, millisecond, pendingIntent);
+    }
+
+    public static void cancelAlarm(Context context, long millisecond)
+    {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.setAction(AlarmReceiver.SOMEACTION);
+
+        int uniqueID = (int)((millisecond >> 32) ^ millisecond);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, uniqueID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarm.cancel(pendingIntent);
+    }
+
+    /*
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            Intent serviceIntent = new Intent(context, MySystemService.class);
+            context.startService(serviceIntent);
+        }
+    }
+     */
+
 
 }

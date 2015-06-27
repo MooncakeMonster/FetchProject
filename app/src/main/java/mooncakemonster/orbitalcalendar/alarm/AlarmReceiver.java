@@ -1,15 +1,12 @@
 package mooncakemonster.orbitalcalendar.alarm;
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.text.format.Time;
 
-
-
 public class AlarmReceiver extends BroadcastReceiver {
-    private final String SOMEACTION = "mooncakemonster.orbitalcalendar.alarm.ACTION";
+    public static final String SOMEACTION = "mooncakemonster.orbitalcalendar.alarm.ACTION";
 
     @Override
     public void onReceive(Context context, Intent intent) {

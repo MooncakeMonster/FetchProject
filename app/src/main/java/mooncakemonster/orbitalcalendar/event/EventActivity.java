@@ -428,7 +428,15 @@ public class EventActivity extends ActionBarActivity {
                     finish();
                 }
                 break;
+
             case R.id.cancelButton:
+
+                if (getParent() == null) {
+                    setResult(EventActivity.APPOINTMENT_NOT_SET);
+                } else {
+                    getParent().setResult(EventActivity.APPOINTMENT_NOT_SET);
+                }
+
                 finish();
                 break;
 

@@ -76,22 +76,29 @@
             android:theme="@style/AppThemeMenu"
             android:screenOrientation="portrait">
         </activity>
+
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+
+        <receiver android:name="mooncakemonster.orbitalcalendar.alarm.AlarmReceiver">
+            <intent-filter>
+                <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION"/>
+                <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION2"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="mooncakemonster.orbitalcalendar.alarm.AlarmSetter"
+            android:label="AlarmSetter">
+
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+
+        </receiver>
 
     </application>
 
-    <receiver android:name="AlarmReceiver">
-        <intent-filter>
-            <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION"/>
-            <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION2"/>
-        </intent-filter>
-    </receiver>
 
-    <receiver android:name="AlarmSetter" >
-        <intent-filter>
-            <action
-                android:name="android.intent.action.BOOT_COMPLETED" />
-        </intent-filter>
-    </receiver>
 
 </manifest>

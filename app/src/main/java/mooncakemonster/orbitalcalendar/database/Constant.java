@@ -1,11 +1,8 @@
 package mooncakemonster.orbitalcalendar.database;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -16,8 +13,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import mooncakemonster.orbitalcalendar.alarm.AlarmReceiver;
 
 /****************************************************************************************************
  * Abstract Constant class to store all helper method that will most likely be used across the app
@@ -244,20 +239,4 @@ public abstract class Constant
         });
     }
 
-    /****************************************************************************************************
-     * (5) SET ALARM
-     ****************************************************************************************************/
-
-    public void setAlarm(Context context, long millisecond)
-    {
-        Intent intent = new Intent(context, AlarmReceiver.class);
-        intent.setAction("mooncakemonster.orbitalcalendar.alarm.ACTION");
-
-        int uniqueID = (int)((millisecond >> 32) ^ millisecond);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, uniqueID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-
-        AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarm.set(AlarmManager.RTC_WAKEUP, millisecond, pendingIntent);
-    }
 }

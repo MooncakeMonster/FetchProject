@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Constant;
@@ -29,7 +28,6 @@ public class VotingActivity extends ActionBarActivity {
 
     //List to get all the appointments
     private ListView listView;
-    private List<OptionItem> items = new ArrayList<OptionItem>();
     OptionAdapter adapter;
 
     TextView vote_title, vote_location;
@@ -43,6 +41,14 @@ public class VotingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting);
 
+        //(0) Instantiate layout
+        vote_title = (TextView) findViewById(R.id.vote_title);
+        vote_location = (TextView) findViewById(R.id.vote_location);
+        vote_participants = (EditText) findViewById(R.id.vote_participants);
+        add_option = (Button) findViewById(R.id.add_option);
+        // Initialise ArrayAdapter adapter for view
+        listView = (ListView) findViewById(R.id.option_list);
+
         getSupportActionBar().setElevation(0);
 
         // Get intent that started this activity
@@ -50,19 +56,17 @@ public class VotingActivity extends ActionBarActivity {
         final Bundle bundle = intent.getExtras();
         colour = bundle.getInt("event_colour");
 
-        // Initialise ArrayAdapter adapter for view
-        listView = (ListView) findViewById(R.id.option_list);
         // Add default first item to List
-        items.add(new OptionItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
-                bundle.getString("event_start_time"), bundle.getString("event_end_time")));
+        OptionItem firstProposedDate = new OptionItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
+                bundle.getString("event_start_time"), bundle.getString("event_end_time"));
 
-        adapter = new OptionAdapter(this, R.layout.row_vote, items);
+        adapter = new OptionAdapter(this, R.layout.row_vote, new ArrayList<OptionItem>());
         listView.setAdapter(adapter);
 
-        vote_title = (TextView) findViewById(R.id.vote_title);
-        vote_location = (TextView) findViewById(R.id.vote_location);
-        vote_participants = (EditText) findViewById(R.id.vote_participants);
-        add_option = (Button) findViewById(R.id.add_option);
+        adapter.add(firstProposedDate);
+        adapter.notifyDataSetChanged();
+
+
 
         // Get data from bundle and set to relevant texts
         vote_title.setText(bundle.getString("event_title"));

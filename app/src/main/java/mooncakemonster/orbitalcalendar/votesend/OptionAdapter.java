@@ -29,7 +29,8 @@ public class OptionAdapter extends ArrayAdapter<OptionItem> {
     static class Holder {
         Button vote_start_date, vote_end_date;
         Button vote_start_time, vote_end_time;
-        Button remove_option;      // remove from list
+        //Remove from list
+        Button remove_option;
     }
 
     @Override
@@ -37,7 +38,7 @@ public class OptionAdapter extends ArrayAdapter<OptionItem> {
         View row = convertView;
         final Holder holder;
 
-        final OptionItem optionItem =  objects.get(position);
+        final OptionItem optionItem = objects.get(position);
 
         if (row == null) {
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="@dimen/standard_padding_size"
+        android:layout_height="@dimen/standard_padding_size"
+        android:background="@drawable/ballred"/>
+
+    <ImageView
+        android:layout_width="@dimen/standard_padding_size"
+        android:layout_height="@dimen/standard_padding_size"
+        android:background="@drawable/ballyellow"/>
+
+    <ImageView
+        android:layout_width="@dimen/standard_padding_size"
+        android:layout_height="@dimen/standard_padding_size"
+        android:background="@drawable/ballgreen"/>
+
+    <ImageView
+        android:layout_width="@dimen/standard_padding_size"
+        android:layout_height="@dimen/standard_padding_size"
+        android:background="@drawable/ballblue"/>
+
+    <ImageView
+        android:layout_width="@dimen/standard_padding_size"
+        android:layout_height="@dimen/standard_padding_size"
+        android:background="@drawable/ballpurple"/>
+
+</LinearLayout>

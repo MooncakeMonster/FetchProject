@@ -172,6 +172,18 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                 }
             });
 
+            /*
+            //Prevent repeated dates shown on listview
+            if(position > 0) {
+                Appointment appointment1 = objects.get(position - 1);
+
+                if(appointment1 != null && (appointment.getStartProperDate().equals(appointment1.getStartProperDate()))) {
+                    holder.event_day.setText("");
+                    holder.event_month_year.setText("");
+
+                }
+            }
+            */
 
             row.setTag(holder);
         }

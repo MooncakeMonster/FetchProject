@@ -72,5 +72,5 @@
     <string name="register_login">Already registered? Login here.</string>
 
     <!--fragment_listfragment.xml-->
-    <string name="no_appointment_label">No events added yet</string>
+    <string name="no_appointment_label">No event to display</string>
 </resources>

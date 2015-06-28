@@ -13,11 +13,14 @@ import android.widget.ListView;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
+import mooncakemonster.orbitalcalendar.database.Constant;
 
 /*
  * Purpose: EventFragment.java shows the user all the appointment created in the form of a list
@@ -32,6 +35,8 @@ public class EventFragment extends ListFragment {
     private List<Appointment> allAppointment;
     EventAdapter adapter;
     Appointment selected_appointment;
+    Date latestDate;
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -43,6 +48,19 @@ public class EventFragment extends ListFragment {
         //Initialise ArrayAdapter adapter for view
         adapter = new EventAdapter(getActivity(), R.layout.row_event, allAppointment);
         setListAdapter(new SlideExpandableListAdapter(adapter, R.id.event_layout, R.id.expandable));
+
+        //Set first row to be today's date; if no events today, set it on the latest upcoming date
+        latestDate = Calendar.getInstance().getTime();
+        final long todayInMillisecond = Constant.stringToMillisecond(Constant.DATEFORMATTER.format(latestDate),
+                Constant.TIMEFORMATTER.format(latestDate), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
+        int size = allAppointment.size();
+
+        for(int i = 0; i < size; i++) {
+            if(adapter.getItem(i).getStartDate() >= todayInMillisecond) {
+                getListView().setSelectionFromTop(i, 0);
+                break;
+            }
+        }
 
         //TODO: TAKE NOTE - Code had been moved to EventAdapter
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {

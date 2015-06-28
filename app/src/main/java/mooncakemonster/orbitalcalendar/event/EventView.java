@@ -94,8 +94,8 @@ public class EventView extends DialogFragment
         locationLabel.setText(location);
         notesLabel.setText(notes);
 
-        Constant.setButtonDatePicker(getActivity(), beginDateButton, startDate, "From     ");
-        Constant.setButtonDatePicker(getActivity(), endDateButton, endDate,     "To         ");
+        Constant.setButtonDatePicker(getActivity(), beginDateButton, startDate, "");
+        Constant.setButtonDatePicker(getActivity(), endDateButton, endDate,     "");
 
         Constant.setButtonTimePicker(getActivity(), beginTimeButton, startDate, "");
         Constant.setButtonTimePicker(getActivity(), endTimeButton, endDate,     "");

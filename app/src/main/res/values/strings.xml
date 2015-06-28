@@ -20,7 +20,7 @@
         <item>Pictures</item>
         <item>Notifications</item>
         <item>Events</item>
-        <item>Timetable</item>
+        <item>Import Events</item>
         <item>Voting Results</item>
     </string-array>
 
@@ -73,4 +73,8 @@
 
     <!--fragment_listfragment.xml-->
     <string name="no_appointment_label">No event to display</string>
+
+    <!--fragment_import_external.xml-->
+    <string name="facebook_import">Facebook Friends\' Birthday Import</string>
+    <string name="nus_timetable_import">NUS Timetable Import</string>
 </resources>

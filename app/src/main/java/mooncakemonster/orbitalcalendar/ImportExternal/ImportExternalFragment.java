@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.timetable;
+package mooncakemonster.orbitalcalendar.ImportExternal;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,15 +8,15 @@ import android.view.ViewGroup;
 
 import mooncakemonster.orbitalcalendar.R;
 
-public class TimetableFragment extends Fragment {
+public class ImportExternalFragment extends Fragment {
 
-    public TimetableFragment(){}
+    public ImportExternalFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_timetable, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_import_external, container, false);
 
         return rootView;
     }

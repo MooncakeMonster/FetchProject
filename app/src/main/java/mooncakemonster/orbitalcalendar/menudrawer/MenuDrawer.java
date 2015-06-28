@@ -12,12 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import mooncakemonster.orbitalcalendar.ImportExternal.ImportExternalFragment;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.picoftheday.PictureFragment;
-import mooncakemonster.orbitalcalendar.timetable.TimetableFragment;
 import mooncakemonster.orbitalcalendar.votereceive.VotingFragment;
 
 public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
@@ -85,8 +85,8 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
                 title = "Events";
                 break;
             case 4:
-                fragment = new TimetableFragment();
-                title = "Timetable";
+                fragment = new ImportExternalFragment();
+                title = "Import Events";
                 break;
             case 5:
                 fragment = new VotingFragment();

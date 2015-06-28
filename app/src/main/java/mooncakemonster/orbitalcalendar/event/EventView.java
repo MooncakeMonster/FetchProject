@@ -260,6 +260,7 @@ public class EventView extends DialogFragment
         reminderCheckBox.setEnabled(value);
     }
 
+    /*
     @Override
     public void onPause()
     {
@@ -281,5 +282,6 @@ public class EventView extends DialogFragment
             appointmentDatabase.open();
         }
     }
+    */
 
 }

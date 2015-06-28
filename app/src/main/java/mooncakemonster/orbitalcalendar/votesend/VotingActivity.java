@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
 /**
@@ -51,14 +52,27 @@ public class VotingActivity extends ActionBarActivity {
 
         getSupportActionBar().setElevation(0);
 
-        // Get intent that started this activity
+        //(1) Get intent that started this activity
         Intent intent = getIntent();
         final Bundle bundle = intent.getExtras();
-        colour = bundle.getInt("event_colour");
+        Appointment appt = (Appointment) bundle.getSerializable("appointment");
+
+        //(2) Extract data from appointment
+        colour = appt.getColour();
+        //Get Event Title and Location
+        String event = appt.getEvent();
+        String location = appt.getLocation();
+        //Get millisecond
+        long beginMillisec = appt.getStartDate();
+        long endMillisec = appt.getEndDate();
+        //Convert to standard format
+        final String startDate = Constant.getDate(beginMillisec, Constant.DATEFORMATTER);
+        final String startTime = Constant.getDate(beginMillisec, Constant.TIMEFORMATTER);
+        final String endDate = Constant.getDate(endMillisec, Constant.DATEFORMATTER);
+        final String endTime = Constant.getDate(endMillisec, Constant.TIMEFORMATTER);
 
         // Add default first item to List
-        OptionItem firstProposedDate = new OptionItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
-                bundle.getString("event_start_time"), bundle.getString("event_end_time"));
+        OptionItem firstProposedDate = new OptionItem(startDate, endDate, startTime, endTime);
 
         adapter = new OptionAdapter(this, R.layout.row_vote, new ArrayList<OptionItem>());
         listView.setAdapter(adapter);
@@ -66,18 +80,25 @@ public class VotingActivity extends ActionBarActivity {
         adapter.add(firstProposedDate);
         adapter.notifyDataSetChanged();
 
-
-
         // Get data from bundle and set to relevant texts
-        vote_title.setText(bundle.getString("event_title"));
-        vote_location.setText(" @ " + bundle.getString("event_location"));
+        vote_title.setText(event);
+
+        if (location != null)
+        {
+            vote_location.setText(" @ " + location);
+        }
+        else
+        {
+            //Make TextView disappear
+            vote_location.setVisibility(View.GONE);
+        }
+
 
         add_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Button pressed", "Add option");
-                adapter.add(new OptionItem(bundle.getString("event_start_date"), bundle.getString("event_end_date"),
-                        bundle.getString("event_start_time"), bundle.getString("event_end_time")));
+                adapter.add(new OptionItem(startDate, endDate, startTime, endTime));
                 adapter.notifyDataSetChanged();
             }
         });

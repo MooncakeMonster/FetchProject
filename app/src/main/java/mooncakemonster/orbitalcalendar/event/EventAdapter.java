@@ -117,21 +117,11 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getContext(), VotingActivity.class);
+
                     Bundle bundle = new Bundle();
 
-                    // Get start date in proper format
-                    SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
-                    String startDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), standardFormat, new SimpleDateFormat("dd/MM/yyyy, EEE"));
-                    String endDate = Constant.standardYearMonthDate(Constant.getDate(appointment.getEndDate(), "yyyy MM dd"), standardFormat, new SimpleDateFormat("dd/MM/yyyy, EEE"));
-
-                    // Storing date into bundle
-                    bundle.putString("event_title", appointment.getEvent());
-                    bundle.putString("event_location", appointment.getLocation());
-                    bundle.putString("event_start_date", startDate);
-                    bundle.putString("event_end_date", endDate);
-                    bundle.putString("event_start_time", startTime);
-                    bundle.putString("event_end_time", endTime);
-                    bundle.putInt("event_colour", appointment.getColour());
+                    //TODO: Replace with parcable once MVP is out
+                    bundle.putSerializable("appointment", appointment);
 
                     // Store bundle into intent
                     intent.putExtras(bundle);

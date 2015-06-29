@@ -154,6 +154,12 @@ public class VotingActivity extends ActionBarActivity {
                 VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
                 votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(), vote_location.getText().toString(), vote_participants.getText().toString(), start_date, end_date, start_time, end_time);
 
+                //TODO: Add in Cloudant - N.B. NEVER ADD IN PASSWORD IN SOURCE CODE
+                /*
+                String password = System.getProperty("cloudant_password");
+                CloudantClient client = new CloudantClient("account","username", password);
+                */
+
                 Toast.makeText(getBaseContext(), "Details successfully saved", Toast.LENGTH_SHORT).show();
                 finish();
             }

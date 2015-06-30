@@ -9,8 +9,8 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/emailL"
-        android:hint="@string/login_email"
+        android:id="@+id/usernameL"
+        android:hint="@string/register_username"
         android:background="@color/caldroid_white"
         android:inputType="textEmailAddress"
         android:layout_marginBottom="@dimen/standard_margin_size"

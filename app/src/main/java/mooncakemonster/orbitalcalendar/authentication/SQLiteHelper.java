@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.userdatabase;
+package mooncakemonster.orbitalcalendar.authentication;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,10 +20,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     // Column items
     private static final String KEY_ID = "id";
-    private static final String KEY_UID = "uid";
-    private static final String KEY_NAME = "name";
     private static final String KEY_EMAIL = "email";
-    private static final String KEY_CREATED_AT = "created_at";
+    private static final String KEY_USERNAME = "username";
 
     public SQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,7 +30,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_EMAIL + " TEXT UNIQUE," + KEY_UID + " TEXT," + KEY_CREATED_AT + " TEXT" + ")";
+        String CREATE_TABLE = "CREATE TABLE " + TABLE_LOGIN + "("
+                                              + KEY_ID + " INTEGER PRIMARY KEY,"
+                                              + KEY_EMAIL + " TEXT UNIQUE,"
+                                              + KEY_USERNAME + " TEXT UNIQUE " + ")";
 
         try {
             db.execSQL(CREATE_TABLE);
@@ -54,14 +55,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     // This method stores user details in database.
-    public void addUser(String email, String name, String uid, String created_at) {
+    public void addUser(String email, String name) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, name); // Name
         values.put(KEY_EMAIL, email); // Email
-        values.put(KEY_UID, uid); // Uid
-        values.put(KEY_CREATED_AT, created_at); // Created At
+        values.put(KEY_USERNAME, name); // Name
 
         // Inserting Row
         long id = db.insert(TABLE_LOGIN, null, values);
@@ -80,10 +79,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
-            user.put("name", cursor.getString(1));
-            user.put("email", cursor.getString(2));
-            user.put("uid", cursor.getString(3));
-            user.put("created_at", cursor.getString(4));
+            user.put("email", cursor.getString(1));
+            user.put("username", cursor.getString(2));
         }
         cursor.close();
         db.close();

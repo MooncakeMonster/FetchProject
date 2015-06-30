@@ -14,6 +14,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantQuery;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantStorage;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**
@@ -81,15 +83,23 @@ public class RegisterActivity extends Activity {
                 String inputPassword = password.getText().toString().trim();
                 String inputConfirmPassword = confirm_password.getText().toString().trim();
 
-                // TODO: Prevent users from creating account with email address already in database
-
                 // Prevent users from creating account with invalid email address
                 if(!isValidEmailAddress(inputEmail)) {
                     alertUser("Invalid email address!", "Please try again.");
                     resetDetails(1);
                 }
 
+                // TODO: Prevent users from creating account with email address already in database
+                else if(new CloudantQuery().findExistingEmail(inputEmail)) {
+                    alertUser("Email already exist!", "Please try again.");
+                    resetDetails(1);
+                }
+
                 // TODO: Prevent users from creating account with username already in database
+                else if(new CloudantQuery().findExistingUsername(inputUsername)) {
+                    alertUser("Username already exist!", "Please try again.");
+                    resetDetails(2);
+                }
 
                 // Prevent users from creating account with username < 5 characters
                 else if(inputUsername.length() < 5) {
@@ -125,6 +135,8 @@ public class RegisterActivity extends Activity {
         //TODO: Save user details into Cloudant; if successful, take user to main activity
         if(setDatabase()) {
             // TODO: (1) Store user details in Cloudant
+            CloudantStorage cloudantStorage = new CloudantStorage();
+            cloudantStorage.storeUserDetails(email_address, username, password);
             // Store user in SQLite once successfully stored in Cloudant
             sqLiteHelper.addUser(email_address, username);
             // Launch Login Activity

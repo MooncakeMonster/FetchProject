@@ -12,10 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import mooncakemonster.orbitalcalendar.ImportExternal.ImportExternalFragment;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
-import mooncakemonster.orbitalcalendar.importexternal.ImportExternalFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.picoftheday.PictureFragment;
 import mooncakemonster.orbitalcalendar.votereceive.VotingFragment;

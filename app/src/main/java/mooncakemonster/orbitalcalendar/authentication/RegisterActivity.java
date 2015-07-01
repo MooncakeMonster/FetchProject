@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.cloudant.CloudantQuery;
-import mooncakemonster.orbitalcalendar.cloudant.CloudantStorage;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**
@@ -39,6 +39,9 @@ public class RegisterActivity extends Activity {
     private ProgressDialog progressDialog;
     private SQLiteHelper sqLiteHelper;
 
+    // Cloudant connection
+    private CloudantConnect cloudantConnect;
+
     // Check if user is logged in
     private LoginManager loginManager;
 
@@ -58,9 +61,13 @@ public class RegisterActivity extends Activity {
         progressDialog.setCancelable(false);
         sqLiteHelper = new SQLiteHelper(getApplicationContext());
 
+        // Load Cloudant settings
+        if (cloudantConnect == null)
+            this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
+
         // (1) Check if user is logged in; if yes, take user to main activity
         loginManager = new LoginManager(getApplicationContext());
-        if(loginManager.isLoggedIn()) {
+        if (loginManager.isLoggedIn()) {
             startActivity(new Intent(RegisterActivity.this, MenuDrawer.class));
             finish();
         }
@@ -84,37 +91,37 @@ public class RegisterActivity extends Activity {
                 String inputConfirmPassword = confirm_password.getText().toString().trim();
 
                 // Prevent users from creating account with invalid email address
-                if(!isValidEmailAddress(inputEmail)) {
+                if (!isValidEmailAddress(inputEmail)) {
                     alertUser("Invalid email address!", "Please try again.");
                     resetDetails(1);
                 }
 
                 // TODO: Prevent users from creating account with email address already in database
-                else if(new CloudantQuery().findExistingEmail(inputEmail)) {
-                    alertUser("Email already exist!", "Please try again.");
+                else if(cloudantConnect.checkExistingEmail(inputEmail)) {
+                    alertUser("Email address exist!", "Please input other email address.");
                     resetDetails(1);
                 }
 
                 // TODO: Prevent users from creating account with username already in database
-                else if(new CloudantQuery().findExistingUsername(inputUsername)) {
-                    alertUser("Username already exist!", "Please try again.");
+                else if(cloudantConnect.checkExistingUsername(inputUsername)) {
+                    alertUser("Username exist!", "Please input other username.");
                     resetDetails(2);
                 }
 
                 // Prevent users from creating account with username < 5 characters
-                else if(inputUsername.length() < 5) {
+                else if (inputUsername.length() < 5) {
                     alertUser("Invalid username!", "Username must contain at least 5 characters.");
                     resetDetails(2);
                 }
 
                 // Prevent users from creating account with less than 8 characters, no upper and lowercase letters and no digits.
-                else if(!isValidPassword(inputPassword)) {
+                else if (!isValidPassword(inputPassword)) {
                     alertUser("Invalid password!", "Password must contain at least 8 characters, including:\n\n-Uppercase letters\n-Lowercase letters\n-At least 1 digit");
                     resetDetails(0);
                 }
 
                 // Prevent users from logging in if password != confirm password
-                else if(!(inputPassword.equals(inputConfirmPassword))) {
+                else if (!(inputPassword.equals(inputConfirmPassword))) {
                     alertUser("Passwords do not match!", "Please try again.");
                     resetDetails(0);
                 }
@@ -127,16 +134,17 @@ public class RegisterActivity extends Activity {
         });
     }
 
+    /****************************************************************************************************
+     * Helper methods to register user
+     ****************************************************************************************************/
+
     // This method registers new users and store user data in Cloudant
     private void registerUser(String email_address, String username, String password) {
         progressDialog.setMessage("Registering...");
         showDialog();
 
-        //TODO: Save user details into Cloudant; if successful, take user to main activity
-        if(setDatabase()) {
-            // TODO: (1) Store user details in Cloudant
-            CloudantStorage cloudantStorage = new CloudantStorage();
-            cloudantStorage.storeUserDetails(email_address, username, password);
+        //Save user details into Cloudant; if successful, take user to login activity
+        if (createNewUser(email_address, username, password)) {
             // Store user in SQLite once successfully stored in Cloudant
             sqLiteHelper.addUser(email_address, username);
             // Launch Login Activity
@@ -145,36 +153,31 @@ public class RegisterActivity extends Activity {
         }
     }
 
-    // TODO: This method sets database from Cloudant
-    private boolean setDatabase() {
+    /****************************************************************************************************
+     * Helper methods for Cloudant database
+     ****************************************************************************************************/
+
+    // This method creates new user document into Cloudant
+    private boolean createNewUser(String email_address, String username, String password) {
+        User user = new User(email_address, username, password);
+        try {
+            cloudantConnect.createNewUserDocument(user);
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to create new user document");
+        }
+
         return false;
     }
 
-    // This method shows progress dialog when not showing
-    private void showDialog() {
-        if (!progressDialog.isShowing())
-            progressDialog.show();
-    }
-
-    // This method dismiss progress dialog when required (dialog must be showing)
-    private void hideDialog() {
-        if (progressDialog.isShowing())
-            progressDialog.dismiss();
-    }
-
-    // This method calls alert dialog to inform users a message.
-    private void alertUser(String title, String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
-        dialogBuilder.setTitle(title);
-        dialogBuilder.setMessage(message);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
-    }
+    /****************************************************************************************************
+     * Helper methods to check validity of user details
+     ****************************************************************************************************/
 
     // This method resets the details keyed in by user.
     private void resetDetails(int num) {
-        if(num == 1) email_address.setText("");
-        if(num == 1 || num == 2) username.setText("");
+        if (num == 1) email_address.setText("");
+        if (num == 1 || num == 2) username.setText("");
         password.setText("");
         confirm_password.setText("");
     }
@@ -209,5 +212,30 @@ public class RegisterActivity extends Activity {
     // This method ensures that password contains at least 1 lowercase letter.
     private boolean hasLowerCase(final String password) {
         return LOWER_CASE.matcher(password).find();
+    }
+
+    /****************************************************************************************************
+     * Other helper methods
+     ****************************************************************************************************/
+
+    // This method shows progress dialog when not showing
+    private void showDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    // This method dismiss progress dialog when required (dialog must be showing)
+    private void hideDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.dismiss();
+    }
+
+    // This method calls alert dialog to inform users a message.
+    private void alertUser(String title, String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RegisterActivity.this);
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setMessage(message);
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.show();
     }
 }

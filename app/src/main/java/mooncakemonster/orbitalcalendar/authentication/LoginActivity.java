@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**
@@ -27,6 +28,7 @@ public class LoginActivity extends Activity {
 
     private ProgressDialog progressDialog;
     private LoginManager loginManager;
+    private CloudantConnect cloudantConnect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,10 @@ public class LoginActivity extends Activity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         loginManager = new LoginManager(getApplicationContext());
+
+        // Load Cloudant settings
+        if (cloudantConnect == null)
+            this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
 
         // Check if user is already logged in
         if(loginManager.isLoggedIn()) {
@@ -80,7 +86,7 @@ public class LoginActivity extends Activity {
         showDialog();
 
         // TODO: Check Cloudant database for existing users
-        if(verifyUser()) {
+        if(verifyUser(username, password)) {
             // If the user successfully logged in, save the details in SQLite
             hideDialog();
 
@@ -96,8 +102,8 @@ public class LoginActivity extends Activity {
     }
 
     // TODO: This method checks through Cloudant for existing user
-    private boolean verifyUser() {
-        return false;
+    private boolean verifyUser(String username, String password) {
+        return cloudantConnect.authenticateUser(username, password);
     }
 
     // This method calls alert dialog to inform users a message.

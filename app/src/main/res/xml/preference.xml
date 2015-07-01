@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <EditTextPreference
+        android:key="pref_key_username"
+        android:summary="@string/cloudant_replication_database_name"
+        android:title="@string/cloudant_username"
+        android:defaultValue="@string/default_user" />
+    <EditTextPreference
+        android:key="pref_key_dbname"
+        android:summary="@string/cloudant_replication_database_name"
+        android:title="@string/cloudant_database_name"
+        android:defaultValue="@string/default_dbname"  />
+    <EditTextPreference
+        android:key="pref_key_api_key"
+        android:summary="@string/cloudant_replicate_api_key"
+        android:title="@string/cloudant_api_key"
+        android:defaultValue="@string/default_api_key" />
+    <EditTextPreference
+        android:key="pref_key_api_password"
+        android:summary="@string/cloudant_replicate_api_password"
+        android:title="@string/cloudant_api_password"
+        android:defaultValue="@string/default_api_password" />
+
+</PreferenceScreen>

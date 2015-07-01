@@ -1,16 +1,10 @@
 package mooncakemonster.orbitalcalendar.cloudant;
 
-import android.util.Log;
-
-import com.cloudant.client.api.Database;
-import com.cloudant.client.api.model.Response;
-
-import mooncakemonster.orbitalcalendar.authentication.User;
-
 /**
  * This class updates user details into database when required.
  */
 public class CloudantUpdate {
+    /*
     Database database;
 
     public CloudantUpdate() {
@@ -36,4 +30,5 @@ public class CloudantUpdate {
         Response response = database.update(user);
         Log.d("Updated username", "id: " + response.getId() + ", rev: " + response.getRev());
     }
+    */
 }

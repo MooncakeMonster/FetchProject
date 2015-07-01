@@ -1,16 +1,10 @@
 package mooncakemonster.orbitalcalendar.cloudant;
 
-import android.util.Log;
-
-import com.cloudant.client.api.Database;
-import com.cloudant.client.api.model.Response;
-
-import mooncakemonster.orbitalcalendar.authentication.User;
-
 /**
  * This class stores user details in Cloudant database.
  */
 public class CloudantStorage {
+    /*
     Database database;
 
     public CloudantStorage() {
@@ -31,4 +25,5 @@ public class CloudantStorage {
         if(response != null) return true;
         return false;
     }
+    */
 }

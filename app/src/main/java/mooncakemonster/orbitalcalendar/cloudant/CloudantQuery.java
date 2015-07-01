@@ -1,15 +1,10 @@
 package mooncakemonster.orbitalcalendar.cloudant;
 
-import android.util.Log;
-
-import com.cloudant.client.api.Database;
-
-import mooncakemonster.orbitalcalendar.authentication.User;
-
 /**
  * This class searches for requested information (email address, username).
  */
 public class CloudantQuery {
+    /*
     Database database;
 
     public CloudantQuery() {
@@ -46,4 +41,5 @@ public class CloudantQuery {
         //if(user != null) return true;
         return false;
     }
+    */
 }

@@ -2,10 +2,14 @@ package mooncakemonster.orbitalcalendar.ImportExternal;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.facebook.AccessToken;
 
 import mooncakemonster.orbitalcalendar.R;
 
@@ -27,6 +31,21 @@ public class ImportExternalFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Insert code for facebook
+
+                FragmentManager fragmentManager = getFragmentManager();
+
+                //Check if logged-in
+                if(AccessToken.getCurrentAccessToken() == null)
+                {
+                    ImportFacebookLogin fragment= new ImportFacebookLogin();
+
+
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.replace(R.id.container_body, fragment);
+                    fragmentTransaction.commit();
+                }
+
+
             }
         });
 

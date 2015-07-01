@@ -1,14 +1,10 @@
 package mooncakemonster.orbitalcalendar.cloudant;
 
-import android.util.Log;
-
-import com.cloudant.client.api.CloudantClient;
-import com.cloudant.client.api.Database;
-
 /**
  * This class establish connection with cloudant.
  */
 public class CloudantConnect {
+    /*
 
     public CloudantClient connect() {
         String password = System.getProperty("cloudant_password");
@@ -21,4 +17,5 @@ public class CloudantConnect {
         Log.d("Database exist", "" + database.getDBUri());
         return database;
     }
+    */
 }

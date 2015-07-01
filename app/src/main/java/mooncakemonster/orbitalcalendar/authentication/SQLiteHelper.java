@@ -33,7 +33,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_LOGIN + "("
                                               + KEY_ID + " INTEGER PRIMARY KEY,"
                                               + KEY_EMAIL + " TEXT UNIQUE,"
-                                              + KEY_USERNAME + " TEXT UNIQUE " + ")";
+                                              + KEY_USERNAME + " TEXT UNIQUE " + ");";
 
         try {
             db.execSQL(CREATE_TABLE);

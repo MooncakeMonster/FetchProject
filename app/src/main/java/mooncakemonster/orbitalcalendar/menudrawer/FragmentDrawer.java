@@ -23,7 +23,7 @@ import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.accountsettings.SettingActivity;
-import mooncakemonster.orbitalcalendar.userdatabase.SQLiteHelper;
+import mooncakemonster.orbitalcalendar.authentication.SQLiteHelper;
 
 public class FragmentDrawer extends Fragment {
 

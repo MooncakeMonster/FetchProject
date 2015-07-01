@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".userdatabase.ServerController"
+        android:name=".key.KeyActivity"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -46,12 +46,12 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".userdatabase.LoginUser"
+            android:name=".authentication.LoginActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_login" >
         </activity>
         <activity
-            android:name=".userdatabase.RegisterUser"
+            android:name=".authentication.RegisterActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_register" >
         </activity>

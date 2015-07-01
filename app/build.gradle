@@ -44,3 +44,10 @@ dependencies {
     compile 'com.github.flavienlaurent.discrollview:library:0.0.2@aar'
     compile files('libs/volley.jar')
 }
+
+android {
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}

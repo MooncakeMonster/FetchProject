@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +25,7 @@ import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 /**
  * This class registers user and stores user details in Cloudant.
  */
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final Pattern LOWER_CASE = Pattern.compile("\\p{Lu}");
     private static final Pattern UPPER_CASE = Pattern.compile("\\p{Ll}");
@@ -62,8 +66,12 @@ public class RegisterActivity extends Activity {
         sqLiteHelper = new SQLiteHelper(getApplicationContext());
 
         // Load Cloudant settings
+        PreferenceManager.setDefaultValues(this, R.xml.preference, false);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
+        this.cloudantConnect.setReplicationListener(this);
 
         // (1) Check if user is logged in; if yes, take user to main activity
         loginManager = new LoginManager(getApplicationContext());
@@ -170,6 +178,32 @@ public class RegisterActivity extends Activity {
         return false;
     }
 
+    // This method reloads replication settings
+    private void reloadReplicationSettings() {
+        try {
+            this.cloudantConnect.reloadReplicationSettings();
+        } catch (URISyntaxException e) {
+            Log.e(TAG, "Unable to construct remote URI from configuration", e);
+        }
+    }
+
+    // This method stops all replication
+    public void stopReplication() {
+        cloudantConnect.stopAllReplication();
+    }
+
+    // This method completes replication
+    public void replicationComplete() {
+        Toast.makeText(getApplicationContext(), "Replication completed", Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
+    }
+
+    // This method is called if there is an error in replication
+    public void replicationError() {
+        Toast.makeText(getApplicationContext(), "Replication error", Toast.LENGTH_SHORT).show();
+        progressDialog.dismiss();
+    }
+
     /****************************************************************************************************
      * Helper methods to check validity of user details
      ****************************************************************************************************/
@@ -214,6 +248,12 @@ public class RegisterActivity extends Activity {
         return LOWER_CASE.matcher(password).find();
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d(TAG, "onSharedPreferenceChanged()");
+        reloadReplicationSettings();
+    }
+
     /****************************************************************************************************
      * Other helper methods
      ****************************************************************************************************/
@@ -237,5 +277,11 @@ public class RegisterActivity extends Activity {
         dialogBuilder.setMessage(message);
         dialogBuilder.setPositiveButton("Ok", null);
         dialogBuilder.show();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideDialog();
     }
 }

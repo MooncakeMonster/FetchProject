@@ -12,9 +12,9 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.userdatabase.LoginUser;
-import mooncakemonster.orbitalcalendar.userdatabase.SQLiteHelper;
-import mooncakemonster.orbitalcalendar.userdatabase.SessionManager;
+import mooncakemonster.orbitalcalendar.authentication.LoginActivity;
+import mooncakemonster.orbitalcalendar.authentication.LoginManager;
+import mooncakemonster.orbitalcalendar.authentication.SQLiteHelper;
 
 public class SettingActivity extends ActionBarActivity {
 
@@ -22,7 +22,7 @@ public class SettingActivity extends ActionBarActivity {
     private Button facebook, logout;
 
     private SQLiteHelper db;
-    private SessionManager session;
+    private LoginManager session;
 
     public SettingActivity() {
     }
@@ -40,7 +40,7 @@ public class SettingActivity extends ActionBarActivity {
         logout = (Button) findViewById(R.id.logout);
 
         db = new SQLiteHelper(getApplicationContext());
-        session = new SessionManager(getApplicationContext());
+        session = new LoginManager(getApplicationContext());
 
         // Fetch user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
@@ -68,7 +68,7 @@ public class SettingActivity extends ActionBarActivity {
         // Remove user from sqlite in phone
         db.deleteUsers();
 
-        startActivity(new Intent(getApplicationContext(), LoginUser.class));
+        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         finish();
     }
 

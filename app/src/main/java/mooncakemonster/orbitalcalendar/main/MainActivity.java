@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
+import mooncakemonster.orbitalcalendar.authentication.LoginActivity;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -35,11 +35,9 @@ public class MainActivity extends ActionBarActivity {
         ImageView icon = (ImageView) findViewById(R.id.icon),
                 slogan = (ImageView) findViewById(R.id.slogan),
                 tap = (ImageView) findViewById(R.id.tap);
-        //LoginButton loginButton = (LoginButton) findViewById(R.id.login_button);
 
         icon.startAnimation(animationFadeIn);
         slogan.startAnimation(animationFadeIn);
-        //loginButton.startAnimation(animationFadeIn);
         tap.startAnimation(animationAlpha);
     }
 
@@ -51,8 +49,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
 
-                //TODO: When login is successful, redirect to MenuActivity
-                Intent intent = new Intent(MainActivity.this, MenuDrawer.class);
+                //TODO: When login is successful, redirect to LoginActivity
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

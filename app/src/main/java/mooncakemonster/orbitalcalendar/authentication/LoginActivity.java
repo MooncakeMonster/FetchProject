@@ -86,10 +86,7 @@ public class LoginActivity extends Activity {
         showDialog();
 
         // TODO: Check Cloudant database for existing users
-        if(verifyUser(username, password)) {
-            // If the user successfully logged in, save the details in SQLite
-            hideDialog();
-
+        if(cloudantConnect.authenticateUser(username, password)) {
             // User already logged in, next time do not have to login again when using app
             loginManager.setLogin(true);
 
@@ -98,12 +95,8 @@ public class LoginActivity extends Activity {
             finish();
         } else {
             alertUser("Error logging in!", "Please check again.");
+            hideDialog();
         }
-    }
-
-    // TODO: This method checks through Cloudant for existing user
-    private boolean verifyUser(String username, String password) {
-        return cloudantConnect.authenticateUser(username, password);
     }
 
     // This method calls alert dialog to inform users a message.
@@ -125,5 +118,11 @@ public class LoginActivity extends Activity {
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hideDialog();
     }
 }

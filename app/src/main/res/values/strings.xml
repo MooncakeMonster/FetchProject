@@ -75,8 +75,8 @@
     <string name="no_appointment_label">No event to display</string>
 
     <!-- fragment_import_external.xml-->
-    <string name="facebook_import">Facebook Friends\' Birthday Import</string>
-    <string name="nus_timetable_import">NUS Timetable Import</string>
+    <string name="facebook_import">Import Facebook Event</string>
+    <string name="nus_timetable_import">Import NUS Timetable</string>
 
     <!-- cloudant details -->
 

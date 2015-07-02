@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -39,10 +38,10 @@ public class ImportFacebookLogin extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_importfacebooklogin, container, false);
 
         loginButton = (LoginButton) view.findViewById(R.id.facebook_login_button);
-        loginButton.setReadPermissions("user_friends");
+        //Set permission at users_events
+        //loginButton.setReadPermissions("user_events");
         // If using in a fragment
         loginButton.setFragment(this);
-        // Other app specific specialization
 
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -69,8 +68,6 @@ public class ImportFacebookLogin extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-
-        AccessToken.getCurrentAccessToken();
     }
 
 }

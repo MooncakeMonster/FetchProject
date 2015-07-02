@@ -80,19 +80,17 @@
 
     <!-- cloudant details -->
 
-    <string name="default_user">cloudant_account_name</string>
-    <string name="default_dbname">fetch_authentication</string>
-    <string name="default_api_key">api_key</string>
-    <string name="default_api_password">api_password</string>
+    <string name="pref_summary_username">You cloudant user name, and it is also used to determine your cloudant server url.</string>
+    <string name="pref_title_username">Cloudant user name</string>
 
-    <string name="cloudant_api_key">API Key</string>
-    <string name="cloudant_api_password">API Password</string>
-    <string name="cloudant_username">Cloudant user name</string>
-    <string name="cloudant_database_name">Cloudant db name</string>
+    <string name="pref_summary_dbname">You cloudant db name, and this is the db used in replication.</string>
+    <string name="pref_title_dbname">Cloudant db name</string>
 
-    <string name="cloudant_replicate_api_key">The api key used to replicate to/from your cloudant account.</string>
-    <string name="cloudant_replicate_api_password">The api password used to replicate to/from your cloudant account.</string>
-    <string name="cloudant_url_username">You cloudant user name, and it is also used to determine your cloudant server url.</string>
-    <string name="cloudant_replication_database_name">You cloudant db name, and this is the db used in replication.</string>
+    <string name="pref_summary_api_key">The api key used to replicate to/from your cloudant account.</string>
+    <string name="pref_title_api_key">API Key</string>
+
+    <string name="pref_summary_api_password">The api password used to replicate to/from your cloudant account.</string>
+    <string name="pref_title_api_password">API Password</string>
+
 
 </resources>

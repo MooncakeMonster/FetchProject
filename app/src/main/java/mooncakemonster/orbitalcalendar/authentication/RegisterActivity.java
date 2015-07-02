@@ -33,6 +33,11 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
+    public static final String CLOUDANT_USER = "pref_key_username";
+    public static final String CLOUDANT_DB = "pref_key_dbname";
+    public static final String CLOUDANT_API_KEY = "pref_key_api_key";
+    public static final String CLOUDANT_API_SECRET = "pref_key_api_password";
+
     Button register;
     TextView link_to_login;
     EditText email_address;
@@ -41,7 +46,6 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
     EditText confirm_password;
 
     private ProgressDialog progressDialog;
-    private SQLiteHelper sqLiteHelper;
 
     // Cloudant connection
     private CloudantConnect cloudantConnect;
@@ -63,7 +67,6 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
-        sqLiteHelper = new SQLiteHelper(getApplicationContext());
 
         // Load Cloudant settings
         PreferenceManager.setDefaultValues(this, R.xml.preference, false);
@@ -153,8 +156,8 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
 
         //Save user details into Cloudant; if successful, take user to login activity
         if (createNewUser(email_address, username, password)) {
-            // Store user in SQLite once successfully stored in Cloudant
-            sqLiteHelper.addUser(email_address, username);
+            // Push new user details into Cloudant
+            cloudantConnect.startPushReplication();
             // Launch Login Activity
             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             finish();
@@ -169,7 +172,8 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
     private boolean createNewUser(String email_address, String username, String password) {
         User user = new User(email_address, username, password);
         try {
-            cloudantConnect.createNewUserDocument(user);
+            User final_user = cloudantConnect.createNewUserDocument(user);
+            Log.d(TAG, "Saved new user " + final_user.getEmail_address() + " successfully");
             return true;
         } catch (Exception e) {
             Log.e(TAG, "Unable to create new user document");

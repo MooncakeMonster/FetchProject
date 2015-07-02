@@ -64,14 +64,11 @@ public class User {
 
         // Only allow update of user details if both user document
         // and this class refer to the same user.
-        if(user_revised.containsKey("email_address") && user_revised.get("email_address").equals(user.email_address)) {
-            user.setEmail_address((String) user_revised.get("email_address"));
-            user.setUsername((String) user_revised.get("username"));
-            user.setPassword((String) user_revised.get("encrypted_password"));
-            return user;
-        }
-
-        return null;
+        //if(user_revised.containsKey("email_address") && user_revised.get("email_address").equals(user.email_address)) {
+        user.setEmail_address((String) user_revised.get("email_address"));
+        user.setUsername((String) user_revised.get("username"));
+        user.setPassword((String) user_revised.get("encrypted_password"));
+        return user;
     }
 
     // This method retrieves user details upon registration.

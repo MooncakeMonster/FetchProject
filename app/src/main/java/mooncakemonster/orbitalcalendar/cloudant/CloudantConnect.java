@@ -14,9 +14,12 @@ import com.cloudant.sync.datastore.DatastoreManager;
 import com.cloudant.sync.datastore.DatastoreNotCreatedException;
 import com.cloudant.sync.datastore.DocumentBodyFactory;
 import com.cloudant.sync.datastore.DocumentException;
+import com.cloudant.sync.datastore.DocumentRevision;
 import com.cloudant.sync.datastore.MutableDocumentRevision;
 import com.cloudant.sync.notifications.ReplicationCompleted;
 import com.cloudant.sync.notifications.ReplicationErrored;
+import com.cloudant.sync.query.IndexManager;
+import com.cloudant.sync.query.QueryResult;
 import com.cloudant.sync.replication.PullReplication;
 import com.cloudant.sync.replication.PushReplication;
 import com.cloudant.sync.replication.Replicator;
@@ -25,7 +28,10 @@ import com.cloudant.sync.replication.ReplicatorFactory;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import mooncakemonster.orbitalcalendar.authentication.RegisterActivity;
 import mooncakemonster.orbitalcalendar.authentication.User;
@@ -45,6 +51,7 @@ public class CloudantConnect {
     static final String CLOUDANT_API_SECRET = "pref_key_api_password";
 
     private Datastore datastore;
+    private IndexManager indexManager;
 
     private Replicator push_replicator;
     private Replicator pull_replicator;
@@ -104,6 +111,28 @@ public class CloudantConnect {
 
 
     /**
+     * Save user details in user's phone
+     * @param username, password
+     * @return user found in Cloudant
+     */
+    public User saveUserDetails(String username, String password) {
+        int size_doc = this.datastore.getDocumentCount();
+
+        List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
+
+        // Check through all email address in user datastore
+        for(BasicDocumentRevision revision : all_doc) {
+            User user = User.fromRevision(revision);
+            if(user != null && user.getUsername().equals(username) && user.getPassword().equals(password)) {
+                return user;
+            }
+        }
+        // Reach here if no existing emails found
+        return null;
+    }
+
+
+    /**
      * Updates document when user update their details
      * @param user to retrieve the user details to be updated
      * @return document of new user details updated
@@ -127,17 +156,34 @@ public class CloudantConnect {
      * @return true if there is existing username, else false
      */
     public boolean authenticateUser(String username, String password) {
-        int size_doc = this.datastore.getDocumentCount();
+        // Create index
+        indexManager = new IndexManager(datastore);
+        if(indexManager.isTextSearchEnabled()) {
+            String user_details = indexManager.ensureIndexed(Arrays.<Object> asList("encrypted_password",
+                            "username", "email_address"),
+                    "user_details", "json");
 
-        List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
-
-        // Check through all username in user datastore
-        for(BasicDocumentRevision revision : all_doc) {
-            User user = User.fromRevision(revision);
-            if(user != null && user.getUsername().equals(username) && user.getPassword().equals(password)) {
-                return true;
-            }
+            if(user_details == null) Log.e(TAG, "Unable to create user index");
+            else Log.d(TAG, "Successfully created index" + user_details);
         }
+
+        Map<String, Object> query = new HashMap<>();
+        Map<String, Object> search_username = new HashMap<>();
+        Map<String, Object> search_password = new HashMap<>();
+
+        search_username.put("username", username);
+        search_password.put("encrypted_password", password);
+
+        query.put("$and", Arrays.<Object>asList(search_username, search_password));
+
+        QueryResult result = indexManager.find(query);
+
+        try {
+            for (DocumentRevision revision : result) return true;
+        } catch (Exception e) {
+            Log.e(TAG, "No matching queries found");
+        }
+
         // Reach here if no existing username found
         return false;
     }
@@ -300,10 +346,10 @@ public class CloudantConnect {
         // TODO: Find ways to retrieve cloudant info securely.
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.context);
-        String cloudant_username = sharedPreferences.getString(CLOUDANT_USER, "DEFAULT");
-        String cloudant_dbName = sharedPreferences.getString(CLOUDANT_DB, "DEFAULT");
-        String cloudant_api_key = sharedPreferences.getString(CLOUDANT_API_KEY, "DEFAULT");
-        String cloudant_api_password = sharedPreferences.getString(CLOUDANT_API_SECRET, "DEFAULT");
+        String cloudant_username = sharedPreferences.getString(CLOUDANT_USER, "");
+        String cloudant_dbName = sharedPreferences.getString(CLOUDANT_DB, "");
+        String cloudant_api_key = sharedPreferences.getString(CLOUDANT_API_KEY, "");
+        String cloudant_api_password = sharedPreferences.getString(CLOUDANT_API_SECRET, "");
         String host = cloudant_username + ".cloudant.com";
 
         return new URI("https", cloudant_api_key + ":" + cloudant_api_password, host, 443, "/" + cloudant_dbName, null, null);

@@ -29,6 +29,7 @@ public class LoginActivity extends Activity {
     private ProgressDialog progressDialog;
     private LoginManager loginManager;
     private CloudantConnect cloudantConnect;
+    private SQLiteHelper sqLiteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +44,7 @@ public class LoginActivity extends Activity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         loginManager = new LoginManager(getApplicationContext());
+        sqLiteHelper = new SQLiteHelper(getApplicationContext());
 
         // Load Cloudant settings
         if (cloudantConnect == null)
@@ -85,10 +87,17 @@ public class LoginActivity extends Activity {
         progressDialog.setMessage("Logging in...");
         showDialog();
 
+        // Pull all documents from Cloudant
+        cloudantConnect.startPullReplication();
+
         // TODO: Check Cloudant database for existing users
         if(cloudantConnect.authenticateUser(username, password)) {
             // User already logged in, next time do not have to login again when using app
             loginManager.setLogin(true);
+
+            // Store user in SQLite once successfully stored in Cloudant
+            User user = cloudantConnect.saveUserDetails(username, password);
+            //sqLiteHelper.addUser(user.getEmail_address(), username);
 
             // Take user to next activity
             startActivity(new Intent(LoginActivity.this, MenuDrawer.class));

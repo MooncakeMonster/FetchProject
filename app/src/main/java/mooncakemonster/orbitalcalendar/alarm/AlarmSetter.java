@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 /*
  * Receiver for resetting alarms whenever phone has been shut down.
@@ -24,17 +25,21 @@ public class AlarmSetter extends BroadcastReceiver {
     /****************************************************************************************************
      * SET ALARM - After boot up of Android Phone
      ****************************************************************************************************/
-    public static void setAlarm(Context context, long millisecond)
+    public static void setAlarm(Context context, String event, String location, long millisecond)
     {
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.setAction(AlarmReceiver.SOMEACTION);
+        intent.putExtra("appointmentName", event);
+        intent.putExtra("locationLabel", location);
 
         int uniqueID = (int)((millisecond >> 32) ^ millisecond);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, uniqueID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, uniqueID, intent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.set(AlarmManager.RTC_WAKEUP, millisecond, pendingIntent);
+
+        Log.i("AlarmSetter", "Alarm successfully set!");
     }
 
     public static void cancelAlarm(Context context, long millisecond)
@@ -43,7 +48,7 @@ public class AlarmSetter extends BroadcastReceiver {
         intent.setAction(AlarmReceiver.SOMEACTION);
 
         int uniqueID = (int)((millisecond >> 32) ^ millisecond);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, uniqueID, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, uniqueID, intent, PendingIntent.FLAG_ONE_SHOT);
 
         AlarmManager alarm = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarm.cancel(pendingIntent);

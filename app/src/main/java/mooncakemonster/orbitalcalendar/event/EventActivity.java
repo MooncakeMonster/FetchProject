@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -20,6 +19,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.alarm.AlarmSetter;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
@@ -167,9 +167,12 @@ public class EventActivity extends ActionBarActivity {
                 build2.setSingleChoiceItems(remindWheel, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (!remindNum.getText().equals("1") && which == 0) remindBox.setText("mins before event");
-                        else if (!remindNum.getText().equals("1") && which == 1) remindBox.setText("hours before event");
-                        else if (!remindNum.getText().equals("1") && which == 2) remindBox.setText("days before event");
+                        if (!remindNum.getText().equals("1") && which == 0)
+                            remindBox.setText("mins before event");
+                        else if (!remindNum.getText().equals("1") && which == 1)
+                            remindBox.setText("hours before event");
+                        else if (!remindNum.getText().equals("1") && which == 2)
+                            remindBox.setText("days before event");
                         else remindBox.setText(remindWheel[which]);
                     }
                 }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -210,18 +213,34 @@ public class EventActivity extends ActionBarActivity {
                 if (everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
                     switch (frequencyOfAppointment) {
-                        case "days event":      everyBox.setText("day event");      break;
-                        case "weeks event":     everyBox.setText("week event");     break;
-                        case "months event":    everyBox.setText("month event");    break;
-                        case "years event":     everyBox.setText("year event");     break;
+                        case "days event":
+                            everyBox.setText("day event");
+                            break;
+                        case "weeks event":
+                            everyBox.setText("week event");
+                            break;
+                        case "months event":
+                            everyBox.setText("month event");
+                            break;
+                        case "years event":
+                            everyBox.setText("year event");
+                            break;
                     }
                 } else if (!everyNum.getText().toString().equals("1")) {
                     String frequencyOfAppointment = everyBox.getText().toString();
                     switch (frequencyOfAppointment) {
-                        case "day event":       everyBox.setText("days event");     break;
-                        case "week event":      everyBox.setText("weeks event");    break;
-                        case "month event":     everyBox.setText("months event");   break;
-                        case "year event":      everyBox.setText("years event");    break;
+                        case "day event":
+                            everyBox.setText("days event");
+                            break;
+                        case "week event":
+                            everyBox.setText("weeks event");
+                            break;
+                        case "month event":
+                            everyBox.setText("months event");
+                            break;
+                        case "year event":
+                            everyBox.setText("years event");
+                            break;
                     }
                 }
 
@@ -299,12 +318,16 @@ public class EventActivity extends ActionBarActivity {
         switch (view.getId()) {
             case R.id.everybox:
                 break;
+
+            //Set alarm sound
+            /*
             case R.id.remindbox:
                 if(checked) {
                     Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI);
                     startActivityForResult(i, 1);
                 }
                 break;
+            */
         }
     }
 
@@ -364,7 +387,10 @@ public class EventActivity extends ActionBarActivity {
                     break;
             }
             //Set reminder in milliseconds
-            remind = endEventMillisecond - num;
+            remind = beginEventMillisecond - num;
+
+            //Set alarm
+            AlarmSetter.setAlarm(getApplicationContext(),event, location, remind);
         }
 
         //(2) Start Validity Check
@@ -393,11 +419,22 @@ public class EventActivity extends ActionBarActivity {
         {
             //TODO: If checkbox, sent dialogbox, asking when is the limit date
             //BULK INSERT INTO DATABASE
-            /*DatePickerDialog.Builder alert = new DatePickerDialog.Builder(this);
+            /*
+            final DatePickerDialog.Builder alert = new DatePickerDialog.Builder(this);
             alert.setTitle("Set Recurring Event");
             alert.setMessage("Pick the maximum date for the event: ");
 
-            alert.show();*/
+            alert.setPositiveButton("Set", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    //Get date and start setting appointments
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
+            */
+
         }
         else
         {

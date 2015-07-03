@@ -101,6 +101,9 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
                 String inputPassword = password.getText().toString().trim();
                 String inputConfirmPassword = confirm_password.getText().toString().trim();
 
+                // Start retrieving all documents from Cloudant
+                cloudantConnect.startPullReplication();
+
                 // Prevent users from creating account with invalid email address
                 if (!isValidEmailAddress(inputEmail)) {
                     alertUser("Invalid email address!", "Please try again.");

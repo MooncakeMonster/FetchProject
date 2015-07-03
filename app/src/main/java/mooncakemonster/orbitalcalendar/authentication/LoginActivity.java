@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.net.URISyntaxException;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
@@ -18,7 +23,7 @@ import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
  * This class allows users to login into their account registered
  * and authenticate user by retrieving user details from Cloudant
  */
-public class LoginActivity extends Activity {
+public class LoginActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private Button login;
@@ -47,6 +52,9 @@ public class LoginActivity extends Activity {
         sqLiteHelper = new SQLiteHelper(getApplicationContext());
 
         // Load Cloudant settings
+        PreferenceManager.setDefaultValues(this, R.xml.preference, false);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
 
@@ -97,7 +105,7 @@ public class LoginActivity extends Activity {
 
             // Store user in SQLite once successfully stored in Cloudant
             User user = cloudantConnect.saveUserDetails(username, password);
-            //sqLiteHelper.addUser(user.getEmail_address(), username);
+            sqLiteHelper.addUser(user.getEmail_address(), username);
 
             // Take user to next activity
             startActivity(new Intent(LoginActivity.this, MenuDrawer.class));
@@ -105,6 +113,15 @@ public class LoginActivity extends Activity {
         } else {
             alertUser("Error logging in!", "Please check again.");
             hideDialog();
+        }
+    }
+
+    // This method reloads replication settings
+    private void reloadReplicationSettings() {
+        try {
+            this.cloudantConnect.reloadReplicationSettings();
+        } catch (URISyntaxException e) {
+            Log.e(TAG, "Unable to construct remote URI from configuration", e);
         }
     }
 
@@ -127,6 +144,12 @@ public class LoginActivity extends Activity {
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d(TAG, "onSharedPreferenceChanged()");
+        reloadReplicationSettings();
     }
 
     @Override

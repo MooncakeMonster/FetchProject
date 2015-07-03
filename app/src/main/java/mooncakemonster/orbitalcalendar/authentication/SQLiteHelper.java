@@ -31,9 +31,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_LOGIN + "("
-                                              + KEY_ID + " INTEGER PRIMARY KEY,"
-                                              + KEY_EMAIL + " TEXT UNIQUE,"
-                                              + KEY_USERNAME + " TEXT UNIQUE " + ");";
+                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_EMAIL + " TEXT,"
+                + KEY_USERNAME + " TEXT " + ");";
 
         try {
             db.execSQL(CREATE_TABLE);
@@ -55,12 +55,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     // This method stores user details in database.
-    public void addUser(String email, String name) {
+    public void addUser(String email, String username) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(KEY_EMAIL, email); // Email
-        values.put(KEY_USERNAME, name); // Name
+        values.put(KEY_USERNAME, username); // Username
 
         // Inserting Row
         long id = db.insert(TABLE_LOGIN, null, values);

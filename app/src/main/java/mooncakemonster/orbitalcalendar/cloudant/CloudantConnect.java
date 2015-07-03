@@ -160,8 +160,7 @@ public class CloudantConnect {
         indexManager = new IndexManager(datastore);
         if(indexManager.isTextSearchEnabled()) {
             String user_details = indexManager.ensureIndexed(Arrays.<Object> asList("encrypted_password",
-                            "username", "email_address"),
-                    "user_details", "json");
+                    "username", "email_address"), "user_details", "json");
 
             if(user_details == null) Log.e(TAG, "Unable to create user index");
             else Log.d(TAG, "Successfully created index" + user_details);

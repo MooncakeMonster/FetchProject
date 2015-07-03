@@ -46,11 +46,11 @@ public class SettingActivity extends ActionBarActivity {
         HashMap<String, String> user = db.getUserDetails();
 
         String email = user.get("email");
-        String username = user.get("name");
+        String username = user.get("username");
 
         // TODO: Check why is it stored wrongly
-        user_email.setText("Email: " + username);
-        user_name.setText("Username: " + email);
+        user_email.setText("Email: " + email);
+        user_name.setText("Username: " + username);
 
         // Logout user when button pressed.
         logout.setOnClickListener(new View.OnClickListener() {

@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private Button userIcon;
+    private ImageView settings;
     private TextView displayUsername;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
@@ -80,12 +82,20 @@ public class FragmentDrawer extends Fragment {
             }
         });
 
+        settings = (ImageView) layout.findViewById(R.id.settings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity().getApplicationContext(), SettingActivity.class));
+            }
+        });
+
         displayUsername = (TextView) layout.findViewById(R.id.displayusername);
         db = new SQLiteHelper(getActivity().getApplicationContext());
 
         // Fetch user details from sqlite TODO: Check why is it stored wrongly
         HashMap<String, String> user = db.getUserDetails();
-        displayUsername.setText("Hello " + user.get("email") + "!");
+        displayUsername.setText("Hello " + user.get("username") + "!");
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
         adapter = new NavigationDrawerAdapter(getActivity(), getData());

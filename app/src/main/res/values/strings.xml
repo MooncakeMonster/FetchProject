@@ -79,18 +79,18 @@
     <string name="nus_timetable_import">Import NUS Timetable</string>
 
     <!-- cloudant details -->
+    <string name="default_user"></string>
+    <string name="default_dbname"></string>
+    <string name="default_api_key"></string>
+    <string name="default_api_password"></string>
 
     <string name="pref_summary_username">You cloudant user name, and it is also used to determine your cloudant server url.</string>
     <string name="pref_title_username">Cloudant user name</string>
-
     <string name="pref_summary_dbname">You cloudant db name, and this is the db used in replication.</string>
     <string name="pref_title_dbname">Cloudant db name</string>
-
     <string name="pref_summary_api_key">The api key used to replicate to/from your cloudant account.</string>
     <string name="pref_title_api_key">API Key</string>
-
     <string name="pref_summary_api_password">The api password used to replicate to/from your cloudant account.</string>
     <string name="pref_title_api_password">API Password</string>
-
 
 </resources>

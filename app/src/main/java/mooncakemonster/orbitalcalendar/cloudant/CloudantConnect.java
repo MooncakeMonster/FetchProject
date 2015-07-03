@@ -24,6 +24,7 @@ import com.cloudant.sync.replication.PullReplication;
 import com.cloudant.sync.replication.PushReplication;
 import com.cloudant.sync.replication.Replicator;
 import com.cloudant.sync.replication.ReplicatorFactory;
+import com.google.common.eventbus.Subscribe;
 
 import java.io.File;
 import java.net.URI;
@@ -311,7 +312,9 @@ public class CloudantConnect {
     /**
      * Calls when replication is completed
      */
+    @Subscribe
     public void complete(ReplicationCompleted rc) {
+        Log.d(TAG, "Replication completed");
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -325,6 +328,7 @@ public class CloudantConnect {
     /**
      * Calls when replication has error
      */
+    @Subscribe
     public void error(ReplicationErrored re) {
         Log.e(TAG, "Replication error:", re.errorInfo.getException());
         handler.post(new Runnable() {

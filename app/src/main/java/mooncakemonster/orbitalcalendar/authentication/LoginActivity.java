@@ -64,6 +64,9 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
             finish();
         }
 
+        // Pull all documents from Cloudant before user press login
+        cloudantConnect.startPullReplication();
+
         // Login user
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,9 +97,6 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
     private void checkLogin(final String username, final String password) {
         progressDialog.setMessage("Logging in...");
         showDialog();
-
-        // Pull all documents from Cloudant
-        cloudantConnect.startPullReplication();
 
         // TODO: Check Cloudant database for existing users
         if(cloudantConnect.authenticateUser(username, password)) {

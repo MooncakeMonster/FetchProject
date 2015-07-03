@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import mooncakemonster.orbitalcalendar.authentication.RegisterActivity;
-import mooncakemonster.orbitalcalendar.authentication.User;
 
 /**
  * This class establish connection with Cloudant database and allows replication.
@@ -95,6 +94,7 @@ public class CloudantConnect {
 
     /**
      * Creates new document for user details database storage
+     *
      * @param user to store user details into database
      * @return document of user details stored
      */
@@ -113,6 +113,7 @@ public class CloudantConnect {
 
     /**
      * Save user details in user's phone
+     *
      * @param username, password
      * @return user found in Cloudant
      */
@@ -122,9 +123,12 @@ public class CloudantConnect {
         List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
 
         // Check through all email address in user datastore
-        for(BasicDocumentRevision revision : all_doc) {
+        for (BasicDocumentRevision revision : all_doc) {
             User user = User.fromRevision(revision);
-            if(user != null && user.getUsername().equals(username) && user.getPassword().equals(password)) {
+            Log.d(TAG, user.getUsername());
+            Log.d(TAG, user.getPassword());
+
+            if (user != null && user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 return user;
             }
         }
@@ -135,6 +139,7 @@ public class CloudantConnect {
 
     /**
      * Updates document when user update their details
+     *
      * @param user to retrieve the user details to be updated
      * @return document of new user details updated
      */
@@ -152,30 +157,41 @@ public class CloudantConnect {
     }
 
     /**
+     * Creates index for targeted document
+     */
+    private void createIndex() {
+        indexManager = new IndexManager(datastore);
+        if (indexManager.isTextSearchEnabled()) {
+            String user_details = indexManager.ensureIndexed(Arrays.<Object>asList(
+                            "user_details.email_address", "user_details.username", "user_details.password",
+                            "voting_options.option_start_date", "voting_options.option_end_date",
+                            "voting_options.option_start_time", "voting_options.option_end_time",
+                            "voting_selected.selected_start_date", "voting_selected.selected_end_date",
+                            "voting_selected.selected_start_time", "voting_selected.selected_end_time"),
+                            "user", "json");
+
+            if (user_details == null) Log.e(TAG, "Unable to create user index");
+            else Log.d(TAG, "Successfully created index" + user_details);
+        }
+    }
+
+    /**
      * Checks through database for any exisiting username
+     *
      * @param username to check duplicate when user registers
      * @return true if there is existing username, else false
      */
     public boolean authenticateUser(String username, String password) {
-        // Create index
-        indexManager = new IndexManager(datastore);
-        if(indexManager.isTextSearchEnabled()) {
-            String user_details = indexManager.ensureIndexed(Arrays.<Object> asList("encrypted_password",
-                    "username", "email_address"), "user_details", "json");
-
-            if(user_details == null) Log.e(TAG, "Unable to create user index");
-            else Log.d(TAG, "Successfully created index" + user_details);
-        }
-
         Map<String, Object> query = new HashMap<>();
         Map<String, Object> search_username = new HashMap<>();
         Map<String, Object> search_password = new HashMap<>();
 
-        search_username.put("username", username);
-        search_password.put("encrypted_password", password);
+        search_username.put("user_details.username", username);
+        search_password.put("user_details.encrypted_password", password);
 
         query.put("$and", Arrays.<Object>asList(search_username, search_password));
 
+        createIndex();
         QueryResult result = indexManager.find(query);
 
         try {
@@ -190,42 +206,46 @@ public class CloudantConnect {
 
     /**
      * Checks through database for any exisiting email address
+     *
      * @param email_address to check duplicate when user registers
      * @return true if there is existing email, else false
      */
     public boolean checkExistingEmail(String email_address) {
-        int size_doc = this.datastore.getDocumentCount();
+        Map<String, Object> query = new HashMap<>();
+        query.put("user_details.email_address", email_address);
 
-        List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
+        createIndex();
+        QueryResult result = indexManager.find(query);
 
-        // Check through all email address in user datastore
-        for(BasicDocumentRevision revision : all_doc) {
-            User user = User.fromRevision(revision);
-            if(user != null && user.getEmail_address().equals(email_address)) {
-                return true;
-            }
+        try {
+            for (DocumentRevision revision : result) return true;
+        } catch (Exception e) {
+            Log.e(TAG, "No matching queries found");
         }
-        // Reach here if no existing emails found
+
+        // Reach here if no existing username found
         return false;
     }
 
     /**
      * Checks through database for any exisiting username
+     *
      * @param username to check duplicate when user registers
      * @return true if there is existing username, else false
      */
     public boolean checkExistingUsername(String username) {
-        int size_doc = this.datastore.getDocumentCount();
+        Map<String, Object> query = new HashMap<>();
+        query.put("user_details.username", username);
 
-        List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
+        createIndex();
+        QueryResult result = indexManager.find(query);
 
-        // Check through all username in user datastore
-        for(BasicDocumentRevision revision : all_doc) {
-            User user = User.fromRevision(revision);
-            if(user != null && user.getUsername().equals(username)) {
-                return true;
-            }
+        try {
+            for (DocumentRevision revision : result) return true;
+        } catch (Exception e) {
+            Log.e(TAG, "No matching queries found");
         }
+
         // Reach here if no existing username found
         return false;
     }
@@ -251,7 +271,7 @@ public class CloudantConnect {
      * Start push replication
      */
     public void startPushReplication() {
-        if(this.push_replicator != null) {
+        if (this.push_replicator != null) {
             this.push_replicator.start();
         } else {
             throw new RuntimeException("Push replication not set up correctly");
@@ -262,7 +282,7 @@ public class CloudantConnect {
      * Start pull replication
      */
     public void startPullReplication() {
-        if(this.pull_replicator != null) {
+        if (this.pull_replicator != null) {
             this.pull_replicator.start();
         } else {
             throw new RuntimeException("Pull replication not set up correctly");
@@ -273,11 +293,11 @@ public class CloudantConnect {
      * Stop running replication
      */
     public void stopAllReplication() {
-        if(this.push_replicator != null) {
+        if (this.push_replicator != null) {
             this.push_replicator.stop();
         }
 
-        if(this.pull_replicator != null) {
+        if (this.pull_replicator != null) {
             this.pull_replicator.stop();
         }
     }
@@ -318,7 +338,7 @@ public class CloudantConnect {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(register_listener != null) {
+                if (register_listener != null) {
                     register_listener.replicationComplete();
                 }
             }
@@ -334,7 +354,7 @@ public class CloudantConnect {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                if(register_listener != null) {
+                if (register_listener != null) {
                     register_listener.replicationError();
                 }
             }
@@ -343,6 +363,7 @@ public class CloudantConnect {
 
     /**
      * Retrieves URI for Cloudant database
+     *
      * @return URI
      */
     public URI createServerURI() throws URISyntaxException {

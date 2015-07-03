@@ -78,7 +78,6 @@
     <string name="facebook_import">Import Facebook Event</string>
     <string name="nus_timetable_import">Import NUS Timetable</string>
 
-    <!-- cloudant details -->
     <string name="default_user"></string>
     <string name="default_dbname"></string>
     <string name="default_api_key"></string>

@@ -17,6 +17,7 @@ import java.net.URISyntaxException;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**

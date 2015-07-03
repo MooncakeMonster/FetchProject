@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**
@@ -32,11 +33,6 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
     private static final Pattern DIGIT = Pattern.compile("\\p{Nd}");
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
-
-    public static final String CLOUDANT_USER = "pref_key_username";
-    public static final String CLOUDANT_DB = "pref_key_dbname";
-    public static final String CLOUDANT_API_KEY = "pref_key_api_key";
-    public static final String CLOUDANT_API_SECRET = "pref_key_api_password";
 
     Button register;
     TextView link_to_login;

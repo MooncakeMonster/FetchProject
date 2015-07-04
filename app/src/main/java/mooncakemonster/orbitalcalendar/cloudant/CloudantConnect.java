@@ -136,7 +136,6 @@ public class CloudantConnect {
         return null;
     }
 
-
     /**
      * Updates document when user update their details
      *
@@ -228,7 +227,7 @@ public class CloudantConnect {
     }
 
     /**
-     * Checks through database for any exisiting username
+     * Checks through database for any existing username
      *
      * @param username to check duplicate when user registers
      * @return true if there is existing username, else false
@@ -250,11 +249,61 @@ public class CloudantConnect {
         return false;
     }
 
-
     /****************************************************************************************************
      * (2) VOTING DOCUMENT
      ****************************************************************************************************/
 
+    /**
+     * This method sends the voting options to the target participants.
+     */
+    public void sendOptionsToTargetParticipants(String participants, String start_date, String end_date,
+                                                String start_time, String end_time) {
+        // Retrieve all participants username
+        String[] username = participants.split(" ");
+        int size = username.length;
+
+        for(int i = 0; i < size; i++) {
+
+            User user = getTargetUser(username[i]);
+            // Set options into target user's document
+            user.setOption_start_date(start_date);
+            user.setOption_end_date(end_date);
+            user.setOption_start_time(start_time);
+            user.setOption_end_time(end_time);
+
+            // Retrieve user's documents
+            try {
+                // Update the latest targeted user's items back into Cloudant document
+                updateUserDetailsDocument(user);
+                Log.d(TAG, "Successfully updated target user's information");
+            } catch (ConflictException e) {
+                Log.e(TAG, "Unable to update target user's information");
+            }
+        }
+    }
+
+    /**
+     * Retrieve the target user from Cloudant
+     *
+     * @param username
+     * @return user found in Cloudant
+     */
+    public User getTargetUser(String username) {
+        int size_doc = this.datastore.getDocumentCount();
+
+        List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
+
+        // Check through all email address in user datastore
+        for (BasicDocumentRevision revision : all_doc) {
+            User user = User.fromRevision(revision);
+
+            if (user != null && user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        // Reach here if no existing emails found
+        return null;
+    }
 
     /****************************************************************************************************
      * (3) REPLICATION

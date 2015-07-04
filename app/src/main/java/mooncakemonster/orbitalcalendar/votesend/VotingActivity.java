@@ -18,6 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
@@ -26,6 +27,9 @@ import mooncakemonster.orbitalcalendar.database.Constant;
  * and time options to participants for voting an event.
  */
 public class VotingActivity extends ActionBarActivity {
+
+    // Connect to cloudant database
+    CloudantConnect cloudantConnect;
 
     //List to get all the appointments
     private ListView listView;
@@ -49,6 +53,9 @@ public class VotingActivity extends ActionBarActivity {
         add_option = (Button) findViewById(R.id.add_option);
         // Initialise ArrayAdapter adapter for view
         listView = (ListView) findViewById(R.id.option_list);
+
+        if (cloudantConnect == null)
+            this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
 
         getSupportActionBar().setElevation(0);
 
@@ -151,9 +158,18 @@ public class VotingActivity extends ActionBarActivity {
             else {
                 // Add information into database
                 collateDateTime();
+                // Retrieve all users
+                String participants = vote_participants.getText().toString();
+
                 VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
-                votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(), vote_location.getText().toString(), vote_participants.getText().toString(), start_date, end_date, start_time, end_time);
-                Toast.makeText(getBaseContext(), "Details successfully saved", Toast.LENGTH_SHORT).show();
+                votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(), vote_location.getText().toString(), participants, start_date, end_date, start_time, end_time);
+
+                // Send out to users via Cloudant
+                cloudantConnect.sendOptionsToTargetParticipants(participants, start_date, end_date, start_time, end_time);
+                // Push all options to other targeted participants
+                cloudantConnect.startPushReplication();
+
+                Toast.makeText(getBaseContext(), "Successfully sent out for voting", Toast.LENGTH_SHORT).show();
                 finish();
             }
 

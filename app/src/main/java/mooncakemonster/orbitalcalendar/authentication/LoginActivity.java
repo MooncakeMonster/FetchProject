@@ -113,6 +113,9 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
             finish();
         } else {
             alertUser("Error logging in!", "Please check again.");
+            // Resets username and password
+            this.username.setText("");
+            this.password.setText("");
             hideDialog();
         }
     }

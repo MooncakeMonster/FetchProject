@@ -68,7 +68,10 @@ public class SettingActivity extends ActionBarActivity {
         // Remove user from sqlite in phone
         db.deleteUsers();
 
-        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        // Finish all previous activity and show login activity
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
         finish();
     }
 

@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.facebook.AccessToken;
-
 import mooncakemonster.orbitalcalendar.R;
 
 public class ImportExternalFragment extends Fragment {
@@ -30,17 +28,8 @@ public class ImportExternalFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-
-                //Check if logged-in
-                if(AccessToken.getCurrentAccessToken() == null)
-                {
-                    //Access FacebookLogin fragment
-                    ImportFacebookLogin fragment= new ImportFacebookLogin();
-                    fragment.show(fragmentManager, "facebook_login_fragment");
-                }
-
-                //Show list of events to be imported in user's own calendar for users to confirm
-
+                ImportFacebookLogin fragment= new ImportFacebookLogin();
+                fragment.show(fragmentManager, "facebook_login_fragment");
             }
         });
 

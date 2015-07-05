@@ -27,6 +27,7 @@ public class ImportFacebookLogin extends DialogFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         FacebookSdk.sdkInitialize(this.getActivity());
 
         callbackManager = CallbackManager.Factory.create();

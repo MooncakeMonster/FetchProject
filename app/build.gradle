@@ -43,6 +43,9 @@ dependencies {
     compile 'com.alexvasilkov:android-commons:1.2.3'
     compile 'com.github.flavienlaurent.discrollview:library:0.0.2@aar'
     compile files('libs/volley.jar')
+    //Imported simply to Calendar parser
+    //Source: http://build.mnode.org/projects/ical4j/apidocs/index.html
+    compile 'org.mnode.ical4j:ical4j:1.0.6'
 }
 
 android {

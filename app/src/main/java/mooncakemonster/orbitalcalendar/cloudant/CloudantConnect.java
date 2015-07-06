@@ -128,7 +128,7 @@ public class CloudantConnect {
             Log.d(TAG, user.getUsername());
             Log.d(TAG, user.getPassword());
 
-            if (user != null && user.getUsername().equals(username) && user.getPassword().equals(password)) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 return user;
             }
         }
@@ -204,37 +204,14 @@ public class CloudantConnect {
     }
 
     /**
-     * Checks through database for any exisiting email address
+     * Checks through database for any existing email address or username
      *
-     * @param email_address to check duplicate when user registers
+     * @param type to indicate if it's checking for email address or username
      * @return true if there is existing email, else false
      */
-    public boolean checkExistingEmail(String email_address) {
+    public boolean checkExistingItems(String type, String line) {
         Map<String, Object> query = new HashMap<>();
-        query.put("user_details.email_address", email_address);
-
-        createIndex();
-        QueryResult result = indexManager.find(query);
-
-        try {
-            for (DocumentRevision revision : result) return true;
-        } catch (Exception e) {
-            Log.e(TAG, "No matching queries found");
-        }
-
-        // Reach here if no existing username found
-        return false;
-    }
-
-    /**
-     * Checks through database for any existing username
-     *
-     * @param username to check duplicate when user registers
-     * @return true if there is existing username, else false
-     */
-    public boolean checkExistingUsername(String username) {
-        Map<String, Object> query = new HashMap<>();
-        query.put("user_details.username", username);
+        query.put("user_details." + type, line);
 
         createIndex();
         QueryResult result = indexManager.find(query);

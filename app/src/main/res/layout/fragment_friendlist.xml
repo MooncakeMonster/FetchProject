@@ -1,0 +1,47 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cloudy"
+    android:clipToPadding="false"
+    android:orientation="vertical">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipe_refresh">
+
+        <!--For event display-->
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+    <!--In the event that no pictures are set-->
+    <TextView
+        android:id="@id/android:empty"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="No friends added yet"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:textSize="@dimen/standard_text_size"
+        android:textColor="#000000"/>
+
+
+    <ImageButton
+        android:id="@+id/addFriendButton"
+        android:layout_width="@dimen/picture_button_size"
+        android:layout_height="@dimen/picture_button_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/picture_button_margin"
+        android:layout_marginEnd="@dimen/picture_button_margin"
+        android:layout_marginRight="@dimen/picture_button_margin"
+        android:background="@drawable/addbutton"
+        android:elevation="@dimen/picture_elevation"
+        android:stateListAnimator="@anim/button_elevation"
+        android:tint="@android:color/white" />
+</RelativeLayout>

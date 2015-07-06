@@ -107,13 +107,13 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
                 }
 
                 // TODO: Prevent users from creating account with email address already in database
-                else if(cloudantConnect.checkExistingEmail(inputEmail)) {
+                else if(cloudantConnect.checkExistingItems("email_address", inputEmail)) {
                     alertUser("Email address exist!", "Please input other email address.");
                     resetDetails(1);
                 }
 
                 // TODO: Prevent users from creating account with username already in database
-                else if(cloudantConnect.checkExistingUsername(inputUsername)) {
+                else if(cloudantConnect.checkExistingItems("username", inputUsername)) {
                     alertUser("Username exist!", "Please input other username.");
                     resetDetails(2);
                 }

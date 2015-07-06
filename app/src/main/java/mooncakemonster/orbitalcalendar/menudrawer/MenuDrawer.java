@@ -16,6 +16,7 @@ import mooncakemonster.orbitalcalendar.ImportExternal.ImportExternalFragment;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
+import mooncakemonster.orbitalcalendar.notifications.FriendlistFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.picoftheday.PictureFragment;
 import mooncakemonster.orbitalcalendar.votereceive.VotingFragment;
@@ -73,22 +74,26 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
                 title = "Calendar";
                 break;
             case 1:
+                fragment = new FriendlistFragment();
+                title = "Friend List";
+                break;
+            case 2:
                 fragment = new PictureFragment();
                 title = "Picture of the Day";
                 break;
-            case 2:
+            case 3:
                 fragment = new NotificationFragment();
                 title = "Notifications";
                 break;
-            case 3:
+            case 4:
                 fragment = new EventFragment();
                 title = "Events";
                 break;
-            case 4:
+            case 5:
                 fragment = new ImportExternalFragment();
                 title = "Import Events";
                 break;
-            case 5:
+            case 6:
                 fragment = new VotingFragment();
                 title = "Voting Results";
                 break;

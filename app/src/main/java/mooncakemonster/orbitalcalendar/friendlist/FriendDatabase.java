@@ -64,6 +64,29 @@ public class FriendDatabase extends SQLiteOpenHelper {
         return sqLiteDatabase.query(FriendData.FriendInfo.TABLE_NAME, columns, null, null, null, null, null);
     }
 
+    // Update data from database TODO: Doesn't update
+    public void updateInformation(FriendDatabase data, String username) {
+        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ?";
+        String[] args = { username };
+
+        ContentValues values = new ContentValues();
+        values.put(FriendData.FriendInfo.FRIEND_USERNAME, username);
+
+        SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
+        sqLiteDatabase.update(FriendData.FriendInfo.TABLE_NAME, values, selection, args);
+    }
+
+
+    // Delete data from database TODO: Doesn't delete
+    public void deleteInformation(FriendDatabase data, String username) {
+
+        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ?";
+        String[] args = { username };
+
+        SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
+        sqLiteDatabase.delete(FriendData.FriendInfo.TABLE_NAME, selection, args);
+    }
+
     // This method retrieves all friends' username.
     public List<FriendItem> getAllFriendUsername(FriendDatabase data) {
         List<FriendItem> friend_list = new ArrayList<>();

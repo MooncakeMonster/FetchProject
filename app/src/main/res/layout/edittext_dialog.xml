@@ -10,8 +10,8 @@
         android:layout_height="@dimen/standard_icon_size"
         android:padding="@dimen/standard_padding_size"
         android:layout_margin="@dimen/standard_padding_size"
-        android:hint="Username"
         android:layout_alignParentLeft="true"
-        android:textSize="20dp" />
+        android:textSize="20dp"
+        android:textColor="@color/black"/>
 
 </RelativeLayout>

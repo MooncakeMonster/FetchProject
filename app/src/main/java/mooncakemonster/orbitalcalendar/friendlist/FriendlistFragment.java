@@ -8,6 +8,7 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -17,6 +18,7 @@ import mooncakemonster.orbitalcalendar.R;
 
 public class FriendlistFragment extends ListFragment {
 
+    private static final String TAG = FriendlistFragment.class.getSimpleName();
     private FriendDatabase friendDatabase;
     private List<FriendItem> allFriends;
     FriendlistAdapter adapter;
@@ -40,23 +42,29 @@ public class FriendlistFragment extends ListFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_friendlist, container, false);
 
-        add_friends = (ImageButton) rootView.findViewById(R.id.addFriendButton);
+        return rootView;
+    }
 
+    @Override
+    public void onViewCreated(final View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        add_friends = (ImageButton) view.findViewById(R.id.addFriendButton);
         add_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                View view = LayoutInflater.from(getActivity()).inflate(R.layout.edittext_dialog, null);
-                final EditText input_username = (EditText) view.findViewById(R.id.input_friend_username);
+                final View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.edittext_dialog, null);
+                final EditText input_username = (EditText) dialogview.findViewById(R.id.input_friend_username);
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
                 alertBuilder.setTitle("Enter your friend's username:");
-                alertBuilder.setView(view);
+                alertBuilder.setView(dialogview);
 
                 alertBuilder.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO: Get friend's image and replace with "-1"
-                        friendDatabase.putInformation(friendDatabase, -1, input_username.getText().toString());
+                        // TODO: Get friend's image and replace with "redbear"
+                        friendDatabase.putInformation(friendDatabase, R.color.redbear, input_username.getText().toString());
                         adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
@@ -72,6 +80,90 @@ public class FriendlistFragment extends ListFragment {
             }
         });
 
-        return rootView;
+        // Update friend's username
+        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+                final View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.edittext_dialog, null);
+                final EditText input_username = (EditText) dialogview.findViewById(R.id.input_friend_username);
+
+                //Get FriendItem from ArrayAdapter
+                final FriendItem friendItem = adapter.getItem(position);
+
+                final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Update username");
+                alert.setView(dialogview);
+                input_username.setText(friendItem.getUsername());
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Update latest username into SQLite database
+                        friendDatabase.updateInformation(friendDatabase, input_username.getText().toString());
+                        adapter.clear();
+                        adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
+                        adapter.notifyDataSetChanged();
+
+                        //Remove dialog after execution of the above
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+            }
+        });
+
+        // Delete friend's username
+        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
+                //Get FriendItem from ArrayAdapter
+                final FriendItem friendItem = adapter.getItem(position);
+
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Delete friend");
+                alert.setMessage("Are you sure you want to delete \"" + friendItem.getUsername() + "\"?");
+
+                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Delete from SQLite database
+                        friendDatabase.deleteInformation(friendDatabase, friendItem.getUsername());
+                        //Delete from ArrayAdapter & allFriends
+                        adapter.remove(friendItem);
+                        allFriends.remove(friendItem);
+                        adapter.notifyDataSetChanged();
+                        //Remove dialog after execution of the above
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+
+                alert.show();
+                return true;
+            }
+        });
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+
     }
 }

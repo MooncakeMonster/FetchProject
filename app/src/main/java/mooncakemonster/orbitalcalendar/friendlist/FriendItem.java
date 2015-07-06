@@ -4,8 +4,8 @@ package mooncakemonster.orbitalcalendar.friendlist;
  * Created by BAOJUN on 6/7/15.
  */
 public class FriendItem {
-    int image;
-    String username;
+    private int image;
+    private String username;
 
     public FriendItem(int image, String username) {
         this.image = image;

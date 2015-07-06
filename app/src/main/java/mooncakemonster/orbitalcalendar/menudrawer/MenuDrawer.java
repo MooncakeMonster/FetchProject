@@ -16,7 +16,7 @@ import mooncakemonster.orbitalcalendar.ImportExternal.ImportExternalFragment;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
-import mooncakemonster.orbitalcalendar.notifications.FriendlistFragment;
+import mooncakemonster.orbitalcalendar.friendlist.FriendlistFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.picoftheday.PictureFragment;
 import mooncakemonster.orbitalcalendar.votereceive.VotingFragment;

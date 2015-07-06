@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -13,8 +14,15 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 
 /**
  * Read all .ics extension
+ *
+ * Note: This parser recognizes only "vevent" components.
+ *
  */
 public class ImportICSParser extends Activity{
+
+    //Date format
+    private static final SimpleDateFormat ICS_PARSER_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat ICS_DATE_TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

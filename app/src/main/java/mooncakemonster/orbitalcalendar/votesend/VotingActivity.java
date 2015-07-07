@@ -32,8 +32,6 @@ import mooncakemonster.orbitalcalendar.friendlist.FriendItem;
  */
 public class VotingActivity extends ActionBarActivity {
 
-    private static final String TAG = VotingActivity.class.getSimpleName();
-
     // Connect to cloudant database
     CloudantConnect cloudantConnect;
 
@@ -185,7 +183,7 @@ public class VotingActivity extends ActionBarActivity {
                 // Add information into database
                 collateDateTime();
                 // Retrieve all users
-                String participants = vote_participants.getText().toString();
+                String participants = vote_participants.getText().toString().replace("@", "").replace(",", "");
 
                 VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
                 votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(), vote_location.getText().toString(), participants, start_date, end_date, start_time, end_time);

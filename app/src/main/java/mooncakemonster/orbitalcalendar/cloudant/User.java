@@ -15,6 +15,12 @@ public class User {
     private String username;
     private String password;
 
+    // Event details
+    private int event_colour;
+    private String event_title;
+    private String event_location;
+    private String event_notes;
+
     // Voting options
     private String option_start_date;
     private String option_end_date;
@@ -65,6 +71,37 @@ public class User {
         this.password = password;
     }
 
+    public int getEvent_colour() {
+        return event_colour;
+    }
+
+    public void setEvent_colour(int event_colour) {
+        this.event_colour = event_colour;
+    }
+
+    public String getEvent_title() {
+        return event_title;
+    }
+
+    public void setEvent_title(String event_title) {
+        this.event_title = event_title;
+    }
+
+    public String getEvent_location() {
+        return event_location;
+    }
+
+    public void setEvent_location(String event_location) {
+        this.event_location = event_location;
+    }
+
+    public String getEvent_notes() {
+        return event_notes;
+    }
+
+    public void setEvent_notes(String event_notes) {
+        this.event_notes = event_notes;
+    }
 
     public String getOption_start_date() {
         return option_start_date;
@@ -147,6 +184,12 @@ public class User {
         user.setUsername((String) ((Map) user_revised.get("user_details")).get("username"));
         user.setPassword((String) ((Map) user_revised.get("user_details")).get("encrypted_password"));
 
+        // Event details
+        user.setEvent_colour((int) ((Map) user_revised.get("event_details")).get("event_colour"));
+        user.setEvent_title((String) ((Map) user_revised.get("event_details")).get("event_title"));
+        user.setEvent_location((String) ((Map) user_revised.get("event_details")).get("event_location"));
+        user.setEvent_notes((String) ((Map) user_revised.get("event_details")).get("event_notes"));
+
         // Voting options
         user.setOption_start_date((String) ((Map) user_revised.get("voting_options")).get("option_start_date"));
         user.setOption_end_date((String) ((Map) user_revised.get("voting_options")).get("option_end_date"));
@@ -172,6 +215,13 @@ public class User {
         user_details.put("username", username);
         user_details.put("encrypted_password", password);
 
+        // Event details
+        HashMap<String, Object> event_details = new HashMap<>();
+        event_details.put("event_colour", event_colour);
+        event_details.put("event_title", event_title);
+        event_details.put("event_location", event_location);
+        event_details.put("event_notes", event_notes);
+
         // Voting options
         HashMap<String, Object> voting_options = new HashMap<>();
         voting_options.put("option_start_date", option_start_date);
@@ -188,6 +238,7 @@ public class User {
 
         // User
         user.put("user_details", user_details);
+        user.put("event_details", event_details);
         user.put("voting_options", voting_options);
         user.put("voting_selected", voting_selected);
 

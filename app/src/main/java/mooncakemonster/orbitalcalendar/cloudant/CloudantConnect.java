@@ -148,7 +148,7 @@ public class CloudantConnect {
         revision.body = DocumentBodyFactory.create(user.asMap());
 
         try {
-            BasicDocumentRevision updated = this.datastore.createDocumentFromRevision(revision);
+            BasicDocumentRevision updated = this.datastore.updateDocumentFromRevision(revision);
             return User.fromRevision(updated);
         } catch (DocumentException e) {
             return null;
@@ -240,7 +240,6 @@ public class CloudantConnect {
         int size = username.length;
 
         for(int i = 0; i < size; i++) {
-
             User user = getTargetUser(username[i]);
             // Set options into target user's document
             user.setOption_start_date(start_date);
@@ -260,12 +259,13 @@ public class CloudantConnect {
     }
 
     /**
-     * Retrieve the target user from Cloudant
+     * Retrieve the target user's document from Cloudant
      *
      * @param username
      * @return user found in Cloudant
      */
     public User getTargetUser(String username) {
+        Log.d(TAG, username);
         int size_doc = this.datastore.getDocumentCount();
 
         List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
@@ -275,10 +275,12 @@ public class CloudantConnect {
             User user = User.fromRevision(revision);
 
             if (user != null && user.getUsername().equals(username)) {
+                Log.d(TAG, "Successfully found user to vote");
                 return user;
             }
         }
         // Reach here if no existing emails found
+        Log.e(TAG, "Unable to find user to vote");
         return null;
     }
 

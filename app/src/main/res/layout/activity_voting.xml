@@ -32,17 +32,19 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <EditText
+        <MultiAutoCompleteTextView
             android:id="@+id/vote_participants"
             android:layout_width="match_parent"
             android:layout_height="@dimen/standard_icon_size"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/vote_title"
-            android:layout_marginBottom="@dimen/standard_margin_size"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="@dimen/standard_padding_size"
+            android:padding="@dimen/standard_padding_size"
+            android:ems="10"
             android:hint="Participants"
-            android:padding="@dimen/standard_padding_size" />
+            android:text="">
+
+            <requestFocus />
+        </MultiAutoCompleteTextView>
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -70,10 +72,10 @@
         </LinearLayout>
     </LinearLayout>
 
-        <ListView
-            android:id="@+id/option_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="@color/colorPrimary" />
+    <ListView
+        android:id="@+id/option_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/colorPrimary" />
 
 </LinearLayout>

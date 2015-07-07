@@ -71,6 +71,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:layout_marginLeft="@dimen/standard_padding_size"
         android:orientation="vertical"
         android:id="@+id/right_time"
         android:layout_toRightOf="@+id/left_date">

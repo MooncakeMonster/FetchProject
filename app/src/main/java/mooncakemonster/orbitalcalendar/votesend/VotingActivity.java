@@ -8,19 +8,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
+import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
+import mooncakemonster.orbitalcalendar.friendlist.FriendItem;
 
 /**
  * This class allows users to send a list of date
@@ -28,15 +32,21 @@ import mooncakemonster.orbitalcalendar.database.Constant;
  */
 public class VotingActivity extends ActionBarActivity {
 
+    private static final String TAG = VotingActivity.class.getSimpleName();
+
     // Connect to cloudant database
     CloudantConnect cloudantConnect;
 
-    //List to get all the appointments
+    // List to get all the appointments
     private ListView listView;
     OptionAdapter adapter;
 
+    // Retrieve username from SQLite
+    FriendDatabase friendDatabase;
+    List<FriendItem> list;
+
     TextView vote_title, vote_location;
-    EditText vote_participants;
+    MultiAutoCompleteTextView vote_participants;
     Button add_option;
     String start_date = "", end_date = "", start_time = "", end_time = "";
     int colour;
@@ -49,7 +59,7 @@ public class VotingActivity extends ActionBarActivity {
         //(0) Instantiate layout
         vote_title = (TextView) findViewById(R.id.vote_title);
         vote_location = (TextView) findViewById(R.id.vote_location);
-        vote_participants = (EditText) findViewById(R.id.vote_participants);
+        vote_participants = (MultiAutoCompleteTextView) findViewById(R.id.vote_participants);
         add_option = (Button) findViewById(R.id.add_option);
         // Initialise ArrayAdapter adapter for view
         listView = (ListView) findViewById(R.id.option_list);
@@ -64,7 +74,23 @@ public class VotingActivity extends ActionBarActivity {
         final Bundle bundle = intent.getExtras();
         Appointment appt = (Appointment) bundle.getSerializable("appointment");
 
-        //(2) Extract data from appointment
+        //(2) Enter participants
+        friendDatabase = new FriendDatabase(this);
+        list = friendDatabase.getAllFriendUsername(friendDatabase);
+        int size = list.size();
+
+        String participants = "";
+        for(int i = 0; i < size; i++) {
+            participants += "@" + list.get(i).getUsername() + " ";
+        }
+
+        String[] split_participants = participants.split(" ");
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.row_participants, split_participants);
+        vote_participants.setAdapter(arrayAdapter);
+        vote_participants.setThreshold(1);
+        vote_participants.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+
+        //(3) Extract data from appointment
         colour = appt.getColour();
         //Get Event Title and Location
         String event = appt.getEvent();

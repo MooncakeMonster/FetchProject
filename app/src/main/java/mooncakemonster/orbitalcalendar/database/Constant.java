@@ -76,6 +76,26 @@ public abstract class Constant
         return -1;
     }
 
+    public static long stringToMillisecond(String dateTime, SimpleDateFormat formatterForDateTime)
+    {
+        try
+        {
+            //Try-catch block placed here to prevent 'Unhandled ParseException' error
+            Date tempDateTime = formatterForDateTime.parse(dateTime);
+
+            long dateTimeMillisecond = tempDateTime.getTime();
+
+            return (dateTimeMillisecond);
+        }
+        catch(ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        //Should not reach here
+        return -1;
+    }
+
     /****************************************************************************************************
      * Convert millisecond back to strings
      ****************************************************************************************************/

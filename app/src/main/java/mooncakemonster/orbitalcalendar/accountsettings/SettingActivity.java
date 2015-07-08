@@ -14,14 +14,14 @@ import java.util.HashMap;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.LoginActivity;
 import mooncakemonster.orbitalcalendar.authentication.LoginManager;
-import mooncakemonster.orbitalcalendar.authentication.SQLiteHelper;
+import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 
 public class SettingActivity extends ActionBarActivity {
 
     private TextView user_email, user_name;
     private Button facebook, logout;
 
-    private SQLiteHelper db;
+    private UserDatabase db;
     private LoginManager session;
 
     public SettingActivity() {
@@ -39,7 +39,7 @@ public class SettingActivity extends ActionBarActivity {
         facebook = (Button) findViewById(R.id.login_button);
         logout = (Button) findViewById(R.id.logout);
 
-        db = new SQLiteHelper(getApplicationContext());
+        db = new UserDatabase(getApplicationContext());
         session = new LoginManager(getApplicationContext());
 
         // Fetch user details from sqlite

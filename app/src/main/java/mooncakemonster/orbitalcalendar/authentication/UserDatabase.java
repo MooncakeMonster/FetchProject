@@ -10,9 +10,9 @@ import android.util.Log;
 
 import java.util.HashMap;
 
-public class SQLiteHelper extends SQLiteOpenHelper {
+public class UserDatabase extends SQLiteOpenHelper {
 
-    private static final String TAG = SQLiteHelper.class.getSimpleName();
+    private static final String TAG = UserDatabase.class.getSimpleName();
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "fetch_api";
@@ -23,7 +23,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_EMAIL = "email";
     private static final String KEY_USERNAME = "username";
 
-    public SQLiteHelper(Context context) {
+    public UserDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

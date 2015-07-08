@@ -15,19 +15,23 @@ public class User {
     private String username;
     private String password;
 
-    // Event details
-    private int event_colour;
-    private String event_title;
-    private String event_location;
-    private String event_notes;
-
     // Voting options
+    private String option_my_username;
+    private int option_event_colour;
+    private String option_event_title;
+    private String option_event_location;
+    private String option_event_notes;
     private String option_start_date;
     private String option_end_date;
     private String option_start_time;
     private String option_end_time;
 
     // Voting selected options
+    private String selected_my_username;
+    private int selected_event_colour;
+    private String selected_event_title;
+    private String selected_event_location;
+    private String selected_event_notes;
     private String selected_start_date;
     private String selected_end_date;
     private String selected_start_time;
@@ -71,36 +75,84 @@ public class User {
         this.password = password;
     }
 
-    public int getEvent_colour() {
-        return event_colour;
+    public String getOption_my_username() {
+        return option_my_username;
     }
 
-    public void setEvent_colour(int event_colour) {
-        this.event_colour = event_colour;
+    public void setOption_my_username(String option_my_username) {
+        this.option_my_username = option_my_username;
     }
 
-    public String getEvent_title() {
-        return event_title;
+    public int getOption_event_colour() {
+        return option_event_colour;
     }
 
-    public void setEvent_title(String event_title) {
-        this.event_title = event_title;
+    public void setOption_event_colour(int option_event_colour) {
+        this.option_event_colour = option_event_colour;
     }
 
-    public String getEvent_location() {
-        return event_location;
+    public String getOption_event_title() {
+        return option_event_title;
     }
 
-    public void setEvent_location(String event_location) {
-        this.event_location = event_location;
+    public void setOption_event_title(String option_event_title) {
+        this.option_event_title = option_event_title;
     }
 
-    public String getEvent_notes() {
-        return event_notes;
+    public String getOption_event_location() {
+        return option_event_location;
     }
 
-    public void setEvent_notes(String event_notes) {
-        this.event_notes = event_notes;
+    public void setOption_event_location(String option_event_location) {
+        this.option_event_location = option_event_location;
+    }
+
+    public String getOption_event_notes() {
+        return option_event_notes;
+    }
+
+    public void setOption_event_notes(String option_event_notes) {
+        this.option_event_notes = option_event_notes;
+    }
+
+    public String getSelected_my_username() {
+        return selected_my_username;
+    }
+
+    public void setSelected_my_username(String selected_my_username) {
+        this.selected_my_username = selected_my_username;
+    }
+
+    public int getSelected_event_colour() {
+        return selected_event_colour;
+    }
+
+    public void setSelected_event_colour(int selected_event_colour) {
+        this.selected_event_colour = selected_event_colour;
+    }
+
+    public String getSelected_event_title() {
+        return selected_event_title;
+    }
+
+    public void setSelected_event_title(String selected_event_title) {
+        this.selected_event_title = selected_event_title;
+    }
+
+    public String getSelected_event_location() {
+        return selected_event_location;
+    }
+
+    public void setSelected_event_location(String selected_event_location) {
+        this.selected_event_location = selected_event_location;
+    }
+
+    public String getSelected_event_notes() {
+        return selected_event_notes;
+    }
+
+    public void setSelected_event_notes(String selected_event_notes) {
+        this.selected_event_notes = selected_event_notes;
     }
 
     public String getOption_start_date() {
@@ -184,19 +236,23 @@ public class User {
         user.setUsername((String) ((Map) user_revised.get("user_details")).get("username"));
         user.setPassword((String) ((Map) user_revised.get("user_details")).get("encrypted_password"));
 
-        // Event details
-        user.setEvent_colour((int) ((Map) user_revised.get("event_details")).get("event_colour"));
-        user.setEvent_title((String) ((Map) user_revised.get("event_details")).get("event_title"));
-        user.setEvent_location((String) ((Map) user_revised.get("event_details")).get("event_location"));
-        user.setEvent_notes((String) ((Map) user_revised.get("event_details")).get("event_notes"));
-
         // Voting options
+        user.setOption_my_username((String) ((Map) user_revised.get("voting_options")).get("option_my_username"));
+        user.setOption_event_colour((int) ((Map) user_revised.get("voting_options")).get("option_event_colour"));
+        user.setOption_event_title((String) ((Map) user_revised.get("voting_options")).get("option_event_title"));
+        user.setOption_event_location((String) ((Map) user_revised.get("voting_options")).get("option_event_location"));
+        user.setOption_event_notes((String) ((Map) user_revised.get("voting_options")).get("option_event_notes"));
         user.setOption_start_date((String) ((Map) user_revised.get("voting_options")).get("option_start_date"));
         user.setOption_end_date((String) ((Map) user_revised.get("voting_options")).get("option_end_date"));
         user.setOption_start_time((String) ((Map) user_revised.get("voting_options")).get("option_start_time"));
         user.setOption_end_time((String) ((Map) user_revised.get("voting_options")).get("option_end_time"));
 
         // Voting selected options
+        user.setSelected_my_username((String) ((Map) user_revised.get("voting_selected")).get("selected_my_username"));
+        user.setSelected_event_colour((int) ((Map) user_revised.get("voting_selected")).get("selected_event_colour"));
+        user.setSelected_event_title((String) ((Map) user_revised.get("voting_selected")).get("selected_event_title"));
+        user.setSelected_event_location((String) ((Map) user_revised.get("voting_selected")).get("selected_event_location"));
+        user.setSelected_event_notes((String) ((Map) user_revised.get("voting_selected")).get("selected_event_notes"));
         user.setSelected_start_date((String) ((Map) user_revised.get("voting_selected")).get("selected_start_date"));
         user.setSelected_end_date((String) ((Map) user_revised.get("voting_selected")).get("selected_end_date"));
         user.setSelected_start_time((String) ((Map) user_revised.get("voting_selected")).get("selected_start_time"));
@@ -215,15 +271,13 @@ public class User {
         user_details.put("username", username);
         user_details.put("encrypted_password", password);
 
-        // Event details
-        HashMap<String, Object> event_details = new HashMap<>();
-        event_details.put("event_colour", event_colour);
-        event_details.put("event_title", event_title);
-        event_details.put("event_location", event_location);
-        event_details.put("event_notes", event_notes);
-
         // Voting options
         HashMap<String, Object> voting_options = new HashMap<>();
+        voting_options.put("option_my_username", option_my_username);
+        voting_options.put("option_event_colour", option_event_colour);
+        voting_options.put("option_event_title", option_event_title);
+        voting_options.put("option_event_location", option_event_location);
+        voting_options.put("option_event_notes", option_event_notes);
         voting_options.put("option_start_date", option_start_date);
         voting_options.put("option_end_date", option_end_date);
         voting_options.put("option_start_time", option_start_time);
@@ -231,6 +285,11 @@ public class User {
 
         // Voting selected options
         HashMap<String, Object> voting_selected = new HashMap<>();
+        voting_selected.put("selected_my_username", selected_my_username);
+        voting_selected.put("selected_event_colour", selected_event_colour);
+        voting_selected.put("selected_event_title", selected_event_title);
+        voting_selected.put("selected_event_location", selected_event_location);
+        voting_selected.put("selected_event_notes", selected_event_notes);
         voting_selected.put("selected_start_date", selected_start_date);
         voting_selected.put("selected_end_date", selected_end_date);
         voting_selected.put("selected_start_time", selected_start_time);
@@ -238,7 +297,6 @@ public class User {
 
         // User
         user.put("user_details", user_details);
-        user.put("event_details", event_details);
         user.put("voting_options", voting_options);
         user.put("voting_selected", voting_selected);
 

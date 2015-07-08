@@ -1,0 +1,92 @@
+package mooncakemonster.orbitalcalendar.notifications;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by BAOJUN on 6/7/15.
+ */
+public class NotificationDatabase extends SQLiteOpenHelper {
+
+    private static final String TAG = NotificationDatabase.class.getSimpleName();
+
+    public String query = "CREATE TABLE " + NotificationData.NotificationInfo.TABLE_NAME + " (" +
+            NotificationData.NotificationInfo.SENDER_USERNAME + " TEXT, " +
+            NotificationData.NotificationInfo.MESSAGE + " TEXT, " +
+            NotificationData.NotificationInfo.SENDER_EVENT + " TEXT, " +
+            NotificationData.NotificationInfo.ACTION + " TEXT, " +
+            NotificationData.NotificationInfo.INTENT + " TEXT); ";
+
+    public NotificationDatabase (Context context) {
+        super(context, NotificationData.NotificationInfo.DATABASE_NAME, null, NotificationData.NotificationInfo.DATABASE_VERSION);
+        // Check if database is created
+        Log.d(TAG, "Notification database created");
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(query);
+        // Create table
+        Log.d(TAG, "Notification table created");
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    // This method insets information into the database.
+    public void putInformation(NotificationDatabase data, String sender_username, String message, String sender_event, String action, String intent) {
+        // Write data into database
+        SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        // Add value from each column into contentvalue
+        contentValues.put(NotificationData.NotificationInfo.SENDER_USERNAME, sender_username);
+        contentValues.put(NotificationData.NotificationInfo.MESSAGE, message);
+        contentValues.put(NotificationData.NotificationInfo.SENDER_EVENT, sender_event);
+        contentValues.put(NotificationData.NotificationInfo.ACTION, action);
+        contentValues.put(NotificationData.NotificationInfo.INTENT, intent);
+
+        // Insert into sqlite database
+        sqLiteDatabase.insert(NotificationData.NotificationInfo.TABLE_NAME, null, contentValues);
+        Log.d(TAG, "One notification row inserted");
+    }
+
+    // Retrieve data from database
+    public Cursor getInformation(NotificationDatabase data) {
+        // Read data from sqlite database
+        SQLiteDatabase sqLiteDatabase = data.getReadableDatabase();
+        String[] columns = {NotificationData.NotificationInfo.SENDER_USERNAME, NotificationData.NotificationInfo.MESSAGE,
+                            NotificationData.NotificationInfo.SENDER_EVENT, NotificationData.NotificationInfo.ACTION,
+                            NotificationData.NotificationInfo.INTENT};
+
+        // Points to first row of table
+        return sqLiteDatabase.query(NotificationData.NotificationInfo.TABLE_NAME, columns, null, null, null, null, null);
+    }
+
+    // This method retrieves all notifications.
+    public List<NotificationItem> getAllNotifications(NotificationDatabase data) {
+        List<NotificationItem> notificationItems = new ArrayList<>();
+        Cursor cursor = getInformation(data);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            NotificationItem notificationItem = new NotificationItem(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                                                cursor.getString(3), cursor.getString(4));
+            notificationItems.add(notificationItem);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return notificationItems;
+    }
+
+}

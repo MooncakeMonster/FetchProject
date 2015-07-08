@@ -35,7 +35,7 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
     private ProgressDialog progressDialog;
     private LoginManager loginManager;
     private CloudantConnect cloudantConnect;
-    private SQLiteHelper sqLiteHelper;
+    private UserDatabase userDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +50,7 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         loginManager = new LoginManager(getApplicationContext());
-        sqLiteHelper = new SQLiteHelper(getApplicationContext());
+        userDatabase = new UserDatabase(getApplicationContext());
 
         // Load Cloudant settings
         PreferenceManager.setDefaultValues(this, R.xml.preference, false);
@@ -106,7 +106,7 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
 
             // Store user in SQLite once successfully stored in Cloudant
             User user = cloudantConnect.saveUserDetails(username, password);
-            sqLiteHelper.addUser(user.getEmail_address(), username);
+            userDatabase.addUser(user.getEmail_address(), username);
 
             // Take user to next activity
             startActivity(new Intent(LoginActivity.this, MenuDrawer.class));

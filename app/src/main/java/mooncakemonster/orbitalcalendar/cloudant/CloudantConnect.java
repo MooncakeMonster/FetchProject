@@ -163,8 +163,10 @@ public class CloudantConnect {
         if (indexManager.isTextSearchEnabled()) {
             String user_details = indexManager.ensureIndexed(Arrays.<Object>asList(
                             "user_details.email_address", "user_details.username", "user_details.password",
+                            "voting_options.my_username", "voting_options.event_title", "voting_options.event_location", "voting_options.event_notes",
                             "voting_options.option_start_date", "voting_options.option_end_date",
                             "voting_options.option_start_time", "voting_options.option_end_time",
+                            "voting_selected.my_username", "voting_selected.event_title", "voting_selected.event_location", "voting_selected.event_notes",
                             "voting_selected.selected_start_date", "voting_selected.selected_end_date",
                             "voting_selected.selected_start_time", "voting_selected.selected_end_time"),
                             "user", "json");
@@ -233,7 +235,10 @@ public class CloudantConnect {
     /**
      * This method sends the voting options to the target participants.
      */
-    public void sendOptionsToTargetParticipants(String participants, String start_date, String end_date,
+    public void sendOptionsToTargetParticipants(String my_username, String participants,
+                                                int event_colour, String event_title,
+                                                String event_location, String event_notes,
+                                                String start_date, String end_date,
                                                 String start_time, String end_time) {
         // Retrieve all participants username
         String[] username = participants.split(" ");
@@ -242,6 +247,11 @@ public class CloudantConnect {
         for(int i = 0; i < size; i++) {
             User user = getTargetUser(username[i]);
             // Set options into target user's document
+            user.setOption_my_username(my_username);
+            user.setOption_event_colour(event_colour);
+            user.setOption_event_title(event_title);
+            user.setOption_event_location(event_location);
+            user.setOption_event_notes(event_notes);
             user.setOption_start_date(start_date);
             user.setOption_end_date(end_date);
             user.setOption_start_time(start_time);
@@ -282,6 +292,86 @@ public class CloudantConnect {
         // Reach here if no existing emails found
         Log.e(TAG, "Unable to find user to vote");
         return null;
+    }
+
+    /**
+     * Check if there is any voting request
+     *
+     * @param username
+     * @return true if there is voting request, else false
+     */
+    public boolean checkVotingRequest(String username) {
+        User user = getTargetUser(username);
+        if(user.getOption_event_title() != null) return true;
+        return false;
+    }
+
+    /**
+     * Check if there is any voting response
+     *
+     * @param username
+     * @return true if there is voting request, else false
+     */
+    public boolean checkVotingResponse(String username) {
+        User user = getTargetUser(username);
+        if(user.getSelected_event_title() != null) return true;
+        return false;
+    }
+
+    /**
+     * Reset voting options once saved in user's phone
+     *
+     * @param username to reset the document of target username
+     */
+    public void resetVotingOptions(String username) {
+        User user = getTargetUser(username);
+
+        user.setOption_my_username("");
+        user.setOption_event_colour(-1);
+        user.setOption_event_title("");
+        user.setOption_event_location("");
+        user.setOption_event_notes("");
+        user.setOption_start_date("");
+        user.setOption_end_date("");
+        user.setOption_start_time("");
+        user.setOption_end_time("");
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /**
+     * Reset voting response once saved in user's phone
+     *
+     * @param username to reset the document of target username
+     */
+    public void resetVotingResponse(String username) {
+        User user = getTargetUser(username);
+
+        user.setSelected_my_username("");
+        user.setSelected_event_colour(-1);
+        user.setSelected_event_title("");
+        user.setSelected_event_location("");
+        user.setSelected_event_notes("");
+        user.setSelected_start_date("");
+        user.setSelected_end_date("");
+        user.setSelected_start_time("");
+        user.setSelected_end_time("");
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
     }
 
     /****************************************************************************************************

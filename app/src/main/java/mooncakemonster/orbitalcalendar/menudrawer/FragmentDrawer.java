@@ -24,7 +24,7 @@ import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.accountsettings.SettingActivity;
-import mooncakemonster.orbitalcalendar.authentication.SQLiteHelper;
+import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 
 public class FragmentDrawer extends Fragment {
 
@@ -40,7 +40,7 @@ public class FragmentDrawer extends Fragment {
     private TextView displayUsername;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
-    private SQLiteHelper db;
+    private UserDatabase db;
 
     public FragmentDrawer() {
 
@@ -91,9 +91,9 @@ public class FragmentDrawer extends Fragment {
         });
 
         displayUsername = (TextView) layout.findViewById(R.id.displayusername);
-        db = new SQLiteHelper(getActivity().getApplicationContext());
+        db = new UserDatabase(getActivity().getApplicationContext());
 
-        // Fetch user details from sqlite TODO: Check why is it stored wrongly
+        // Fetch user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
         displayUsername.setText("Hello " + user.get("username") + "!");
 

@@ -17,9 +17,11 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
@@ -40,13 +42,14 @@ public class VotingActivity extends ActionBarActivity {
     OptionAdapter adapter;
 
     // Retrieve username from SQLite
+    UserDatabase db;
     FriendDatabase friendDatabase;
     List<FriendItem> list;
 
     TextView vote_title, vote_location;
     MultiAutoCompleteTextView vote_participants;
     Button add_option;
-    String start_date = "", end_date = "", start_time = "", end_time = "";
+    String notes = "", start_date = "", end_date = "", start_time = "", end_time = "";
     int colour;
 
     @Override
@@ -64,6 +67,8 @@ public class VotingActivity extends ActionBarActivity {
 
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
+
+        db = new UserDatabase(this);
 
         getSupportActionBar().setElevation(0);
 
@@ -89,6 +94,7 @@ public class VotingActivity extends ActionBarActivity {
         vote_participants.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
 
         //(3) Extract data from appointment
+        notes = appt.getNotes();
         colour = appt.getColour();
         //Get Event Title and Location
         String event = appt.getEvent();
@@ -186,10 +192,16 @@ public class VotingActivity extends ActionBarActivity {
                 String participants = vote_participants.getText().toString().replace("@", "").replace(",", "");
 
                 VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
-                votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(), vote_location.getText().toString(), participants, start_date, end_date, start_time, end_time);
+                votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(),
+                        vote_location.getText().toString(), participants, start_date, end_date, start_time, end_time);
+
+                // Fetch user details from sqlite
+                HashMap<String, String> user = db.getUserDetails();
 
                 // Send out to users via Cloudant
-                cloudantConnect.sendOptionsToTargetParticipants(participants, start_date, end_date, start_time, end_time);
+                cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participants, colour, vote_title.getText().toString(),
+                                                                vote_location.getText().toString().replace(" @ ", ""),
+                                                                notes, start_date, end_date, start_time, end_time);
                 // Push all options to other targeted participants
                 cloudantConnect.startPushReplication();
 

@@ -27,6 +27,7 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.friendlist.FriendItem;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 
 /**
  * This class allows users to send a list of date
@@ -190,6 +191,8 @@ public class VotingActivity extends ActionBarActivity {
                 collateDateTime();
                 // Retrieve all users
                 String participants = vote_participants.getText().toString().replace("@", "").replace(",", "");
+                String[] participant_username = participants.split(" ");
+                int size = participant_username.length;
 
                 VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
                 votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(),
@@ -199,9 +202,13 @@ public class VotingActivity extends ActionBarActivity {
                 HashMap<String, String> user = db.getUserDetails();
 
                 // Send out to users via Cloudant
-                cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participants, colour, vote_title.getText().toString(),
-                                                                vote_location.getText().toString().replace(" @ ", ""),
-                                                                notes, start_date, end_date, start_time, end_time);
+
+                for(int i = 0; i < size; i++) {
+                    cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participant_username[i],
+                            new VoteOptionItem(colour, vote_title.getText().toString(),
+                            vote_location.getText().toString().replace(" @ ", ""),
+                            notes, start_date, end_date, start_time, end_time));
+                }
                 // Push all options to other targeted participants
                 cloudantConnect.startPushReplication();
 

@@ -73,7 +73,7 @@
             android:theme="@style/AppThemeMenu">
         </activity>
         <activity android:name=".voteinvitation.VoteInvitation"
-            android:label="Add New Picture"
+            android:label="Response to Voting Request"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeMenu">
         </activity>

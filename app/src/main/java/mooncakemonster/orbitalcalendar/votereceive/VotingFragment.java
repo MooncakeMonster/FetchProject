@@ -16,6 +16,7 @@ import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 
 public class VotingFragment extends BaseFragment {
 
@@ -85,7 +86,7 @@ public class VotingFragment extends BaseFragment {
         getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final VoteItem voteItem = votingAdapter.getItem(position);
+                final VoteOptionItem voteItem = votingAdapter.getItem(position);
 
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                 alert.setTitle("Delete voting result");
@@ -114,7 +115,7 @@ public class VotingFragment extends BaseFragment {
         });
     }
 
-    public void openDetails(View coverview, VoteItem voteItem) {
+    public void openDetails(View coverview, VoteOptionItem voteItem) {
         TextView title = Views.find(detailsLayout, R.id.details_title);
         TextView location = Views.find(detailsLayout, R.id.details_location);
 

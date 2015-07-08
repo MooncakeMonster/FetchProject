@@ -1,21 +1,20 @@
-package mooncakemonster.orbitalcalendar.votereceive;
+package mooncakemonster.orbitalcalendar.voteinvitation;
 
 /**
- * Created by BAOJUN on 20/6/15.
+ * Created by BAOJUN on 8/7/15.
  */
-public class VoteItem {
+public class VoteSelectedItem {
     private int imageId;
     private String event_title;
-    private String event_location;
     private String event_start_date;
     private String event_end_date;
     private String event_start_time;
     private String event_end_time;
 
-    public VoteItem(int imageId, String event_title, String event_location, String event_start_date, String event_end_date, String event_start_time, String event_end_time) {
+    public VoteSelectedItem(int imageId, String event_title, String event_start_date,
+                            String event_end_date, String event_start_time, String event_end_time) {
         this.imageId = imageId;
         this.event_title = event_title;
-        this.event_location = event_location;
         this.event_start_date = event_start_date;
         this.event_end_date = event_end_date;
         this.event_start_time = event_start_time;
@@ -38,14 +37,6 @@ public class VoteItem {
         this.event_title = event_title;
     }
 
-    public String getEvent_location() {
-        return event_location;
-    }
-
-    public void setEvent_location(String event_location) {
-        this.event_location = event_location;
-    }
-
     public String getEvent_start_date() {
         return event_start_date;
     }
@@ -58,7 +49,7 @@ public class VoteItem {
         return event_end_date;
     }
 
-    public void setEvent_end_date() {
+    public void setEvent_end_date(String event_end_date) {
         this.event_end_date = event_end_date;
     }
 

@@ -12,13 +12,14 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.squareup.picasso.Picasso;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
  * Created by BAOJUN on 20/6/15.
  */
 
-public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClickListener {
+public class VotingAdapter extends ItemsAdapter<VoteOptionItem> implements View.OnClickListener {
 
     VotingFragment votingFragment;
     VotingDatabase votingDatabase = new VotingDatabase(getContext());
@@ -31,7 +32,7 @@ public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        votingFragment.openDetails(v, (VoteItem) v.getTag());
+        votingFragment.openDetails(v, (VoteOptionItem) v.getTag());
     }
 
     static class Holder {
@@ -43,7 +44,7 @@ public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClic
     }
 
     @Override
-    protected View createView(VoteItem voteItem, int i, ViewGroup viewGroup, LayoutInflater layoutInflater) {
+    protected View createView(VoteOptionItem voteItem, int i, ViewGroup viewGroup, LayoutInflater layoutInflater) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.row_vote_history, viewGroup, false);
         Holder holder = new Holder();
 
@@ -60,7 +61,7 @@ public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClic
     }
 
     @Override
-    protected void bindView(VoteItem voteItem, int i, View view) {
+    protected void bindView(VoteOptionItem voteItem, int i, View view) {
         Holder holder = (Holder) view.getTag();
 
         holder.event_image.setTag(voteItem);
@@ -80,7 +81,7 @@ public class VotingAdapter extends ItemsAdapter<VoteItem> implements View.OnClic
         }
     }
 
-    private int getBackgroundResource(VoteItem voteItem) {
+    private int getBackgroundResource(VoteOptionItem voteItem) {
         switch (voteItem.getImageId()) {
             case R.color.redbear:
                 return R.drawable.backgroundred;

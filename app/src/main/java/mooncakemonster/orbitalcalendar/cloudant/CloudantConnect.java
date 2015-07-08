@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import mooncakemonster.orbitalcalendar.authentication.RegisterActivity;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 
 /**
  * This class establish connection with Cloudant database and allows replication.
@@ -163,12 +164,8 @@ public class CloudantConnect {
         if (indexManager.isTextSearchEnabled()) {
             String user_details = indexManager.ensureIndexed(Arrays.<Object>asList(
                             "user_details.email_address", "user_details.username", "user_details.password",
-                            "voting_options.my_username", "voting_options.event_title", "voting_options.event_location", "voting_options.event_notes",
-                            "voting_options.option_start_date", "voting_options.option_end_date",
-                            "voting_options.option_start_time", "voting_options.option_end_time",
-                            "voting_selected.my_username", "voting_selected.event_title", "voting_selected.event_location", "voting_selected.event_notes",
-                            "voting_selected.selected_start_date", "voting_selected.selected_end_date",
-                            "voting_selected.selected_start_time", "voting_selected.selected_end_time"),
+                            "voting_options.my_username", "voting_options.option_item",
+                            "voting_selected.my_username", "voting_selected.selected_item"),
                             "user", "json");
 
             if (user_details == null) Log.e(TAG, "Unable to create user index");
@@ -235,36 +232,20 @@ public class CloudantConnect {
     /**
      * This method sends the voting options to the target participants.
      */
-    public void sendOptionsToTargetParticipants(String my_username, String participants,
-                                                int event_colour, String event_title,
-                                                String event_location, String event_notes,
-                                                String start_date, String end_date,
-                                                String start_time, String end_time) {
-        // Retrieve all participants username
-        String[] username = participants.split(" ");
-        int size = username.length;
+    public void sendOptionsToTargetParticipants(String my_username, String participant_username, VoteOptionItem voteOptionItem) {
+        // Get target participant's username
+        User user = getTargetUser(participant_username);
+        // Set options into target user's document
+        user.setOption_my_username(my_username);
+        user.setVoteOptionItem(voteOptionItem);
 
-        for(int i = 0; i < size; i++) {
-            User user = getTargetUser(username[i]);
-            // Set options into target user's document
-            user.setOption_my_username(my_username);
-            user.setOption_event_colour(event_colour);
-            user.setOption_event_title(event_title);
-            user.setOption_event_location(event_location);
-            user.setOption_event_notes(event_notes);
-            user.setOption_start_date(start_date);
-            user.setOption_end_date(end_date);
-            user.setOption_start_time(start_time);
-            user.setOption_end_time(end_time);
-
-            // Retrieve user's documents
-            try {
-                // Update the latest targeted user's items back into Cloudant document
-                updateUserDetailsDocument(user);
-                Log.d(TAG, "Successfully updated target user's information");
-            } catch (ConflictException e) {
-                Log.e(TAG, "Unable to update target user's information");
-            }
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
         }
     }
 
@@ -302,7 +283,7 @@ public class CloudantConnect {
      */
     public boolean checkVotingRequest(String username) {
         User user = getTargetUser(username);
-        if(user.getOption_event_title() != null) return true;
+        if (user.getVoteOptionItem() != null) return true;
         return false;
     }
 
@@ -314,7 +295,7 @@ public class CloudantConnect {
      */
     public boolean checkVotingResponse(String username) {
         User user = getTargetUser(username);
-        if(user.getSelected_event_title() != null) return true;
+        if (user.getVoteSelectedItem() != null) return true;
         return false;
     }
 
@@ -327,14 +308,14 @@ public class CloudantConnect {
         User user = getTargetUser(username);
 
         user.setOption_my_username("");
-        user.setOption_event_colour(-1);
-        user.setOption_event_title("");
-        user.setOption_event_location("");
-        user.setOption_event_notes("");
-        user.setOption_start_date("");
-        user.setOption_end_date("");
-        user.setOption_start_time("");
-        user.setOption_end_time("");
+        user.getVoteOptionItem().setImageId(-1);
+        user.getVoteOptionItem().setEvent_title("");
+        user.getVoteOptionItem().setEvent_location("");
+        user.getVoteOptionItem().setEvent_notes("");
+        user.getVoteOptionItem().setEvent_start_date("");
+        user.getVoteOptionItem().setEvent_end_date("");
+        user.getVoteOptionItem().setEvent_start_time("");
+        user.getVoteOptionItem().setEvent_end_time("");
 
         // Retrieve user's documents
         try {
@@ -355,14 +336,12 @@ public class CloudantConnect {
         User user = getTargetUser(username);
 
         user.setSelected_my_username("");
-        user.setSelected_event_colour(-1);
-        user.setSelected_event_title("");
-        user.setSelected_event_location("");
-        user.setSelected_event_notes("");
-        user.setSelected_start_date("");
-        user.setSelected_end_date("");
-        user.setSelected_start_time("");
-        user.setSelected_end_time("");
+        user.getVoteSelectedItem().setImageId(-1);
+        user.getVoteSelectedItem().setEvent_title("");
+        user.getVoteSelectedItem().setEvent_start_date("");
+        user.getVoteSelectedItem().setEvent_end_date("");
+        user.getVoteSelectedItem().setEvent_start_time("");
+        user.getVoteSelectedItem().setEvent_end_time("");
 
         // Retrieve user's documents
         try {

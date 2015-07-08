@@ -46,7 +46,7 @@ public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
             holder.friend_username = (TextView) row.findViewById(R.id.friend_username);
 
             //holder.friend_alpha.setBackgroundResource(friend.getImage());
-            //holder.friend_alpha.setText(String.valueOf(friend.getUsername().charAt(0)));
+            //holder.friend_alpha.setText(friend.getUsername().charAt(0));
             holder.friend_username.setText(friend.getUsername());
 
             row.setTag(holder);

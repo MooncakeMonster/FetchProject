@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import mooncakemonster.orbitalcalendar.votereceive.VoteItem;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 /**
  * This class creates table for database.
  */
@@ -82,13 +82,13 @@ public class VotingDatabase extends SQLiteOpenHelper {
     }
 
     // This method retrieves all votings.
-    public List<VoteItem> getAllVotings(VotingDatabase data) {
-        List<VoteItem> votings = new ArrayList<VoteItem>();
+    public List<VoteOptionItem> getAllVotings(VotingDatabase data) {
+        List<VoteOptionItem> votings = new ArrayList<VoteOptionItem>();
         Cursor cursor = getInformation(data);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            VoteItem voteItem = new VoteItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
+            VoteOptionItem voteItem = new VoteOptionItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
             votings.add(voteItem);
             cursor.moveToNext();
         }

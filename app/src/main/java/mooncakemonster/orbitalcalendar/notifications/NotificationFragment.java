@@ -7,9 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,14 +43,17 @@ public class NotificationFragment extends ListFragment {
         // (1) Retrieve latest voting request
         String my_username = user.get("username");
         Log.d(TAG, my_username);
+        // TODO: Find out a way to pull data from Cloudant and store in phone in real time
         cloudantConnect.startPullReplication();
         User my_user = cloudantConnect.getTargetUser(my_username);
 
         if(cloudantConnect.checkVotingRequest(my_username)) {
             Log.d(TAG, "Voting request found");
             notificationDatabase.putInformation(notificationDatabase,
-                    my_user.getOption_my_username(), " has requested you to vote for his/her event - ",
-                    my_user.getOption_event_title(), ". Vote now!",  new Intent(getActivity(), VoteInvitation.class).toUri(0));
+                    my_user.getOption_my_username(), " has requested you to vote for the event - ",
+                    my_user.getOption_event_title(), ", vote now!", my_user.getOption_event_location(),
+                    my_user.getOption_event_notes(), "", my_user.getOption_start_date(), my_user.getOption_end_date(),
+                    my_user.getOption_start_time(), my_user.getOption_end_time(), new Intent(getActivity(), VoteInvitation.class).toUri(0));
 
             // Reset document once data is saved in the phone
             cloudantConnect.resetVotingOptions(my_username);
@@ -61,7 +62,9 @@ public class NotificationFragment extends ListFragment {
             Log.d(TAG, "Voting response found");
             notificationDatabase.putInformation(notificationDatabase,
                     my_user.getOption_my_username(), " has responded to your event - ",
-                    my_user.getOption_event_title(), ". Checkout the current voting result now!", "");
+                    my_user.getOption_event_title(), ", checkout the current voting result now!", my_user.getSelected_event_location(),
+                    my_user.getSelected_event_notes(), "", my_user.getSelected_start_date(), my_user.getOption_end_date(),
+                    my_user.getSelected_start_time(), my_user.getOption_end_time(), "");
 
             // Reset document once data is saved in the phone
             cloudantConnect.resetVotingResponse(my_username);
@@ -79,23 +82,6 @@ public class NotificationFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return  inflater.inflate(R.layout.fragment_notifications, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                final NotificationItem notificationItem = adapter.getItem(position);
-                try {
-                    startActivity(Intent.parseUri(notificationItem.getIntent(), 0));
-                } catch (URISyntaxException e){
-                    Log.e(TAG, "Error setting intent");
-                }
-            }
-        });
+        return inflater.inflate(R.layout.fragment_notifications, container, false);
     }
 }

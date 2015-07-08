@@ -88,7 +88,8 @@ public class VotingDatabase extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            VoteOptionItem voteItem = new VoteOptionItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
+            VoteOptionItem voteItem = new VoteOptionItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3),
+                    cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
             votings.add(voteItem);
             cursor.moveToNext();
         }

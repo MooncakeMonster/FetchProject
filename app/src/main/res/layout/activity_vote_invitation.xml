@@ -1,8 +1,140 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/cloudy"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/invite_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        android:text="You're invited!"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/activity_horizontal_margin">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/text_left_date">
+
+            <TextView
+                android:id="@+id/invite_header_sender"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:inputType="textCapCharacters"
+                android:text="Sender: "
+                android:textStyle="bold"
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/invite_header_title"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:inputType="textCapCharacters"
+                android:text="Event title: "
+                android:textStyle="bold"
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp" />
+
+
+            <TextView
+                android:id="@+id/invite_header_location"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:inputType="textCapCharacters"
+                android:text="Event location: "
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp"/>
+
+            <TextView
+                android:id="@+id/invite_header_notes"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:textStyle="bold"
+                android:inputType="textCapCharacters"
+                android:text="Event notes: "
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/standard_padding_size"
+            android:layout_toRightOf="@+id/text_left_date"
+            android:id="@+id/left_date">
+
+            <TextView
+                android:id="@+id/invite_sender"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:inputType="textCapCharacters"
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp"/>
+
+
+            <TextView
+                android:id="@+id/invite_title"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:inputType="textCapCharacters"
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/invite_location"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:inputType="textCapCharacters"
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp"/>
+
+            <TextView
+                android:id="@+id/invite_notes"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@android:color/transparent"
+                android:gravity="left"
+                android:inputType="textCapCharacters"
+                android:textColor="@color/caldroid_black"
+                android:textSize="17dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/select_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/colorPrimary" />
 
 
 

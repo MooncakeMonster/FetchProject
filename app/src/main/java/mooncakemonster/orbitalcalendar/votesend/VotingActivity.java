@@ -27,7 +27,6 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.friendlist.FriendItem;
-import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 
 /**
  * This class allows users to send a list of date
@@ -191,24 +190,19 @@ public class VotingActivity extends ActionBarActivity {
                 collateDateTime();
                 // Retrieve all users
                 String participants = vote_participants.getText().toString().replace("@", "").replace(",", "");
-                String[] participant_username = participants.split(" ");
-                int size = participant_username.length;
+                String title = vote_title.getText().toString();
+                String location = vote_location.getText().toString().replace(" @ ", "");
 
                 VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
-                votingDatabase.putInformation(votingDatabase, colour, vote_title.getText().toString(),
-                        vote_location.getText().toString(), participants, start_date, end_date, start_time, end_time);
+                votingDatabase.putInformation(votingDatabase, colour, title, location,
+                                              participants, start_date, end_date, start_time, end_time);
 
                 // Fetch user details from sqlite
                 HashMap<String, String> user = db.getUserDetails();
 
                 // Send out to users via Cloudant
-
-                for(int i = 0; i < size; i++) {
-                    cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participant_username[i],
-                            new VoteOptionItem(colour, vote_title.getText().toString(),
-                            vote_location.getText().toString().replace(" @ ", ""),
-                            notes, start_date, end_date, start_time, end_time));
-                }
+                cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participants, colour,
+                                                                title, location, notes, start_date, end_date, start_time, end_time);
                 // Push all options to other targeted participants
                 cloudantConnect.startPushReplication();
 

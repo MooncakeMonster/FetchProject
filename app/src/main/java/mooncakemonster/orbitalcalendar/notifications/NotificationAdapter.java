@@ -1,7 +1,9 @@
 package mooncakemonster.orbitalcalendar.notifications;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -9,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.net.URISyntaxException;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
@@ -19,7 +23,10 @@ import mooncakemonster.orbitalcalendar.R;
  * Created by BAOJUN on 7/7/15.
  */
 public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
+
+    private static final String TAG = NotificationAdapter.class.getSimpleName();
     private List<NotificationItem> objects;
+    Intent intent;
 
     public NotificationAdapter(Context context, int resource, List<NotificationItem> objects) {
         super(context, resource, objects);
@@ -27,6 +34,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
     }
 
     static class Holder {
+        LinearLayout linearLayout;
         TextView message;
     }
 
@@ -41,7 +49,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             row = inflater.inflate(R.layout.row_notifications, parent, false);
         }
 
-        NotificationItem notificationItem = objects.get(position);
+        final NotificationItem notificationItem = objects.get(position);
 
         if(notificationItem != null) {
             holder = new Holder();
@@ -51,16 +59,33 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             String sender_event = notificationItem.getSender_event();
             String action = notificationItem.getAction();
 
-            Log.d("notiadapter", sender_username);
-
             // Create a new spannable
             SpannableString spannable = new SpannableString(sender_username + sender_message + sender_event + action);
             spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, sender_username.length(), 0);
             //spannable.setSpan(new StyleSpan(Typeface.BOLD), sender_username.length() + sender_message.length(), sender_event.length(), 0);
 
             // Set the text of a textView with the spannable object
+            holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
+
+
+            final View inner_view = row;
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        intent = Intent.parseUri(notificationItem.getIntent(), 0);
+                    } catch (URISyntaxException e) {
+                        Log.e(TAG, "Unable to retrieve intent");
+                    }
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("vote_item", notificationItem);
+                    intent.putExtras(bundle);
+                    inner_view.getContext().startActivity(intent);
+                }
+            });
 
             row.setTag(holder);
         }

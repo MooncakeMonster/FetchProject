@@ -14,11 +14,10 @@ public class NotificationData {
         public static final String MESSAGE = "message";
         public static final String SENDER_EVENT = "sender_event";
         public static final String ACTION = "action";
-
         public static final String SENDER_LOCATION = "sender_location";
         public static final String SENDER_NOTES = "sender_notes";
 
-        public static final String SELECTED_DATE = "selected_date";
+        public static final String VOTE_TYPE = "vote_type";
         public static final String START_DATE = "start_date";
         public static final String END_DATE = "end_date";
         public static final String START_TIME = "start_time";

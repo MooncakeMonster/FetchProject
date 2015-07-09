@@ -54,7 +54,7 @@ public class FriendlistFragment extends ListFragment {
             @Override
             public void onClick(View v) {
                 final View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.edittext_dialog, null);
-                final EditText input_username = (EditText) dialogview.findViewById(R.id.input_friend_username);
+                final EditText input_username = (EditText) dialogview.findViewById(R.id.input_text);
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
                 alertBuilder.setTitle("Enter your friend's username:");
@@ -86,7 +86,7 @@ public class FriendlistFragment extends ListFragment {
             @Override
             public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
                 final View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.edittext_dialog, null);
-                final EditText input_username = (EditText) dialogview.findViewById(R.id.input_friend_username);
+                final EditText input_username = (EditText) dialogview.findViewById(R.id.input_text);
 
                 //Get FriendItem from ArrayAdapter
                 final FriendItem friendItem = adapter.getItem(position);

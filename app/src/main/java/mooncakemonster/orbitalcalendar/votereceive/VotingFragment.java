@@ -16,7 +16,7 @@ import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
+import mooncakemonster.orbitalcalendar.cloudant.VoteOptionItem;
 
 public class VotingFragment extends BaseFragment {
 

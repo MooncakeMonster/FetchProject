@@ -21,13 +21,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/activity_horizontal_margin">
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/text_left_date">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/invite_header_sender"
@@ -37,9 +38,9 @@
                 android:gravity="left"
                 android:inputType="textCapCharacters"
                 android:text="Sender: "
-                android:textStyle="bold"
                 android:textColor="@color/caldroid_black"
-                android:textSize="17dp" />
+                android:textSize="17dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/invite_header_title"
@@ -49,9 +50,9 @@
                 android:gravity="left"
                 android:inputType="textCapCharacters"
                 android:text="Event title: "
-                android:textStyle="bold"
                 android:textColor="@color/caldroid_black"
-                android:textSize="17dp" />
+                android:textSize="17dp"
+                android:textStyle="bold" />
 
 
             <TextView
@@ -60,11 +61,11 @@
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:gravity="left"
-                android:textStyle="bold"
                 android:inputType="textCapCharacters"
                 android:text="Event location: "
                 android:textColor="@color/caldroid_black"
-                android:textSize="17dp"/>
+                android:textSize="17dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/invite_header_notes"
@@ -72,20 +73,20 @@
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:gravity="left"
-                android:textStyle="bold"
                 android:inputType="textCapCharacters"
                 android:text="Event notes: "
                 android:textColor="@color/caldroid_black"
-                android:textSize="17dp"/>
+                android:textSize="17dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
+
         <LinearLayout
+            android:id="@+id/left_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginLeft="@dimen/standard_padding_size"
-            android:layout_toRightOf="@+id/text_left_date"
-            android:id="@+id/left_date">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/invite_sender"
@@ -95,7 +96,7 @@
                 android:gravity="left"
                 android:inputType="textCapCharacters"
                 android:textColor="@color/caldroid_black"
-                android:textSize="17dp"/>
+                android:textSize="17dp" />
 
 
             <TextView
@@ -116,7 +117,7 @@
                 android:gravity="left"
                 android:inputType="textCapCharacters"
                 android:textColor="@color/caldroid_black"
-                android:textSize="17dp"/>
+                android:textSize="17dp" />
 
             <TextView
                 android:id="@+id/invite_notes"
@@ -126,8 +127,26 @@
                 android:gravity="left"
                 android:inputType="textCapCharacters"
                 android:textColor="@color/caldroid_black"
-                android:textSize="17dp"/>
+                android:textSize="17dp" />
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <Button
+            android:id="@+id/reject_event"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:inputType="textCapCharacters"
+            android:text="Reject Event"
+            android:textColor="@color/white"
+            android:textSize="@dimen/event_text_size" />
     </LinearLayout>
 
     <ListView
@@ -135,7 +154,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:divider="@color/colorPrimary" />
-
 
 
 </LinearLayout>

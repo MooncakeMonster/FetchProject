@@ -1,20 +1,24 @@
-package mooncakemonster.orbitalcalendar.voteinvitation;
+package mooncakemonster.orbitalcalendar.cloudant;
 
 /**
- * Created by BAOJUN on 8/7/15.
+ * This class represents the voting options sent out to target participants to vote the dates they are available.
  */
-public class VoteSelectedItem {
+public class VoteOptionItem {
     private int imageId;
     private String event_title;
+    private String event_location;
+    private String event_notes;
     private String event_start_date;
     private String event_end_date;
     private String event_start_time;
     private String event_end_time;
 
-    public VoteSelectedItem(int imageId, String event_title, String event_start_date,
-                            String event_end_date, String event_start_time, String event_end_time) {
+    public VoteOptionItem(int imageId, String event_title, String event_location, String event_notes,
+                          String event_start_date, String event_end_date, String event_start_time, String event_end_time) {
         this.imageId = imageId;
         this.event_title = event_title;
+        this.event_location = event_location;
+        this.event_notes = event_notes;
         this.event_start_date = event_start_date;
         this.event_end_date = event_end_date;
         this.event_start_time = event_start_time;
@@ -35,6 +39,22 @@ public class VoteSelectedItem {
 
     public void setEvent_title(String event_title) {
         this.event_title = event_title;
+    }
+
+    public String getEvent_location() {
+        return event_location;
+    }
+
+    public void setEvent_location(String event_location) {
+        this.event_location = event_location;
+    }
+
+    public String getEvent_notes() {
+        return event_notes;
+    }
+
+    public void setEvent_notes(String event_notes) {
+        this.event_notes = event_notes;
     }
 
     public String getEvent_start_date() {

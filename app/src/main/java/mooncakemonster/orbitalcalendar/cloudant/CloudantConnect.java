@@ -170,8 +170,9 @@ public class CloudantConnect {
                             "voting_selected.my_username", "voting_selected.event_title",
                             "voting_selected.event_location", "voting_selected.event_notes",
                             "voting_selected.selected_start_date", "voting_selected.selected_end_date",
-                            "voting_selected.selected_start_time", "voting_selected.selected_end_time"),
-                    "user", "json");
+                            "voting_selected.selected_start_time", "voting_selected.selected_end_time",
+                            "voting_selected.reject_reason"),
+                            "user", "json");
 
             if (user_details == null) Log.e(TAG, "Unable to create user index");
             else Log.d(TAG, "Successfully created index" + user_details);
@@ -277,7 +278,7 @@ public class CloudantConnect {
                                                    int event_colour, String event_title,
                                                    String event_location, String event_notes,
                                                    String start_date, String end_date,
-                                                   String start_time, String end_time) {
+                                                   String start_time, String end_time, String reject_reason) {
 
         User user = getTargetUser(sender);
         // Set options into target user's document
@@ -290,6 +291,7 @@ public class CloudantConnect {
         user.setSelected_end_date(end_date);
         user.setSelected_start_time(start_time);
         user.setSelected_end_time(end_time);
+        user.setReject_reason(reject_reason);
 
         // Retrieve user's documents
         try {
@@ -354,56 +356,55 @@ public class CloudantConnect {
     /**
      * Reset voting options once saved in user's phone
      *
-     * @param username to reset the document of target username
+     * @param user to reset the document of target user
      */
-    public void resetVotingOptions(String username) {
-        User user = getTargetUser(username);
-
-        user.setOption_my_username("");
-        user.setOption_event_colour(-1);
-        user.setOption_event_title("");
-        user.setOption_event_location("");
-        user.setOption_event_notes("");
-        user.setOption_start_date("");
-        user.setOption_end_date("");
-        user.setOption_start_time("");
-        user.setOption_end_time("");
+    public void resetVotingOptions(User user) {
+        // Set options into target user's document
+        user.setOption_my_username(null);
+        user.setOption_event_colour(0);
+        user.setOption_event_title(null);
+        user.setOption_event_location(null);
+        user.setOption_event_notes(null);
+        user.setOption_start_date(null);
+        user.setOption_end_date(null);
+        user.setOption_start_time(null);
+        user.setOption_end_time(null);
 
         // Retrieve user's documents
         try {
             // Update the latest targeted user's items back into Cloudant document
             updateUserDetailsDocument(user);
-            Log.d(TAG, "Successfully updated target user's information");
+            Log.d(TAG, "Successfully reset target user's voting options");
         } catch (ConflictException e) {
-            Log.e(TAG, "Unable to update target user's information");
+            Log.e(TAG, "Unable to reset target user's voting options");
         }
     }
 
     /**
      * Reset voting response once saved in user's phone
      *
-     * @param username to reset the document of target username
+     * @param user to reset the document of target username
      */
-    public void resetVotingResponse(String username) {
-        User user = getTargetUser(username);
-
-        user.setSelected_my_username("");
-        user.setSelected_event_colour(-1);
-        user.setSelected_event_title("");
-        user.setSelected_event_location("");
-        user.setSelected_event_notes("");
-        user.setSelected_start_date("");
-        user.setSelected_end_date("");
-        user.setSelected_start_time("");
-        user.setSelected_end_time("");
+    public void resetVotingResponse(User user) {
+        // Set options into target user's document
+        user.setSelected_my_username(null);
+        user.setSelected_event_colour(0);
+        user.setSelected_event_title(null);
+        user.setSelected_event_location(null);
+        user.setSelected_event_notes(null);
+        user.setSelected_start_date(null);
+        user.setSelected_end_date(null);
+        user.setSelected_start_time(null);
+        user.setSelected_end_time(null);
+        user.setReject_reason(null);
 
         // Retrieve user's documents
         try {
             // Update the latest targeted user's items back into Cloudant document
             updateUserDetailsDocument(user);
-            Log.d(TAG, "Successfully updated target user's information");
+            Log.d(TAG, "Successfully reset target user's voting selection");
         } catch (ConflictException e) {
-            Log.e(TAG, "Unable to update target user's information");
+            Log.e(TAG, "Unable to reset target user's voting selection");
         }
     }
 

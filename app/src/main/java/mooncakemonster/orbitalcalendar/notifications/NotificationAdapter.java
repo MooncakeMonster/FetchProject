@@ -59,10 +59,11 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             String sender_event = notificationItem.getSender_event();
             String action = notificationItem.getAction();
 
-            // Create a new spannable
+            // Create a new spannable TODO: Unable to bold properly
             SpannableString spannable = new SpannableString(sender_username + sender_message + sender_event + action);
             spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, sender_username.length(), 0);
-            //spannable.setSpan(new StyleSpan(Typeface.BOLD), sender_username.length() + sender_message.length(), sender_event.length(), 0);
+            //spannable.setSpan(new StyleSpan(Typeface.NORMAL), sender_username.length(), sender_message.length(), 0);
+            //spannable.setSpan(new StyleSpan(Typeface.BOLD), sender_message.length(), sender_event.length(), 0);
 
             // Set the text of a textView with the spannable object
             holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);

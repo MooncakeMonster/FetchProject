@@ -11,17 +11,16 @@ import android.widget.CheckBox;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 
 /**
  * Created by BAOJUN on 7/7/15.
  */
-public class VoteInvitationAdapter extends ArrayAdapter<NotificationItem> {
+public class SelectAdapter extends ArrayAdapter<SelectItem> {
 
-    private static final String TAG = VoteInvitationAdapter.class.getSimpleName();
-    private List<NotificationItem> objects;
+    private static final String TAG = SelectAdapter.class.getSimpleName();
+    private List<SelectItem> objects;
 
-    public VoteInvitationAdapter(Context context, int resource, List<NotificationItem> objects) {
+    public SelectAdapter(Context context, int resource, List<SelectItem> objects) {
         super(context, resource, objects);
         this.objects = objects;
     }
@@ -42,12 +41,12 @@ public class VoteInvitationAdapter extends ArrayAdapter<NotificationItem> {
 
         if(row == null) {
             inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_notifications, parent, false);
+            row = inflater.inflate(R.layout.row_selected_checkbox, parent, false);
         }
 
-        final NotificationItem notificationItem = objects.get(position);
+        final SelectItem selectItem = objects.get(position);
 
-        if(notificationItem != null) {
+        if(selectItem != null) {
             holder = new Holder();
 
             holder.select_date = (CheckBox) row.findViewById(R.id.select_date);
@@ -56,10 +55,13 @@ public class VoteInvitationAdapter extends ArrayAdapter<NotificationItem> {
             holder.select_start_time = (Button) row.findViewById(R.id.select_start_time);
             holder.select_end_time = (Button) row.findViewById(R.id.select_end_time);
 
-            holder.select_start_date.setText(notificationItem.getStart_date());
-            holder.select_end_date.setText(notificationItem.getEnd_date());
-            holder.select_start_time.setText(notificationItem.getStart_time());
-            holder.select_end_time.setText(notificationItem.getEnd_time());
+            if(holder.select_date.isChecked()) holder.select_date.setSelected(true);
+            else holder.select_date.setSelected(false);
+
+            holder.select_start_date.setText(selectItem.getEvent_start_date());
+            holder.select_end_date.setText(selectItem.getEvent_end_date());
+            holder.select_start_time.setText(selectItem.getEvent_start_time());
+            holder.select_end_time.setText(selectItem.getEvent_end_time());
 
             row.setTag(holder);
         }

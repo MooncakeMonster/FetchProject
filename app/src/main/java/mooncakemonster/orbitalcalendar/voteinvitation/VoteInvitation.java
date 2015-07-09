@@ -1,23 +1,27 @@
 package mooncakemonster.orbitalcalendar.voteinvitation;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.notifications.NotificationDatabase;
 import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 
 /**
@@ -31,16 +35,15 @@ public class VoteInvitation extends ActionBarActivity {
 
     // List to get all the appointments
     private ListView listView;
-    VoteInvitationAdapter adapter;
+    SelectAdapter adapter;
 
     // Retrieve username from SQLite
     UserDatabase db;
-    NotificationDatabase notificationDatabase;
-    List<NotificationItem> list;
     NotificationItem notificationItem;
 
+    Button reject_event;
     TextView invite_sender, invite_title, invite_location, invite_notes;
-    String start_date, end_date, start_time, end_time;
+    String start_date, end_date, start_time, end_time, reject_reason;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,33 +70,90 @@ public class VoteInvitation extends ActionBarActivity {
         final Bundle bundle = intent.getExtras();
         notificationItem = (NotificationItem) bundle.getSerializable("vote_item");
 
-        //(2) Enter participants
-        notificationDatabase = new NotificationDatabase(this);
-        list = notificationDatabase.getAllNotifications(notificationDatabase);
-
-        //(3) Extract data from notification
+        //(2) Extract data from notification
         if(notificationItem != null) {
+            String notes = notificationItem.getSender_notes();
+
             invite_sender.setText(notificationItem.getSender_username());
             invite_title.setText(notificationItem.getSender_event());
             invite_location.setText(notificationItem.getSender_location());
-            invite_notes.setText(notificationItem.getSender_notes());
+            if(!notes.isEmpty()) invite_notes.setText(notes);
+            else invite_notes.setText("No notes");
         }
 
-        adapter = new VoteInvitationAdapter(this, R.layout.row_vote, new ArrayList<NotificationItem>());
+        //(3) Get voting options from sender
+        adapter = new SelectAdapter(this, R.layout.row_selected_checkbox, new ArrayList<SelectItem>());
         listView.setAdapter(adapter);
+        retrieveAllOptions(notificationItem);
+
+        reject_event = (Button) findViewById(R.id.reject_event);
+        reject_event.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final View dialogview = LayoutInflater.from(VoteInvitation.this).inflate(R.layout.edittext_dialog, null);
+                final EditText input_username = (EditText) dialogview.findViewById(R.id.input_text);
+
+                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(VoteInvitation.this);
+                alertBuilder.setTitle("State your reason: ");
+                alertBuilder.setView(dialogview);
+
+                alertBuilder.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        reject_reason = input_username.getText().toString();
+                        resetAllDateTime();
+                        dialog.dismiss();
+                        Toast.makeText(getApplicationContext(), "Rejected event successfully", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                Dialog dialog = alertBuilder.create();
+                dialog.show();
+            }
+        });
     }
 
+    // This method retrieves the voting options from sender.
+    private void retrieveAllOptions(NotificationItem notificationItem) {
+        String[] split_start_date = notificationItem.getStart_date().split(" ");
+        String[] split_end_date = notificationItem.getEnd_date().split(" ");
+        String[] split_start_time = notificationItem.getStart_time().split(" ");
+        String[] split_end_time = notificationItem.getEnd_time().split(" ");
+
+        int size = split_start_date.length;
+
+        for(int i = 0; i < size; i++) {
+            adapter.add(new SelectItem(false, split_start_date[i], split_end_date[i],
+                    split_start_time[i], split_end_time[i]));
+        }
+    }
+
+    // This method resets all date and time as user has rejected event.
+    private void resetAllDateTime() {
+        start_date = null;
+        end_date = null;
+        start_time = null;
+        end_time = null;
+    }
+
+    // This method retrieves the selected date and time by user.
     private void collateDateTime() {
         int size = adapter.getCount();
 
         for (int i = 0; i < size; i++) {
-            NotificationItem item = adapter.getItem(i);
-            if(item.getSelected_date().equals("true")) {
+            SelectItem item = adapter.getItem(i);
+            if(item.getSelected_date()) {
                 // Space to split all dates later when retrieving
-                start_date += item.getStart_date() + " ";
-                end_date += item.getEnd_date() + " ";
-                start_time += item.getStart_time() + " ";
-                end_time += item.getEnd_time() + " ";
+                start_date += item.getEvent_start_date() + " ";
+                end_date += item.getEvent_end_date() + " ";
+                start_time += item.getEvent_start_time() + " ";
+                end_time += item.getEvent_end_time() + " ";
             }
         }
     }
@@ -131,9 +191,9 @@ public class VoteInvitation extends ActionBarActivity {
                 HashMap<String, String> user = db.getUserDetails();
 
                 // Send out to users via Cloudant
-                cloudantConnect.sendSelectedOptionsBackToRequester(user.get("username"), notificationItem.getSender_username(), -1,
+                cloudantConnect.sendSelectedOptionsBackToRequester(user.get("username"), notificationItem.getSender_username(), 0,
                         notificationItem.getSender_event(), notificationItem.getSender_location(),
-                        notificationItem.getSender_notes(), start_date, end_date, start_time, end_time);
+                        notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
                 // Push all options to other targeted participants
                 cloudantConnect.startPushReplication();
 

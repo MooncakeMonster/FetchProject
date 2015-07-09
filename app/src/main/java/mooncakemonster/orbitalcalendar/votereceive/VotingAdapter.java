@@ -12,7 +12,7 @@ import com.alexvasilkov.android.commons.utils.Views;
 import com.squareup.picasso.Picasso;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
+import mooncakemonster.orbitalcalendar.cloudant.VoteOptionItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**

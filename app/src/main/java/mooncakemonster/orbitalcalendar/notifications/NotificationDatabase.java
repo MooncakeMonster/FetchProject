@@ -24,7 +24,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
             NotificationData.NotificationInfo.ACTION + " TEXT, " +
             NotificationData.NotificationInfo.SENDER_LOCATION + " TEXT, " +
             NotificationData.NotificationInfo.SENDER_NOTES + " TEXT, " +
-            NotificationData.NotificationInfo.SELECTED_DATE + " TEXT, " +
+            NotificationData.NotificationInfo.VOTE_TYPE + " TEXT, " +
             NotificationData.NotificationInfo.START_DATE + " TEXT, " +
             NotificationData.NotificationInfo.END_DATE + " TEXT, " +
             NotificationData.NotificationInfo.START_TIME + " TEXT, " +
@@ -51,7 +51,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
     // This method insets information into the database.
     public void putInformation(NotificationDatabase data, String sender_username, String message, String sender_event, String action,
-                               String sender_location, String sender_notes, String selected_date,
+                               String sender_location, String sender_notes, String vote_type,
                                String start_date, String end_date, String start_time, String end_time, String intent) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
@@ -65,7 +65,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
         contentValues.put(NotificationData.NotificationInfo.SENDER_LOCATION, sender_location);
         contentValues.put(NotificationData.NotificationInfo.SENDER_NOTES, sender_notes);
-        contentValues.put(NotificationData.NotificationInfo.SELECTED_DATE, selected_date);
+        contentValues.put(NotificationData.NotificationInfo.VOTE_TYPE, vote_type);
         contentValues.put(NotificationData.NotificationInfo.START_DATE, start_date);
         contentValues.put(NotificationData.NotificationInfo.END_DATE, end_date);
         contentValues.put(NotificationData.NotificationInfo.START_TIME, start_time);
@@ -85,7 +85,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         String[] columns = {NotificationData.NotificationInfo.SENDER_USERNAME, NotificationData.NotificationInfo.MESSAGE,
                             NotificationData.NotificationInfo.SENDER_EVENT, NotificationData.NotificationInfo.ACTION,
                             NotificationData.NotificationInfo.SENDER_LOCATION, NotificationData.NotificationInfo.SENDER_NOTES,
-                            NotificationData.NotificationInfo.SELECTED_DATE, NotificationData.NotificationInfo.START_DATE,
+                            NotificationData.NotificationInfo.VOTE_TYPE, NotificationData.NotificationInfo.START_DATE,
                             NotificationData.NotificationInfo.END_DATE, NotificationData.NotificationInfo.END_DATE,
                             NotificationData.NotificationInfo.END_TIME, NotificationData.NotificationInfo.INTENT};
 

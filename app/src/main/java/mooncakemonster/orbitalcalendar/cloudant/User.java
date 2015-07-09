@@ -37,6 +37,9 @@ public class User {
     private String selected_start_time;
     private String selected_end_time;
 
+    // Reject event
+    private String reject_reason;
+
 
     // Document in database representing this user to be revised
     private BasicDocumentRevision revision;
@@ -219,6 +222,14 @@ public class User {
         this.selected_end_time = selected_end_time;
     }
 
+    public String getReject_reason() {
+        return reject_reason;
+    }
+
+    public void setReject_reason(String reject_reason) {
+        this.reject_reason = reject_reason;
+    }
+
     public BasicDocumentRevision getDocumentRevision() {
         return revision;
     }
@@ -258,6 +269,9 @@ public class User {
         user.setSelected_start_time((String) ((Map) user_revised.get("voting_selected")).get("selected_start_time"));
         user.setSelected_end_time((String) ((Map) user_revised.get("voting_selected")).get("selected_end_time"));
 
+        // Reject event
+        user.setSelected_end_time((String) ((Map) user_revised.get("voting_selected")).get("reject_reason"));
+
         return user;
     }
 
@@ -294,6 +308,9 @@ public class User {
         voting_selected.put("selected_end_date", selected_end_date);
         voting_selected.put("selected_start_time", selected_start_time);
         voting_selected.put("selected_end_time", selected_end_time);
+
+        // Reject event
+        voting_selected.put("reject_reason", reject_reason);
 
         // User
         user.put("user_details", user_details);

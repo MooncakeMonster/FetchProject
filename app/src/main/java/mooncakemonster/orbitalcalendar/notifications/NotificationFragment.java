@@ -61,23 +61,24 @@ public class NotificationFragment extends ListFragment {
 
         } else if(cloudantConnect.checkVotingResponse(my_username)) {
             Log.d(TAG, "Voting response found");
-            String action1, action2;
-
+            String action1, action2, intent;
 
             // case 1: Target participant has chosen the dates they can make it
             // case 2: Target participant has rejected the event
             if(my_user.getSelected_start_date() != null) {
-                action1 =  " has responded to your event - ";
+                action1 = " has responded to your event - ";
                 action2 = ", checkout the current voting result now!";
+                intent = "fragment";
             } else {
                 action1 = " has rejected your event - ";
                 action2 = ", find out why!";
+                intent = "dialog";
             }
             notificationDatabase.putInformation(notificationDatabase,
-                    my_user.getOption_my_username(), action1,
-                    my_user.getOption_event_title(), action2, my_user.getSelected_event_location(),
-                    my_user.getSelected_event_notes(), "vote_response", my_user.getSelected_start_date(), my_user.getOption_end_date(),
-                    my_user.getSelected_start_time(), my_user.getOption_end_time(), "");
+                    my_user.getSelected_my_username(), action1,
+                    my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
+                    my_user.getSelected_event_notes(), "vote_response", my_user.getSelected_start_date(), my_user.getSelected_end_date(),
+                    my_user.getSelected_start_time(), my_user.getSelected_end_time(), intent);
 
             // Reset document once data is saved in the phone
             cloudantConnect.resetVotingResponse(my_user);

@@ -86,7 +86,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
                             NotificationData.NotificationInfo.SENDER_EVENT, NotificationData.NotificationInfo.ACTION,
                             NotificationData.NotificationInfo.SENDER_LOCATION, NotificationData.NotificationInfo.SENDER_NOTES,
                             NotificationData.NotificationInfo.VOTE_TYPE, NotificationData.NotificationInfo.START_DATE,
-                            NotificationData.NotificationInfo.END_DATE, NotificationData.NotificationInfo.END_DATE,
+                            NotificationData.NotificationInfo.END_DATE, NotificationData.NotificationInfo.START_TIME,
                             NotificationData.NotificationInfo.END_TIME, NotificationData.NotificationInfo.INTENT};
 
         // Points to first row of table

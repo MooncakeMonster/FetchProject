@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import mooncakemonster.orbitalcalendar.cloudant.VoteOptionItem;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 /**
  * This class creates table for database.
  */

@@ -144,7 +144,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:inputType="textCapCharacters"
-            android:text="Reject Event"
+            android:text="Reject Voting"
             android:textColor="@color/white"
             android:textSize="@dimen/event_text_size" />
     </LinearLayout>

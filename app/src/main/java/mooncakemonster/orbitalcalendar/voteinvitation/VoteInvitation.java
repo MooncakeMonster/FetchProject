@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +44,7 @@ public class VoteInvitation extends ActionBarActivity {
 
     Button reject_event;
     TextView invite_sender, invite_title, invite_location, invite_notes;
-    String start_date, end_date, start_time, end_time, reject_reason;
+    String username = "", start_date = "", end_date = "", start_time = "", end_time = "", reject_reason = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,9 @@ public class VoteInvitation extends ActionBarActivity {
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
 
         db = new UserDatabase(this);
+        // Fetch user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+        username = user.get("username");
 
         getSupportActionBar().setElevation(0);
 
@@ -86,6 +90,7 @@ public class VoteInvitation extends ActionBarActivity {
         listView.setAdapter(adapter);
         retrieveAllOptions(notificationItem);
 
+        // Dialog edittext appears for user to state reason for rejection if they choose to reject voting
         reject_event = (Button) findViewById(R.id.reject_event);
         reject_event.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,8 +105,10 @@ public class VoteInvitation extends ActionBarActivity {
                 alertBuilder.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        reject_reason = input_username.getText().toString();
                         resetAllDateTime();
+                        pushItem(username, notificationItem.getSender_username(), 0,
+                                notificationItem.getSender_event(), notificationItem.getSender_location(),
+                                notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Rejected event successfully", Toast.LENGTH_SHORT).show();
                         finish();
@@ -142,20 +149,36 @@ public class VoteInvitation extends ActionBarActivity {
         end_time = null;
     }
 
-    // This method retrieves the selected date and time by user.
+    // This method retrieves the selected date and time by user if user did not reject the event.
     private void collateDateTime() {
         int size = adapter.getCount();
+        Log.d("VoteInvitation", "" + size);
 
         for (int i = 0; i < size; i++) {
             SelectItem item = adapter.getItem(i);
             if(item.getSelected_date()) {
+                Log.d("VoteInvitation", "pass");
                 // Space to split all dates later when retrieving
                 start_date += item.getEvent_start_date() + " ";
                 end_date += item.getEvent_end_date() + " ";
                 start_time += item.getEvent_start_time() + " ";
                 end_time += item.getEvent_end_time() + " ";
+            } else {
+                Log.d("VoteInvitation", "fail");
             }
         }
+    }
+
+    // This method push items into Cloudant database.
+    private void pushItem(String my_username, String sender_username, int colour, String event, String location, String notes,
+                          String start_date, String end_date, String start_time, String end_time, String reject_reason) {
+
+        Log.d("VoteInvitation", notificationItem.getSender_username());
+        // Send out to users via Cloudant
+        cloudantConnect.sendSelectedOptionsBackToRequester(my_username, sender_username, colour, event, location, notes,
+                                        start_date, end_date, start_time, end_time, reject_reason);
+        // Push all options to other targeted participants
+        cloudantConnect.startPushReplication();
     }
 
     // This method calls alert dialog to inform users a message.
@@ -187,15 +210,9 @@ public class VoteInvitation extends ActionBarActivity {
 
             // Save data
             else {
-                // Fetch user details from sqlite
-                HashMap<String, String> user = db.getUserDetails();
-
-                // Send out to users via Cloudant
-                cloudantConnect.sendSelectedOptionsBackToRequester(user.get("username"), notificationItem.getSender_username(), 0,
+                pushItem(username, notificationItem.getSender_username(), 0,
                         notificationItem.getSender_event(), notificationItem.getSender_location(),
                         notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
-                // Push all options to other targeted participants
-                cloudantConnect.startPushReplication();
 
                 Toast.makeText(getBaseContext(), "Successfully sent selected options", Toast.LENGTH_SHORT).show();
                 finish();

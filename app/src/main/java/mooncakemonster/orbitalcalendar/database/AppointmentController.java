@@ -63,6 +63,28 @@ public class AppointmentController
         return newAppt;
     }
 
+    public Appointment createAppointment(Appointment appointment)
+    {
+        ContentValues values = new ContentValues();
+        //Insert key-value in ContentValues
+        values.put(DatabaseHelper.EVENT, appointment.getEvent());
+        values.put(DatabaseHelper.STARTPROPERDATE, appointment.getStartProperDate());
+        values.put(DatabaseHelper.STARTDATE, appointment.getStartDate());
+        values.put(DatabaseHelper.ENDDATE, appointment.getEndDate());
+        values.put(DatabaseHelper.LOCATION, appointment.getLocation());
+        values.put(DatabaseHelper.NOTES, appointment.getNotes());
+        values.put(DatabaseHelper.REMIND, appointment.getRemind());
+        values.put(DatabaseHelper.COLOUR, appointment.getColour());
+
+        long insertId = database.insert(DatabaseHelper.DATABASE_NAME, null, values);
+        Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME, allColumns, DatabaseHelper.COLUMN_ID + " = " + insertId, null, null, null, null);
+
+        //Move cursor to the first row of the result, not the table
+        cursor.moveToFirst();
+        cursor.close();
+        return appointment;
+    }
+
     public void deleteAppointment(Appointment appointment) {
         long id = appointment.getId();
         //System.out.println("Comment deleted with id: " + id);

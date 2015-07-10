@@ -12,7 +12,8 @@ import mooncakemonster.orbitalcalendar.R;
 
 public class ImportExternalFragment extends Fragment {
 
-    public ImportExternalFragment(){}
+    public ImportExternalFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,7 +29,7 @@ public class ImportExternalFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
-                ImportFacebookLogin fragment= new ImportFacebookLogin();
+                ImportFacebookLogin fragment = new ImportFacebookLogin();
                 fragment.show(fragmentManager, "facebook_login_fragment");
             }
         });

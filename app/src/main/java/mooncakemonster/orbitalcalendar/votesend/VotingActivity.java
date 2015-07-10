@@ -2,6 +2,7 @@ package mooncakemonster.orbitalcalendar.votesend;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -27,6 +28,8 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.friendlist.FriendItem;
+import mooncakemonster.orbitalcalendar.votereceive.ResultDatabase;
+import mooncakemonster.orbitalcalendar.votereceive.ResultItem;
 
 /**
  * This class allows users to send a list of date
@@ -37,6 +40,9 @@ public class VotingActivity extends ActionBarActivity {
     // Connect to cloudant database
     CloudantConnect cloudantConnect;
 
+    // Save the option dates in SQLite database
+    ResultDatabase resultDatabase;
+
     // List to get all the appointments
     private ListView listView;
     OptionAdapter adapter;
@@ -44,13 +50,14 @@ public class VotingActivity extends ActionBarActivity {
     // Retrieve username from SQLite
     UserDatabase db;
     FriendDatabase friendDatabase;
+    VotingDatabase votingDatabase;
     List<FriendItem> list;
 
     TextView vote_title, vote_location;
     MultiAutoCompleteTextView vote_participants;
     Button add_option;
     String notes = "", start_date = "", end_date = "", start_time = "", end_time = "";
-    int colour;
+    int colour, eventId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +71,7 @@ public class VotingActivity extends ActionBarActivity {
         add_option = (Button) findViewById(R.id.add_option);
         // Initialise ArrayAdapter adapter for view
         listView = (ListView) findViewById(R.id.option_list);
+        votingDatabase = new VotingDatabase(getBaseContext());
 
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
@@ -141,19 +149,41 @@ public class VotingActivity extends ActionBarActivity {
         });
     }
 
+    // This method collates the options sent out by the requester.
     private void collateDateTime() {
         int size = adapter.getCount();
 
         for (int i = 0; i < size; i++) {
-            String startDate = Constant.standardYearMonthDate(adapter.getItem(i).getEvent_start_date(), new SimpleDateFormat("dd/MM/yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
-            String endDate = Constant.standardYearMonthDate(adapter.getItem(i).getEvent_end_date(), new SimpleDateFormat("dd/MM/yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
+            OptionItem optionItem = adapter.getItem(i);
+            String startDate = Constant.standardYearMonthDate(optionItem.getEvent_start_date(), new SimpleDateFormat("dd/MM/yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
+            String endDate = Constant.standardYearMonthDate(optionItem.getEvent_end_date(), new SimpleDateFormat("dd/MM/yyyy, EEE"), new SimpleDateFormat("dd/MM/yyyy"));
+            String startTime = optionItem.getEvent_start_time();
+            String endTime = optionItem.getEvent_end_time();
 
             // Space to split all dates later when retrieving
             start_date += startDate + " ";
             end_date += endDate + " ";
-            start_time += adapter.getItem(i).getEvent_start_time() + " ";
-            end_time += adapter.getItem(i).getEvent_end_time() + " ";
+            start_time += startTime + " ";
+            end_time += endTime + " ";
         }
+    }
+
+    // This method saves the voting options sent out into database.
+    private void saveOptions(ResultItem resultItem) {
+        resultDatabase = new ResultDatabase(this);
+
+        String[] split_start_date = resultItem.getStart_date().split(" ");
+        String[] split_end_date = resultItem.getEnd_date().split(" ");
+        String[] split_start_time = resultItem.getStart_time().split(" ");
+        String[] split_end_time = resultItem.getEnd_time().split(" ");
+
+        int size = split_start_date.length;
+
+        for(int i = 0; i < size; i++) {
+            resultDatabase.putInformation(resultDatabase, resultItem.getEvent_id(), split_start_date[i],
+                    split_end_date[i], split_start_time[i], split_end_time[i], resultItem.getAll_username(), "", 0);
+        }
+
     }
 
     // This method calls alert dialog to inform users a message.
@@ -193,15 +223,21 @@ public class VotingActivity extends ActionBarActivity {
                 String title = vote_title.getText().toString();
                 String location = vote_location.getText().toString().replace(" @ ", "");
 
-                VotingDatabase votingDatabase = new VotingDatabase(getBaseContext());
                 votingDatabase.putInformation(votingDatabase, colour, title, location,
-                                              participants, start_date, end_date, start_time, end_time);
+                        participants, start_date, end_date, start_time, end_time);
+
+                Cursor cursor = votingDatabase.getInformation(votingDatabase);
+                cursor.moveToLast();
+                eventId = cursor.getInt(0);
+
+                // Save options in SQLite for voting result
+                saveOptions(new ResultItem(eventId, start_date, end_date, start_time, end_time, participants, "", 0));
 
                 // Fetch user details from sqlite
                 HashMap<String, String> user = db.getUserDetails();
 
                 // Send out to users via Cloudant
-                cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participants, colour,
+                cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participants, eventId, colour,
                                                                 title, location, notes, start_date, end_date, start_time, end_time);
                 // Push all options to other targeted participants
                 cloudantConnect.startPushReplication();

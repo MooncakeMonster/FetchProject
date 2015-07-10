@@ -47,9 +47,9 @@ public class NotificationFragment extends ListFragment {
         cloudantConnect.startPullReplication();
         User my_user = cloudantConnect.getTargetUser(my_username);
 
-        if(cloudantConnect.checkVotingRequest(my_username)) {
+        if(cloudantConnect.checkVotingRequest(my_user)) {
             Log.d(TAG, "Voting request found");
-            notificationDatabase.putInformation(notificationDatabase,
+            notificationDatabase.putInformation(notificationDatabase, my_user.getOption_event_id(), my_user.getOption_event_colour(),
                     my_user.getOption_my_username(), " has requested you to vote for the event - ",
                     my_user.getOption_event_title(), ", vote now!", my_user.getOption_event_location(),
                     my_user.getOption_event_notes(), "vote_request", my_user.getOption_start_date(), my_user.getOption_end_date(),
@@ -59,7 +59,7 @@ public class NotificationFragment extends ListFragment {
             cloudantConnect.resetVotingOptions(my_user);
             cloudantConnect.startPushReplication();
 
-        } else if(cloudantConnect.checkVotingResponse(my_username)) {
+        } else if(cloudantConnect.checkVotingResponse(my_user)) {
             Log.d(TAG, "Voting response found");
             String action1, action2, intent;
 
@@ -74,15 +74,12 @@ public class NotificationFragment extends ListFragment {
                 action2 = ", find out why!";
                 intent = "dialog";
             }
-            notificationDatabase.putInformation(notificationDatabase,
-                    my_user.getSelected_my_username(), action1,
-                    my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
+            notificationDatabase.putInformation(notificationDatabase, my_user.getSelected_event_id(), my_user.getSelected_event_colour(),
+                    my_user.getSelected_my_username(), action1, my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
                     my_user.getSelected_event_notes(), "vote_response", my_user.getSelected_start_date(), my_user.getSelected_end_date(),
                     my_user.getSelected_start_time(), my_user.getSelected_end_time(), intent);
 
-            // Reset document once data is saved in the phone
-            cloudantConnect.resetVotingResponse(my_user);
-            cloudantConnect.startPushReplication();
+            // Do not reset here; reset at VotingFragment when data is stored under "Voting result"
         } else {
             Log.d(TAG, "Nothing found");
         }

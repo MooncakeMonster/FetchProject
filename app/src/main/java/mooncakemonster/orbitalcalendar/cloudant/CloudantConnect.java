@@ -238,7 +238,7 @@ public class CloudantConnect {
     /**
      * This method sends the voting options to the target participants.
      */
-    public void sendOptionsToTargetParticipants(String my_username, String participants,
+    public void sendOptionsToTargetParticipants(String my_username, String participants, int event_id,
                                                 int event_colour, String event_title,
                                                 String event_location, String event_notes,
                                                 String start_date, String end_date,
@@ -251,6 +251,7 @@ public class CloudantConnect {
             User user = getTargetUser(username[i]);
             // Set options into target user's document
             user.setOption_my_username(my_username);
+            user.setOption_event_id(event_id);
             user.setOption_event_colour(event_colour);
             user.setOption_event_title(event_title);
             user.setOption_event_location(event_location);
@@ -274,7 +275,7 @@ public class CloudantConnect {
     /**
      * This method sends the options selected back to the sender.
      */
-    public void sendSelectedOptionsBackToRequester(String my_username, String sender,
+    public void sendSelectedOptionsBackToRequester(String my_username, String sender, int event_id,
                                                    int event_colour, String event_title,
                                                    String event_location, String event_notes,
                                                    String start_date, String end_date,
@@ -283,6 +284,7 @@ public class CloudantConnect {
         User user = getTargetUser(sender);
         // Set options into target user's document
         user.setSelected_my_username(my_username);
+        user.setSelected_event_id(event_id);
         user.setSelected_event_colour(event_colour);
         user.setSelected_event_title(event_title);
         user.setSelected_event_location(event_location);
@@ -332,11 +334,10 @@ public class CloudantConnect {
     /**
      * Check if there is any voting request
      *
-     * @param username
+     * @param user
      * @return true if there is voting request, else false
      */
-    public boolean checkVotingRequest(String username) {
-        User user = getTargetUser(username);
+    public boolean checkVotingRequest(User user) {
         if (user.getOption_event_title() != null) return true;
         return false;
     }
@@ -344,11 +345,10 @@ public class CloudantConnect {
     /**
      * Check if there is any voting response
      *
-     * @param username
+     * @param user
      * @return true if there is voting request, else false
      */
-    public boolean checkVotingResponse(String username) {
-        User user = getTargetUser(username);
+    public boolean checkVotingResponse(User user) {
         if (user.getSelected_event_title() != null) return true;
         return false;
     }
@@ -361,6 +361,7 @@ public class CloudantConnect {
     public void resetVotingOptions(User user) {
         // Set options into target user's document
         user.setOption_my_username(null);
+        user.setOption_event_id(0);
         user.setOption_event_colour(0);
         user.setOption_event_title(null);
         user.setOption_event_location(null);
@@ -388,6 +389,7 @@ public class CloudantConnect {
     public void resetVotingResponse(User user) {
         // Set options into target user's document
         user.setSelected_my_username(null);
+        user.setSelected_event_id(0);
         user.setSelected_event_colour(0);
         user.setSelected_event_title(null);
         user.setSelected_event_location(null);

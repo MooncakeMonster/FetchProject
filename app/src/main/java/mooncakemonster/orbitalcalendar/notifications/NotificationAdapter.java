@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
     static class Holder {
         LinearLayout linearLayout;
+        ImageView action_image;
         TextView message;
     }
 
@@ -67,6 +69,9 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
             // Set the text of a textView with the spannable object
             holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);
+            holder.action_image = (ImageView) row.findViewById(R.id.action_image);
+            // TODO: Set appropriate background image
+
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
 

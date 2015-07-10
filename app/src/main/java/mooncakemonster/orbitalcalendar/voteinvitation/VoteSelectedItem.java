@@ -4,6 +4,7 @@ package mooncakemonster.orbitalcalendar.voteinvitation;
  * Created by BAOJUN on 8/7/15.
  */
 public class VoteSelectedItem {
+    private int eventId;
     private int imageId;
     private String event_title;
     private String event_start_date;
@@ -11,14 +12,23 @@ public class VoteSelectedItem {
     private String event_start_time;
     private String event_end_time;
 
-    public VoteSelectedItem(int imageId, String event_title, String event_start_date,
+    public VoteSelectedItem(int eventId, int imageId, String event_title, String event_start_date,
                             String event_end_date, String event_start_time, String event_end_time) {
+        this.eventId = eventId;
         this.imageId = imageId;
         this.event_title = event_title;
         this.event_start_date = event_start_date;
         this.event_end_date = event_end_date;
         this.event_start_time = event_start_time;
         this.event_end_time = event_end_time;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     public int getImageId() {

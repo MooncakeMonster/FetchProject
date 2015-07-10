@@ -94,13 +94,14 @@ public class FriendlistFragment extends ListFragment {
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                 alert.setTitle("Update username");
                 alert.setView(dialogview);
-                input_username.setText(friendItem.getUsername());
+                final String previous_username = friendItem.getUsername();
+                input_username.setText(previous_username);
 
                 alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //Update latest username into SQLite database
-                        friendDatabase.updateInformation(friendDatabase, input_username.getText().toString());
+                        friendDatabase.updateInformation(friendDatabase, previous_username, input_username.getText().toString());
                         adapter.clear();
                         adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
                         adapter.notifyDataSetChanged();

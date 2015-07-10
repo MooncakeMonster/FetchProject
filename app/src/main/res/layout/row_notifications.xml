@@ -2,8 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:id="@+id/notification_layout"
+    android:padding="@dimen/standard_padding_size"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/action_image"
+        android:src="@drawable/beared"
+        android:layout_width="@dimen/standard_icon_size"
+        android:layout_height="@dimen/event_icon_size"
+        android:layout_marginRight="@dimen/standard_margin_size"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/message"

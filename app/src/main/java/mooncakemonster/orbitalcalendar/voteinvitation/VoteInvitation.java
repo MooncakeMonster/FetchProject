@@ -34,7 +34,7 @@ public class VoteInvitation extends ActionBarActivity {
     // Connect to cloudant database
     CloudantConnect cloudantConnect;
 
-    // List to get all the appointments
+    // List to get all the date options
     private ListView listView;
     SelectAdapter adapter;
 
@@ -106,7 +106,7 @@ public class VoteInvitation extends ActionBarActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         resetAllDateTime();
-                        pushItem(username, notificationItem.getSender_username(), 0,
+                        pushItem(username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
                                 notificationItem.getSender_event(), notificationItem.getSender_location(),
                                 notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
                         dialog.dismiss();
@@ -170,12 +170,12 @@ public class VoteInvitation extends ActionBarActivity {
     }
 
     // This method push items into Cloudant database.
-    private void pushItem(String my_username, String sender_username, int colour, String event, String location, String notes,
+    private void pushItem(String my_username, String sender_username, int eventId, int imageId, String event, String location, String notes,
                           String start_date, String end_date, String start_time, String end_time, String reject_reason) {
 
         Log.d("VoteInvitation", notificationItem.getSender_username());
         // Send out to users via Cloudant
-        cloudantConnect.sendSelectedOptionsBackToRequester(my_username, sender_username, colour, event, location, notes,
+        cloudantConnect.sendSelectedOptionsBackToRequester(my_username, sender_username, eventId, imageId, event, location, notes,
                                         start_date, end_date, start_time, end_time, reject_reason);
         // Push all options to other targeted participants
         cloudantConnect.startPushReplication();
@@ -210,7 +210,7 @@ public class VoteInvitation extends ActionBarActivity {
 
             // Save data
             else {
-                pushItem(username, notificationItem.getSender_username(), 0,
+                pushItem(username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
                         notificationItem.getSender_event(), notificationItem.getSender_location(),
                         notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
 

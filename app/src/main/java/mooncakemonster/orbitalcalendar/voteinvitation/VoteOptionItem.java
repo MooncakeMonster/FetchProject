@@ -4,25 +4,35 @@ package mooncakemonster.orbitalcalendar.voteinvitation;
  * This class represents the voting options sent out to target participants to vote the dates they are available.
  */
 public class VoteOptionItem {
+    private int eventId;
     private int imageId;
     private String event_title;
     private String event_location;
-    private String event_notes;
+    private String event_participants;
     private String event_start_date;
     private String event_end_date;
     private String event_start_time;
     private String event_end_time;
 
-    public VoteOptionItem(int imageId, String event_title, String event_location, String event_notes,
+    public VoteOptionItem(int eventId, int imageId, String event_title, String event_location, String event_participants,
                           String event_start_date, String event_end_date, String event_start_time, String event_end_time) {
+        this.eventId = eventId;
         this.imageId = imageId;
         this.event_title = event_title;
         this.event_location = event_location;
-        this.event_notes = event_notes;
+        this.event_participants = event_participants;
         this.event_start_date = event_start_date;
         this.event_end_date = event_end_date;
         this.event_start_time = event_start_time;
         this.event_end_time = event_end_time;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     public int getImageId() {
@@ -49,12 +59,12 @@ public class VoteOptionItem {
         this.event_location = event_location;
     }
 
-    public String getEvent_notes() {
-        return event_notes;
+    public String getEvent_participants() {
+        return event_participants;
     }
 
-    public void setEvent_notes(String event_notes) {
-        this.event_notes = event_notes;
+    public void setEvent_participants(String event_participants) {
+        this.event_participants = event_participants;
     }
 
     public String getEvent_start_date() {

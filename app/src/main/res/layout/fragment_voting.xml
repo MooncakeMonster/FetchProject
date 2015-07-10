@@ -3,142 +3,204 @@
     android:layout_height="match_parent"
     android:background="@drawable/cloudy">
 
-    <ListView
-        android:id="@android:id/list"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="12dp"
-        android:padding="12dp"
-        android:listSelector="@android:color/transparent"
-        android:scrollingCache="false"
-        android:clipToPadding="false"
-        android:fadeScrollbars="true"
-        android:scrollbarStyle="outsideOverlay" />
+        android:layout_height="match_parent">
 
-    <View
-        android:id="@+id/touch_interceptor_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
-    <!-- Show event title and location -->
-    <LinearLayout
-        android:id="@+id/details_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/cloudy"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/details_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="25dp"
-            android:gravity="center"
-            android:text="BBQ Party"
-            android:textColor="@color/black"
-            android:textSize="28sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/details_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="25dp"
-            android:gravity="center"
-            android:text=" @ Pasir Ris"
-            android:textColor="@color/black"
-            android:textSize="15sp" />
-
-        <!-- Listview header -->
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:text="Date"
-                android:textColor="@color/black"
-                android:textSize="@dimen/standard_text_size" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:text="Time"
-                android:textColor="@color/black"
-                android:textSize="@dimen/standard_text_size" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:text="Username"
-                android:textColor="@color/black"
-                android:textSize="@dimen/standard_text_size" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:text="Total"
-                android:textColor="@color/black"
-                android:textSize="@dimen/standard_text_size" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="match_parent">
 
             <ListView
-                android:id="@+id/details_list"
+                android:id="@android:id/list"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:divider="@color/colorPrimary" />
+                android:layout_height="match_parent"
+                android:cacheColorHint="@android:color/transparent"
+                android:clipToPadding="false"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="12dp"
+                android:fadeScrollbars="true"
+                android:listSelector="@android:color/transparent"
+                android:padding="12dp"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollingCache="false" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <!-- List username that has not cast vote yet -->
-            <TextView
-                android:id="@+id/details_vote_not_casted"
+            <View
+                android:id="@+id/touch_interceptor_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                android:gravity="center"
-                android:padding="3dp"
-                android:text="Vote not casted yet"
-                android:textColor="@color/white"
-                android:textSize="@dimen/standard_text_size" />
+                android:layout_height="match_parent" />
 
-            <ListView
-                android:id="@+id/details__no_votes_list"
+
+            <!-- Show event title and location -->
+            <LinearLayout
+                android:id="@+id/details_layout"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
-                android:divider="@color/colorPrimary" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:background="@drawable/cloudy"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/details_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="25dp"
+                    android:gravity="center"
+                    android:text="BBQ Party"
+                    android:textColor="@color/black"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
 
-    <com.alexvasilkov.foldablelayout.UnfoldableView
-        android:id="@+id/unfoldable_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+                <TextView
+                    android:id="@+id/details_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="25dp"
+                    android:gravity="center"
+                    android:text=" @ Pasir Ris"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <!-- Listview header -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:gravity="center"
+                        android:text="DATE"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/standard_text_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:gravity="center"
+                        android:text="TIME"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/standard_text_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:gravity="center"
+                        android:text="USER"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/standard_text_size" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.2"
+                        android:gravity="center"
+                        android:text="TOTAL"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/standard_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ListView
+                        android:id="@+id/vote_result_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="@color/black" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Confirm date -->
+                    <Button
+                        android:id="@+id/confirm_date"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:background="@color/button"
+                        android:text="CONFIRM DATE"
+                        android:textColor="@color/caldroid_white"
+                        android:textSize="@dimen/standard_text_size" />
+
+                    <!-- Get fetch to decide -->
+                    <Button
+                        android:id="@+id/fetch_help"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:background="@color/button"
+                        android:text="CAN'T DECIDE?"
+                        android:textColor="@color/caldroid_white"
+                        android:textSize="@dimen/standard_text_size" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <!-- List username that has not cast vote yet -->
+                    <TextView
+                        android:id="@+id/details_vote_not_casted"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:text="Vote not casted yet"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/standard_text_size" />
+
+                    <ListView
+                        android:id="@+id/no_vote_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="@color/colorPrimary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="@dimen/activity_horizontal_margin"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:paddingRight="@dimen/activity_horizontal_margin">
+
+                    <Button
+                        android:id="@+id/send_reminder"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/colorPrimary"
+                        android:inputType="textCapCharacters"
+                        android:text="SEND REMINDER"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/event_text_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <com.alexvasilkov.foldablelayout.UnfoldableView
+                android:id="@+id/unfoldable_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+    </ScrollView>
 </FrameLayout>

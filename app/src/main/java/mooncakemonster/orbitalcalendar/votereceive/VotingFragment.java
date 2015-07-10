@@ -1,27 +1,38 @@
 package mooncakemonster.orbitalcalendar.votereceive;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.alexvasilkov.android.commons.utils.Views;
 import com.alexvasilkov.foldablelayout.UnfoldableView;
 import com.alexvasilkov.foldablelayout.shading.GlanceFoldShading;
 
+import java.util.HashMap;
+
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 
 public class VotingFragment extends BaseFragment {
 
+    // Connect to cloudant database
+    CloudantConnect cloudantConnect;
+    UserDatabase db;
+
+    // SQLite database
+    ResultDatabase resultDatabase;
+
+    // Adapter for listing out the event votes
     VotingAdapter votingAdapter;
-    //Set unfoldable effect
+    // Set unfoldable effect
     private View listTouchInterceptor;
     private View detailsLayout;
     private UnfoldableView unfoldableView;
@@ -37,8 +48,14 @@ public class VotingFragment extends BaseFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_voting, container, false);
+
+        resultDatabase = new ResultDatabase(getActivity());
+
         votingAdapter = new VotingAdapter(getActivity(), this);
         setListAdapter(votingAdapter);
+
+        if (cloudantConnect == null)
+            this.cloudantConnect = new CloudantConnect(getActivity(), "user");
 
         listTouchInterceptor = rootView.findViewById(R.id.touch_interceptor_view);
         listTouchInterceptor.setClickable(false);
@@ -79,50 +96,43 @@ public class VotingFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final VoteOptionItem voteItem = votingAdapter.getItem(position);
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Delete voting result");
-                alert.setMessage("Are you sure you want to delete \"" + voteItem.getEvent_title() + "\"'s voting result?");
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Delete from SQLite database TODO
-                        //Delete from ArrayAdapter & allAppointment
-                        votingAdapter.notifyDataSetChanged();
-                        //Remove dialog after execution of the above
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
-                return true;
-            }
-        });
-    }
-
     public void openDetails(View coverview, VoteOptionItem voteItem) {
+        // (1) Retrieve title and location of event
         TextView title = Views.find(detailsLayout, R.id.details_title);
         TextView location = Views.find(detailsLayout, R.id.details_location);
-
         title.setText(voteItem.getEvent_title());
-        location.setText(voteItem.getEvent_location());
+        location.setText("@ " + voteItem.getEvent_location());
+
+        // (2) Collate all dates selected by target participants
+        ListView result_listview = Views.find(detailsLayout, R.id.vote_result_list);
+        saveDateSelectedByTargetParticipants();
+        ResultAdapter resultAdapter = new ResultAdapter(getActivity(), R.layout.row_vote_result,
+                resultDatabase.getAllTargetResults(resultDatabase, voteItem.getEventId()));
+        result_listview.setAdapter(resultAdapter);
+        resultAdapter.notifyDataSetChanged();
 
         unfoldableView.unfold(coverview, detailsLayout);
     }
 
+    // This method retrieves the selected dates from target participants via Cloudant database.
+    private void saveDateSelectedByTargetParticipants() {
+        // Retrieve the user's document from Cloudant
+        cloudantConnect.startPullReplication();
+        db = new UserDatabase(getActivity().getApplicationContext());
+        HashMap<String, String> user = db.getUserDetails();
+        String my_username = user.get("username");
+        User my_user = cloudantConnect.getTargetUser(my_username);
+
+        if(cloudantConnect.checkVotingResponse(my_user)) {
+            // Store participants according to date and time selected into SQLite
+            resultDatabase.storeParticipants(resultDatabase, new ResultItem(my_user.getSelected_event_id(),
+                    my_user.getSelected_start_date(), my_user.getSelected_end_date(),
+                    my_user.getSelected_start_time(), my_user.getSelected_end_time(), "",
+                    my_user.getSelected_my_username(), 0));
+
+            // Reset document once data is saved in the phone
+            cloudantConnect.resetVotingResponse(my_user);
+            cloudantConnect.startPushReplication();
+        }
+    }
 }

@@ -17,6 +17,7 @@ public class User {
 
     // Voting options
     private String option_my_username;
+    private int option_event_id;
     private int option_event_colour;
     private String option_event_title;
     private String option_event_location;
@@ -28,6 +29,7 @@ public class User {
 
     // Voting selected options
     private String selected_my_username;
+    private int selected_event_id;
     private int selected_event_colour;
     private String selected_event_title;
     private String selected_event_location;
@@ -86,6 +88,14 @@ public class User {
         this.option_my_username = option_my_username;
     }
 
+    public void setOption_event_id(int option_event_id) {
+        this.option_event_id = option_event_id;
+    }
+
+    public int getOption_event_id() {
+        return option_event_id;
+    }
+
     public int getOption_event_colour() {
         return option_event_colour;
     }
@@ -124,6 +134,14 @@ public class User {
 
     public void setSelected_my_username(String selected_my_username) {
         this.selected_my_username = selected_my_username;
+    }
+
+    public void setSelected_event_id(int selected_event_id) {
+        this.selected_event_id = selected_event_id;
+    }
+
+    public int getSelected_event_id() {
+        return selected_event_id;
     }
 
     public int getSelected_event_colour() {
@@ -249,6 +267,7 @@ public class User {
 
         // Voting options
         user.setOption_my_username((String) ((Map) user_revised.get("voting_options")).get("option_my_username"));
+        user.setOption_event_colour((int) ((Map) user_revised.get("voting_options")).get("option_event_id"));
         user.setOption_event_colour((int) ((Map) user_revised.get("voting_options")).get("option_event_colour"));
         user.setOption_event_title((String) ((Map) user_revised.get("voting_options")).get("option_event_title"));
         user.setOption_event_location((String) ((Map) user_revised.get("voting_options")).get("option_event_location"));
@@ -261,6 +280,7 @@ public class User {
         // Voting selected options
         user.setSelected_my_username((String) ((Map) user_revised.get("voting_selected")).get("selected_my_username"));
         user.setSelected_event_colour((int) ((Map) user_revised.get("voting_selected")).get("selected_event_colour"));
+        user.setSelected_event_colour((int) ((Map) user_revised.get("voting_selected")).get("selected_event_id"));
         user.setSelected_event_title((String) ((Map) user_revised.get("voting_selected")).get("selected_event_title"));
         user.setSelected_event_location((String) ((Map) user_revised.get("voting_selected")).get("selected_event_location"));
         user.setSelected_event_notes((String) ((Map) user_revised.get("voting_selected")).get("selected_event_notes"));
@@ -288,6 +308,7 @@ public class User {
         // Voting options
         HashMap<String, Object> voting_options = new HashMap<>();
         voting_options.put("option_my_username", option_my_username);
+        voting_options.put("option_event_id", option_event_id);
         voting_options.put("option_event_colour", option_event_colour);
         voting_options.put("option_event_title", option_event_title);
         voting_options.put("option_event_location", option_event_location);
@@ -300,6 +321,7 @@ public class User {
         // Voting selected options
         HashMap<String, Object> voting_selected = new HashMap<>();
         voting_selected.put("selected_my_username", selected_my_username);
+        voting_selected.put("selected_event_id", selected_event_id);
         voting_selected.put("selected_event_colour", selected_event_colour);
         voting_selected.put("selected_event_title", selected_event_title);
         voting_selected.put("selected_event_location", selected_event_location);

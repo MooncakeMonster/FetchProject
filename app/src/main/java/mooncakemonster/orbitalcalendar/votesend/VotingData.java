@@ -10,6 +10,8 @@ public class VotingData {
     public VotingData() { }
 
     public static abstract class VotingInfo implements BaseColumns {
+        public static final String EVENT_ID = "event_id";
+
         public static final String EVENT_COLOUR = "event_colour";
         public static final String EVENT_TITLE = "event_name";
         public static final String EVENT_LOCATION = "event_location";

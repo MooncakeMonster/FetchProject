@@ -65,9 +65,9 @@ public class FriendDatabase extends SQLiteOpenHelper {
     }
 
     // Update data from database TODO: Doesn't update
-    public void updateInformation(FriendDatabase data, String username) {
-        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ?";
-        String[] args = { username };
+    public void updateInformation(FriendDatabase data, String previous_username, String username) {
+        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ?; ";
+        String[] args = { previous_username };
 
         ContentValues values = new ContentValues();
         values.put(FriendData.FriendInfo.FRIEND_USERNAME, username);
@@ -80,7 +80,7 @@ public class FriendDatabase extends SQLiteOpenHelper {
     // Delete data from database TODO: Doesn't delete
     public void deleteInformation(FriendDatabase data, String username) {
 
-        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ?";
+        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ?; ";
         String[] args = { username };
 
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();

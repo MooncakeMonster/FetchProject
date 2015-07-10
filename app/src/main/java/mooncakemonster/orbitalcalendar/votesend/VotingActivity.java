@@ -181,7 +181,7 @@ public class VotingActivity extends ActionBarActivity {
 
         for(int i = 0; i < size; i++) {
             resultDatabase.putInformation(resultDatabase, resultItem.getEvent_id(), split_start_date[i],
-                    split_end_date[i], split_start_time[i], split_end_time[i], resultItem.getAll_username(), "", 0);
+                    split_end_date[i], split_start_time[i], split_end_time[i], resultItem.getAll_username(), "", "0");
         }
 
     }
@@ -231,7 +231,7 @@ public class VotingActivity extends ActionBarActivity {
                 eventId = cursor.getInt(0);
 
                 // Save options in SQLite for voting result
-                saveOptions(new ResultItem(eventId, start_date, end_date, start_time, end_time, participants, "", 0));
+                saveOptions(new ResultItem("" + eventId, start_date, end_date, start_time, end_time, participants, "", ""));
 
                 // Fetch user details from sqlite
                 HashMap<String, String> user = db.getUserDetails();

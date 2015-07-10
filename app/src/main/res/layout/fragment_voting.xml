@@ -62,50 +62,6 @@
                     android:textColor="@color/black"
                     android:textSize="15sp" />
 
-                <!-- Listview header -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.2"
-                        android:gravity="center"
-                        android:text="DATE"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/standard_text_size" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.2"
-                        android:gravity="center"
-                        android:text="TIME"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/standard_text_size" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.2"
-                        android:gravity="center"
-                        android:text="USER"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/standard_text_size" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="0.2"
-                        android:gravity="center"
-                        android:text="TOTAL"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/standard_text_size" />
-
-                </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -124,28 +80,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <!-- Confirm date -->
-                    <Button
-                        android:id="@+id/confirm_date"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:background="@color/button"
-                        android:text="CONFIRM DATE"
-                        android:textColor="@color/caldroid_white"
-                        android:textSize="@dimen/standard_text_size" />
-
                     <!-- Get fetch to decide -->
                     <Button
                         android:id="@+id/fetch_help"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
                         android:layout_marginBottom="15dp"
                         android:layout_marginRight="20dp"
                         android:layout_weight="1"
+                        android:gravity="center"
+                        android:layout_gravity="center"
                         android:background="@color/button"
                         android:text="CAN'T DECIDE?"
                         android:textColor="@color/caldroid_white"
@@ -177,26 +121,7 @@
                         android:divider="@color/colorPrimary" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="@dimen/activity_horizontal_margin"
-                    android:paddingLeft="@dimen/activity_horizontal_margin"
-                    android:paddingRight="@dimen/activity_horizontal_margin">
-
-                    <Button
-                        android:id="@+id/send_reminder"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/colorPrimary"
-                        android:inputType="textCapCharacters"
-                        android:text="SEND REMINDER"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/event_text_size" />
-                </LinearLayout>
-
             </LinearLayout>
-
             <com.alexvasilkov.foldablelayout.UnfoldableView
                 android:id="@+id/unfoldable_view"
                 android:layout_width="match_parent"

@@ -3,6 +3,7 @@ package mooncakemonster.orbitalcalendar.votereceive;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,6 +107,7 @@ public class VotingFragment extends BaseFragment {
         // (2) Collate all dates selected by target participants
         ListView result_listview = Views.find(detailsLayout, R.id.vote_result_list);
         saveDateSelectedByTargetParticipants();
+        Log.d("ResultDatabase", "run method");
         ResultAdapter resultAdapter = new ResultAdapter(getActivity(), R.layout.row_vote_result,
                 resultDatabase.getAllTargetResults(resultDatabase, voteItem.getEventId()));
         result_listview.setAdapter(resultAdapter);
@@ -125,13 +127,14 @@ public class VotingFragment extends BaseFragment {
 
         if(cloudantConnect.checkVotingResponse(my_user)) {
             // Store participants according to date and time selected into SQLite
-            resultDatabase.storeParticipants(resultDatabase, new ResultItem(my_user.getSelected_event_id(),
+            resultDatabase.storeParticipants(resultDatabase, new ResultItem("" + my_user.getSelected_event_id(),
                     my_user.getSelected_start_date(), my_user.getSelected_end_date(),
                     my_user.getSelected_start_time(), my_user.getSelected_end_time(), "",
-                    my_user.getSelected_my_username(), 0));
+                    my_user.getSelected_my_username(), ""));
 
             // Reset document once data is saved in the phone
-            cloudantConnect.resetVotingResponse(my_user);
+            // TODO: Remove comment!
+            //cloudantConnect.resetVotingResponse(my_user);
             cloudantConnect.startPushReplication();
         }
     }

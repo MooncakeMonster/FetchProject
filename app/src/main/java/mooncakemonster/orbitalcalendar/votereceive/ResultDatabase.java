@@ -15,14 +15,14 @@ import java.util.List;
  */
 public class ResultDatabase extends SQLiteOpenHelper {
     public String query = "CREATE TABLE " + ResultData.ResultInfo.TABLE_NAME + " (" +
-            ResultData.ResultInfo.EVENT_ID + " INTEGER, " +
+            ResultData.ResultInfo.EVENT_ID + " TEXT, " +
             ResultData.ResultInfo.START_DATE + " TEXT, " +
             ResultData.ResultInfo.END_DATE + " TEXT, " +
             ResultData.ResultInfo.START_TIME + " TEXT, " +
             ResultData.ResultInfo.END_TIME + " TEXT, " +
             ResultData.ResultInfo.EVENT_PARTICIPANTS + " TEXT, " +
             ResultData.ResultInfo.SELECT_PARTICIPANTS + " TEXT, " +
-            ResultData.ResultInfo.TOTAL + " INTEGER); ";
+            ResultData.ResultInfo.TOTAL + " TEXT); ";
 
     public ResultDatabase(Context context) {
         super(context, ResultData.ResultInfo.DATABASE_NAME, null, ResultData.ResultInfo.DATABASE_VERSION);
@@ -43,8 +43,8 @@ public class ResultDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database
-    public void putInformation(ResultDatabase data, int event_id, String start_date, String end_date,
-                               String start_time, String end_time, String event_participants, String select_participants, int total) {
+    public void putInformation(ResultDatabase data, String event_id, String start_date, String end_date,
+                               String start_time, String end_time, String event_participants, String select_participants, String total) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -61,7 +61,7 @@ public class ResultDatabase extends SQLiteOpenHelper {
 
         // Insert into sqlite database
         sqLiteDatabase.insert(ResultData.ResultInfo.TABLE_NAME, null, contentValues);
-        Log.d("Votebase operations", "One vote row inserted");
+        Log.d("Resultbase operations", "One vote row inserted");
     }
 
     // Retrieve data from database
@@ -84,40 +84,59 @@ public class ResultDatabase extends SQLiteOpenHelper {
     // This method stores the participants according to the date and time they had selected.
     public void storeParticipants(ResultDatabase data, ResultItem resultItem) {
         Cursor cursor = getInformation(data);
-
-        String split_start_date = resultItem.getStart_date();
-        String split_end_date = resultItem.getEnd_date();
-        String split_start_time = resultItem.getStart_time();
-        String split_end_time = resultItem.getEnd_time();
-
-        int size = split_start_date.length();
-
         cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            if (resultItem.getEvent_id() == cursor.getInt(0)) {
 
-                for (int i = 0; i < size; i++) {
-                    String selection = ResultData.ResultInfo.EVENT_ID + " LIKE ? AND " +
-                            ResultData.ResultInfo.START_DATE + " LIKE ? AND " +
-                            ResultData.ResultInfo.END_DATE + " LIKE ? AND " +
-                            ResultData.ResultInfo.START_TIME + " LIKE ? AND " +
-                            ResultData.ResultInfo.END_TIME + " LIKE ? AND " +
-                            ResultData.ResultInfo.EVENT_PARTICIPANTS + " LIKE ? AND " +
-                            ResultData.ResultInfo.SELECT_PARTICIPANTS + " LIKE ? AND " +
-                            ResultData.ResultInfo.TOTAL + " LIKE ? ";
+        String[] split_start_date = resultItem.getStart_date().split(" ");
+        String[] split_end_date = resultItem.getEnd_date().split(" ");
+        String[] split_start_time = resultItem.getStart_time().split(" ");
+        String[] split_end_time = resultItem.getEnd_time().split(" ");
 
-                    String stored_username = cursor.getString(6);
-                    String[] args = {stored_username};
-                    stored_username += resultItem.getUsername();
+        int size = split_start_date.length;
+        Log.d("ResultDatabase", "size " + size);
 
-                    ContentValues values = new ContentValues();
-                    values.put(ResultData.ResultInfo.SELECT_PARTICIPANTS, stored_username);
+        for (int i = 0; i < size; i++) {
+            Log.d("ResultDatabase", "count " + i);
+            Log.d("ResultDatabase", "event id " + resultItem.getEvent_id() + "/" + cursor.getString(0));
+            Log.d("ResultDatabase", "start date " + split_start_date[i] + "/" + cursor.getString(1));
+            Log.d("ResultDatabase", "end date " + split_end_date[i] + "/" + cursor.getString(2));
+            Log.d("ResultDatabase", "start time " + split_start_time[i] + "/" + cursor.getString(3));
+            Log.d("ResultDatabase", "end time " + split_end_time[i] + "/" + cursor.getString(4));
 
-                    SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
-                    sqLiteDatabase.update(ResultData.ResultInfo.TABLE_NAME, values, selection, args);
-                }
+            if (resultItem.getEvent_id().equals(cursor.getString(0)) &&
+                    split_start_date[i].equals(cursor.getString(1)) &&
+                    split_end_date[i].equals(cursor.getString(2)) &&
+                    split_start_time[i].equals(cursor.getString(3)) &&
+                    split_end_time[i].equals(cursor.getString(4))) {
+
+                Log.d("ResultDatabase", "passed");
+
+                String selection = ResultData.ResultInfo.EVENT_ID + " LIKE ? AND " +
+                        ResultData.ResultInfo.START_DATE + " LIKE ? AND " +
+                        ResultData.ResultInfo.END_DATE + " LIKE ? AND " +
+                        ResultData.ResultInfo.START_TIME + " LIKE ? AND " +
+                        ResultData.ResultInfo.END_TIME + " LIKE ? AND " +
+                        ResultData.ResultInfo.EVENT_PARTICIPANTS + " LIKE ? AND " +
+                        ResultData.ResultInfo.SELECT_PARTICIPANTS + " LIKE ? AND " +
+                        ResultData.ResultInfo.TOTAL + " LIKE ? ";
+
+                String stored_username = cursor.getString(6);
+                int total = Integer.parseInt(cursor.getString(7));
+                String[] args = {cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), stored_username, "" + total };
+                stored_username += resultItem.getUsername() + " ";
+
+                ContentValues values = new ContentValues();
+                values.put(ResultData.ResultInfo.SELECT_PARTICIPANTS, stored_username);
+                values.put(ResultData.ResultInfo.TOTAL, "" + (total + 1));
+
+                SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
+                sqLiteDatabase.update(ResultData.ResultInfo.TABLE_NAME, values, selection, args);
+                cursor.moveToNext();
+            } else if(Integer.parseInt(resultItem.getEvent_id()) < Integer.parseInt(cursor.getString(0))) {
+                break;
+            } else {
+                Log.d("ResultDatabase", "failed");
             }
-            cursor.moveToNext();
         }
         cursor.close();
     }
@@ -129,11 +148,11 @@ public class ResultDatabase extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            if (eventId == cursor.getInt(0)) {
-                ResultItem resultItem = new ResultItem(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
-                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getInt(7));
+            if (cursor.getString(0).equals("" + eventId)) {
+                ResultItem resultItem = new ResultItem(cursor.getString(0), cursor.getString(1), cursor.getString(2),
+                        cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7));
                 result.add(resultItem);
-            } else if (eventId < cursor.getInt(0)) {
+            } else if (eventId < Integer.parseInt(cursor.getString(0))) {
                 break;
             }
             cursor.moveToNext();

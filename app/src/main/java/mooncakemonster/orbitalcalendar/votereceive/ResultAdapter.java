@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -24,7 +25,9 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
     }
 
     static class Holder {
-        TextView result_date;
+        RelativeLayout relativeLayout;
+        TextView result_start_date;
+        TextView result_end_date;
         TextView result_time;
         TextView result_name;
         TextView result_total;
@@ -46,12 +49,22 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         if(resultItem != null) {
             holder = new Holder();
 
-            holder.result_date = (TextView) row.findViewById(R.id.result_date);
+            holder.relativeLayout = (RelativeLayout) row.findViewById(R.id.confirm_send_date);
+            holder.result_start_date = (TextView) row.findViewById(R.id.result_start_date);
+            holder.result_end_date = (TextView) row.findViewById(R.id.result_end_date);
             holder.result_time = (TextView) row.findViewById(R.id.result_time);
             holder.result_name = (TextView) row.findViewById(R.id.result_name);
             holder.result_total = (TextView) row.findViewById(R.id.result_total);
 
-            holder.result_date.setText(resultItem.getStart_date() + " - " + resultItem.getEnd_date());
+            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            holder.result_start_date.setText(resultItem.getStart_date());
+            holder.result_end_date.setText(resultItem.getEnd_date());
             holder.result_time.setText(resultItem.getStart_time() + " - " + resultItem.getEnd_time());
             holder.result_name.setText(resultItem.getUsername());
             holder.result_total.setText(resultItem.getTotal());

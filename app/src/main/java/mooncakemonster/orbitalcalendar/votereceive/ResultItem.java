@@ -4,17 +4,17 @@ package mooncakemonster.orbitalcalendar.votereceive;
  * Created by BAOJUN on 10/7/15.
  */
 public class ResultItem {
-    private int event_id;
+    private String event_id;
     private String start_date;
     private String end_date;
     private String start_time;
     private String end_time;
     private String all_username;
     private String username;
-    private int total;
+    private String total;
 
-    public ResultItem(int event_id, String start_date, String end_date, String start_time,
-                      String end_time, String all_username, String username, int total) {
+    public ResultItem(String event_id, String start_date, String end_date, String start_time,
+                      String end_time, String all_username, String username, String total) {
         this.event_id = event_id;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -25,11 +25,11 @@ public class ResultItem {
         this.total = total;
     }
 
-    public int getEvent_id() {
+    public String getEvent_id() {
         return event_id;
     }
 
-    public void setEvent_id(int event_id) {
+    public void setEvent_id(String event_id) {
         this.event_id = event_id;
     }
 
@@ -81,11 +81,11 @@ public class ResultItem {
         return username;
     }
 
-    public int getTotal() {
+    public String getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(String total) {
         this.total = total;
     }
 }

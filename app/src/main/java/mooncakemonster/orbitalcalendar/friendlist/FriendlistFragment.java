@@ -64,7 +64,7 @@ public class FriendlistFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: Get friend's image and replace with "redbear"
-                        friendDatabase.putInformation(friendDatabase, R.color.redbear, input_username.getText().toString());
+                        friendDatabase.putInformation(friendDatabase, "" + R.color.redbear, input_username.getText().toString());
                         adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }
@@ -101,7 +101,7 @@ public class FriendlistFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //Update latest username into SQLite database
-                        friendDatabase.updateInformation(friendDatabase, previous_username, input_username.getText().toString());
+                        friendDatabase.updateInformation(friendDatabase, friendItem.getImage(), previous_username, input_username.getText().toString());
                         adapter.clear();
                         adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
                         adapter.notifyDataSetChanged();
@@ -138,7 +138,7 @@ public class FriendlistFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //Delete from SQLite database
-                        friendDatabase.deleteInformation(friendDatabase, friendItem.getUsername());
+                        friendDatabase.deleteInformation(friendDatabase, friendItem.getImage(), friendItem.getUsername());
                         //Delete from ArrayAdapter & allFriends
                         adapter.remove(friendItem);
                         allFriends.remove(friendItem);

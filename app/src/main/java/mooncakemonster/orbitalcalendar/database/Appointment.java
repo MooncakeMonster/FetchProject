@@ -27,7 +27,7 @@ public class Appointment implements Comparable<Appointment>, Serializable {
     private long endDate;
     private String location;
     private String notes;
-    private int remind;
+    private long remind;
     private int colour;
 
     //ID of the entry in SQLite table
@@ -87,10 +87,10 @@ public class Appointment implements Comparable<Appointment>, Serializable {
     }
 
     //Reminder; how many minutes prior to reminding user of an upcoming event
-    public int getRemind() {
+    public long getRemind() {
         return remind;
     }
-    public void setRemind(int remind) {
+    public void setRemind(long remind) {
         this.remind = remind;
     }
 

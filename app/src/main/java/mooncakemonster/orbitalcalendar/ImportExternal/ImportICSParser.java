@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mooncakemonster.orbitalcalendar.alarm.AlarmSetter;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
@@ -24,14 +25,25 @@ import mooncakemonster.orbitalcalendar.database.Constant;
 /**
  * Read all .ics extension
  * Based on RFC 2445 iCalendar specification
- * <p/>
  * Note: This parser recognizes only "vevent" components.
  */
 public class ImportICSParser extends Activity {
 
     //Date format
-    private static final SimpleDateFormat ICS_PARSER_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
-    private static final SimpleDateFormat ICS_PARSER_DATETIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssz");
+    private static final SimpleDateFormat ICS_PARSER_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
+    private static final SimpleDateFormat ICS_PARSER_DATETIME_FORMAT = new SimpleDateFormat("yyyyMMdd'T'HHmmss");
+
+    //Pattern to determine if string follows the format:
+    // (a) FIELD;miscellaneousstring:VALUE
+    // (b) FIELD:VALUE
+    private static final String withSemiColon = "^([-A-Z]+);(.*):([^:]*):?";
+    private static final String withColon = "^([-A-Z]+ ):([^:]*):?";
+
+    private static Pattern stringWithSemiColon = Pattern.compile(withSemiColon);
+    private static Pattern stringWithColon = Pattern.compile(withColon);
+
+    //Pattern to process duration field
+    private static Pattern durationFormat = Pattern.compile("[-+]?P([0-9]{0,2})W?([0-9]{0,2})D?T?([0-9]{0,2})H?([0-9]{0,2})M?([0-9]{0,2})S?");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +51,8 @@ public class ImportICSParser extends Activity {
     }
 
     public void icsReader(String file) {
-        String event = null;
-        String location = null;
-        long startMillisec = 0;
-        long endMillisec = 0;
-        String notes = null;
-        boolean hasAlarm = false;
-        long alarmMillisec = 0;
 
-        //For storing appointments in
+        //For storing actual appointments in
         List<Appointment> timetable = new ArrayList<Appointment>();
         Appointment tempAppt;
 
@@ -62,18 +67,19 @@ public class ImportICSParser extends Activity {
             //Read and obtain the number of lines in file
             int numLine = countLines(file);
 
-            //Pattern to determine if string follows the format:
-            // (a) FIELD;miscellaneousstring:VALUE
-            // (b) FIELD:VALUE
-            final String withSemiColon = "^([A-Z]*);(.*):([^:]*)";
-            final String withColon = "^([A-Z]*):([^:]*)";
-
-            Pattern stringWithSemiColon = Pattern.compile(withSemiColon);
-            Pattern stringWithColon = Pattern.compile(withColon);
+            //Variables for storing details pertaining to appointment
+            String event = null;
+            String location = null;
+            long startMillisec = 0;
+            long endMillisec = 0;
+            String notes = null;
+            boolean hasAlarm = false;
+            long alarmMillisec = 0;
 
             for (int counter = 0; counter < numLine; counter++) {
-                String line = bufferedDataFile.readLine();
 
+                String line = bufferedDataFile.readLine();
+                //Processing of line
                 String field = null;
                 String intermediate = null;
                 String value = null;
@@ -81,74 +87,82 @@ public class ImportICSParser extends Activity {
                 Matcher matchWithSemiColon = stringWithSemiColon.matcher(line);
                 Matcher matchWithColon = stringWithColon.matcher(line);
 
-                //Formatting for DTSTART may be different, hence to accommodate for the difference
                 if (matchWithSemiColon.matches()) {
-                    String[] split = stringWithSemiColon.split(line, 3);
-
-                    field = split[0];
-                    intermediate = split[1];
-                    value = split[2];
+                    field = matchWithSemiColon.group(1);
+                    intermediate = matchWithSemiColon.group(2);
+                    value = matchWithSemiColon.group(3);
                 }
                 //Otherwise, split string as per normal
                 else if (matchWithColon.matches()) {
-                    String[] split = stringWithColon.split(line, 2);
-
-                    field = split[0];
-                    value = split[1];
+                    field = matchWithSemiColon.group(1);
+                    value = matchWithSemiColon.group(2);
                     //Clear value of intermediate
                     intermediate = null;
                 } else {
                     Log.i("UNMATCHED", line);
+                    continue;
                 }
 
                 //Decide on what to do, based on the field
                 switch (field) {
                     //Start of a new appointment
                     case "BEGIN":
-                        if (value.equals("VEVENT")) {
-                            tempAppt = new Appointment();
-                        } else if (value.equals("VALARM")) {
+                        if (value.equals("VALARM")) {
                             hasAlarm = true;
                         }
                         break;
 
                     //Get Event Name
-                    case "DESCRIPTION":
                     case "SUMMARY":
-                        event += value + " ";
+                        event = value;
+                        break;
+
+                    //Get Notes
+                    case "DESCRIPTION":
+                        notes = value;
                         break;
 
                     //Get location
                     case "LOCATION":
                         location = value;
+                        break;
 
-                        //Get starting time
-                        // TODO: Find different types of formatting available
+                    //Get starting time
                     case "DTSTART":
-                        if (intermediate.contains("DATE")) {
+                        if (intermediate != null && intermediate.contains("VALUE=DATE")) {
                             //Use a SimpleDateFormatter on value
                             startMillisec = Constant.stringToMillisecond(value, ICS_PARSER_DATE_FORMAT);
                         } else {
-                            //Use a different SimpleDateFormatter on value
+                            //If(intermediate.contains("VALUE=DATE-TIME")) or by default,
+                            value = value.replaceFirst("^([0-9]{8}T[0-9]{6})[.]*", "$1");
                             startMillisec = Constant.stringToMillisecond(value, ICS_PARSER_DATETIME_FORMAT);
                         }
                         break;
 
-                    //Get ending time if any
+                    //Get ending time, if any
                     case "DTEND":
-                        if (intermediate.contains("DATE")) {
+                        if (intermediate != null && intermediate.contains("VALUE=DATE")) {
                             //Use a SimpleDateFormatter on value
                             endMillisec = Constant.stringToMillisecond(value, ICS_PARSER_DATE_FORMAT);
                         } else {
-                            //Use a different SimpleDateFormatter on value
+                            //If(intermediate.contains("VALUE=DATE-TIME")) or by default
+                            value = value.replaceFirst("^([0-9]{8}T[0-9]{6})[.]*", "$1");
                             endMillisec = Constant.stringToMillisecond(value, ICS_PARSER_DATETIME_FORMAT);
                         }
                         break;
 
                     case "DURATION":
+                        //Assuming VALARM field has not been encountered (yet)
+                        if(!hasAlarm) {
+                            if (value.contains("+")) break;
+                            else if (value.contains("-")) value = value.substring(1, value.length());
+                            endMillisec = startMillisec + processDuration(value);
+                            break;
+                        }
+                        break;
 
 
-                        //Is there a repeat appointment in the future?
+                    //Is there a repeat appointment in the future?
                     case "RRULE":
                         //TODO: Make for repeat
                         break;
@@ -157,8 +171,10 @@ public class ImportICSParser extends Activity {
                     case "TRIGGER":
                         if (hasAlarm) {
                             //Set if only alarm is made to trigger before the beginning of event commencement
+                            if (value.contains("+")) break;
+                            else if (value.contains("-")) value = value.substring(1, value.length());
+                            alarmMillisec = startMillisec - processDuration(value);
                         }
-
 
                     case "END":
                         if (value.equals("VEVENT")) {
@@ -169,16 +185,21 @@ public class ImportICSParser extends Activity {
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd");
                             String dateFormatted = formatter.format(date);
 
-                            appointmentDatabase.createAppointment(event, dateFormatted, startMillisec, endMillisec, location, notes, alarmMillisec, 0);
+                            //Set value for appointment
+                            tempAppt = new Appointment();
+                            tempAppt.setEvent(event);
+                            tempAppt.setStartDate(startMillisec);
+                            tempAppt.setStartProperDate(dateFormatted);
+                            tempAppt.setEndDate(endMillisec);
+                            tempAppt.setLocation(location);
+                            tempAppt.setNotes(notes);
+                            tempAppt.setRemind(alarmMillisec);
 
-                            //Nuke tempAppt
-                            tempAppt = null;
-                            //Nuke all values
-                            event = null;
-                            location = null;
-                            startMillisec = 0;
-                            endMillisec = 0;
-                            notes = null;
+                            //Set alarm
+                            AlarmSetter.setAlarm(getApplicationContext(), event, location, alarmMillisec);
+
+                            appointmentDatabase.createAppointment(tempAppt);
+
                         } else if (value.equals("VALARM")) {
                             //Nuke hasAlarm value
                             hasAlarm = false;
@@ -187,8 +208,13 @@ public class ImportICSParser extends Activity {
 
                     default:
                         break;
-
                 }
+            }
+
+            //Add in database
+            for(Appointment s: timetable)
+            {
+                appointmentDatabase.createAppointment(s);
             }
 
             //Close resources
@@ -225,8 +251,20 @@ public class ImportICSParser extends Activity {
 
     //Helper method for processing duration (e.g. DURATION:PT1H0M0S)
     private static long processDuration(String duration) {
-        //TODO
-        return 0;
+        Matcher match = durationFormat.matcher(duration);
+
+        long answer = 0;
+
+        if(match.find())
+        {
+            if(match.group(0) != null) {answer += Integer.parseInt(match.group(0)) * Constant.WEEK_IN_MILLISECOND;}
+            if(match.group(1) != null) {answer += Integer.parseInt(match.group(1)) * Constant.DAY_IN_MILLISECOND;}
+            if(match.group(2) != null) {answer += Integer.parseInt(match.group(2)) * Constant.HOUR_IN_MILLISECOND;}
+            if(match.group(3) != null) {answer += Integer.parseInt(match.group(3)) * Constant.MIN_IN_MILLISECOND;}
+            //Second omitted, as such precision is not required
+        }
+
+        return answer;
     }
 
     //Need a builder to take in inputs and create appointments

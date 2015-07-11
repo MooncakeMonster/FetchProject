@@ -10,18 +10,22 @@ public class ResultItem {
     private String start_time;
     private String end_time;
     private String all_username;
-    private String username;
+    private String selected_username;
+    private String not_selected_username;
+    private String username_rejected;
     private String total;
 
-    public ResultItem(String event_id, String start_date, String end_date, String start_time,
-                      String end_time, String all_username, String username, String total) {
+    public ResultItem(String event_id, String start_date, String end_date, String start_time, String end_time, String all_username,
+                      String selected_username, String not_selected_username, String username_rejected, String total) {
         this.event_id = event_id;
         this.start_date = start_date;
         this.end_date = end_date;
         this.start_time = start_time;
         this.end_time = end_time;
         this.all_username = all_username;
-        this.username = username;
+        this.selected_username = selected_username;
+        this.not_selected_username = not_selected_username;
+        this.username_rejected = username_rejected;
         this.total = total;
     }
 
@@ -73,12 +77,28 @@ public class ResultItem {
         this.all_username = all_username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setSelected_username(String selected_username) {
+        this.selected_username = selected_username;
     }
 
-    public String getUsername() {
-        return username;
+    public String getSelected_username() {
+        return selected_username;
+    }
+
+    public void setNot_selected_username(String not_selected_username) {
+        this.not_selected_username = not_selected_username;
+    }
+
+    public String getNot_selected_username() {
+        return not_selected_username;
+    }
+
+    public String getUsername_rejected() {
+        return username_rejected;
+    }
+
+    public void setUsername_rejected(String username_rejected) {
+        this.username_rejected = username_rejected;
     }
 
     public String getTotal() {

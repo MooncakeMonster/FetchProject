@@ -19,6 +19,9 @@ public class ResultData {
 
         public static final String EVENT_PARTICIPANTS = "event_participants";
         public static final String SELECT_PARTICIPANTS = "select_participants";
+        public static final String NOT_SELECTED_PARTICIPANTS = "not_selected_participants";
+        public static final String REJECT_PARTICIPANTS = "reject_participants";
+
         public static final String TOTAL = "total";
 
         public static final int DATABASE_VERSION = 1;

@@ -71,6 +71,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);
             holder.action_image = (ImageView) row.findViewById(R.id.action_image);
             // TODO: Set appropriate background image
+            holder.action_image.setBackgroundResource(setBackground(notificationItem.getNotificationId(), notificationItem.getImageId()));
 
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
@@ -97,5 +98,47 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         }
 
         return row;
+    }
+
+    // This method sets appropriate background image for notification.
+    private int setBackground(int notificationId, int imageId) {
+        // 1 - Voting request received
+        // 2 - Voting response received
+        // 3 - Voting rejected
+        // 4 - Date of event confirmed
+        if(notificationId == 1) {
+            switch (imageId) {
+                case R.color.redbear:
+                    return R.drawable.partyred;
+                case R.color.yellowbear:
+                    return R.drawable.partyyellow;
+                case R.color.greenbear:
+                    return R.drawable.partygreen;
+                case R.color.bluebear:
+                    return R.drawable.partyblue;
+                case R.color.purplebear:
+                    return R.drawable.partypurple;
+            }
+        } else if(notificationId == 2) {
+            switch (imageId) {
+                case R.color.redbear:
+                    return R.drawable.sunred;
+                case R.color.yellowbear:
+                    return R.drawable.sunyellow;
+                case R.color.greenbear:
+                    return R.drawable.sungreen;
+                case R.color.bluebear:
+                    return R.drawable.sunblue;
+                case R.color.purplebear:
+                    return R.drawable.sunpurple;
+            }
+        } else if(notificationId == 3) {
+
+        } else if(notificationId == 4) {
+
+        }
+
+        // Should not reach here
+        return -1;
     }
 }

@@ -17,7 +17,7 @@ import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 public class VotingDatabase extends SQLiteOpenHelper {
 
     public String query = "CREATE TABLE " + VotingData.VotingInfo.TABLE_NAME + " (" +
-                                            VotingData.VotingInfo.EVENT_ID + " INTEGER PRIMARY KEY, " +
+                                            VotingData.VotingInfo.EVENT_ID + " INTEGER NOT NULL, " +
                                             VotingData.VotingInfo.EVENT_COLOUR + " INTEGER NOT NULL, " +
                                             VotingData.VotingInfo.EVENT_TITLE + " TEXT, " +
                                             VotingData.VotingInfo.EVENT_LOCATION + " TEXT, " +
@@ -45,13 +45,14 @@ public class VotingDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database
-    public void putInformation(VotingDatabase data, int event_colour, String event_title, String event_location,
+    public void putInformation(VotingDatabase data, int event_id, int event_colour, String event_title, String event_location,
                                String event_participants, String start_date, String end_date, String start_time, String end_time) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         // Add value from each column into contentvalue
+        contentValues.put(VotingData.VotingInfo.EVENT_ID, event_id);
         contentValues.put(VotingData.VotingInfo.EVENT_COLOUR, event_colour);
         contentValues.put(VotingData.VotingInfo.EVENT_TITLE, event_title);
         contentValues.put(VotingData.VotingInfo.EVENT_LOCATION, event_location);
@@ -88,8 +89,8 @@ public class VotingDatabase extends SQLiteOpenHelper {
     public List<VoteOptionItem> getAllVotings(VotingDatabase data) {
         List<VoteOptionItem> votings = new ArrayList<VoteOptionItem>();
         Cursor cursor = getInformation(data);
-
         cursor.moveToFirst();
+
         while (!cursor.isAfterLast()) {
             VoteOptionItem voteItem = new VoteOptionItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8));
@@ -99,5 +100,11 @@ public class VotingDatabase extends SQLiteOpenHelper {
 
         cursor.close();
         return votings;
+    }
+
+    // This method returns the number of events saved.
+    public int eventSize(VotingDatabase data) {
+        Log.d("ResultDatabase", "SIZE OF TABLE" + getInformation(data).getCount());
+        return getInformation(data).getCount();
     }
 }

@@ -171,6 +171,8 @@ public class CloudantConnect {
                             "voting_selected.event_location", "voting_selected.event_notes",
                             "voting_selected.selected_start_date", "voting_selected.selected_end_date",
                             "voting_selected.selected_start_time", "voting_selected.selected_end_time",
+                            "voting_selected.not_selected_start_date", "voting_selected.not_selected_end_date",
+                            "voting_selected.not_selected_start_time", "voting_selected.not_selected_end_time",
                             "voting_selected.reject_reason"),
                             "user", "json");
 
@@ -279,7 +281,10 @@ public class CloudantConnect {
                                                    int event_colour, String event_title,
                                                    String event_location, String event_notes,
                                                    String start_date, String end_date,
-                                                   String start_time, String end_time, String reject_reason) {
+                                                   String start_time, String end_time,
+                                                   String not_start_date, String not_end_date,
+                                                   String not_start_time, String not_end_time,
+                                                   String reject_reason) {
 
         User user = getTargetUser(sender);
         // Set options into target user's document
@@ -293,6 +298,10 @@ public class CloudantConnect {
         user.setSelected_end_date(end_date);
         user.setSelected_start_time(start_time);
         user.setSelected_end_time(end_time);
+        user.setNot_selected_start_date(not_start_date);
+        user.setNot_selected_end_date(not_end_date);
+        user.setNot_selected_start_time(not_start_time);
+        user.setNot_selected_end_time(not_end_time);
         user.setReject_reason(reject_reason);
 
         // Retrieve user's documents

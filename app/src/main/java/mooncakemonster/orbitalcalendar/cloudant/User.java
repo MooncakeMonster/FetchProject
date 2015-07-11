@@ -38,6 +38,10 @@ public class User {
     private String selected_end_date;
     private String selected_start_time;
     private String selected_end_time;
+    private String not_selected_start_date;
+    private String not_selected_end_date;
+    private String not_selected_start_time;
+    private String not_selected_end_time;
 
     // Reject event
     private String reject_reason;
@@ -240,6 +244,38 @@ public class User {
         this.selected_end_time = selected_end_time;
     }
 
+    public String getNot_selected_start_date() {
+        return not_selected_start_date;
+    }
+
+    public void setNot_selected_start_date(String not_selected_start_date) {
+        this.not_selected_start_date = not_selected_start_date;
+    }
+
+    public String getNot_selected_end_date() {
+        return not_selected_end_date;
+    }
+
+    public void setNot_selected_end_date(String not_selected_end_date) {
+        this.not_selected_end_date = not_selected_end_date;
+    }
+
+    public String getNot_selected_start_time() {
+        return not_selected_start_time;
+    }
+
+    public void setNot_selected_start_time(String not_selected_start_time) {
+        this.not_selected_start_time = not_selected_start_time;
+    }
+
+    public String getNot_selected_end_time() {
+        return not_selected_end_time;
+    }
+
+    public void setNot_selected_end_time(String not_selected_end_time) {
+        this.not_selected_end_time = not_selected_end_time;
+    }
+
     public String getReject_reason() {
         return reject_reason;
     }
@@ -288,6 +324,10 @@ public class User {
         user.setSelected_end_date((String) ((Map) user_revised.get("voting_selected")).get("selected_end_date"));
         user.setSelected_start_time((String) ((Map) user_revised.get("voting_selected")).get("selected_start_time"));
         user.setSelected_end_time((String) ((Map) user_revised.get("voting_selected")).get("selected_end_time"));
+        user.setNot_selected_start_date((String) ((Map) user_revised.get("voting_selected")).get("not_selected_start_date"));
+        user.setNot_selected_end_date((String) ((Map) user_revised.get("voting_selected")).get("not_selected_end_date"));
+        user.setNot_selected_start_time((String) ((Map) user_revised.get("voting_selected")).get("not_selected_start_time"));
+        user.setNot_selected_end_time((String) ((Map) user_revised.get("voting_selected")).get("not_selected_end_time"));
 
         // Reject event
         user.setSelected_end_time((String) ((Map) user_revised.get("voting_selected")).get("reject_reason"));
@@ -330,6 +370,10 @@ public class User {
         voting_selected.put("selected_end_date", selected_end_date);
         voting_selected.put("selected_start_time", selected_start_time);
         voting_selected.put("selected_end_time", selected_end_time);
+        voting_selected.put("not_selected_start_date", not_selected_start_date);
+        voting_selected.put("not_selected_end_date", not_selected_end_date);
+        voting_selected.put("not_selected_start_time", not_selected_start_time);
+        voting_selected.put("not_selected_end_time", not_selected_end_time);
 
         // Reject event
         voting_selected.put("reject_reason", reject_reason);

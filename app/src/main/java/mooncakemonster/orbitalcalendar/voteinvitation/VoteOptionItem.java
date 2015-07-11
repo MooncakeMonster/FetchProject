@@ -1,9 +1,11 @@
 package mooncakemonster.orbitalcalendar.voteinvitation;
 
+import java.io.Serializable;
+
 /**
  * This class represents the voting options sent out to target participants to vote the dates they are available.
  */
-public class VoteOptionItem {
+public class VoteOptionItem implements Serializable {
     private int eventId;
     private int imageId;
     private String event_title;

@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by BAOJUN on 7/7/15.
  */
 public class NotificationItem implements Serializable {
+    private int notificationId;
     private int eventId;
     private int imageId;
     private String sender_username;
@@ -21,10 +22,11 @@ public class NotificationItem implements Serializable {
     private String end_time;
     private String intent;
 
-    public NotificationItem(int eventId, int imageId, String sender_username, String message, String sender_event, String action,
+    public NotificationItem(int notificationId, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
                             String sender_location, String sender_notes, String selected_date,
                             String start_date, String end_date, String start_time,
                             String end_time, String intent) {
+        this.notificationId = notificationId;
         this.eventId = eventId;
         this.imageId = imageId;
         this.sender_username = sender_username;
@@ -39,6 +41,14 @@ public class NotificationItem implements Serializable {
         this.start_time = start_time;
         this.end_time = end_time;
         this.intent = intent;
+    }
+
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
     }
 
     public int getEventId() {

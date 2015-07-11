@@ -18,6 +18,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
     private static final String TAG = NotificationDatabase.class.getSimpleName();
 
     public String query = "CREATE TABLE " + NotificationData.NotificationInfo.TABLE_NAME + " (" +
+            NotificationData.NotificationInfo.NOTIFICATION_ID + " INTEGER, " +
             NotificationData.NotificationInfo.EVENT_ID + " INTEGER, " +
             NotificationData.NotificationInfo.IMAGE_ID + " INTEGER, " +
             NotificationData.NotificationInfo.SENDER_USERNAME + " TEXT, " +
@@ -52,7 +53,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database.
-    public void putInformation(NotificationDatabase data, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
+    public void putInformation(NotificationDatabase data, int notification_id, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
                                String sender_location, String sender_notes, String vote_type,
                                String start_date, String end_date, String start_time, String end_time, String intent) {
         // Write data into database
@@ -60,6 +61,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
 
         // Add value from each column into contentvalue
+        contentValues.put(NotificationData.NotificationInfo.NOTIFICATION_ID, notification_id);
         contentValues.put(NotificationData.NotificationInfo.EVENT_ID, eventId);
         contentValues.put(NotificationData.NotificationInfo.IMAGE_ID, imageId);
         contentValues.put(NotificationData.NotificationInfo.SENDER_USERNAME, sender_username);
@@ -86,7 +88,8 @@ public class NotificationDatabase extends SQLiteOpenHelper {
     public Cursor getInformation(NotificationDatabase data) {
         // Read data from sqlite database
         SQLiteDatabase sqLiteDatabase = data.getReadableDatabase();
-        String[] columns = {NotificationData.NotificationInfo.EVENT_ID, NotificationData.NotificationInfo.IMAGE_ID,
+        String[] columns = {NotificationData.NotificationInfo.NOTIFICATION_ID,
+                            NotificationData.NotificationInfo.EVENT_ID, NotificationData.NotificationInfo.IMAGE_ID,
                             NotificationData.NotificationInfo.SENDER_USERNAME, NotificationData.NotificationInfo.MESSAGE,
                             NotificationData.NotificationInfo.SENDER_EVENT, NotificationData.NotificationInfo.ACTION,
                             NotificationData.NotificationInfo.SENDER_LOCATION, NotificationData.NotificationInfo.SENDER_NOTES,
@@ -105,9 +108,9 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            NotificationItem notificationItem = new NotificationItem(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3),
-                                                cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8),
-                                                cursor.getString(9), cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13));
+            NotificationItem notificationItem = new NotificationItem(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4),
+                                                cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
+                                                cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14));
             notificationItems.add(notificationItem);
             cursor.moveToNext();
         }

@@ -44,7 +44,8 @@ public class VoteInvitation extends ActionBarActivity {
 
     Button reject_event;
     TextView invite_sender, invite_title, invite_location, invite_notes;
-    String username = "", start_date = "", end_date = "", start_time = "", end_time = "", reject_reason = "";
+    String username = "", start_date = "", end_date = "", start_time = "", end_time = "",
+            not_start_date = "", not_end_date = "", not_start_time = "", not_end_time = "", reject_reason = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,7 @@ public class VoteInvitation extends ActionBarActivity {
         reject_event.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final View dialogview = LayoutInflater.from(VoteInvitation.this).inflate(R.layout.edittext_dialog, null);
+                final View dialogview = LayoutInflater.from(VoteInvitation.this).inflate(R.layout.dialog_edittext, null);
                 final EditText input_username = (EditText) dialogview.findViewById(R.id.input_text);
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(VoteInvitation.this);
@@ -147,6 +148,10 @@ public class VoteInvitation extends ActionBarActivity {
         end_date = null;
         start_time = null;
         end_time = null;
+        not_start_date = null;
+        not_end_date = null;
+        not_start_time = null;
+        not_end_time = null;
     }
 
     // This method retrieves the selected date and time by user if user did not reject the event.
@@ -164,7 +169,11 @@ public class VoteInvitation extends ActionBarActivity {
                 start_time += item.getEvent_start_time() + " ";
                 end_time += item.getEvent_end_time() + " ";
             } else {
-                Log.d("VoteInvitation", "fail");
+                // Space to split all dates later when retrieving
+                not_start_date += item.getEvent_start_date() + " ";
+                not_end_date += item.getEvent_end_date() + " ";
+                not_start_time += item.getEvent_start_time() + " ";
+                not_end_time += item.getEvent_end_time() + " ";
             }
         }
     }
@@ -176,7 +185,8 @@ public class VoteInvitation extends ActionBarActivity {
         Log.d("VoteInvitation", notificationItem.getSender_username());
         // Send out to users via Cloudant
         cloudantConnect.sendSelectedOptionsBackToRequester(my_username, sender_username, eventId, imageId, event, location, notes,
-                                        start_date, end_date, start_time, end_time, reject_reason);
+                                        start_date, end_date, start_time, end_time, not_start_date, not_end_date,
+                                        not_start_time, not_end_time, reject_reason);
         // Push all options to other targeted participants
         cloudantConnect.startPushReplication();
     }

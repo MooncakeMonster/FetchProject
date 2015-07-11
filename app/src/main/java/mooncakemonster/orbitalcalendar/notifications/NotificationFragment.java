@@ -41,7 +41,7 @@ public class NotificationFragment extends ListFragment {
         notificationDatabase = new NotificationDatabase(getActivity());
 
         // (1) Retrieve latest voting request
-        String my_username = user.get("username");
+        String my_username = user.get("username");//
         Log.d(TAG, my_username);
         // TODO: Find out a way to pull data from Cloudant and store in phone in real time
         cloudantConnect.startPullReplication();
@@ -49,7 +49,7 @@ public class NotificationFragment extends ListFragment {
 
         if(cloudantConnect.checkVotingRequest(my_user)) {
             Log.d(TAG, "Voting request found");
-            notificationDatabase.putInformation(notificationDatabase, my_user.getOption_event_id(), my_user.getOption_event_colour(),
+            notificationDatabase.putInformation(notificationDatabase, 1, my_user.getOption_event_id(), my_user.getOption_event_colour(),
                     my_user.getOption_my_username(), " has requested you to vote for the event - ",
                     my_user.getOption_event_title(), ", vote now!", my_user.getOption_event_location(),
                     my_user.getOption_event_notes(), "vote_request", my_user.getOption_start_date(), my_user.getOption_end_date(),
@@ -61,20 +61,23 @@ public class NotificationFragment extends ListFragment {
 
         } else if(cloudantConnect.checkVotingResponse(my_user)) {
             Log.d(TAG, "Voting response found");
+            int notification_id = 0;
             String action1, action2, intent;
 
             // case 1: Target participant has chosen the dates they can make it
             // case 2: Target participant has rejected the event
             if(my_user.getSelected_start_date() != null) {
+                notification_id = 2;
                 action1 = " has responded to your event - ";
                 action2 = ", checkout the current voting result now!";
                 intent = "fragment";
             } else {
+                notification_id = 3;
                 action1 = " has rejected your event - ";
                 action2 = ", find out why!";
                 intent = "dialog";
             }
-            notificationDatabase.putInformation(notificationDatabase, my_user.getSelected_event_id(), my_user.getSelected_event_colour(),
+            notificationDatabase.putInformation(notificationDatabase, notification_id, my_user.getSelected_event_id(), my_user.getSelected_event_colour(),
                     my_user.getSelected_my_username(), action1, my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
                     my_user.getSelected_event_notes(), "vote_response", my_user.getSelected_start_date(), my_user.getSelected_end_date(),
                     my_user.getSelected_start_time(), my_user.getSelected_end_time(), intent);

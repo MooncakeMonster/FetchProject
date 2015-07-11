@@ -2,7 +2,6 @@ package mooncakemonster.orbitalcalendar.votesend;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -181,7 +180,8 @@ public class VotingActivity extends ActionBarActivity {
 
         for(int i = 0; i < size; i++) {
             resultDatabase.putInformation(resultDatabase, resultItem.getEvent_id(), split_start_date[i],
-                    split_end_date[i], split_start_time[i], split_end_time[i], resultItem.getAll_username(), "", "0");
+                    split_end_date[i], split_start_time[i], split_end_time[i], resultItem.getAll_username(),
+                    "", "", "", "0");
         }
 
     }
@@ -223,15 +223,15 @@ public class VotingActivity extends ActionBarActivity {
                 String title = vote_title.getText().toString();
                 String location = vote_location.getText().toString().replace(" @ ", "");
 
-                votingDatabase.putInformation(votingDatabase, colour, title, location,
+                eventId = votingDatabase.eventSize(votingDatabase);
+
+                Log.d("VotingActivity", "EVENT ID " + eventId);
+
+                votingDatabase.putInformation(votingDatabase, eventId, colour, title, location,
                         participants, start_date, end_date, start_time, end_time);
 
-                Cursor cursor = votingDatabase.getInformation(votingDatabase);
-                cursor.moveToLast();
-                eventId = cursor.getInt(0);
-
                 // Save options in SQLite for voting result
-                saveOptions(new ResultItem("" + eventId, start_date, end_date, start_time, end_time, participants, "", ""));
+                saveOptions(new ResultItem("" + eventId, start_date, end_date, start_time, end_time, participants, "", "", "", ""));
 
                 // Fetch user details from sqlite
                 HashMap<String, String> user = db.getUserDetails();

@@ -10,6 +10,7 @@ public class NotificationData {
     public NotificationData() { }
 
     public static abstract class NotificationInfo implements BaseColumns {
+        public static final String NOTIFICATION_ID = "notification_id";
         public static final String EVENT_ID = "event_id";
         public static final String IMAGE_ID = "image_id";
 

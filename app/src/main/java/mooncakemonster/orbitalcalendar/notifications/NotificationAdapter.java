@@ -71,7 +71,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);
             holder.action_image = (ImageView) row.findViewById(R.id.action_image);
             // TODO: Set appropriate background image
-            holder.action_image.setBackgroundResource(setBackground(notificationItem.getNotificationId(), notificationItem.getImageId()));
+            holder.action_image.setBackgroundResource(setBackground(notificationItem.getNotificationId(), R.color.redbear));
 
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
@@ -81,16 +81,19 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    try {
-                        intent = Intent.parseUri(notificationItem.getIntent(), 0);
-                    } catch (URISyntaxException e) {
-                        Log.e(TAG, "Unable to retrieve intent");
-                    }
 
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("vote_item", notificationItem);
-                    intent.putExtras(bundle);
-                    inner_view.getContext().startActivity(intent);
+                    if (notificationItem.getNotificationId() == 1) {
+                        try {
+                            intent = Intent.parseUri(notificationItem.getIntent(), 0);
+                        } catch (URISyntaxException e) {
+                            Log.e(TAG, "Unable to retrieve intent");
+                        }
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("vote_item", notificationItem);
+                        intent.putExtras(bundle);
+                        inner_view.getContext().startActivity(intent);
+                    }
                 }
             });
 

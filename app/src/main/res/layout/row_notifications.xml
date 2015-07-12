@@ -8,14 +8,16 @@
 
     <LinearLayout
         android:layout_width="@dimen/standard_padding_size"
-        android:layout_height="@dimen/standard_padding_size">
+        android:layout_height="@dimen/standard_padding_size"
+        android:layout_marginTop="3dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="@dimen/standard_margin_size">
 
         <ImageView
             android:id="@+id/action_image"
             android:layout_width="@dimen/standard_padding_size"
             android:layout_height="@dimen/standard_padding_size"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/standard_margin_size"
             android:textColor="@color/black"
             android:textSize="23dp"
             android:layout_gravity="center"

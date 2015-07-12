@@ -54,7 +54,7 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
         if(voteItem != null) {
             holder = new Holder();
 
-            holder.event_image = (ImageView) row.findViewById(R.id.history_image);
+            //holder.event_image = (ImageView) row.findViewById(R.id.history_image);
             holder.event_title = (TextView) row.findViewById(R.id.history_title);
             holder.event_location = (TextView) row.findViewById(R.id.history_location);
             holder.event_start_end_date = (TextView) row.findViewById(R.id.history_start_end_date);
@@ -66,7 +66,7 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
             holder.fetch_help = (Button) row.findViewById(R.id.expand_fetch_help);
 
             //Picasso.with(getContext()).load(getBackgroundResource(voteItem)).fit().noFade().into(holder.event_image);
-            holder.event_image.setBackgroundResource(R.color.redbear);
+            //holder.event_image.setBackgroundResource(R.color.redbear);
             holder.event_title.setText(voteItem.getEvent_title());
             holder.event_location.setText("@" + voteItem.getEvent_location());
 

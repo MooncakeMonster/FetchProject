@@ -5,66 +5,90 @@
     android:background="@color/caldroid_transparent"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/history_layout"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:orientation="vertical"
-        android:padding="@dimen/standard_padding_size">
-
-        <ImageView
-            android:id="@+id/history_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/redbear"
-            android:scaleType="centerCrop" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/event_list_margin"
+        android:layout_marginBottom="@dimen/event_list_margin"
+        android:orientation="horizontal">
 
         <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/standard_margin_size">
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="Vote casted:"
+                android:textSize="12dp"
+                android:gravity="center"
+                android:layout_above="@id/event_day"
+                android:textColor="@color/caldroid_black" />
+
+            <TextView
+                android:id="@+id/history_total"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="20"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:textColor="@color/caldroid_black"
+                android:textSize="45dp" />
+
+        </LinearLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="@dimen/standard_padding_size"
+            android:paddingBottom="@dimen/standard_padding_size"
+            android:paddingLeft="@dimen/feed_item_profile_info_padd"
+            android:paddingRight="@dimen/feed_item_profile_info_padd"
+            android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
+            android:layout_marginRight="@dimen/feed_item_profile_info_padd"
+            android:id="@+id/event_set_colour">
 
             <TextView
                 android:id="@+id/history_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_marginTop="35dp"
-                android:text="BBQ Party"
+                android:text="Title"
+                android:textStyle="bold"
                 android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/feed_item_profile_name"
-                android:textStyle="bold" />
+                android:textSize="@dimen/standard_text_size" />
 
             <TextView
                 android:id="@+id/history_location"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text=" @ Pasir Ris"
+                android:text="Singapore"
+                android:layout_below="@id/history_title"
                 android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/feed_item_profile_name"
-                android:textStyle="bold" />
+                android:textSize="@dimen/feed_item_profile_name" />
 
             <TextView
                 android:id="@+id/history_start_end_date"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_below="@id/history_location"
+                android:text="28 May 2015, Saturday"
                 android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/feed_item_timestamp" />
+                android:textSize="@dimen/feed_item_profile_name" />
 
             <TextView
                 android:id="@+id/history_start_end_time"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_below="@id/history_start_end_date"
+                android:text="28 May 2015, Saturday"
                 android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/feed_item_timestamp" />
-        </LinearLayout>
-    </RelativeLayout>
+                android:textSize="@dimen/feed_item_profile_name" />
+        </RelativeLayout>
+    </LinearLayout>
 
     <!-- Expandable view that is initially hidden and will slide out when the more button is pressed -->
     <LinearLayout

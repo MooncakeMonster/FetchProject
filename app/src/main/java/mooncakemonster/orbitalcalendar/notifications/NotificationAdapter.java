@@ -46,14 +46,14 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         LayoutInflater inflater;
         Holder holder;
 
-        if(row == null) {
+        if (row == null) {
             inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.row_notifications, parent, false);
         }
 
         final NotificationItem notificationItem = objects.get(position);
 
-        if(notificationItem != null) {
+        if (notificationItem != null) {
             holder = new Holder();
 
             String sender_username = notificationItem.getSender_username();
@@ -102,40 +102,17 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
     // This method sets appropriate background image for notification.
     private int setBackground(int notificationId, int imageId) {
-        // 1 - Voting request received
-        // 2 - Voting response received
-        // 3 - Voting rejected
-        // 4 - Date of event confirmed
-        if(notificationId == 1) {
-            switch (imageId) {
-                case R.color.redbear:
-                    return R.drawable.partyred;
-                case R.color.yellowbear:
-                    return R.drawable.partyyellow;
-                case R.color.greenbear:
-                    return R.drawable.partygreen;
-                case R.color.bluebear:
-                    return R.drawable.partyblue;
-                case R.color.purplebear:
-                    return R.drawable.partypurple;
-            }
-        } else if(notificationId == 2) {
-            switch (imageId) {
-                case R.color.redbear:
-                    return R.drawable.sunred;
-                case R.color.yellowbear:
-                    return R.drawable.sunyellow;
-                case R.color.greenbear:
-                    return R.drawable.sungreen;
-                case R.color.bluebear:
-                    return R.drawable.sunblue;
-                case R.color.purplebear:
-                    return R.drawable.sunpurple;
-            }
-        } else if(notificationId == 3) {
-
-        } else if(notificationId == 4) {
-
+        switch (imageId) {
+            case R.color.redbear:
+                return R.drawable.ballred;
+            case R.color.yellowbear:
+                return R.drawable.ballyellow;
+            case R.color.greenbear:
+                return R.drawable.ballgreen;
+            case R.color.bluebear:
+                return R.drawable.ballblue;
+            case R.color.purplebear:
+                return R.drawable.ballpurple;
         }
 
         // Should not reach here

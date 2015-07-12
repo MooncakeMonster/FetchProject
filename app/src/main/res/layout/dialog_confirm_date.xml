@@ -1,53 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:padding="@dimen/standard_padding_size"
-        android:textSize="@dimen/standard_text_size"
-        android:textColor="@color/black"
-        android:text="Can make it on this day:"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/can_make_it"
-        android:paddingLeft="@dimen/standard_padding_size"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:padding="@dimen/standard_padding_size"
+            android:text="Can make it on this day:"
+            android:textColor="@color/black"
+            android:textSize="@dimen/standard_text_size" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:padding="@dimen/standard_padding_size"
-        android:textSize="@dimen/standard_text_size"
-        android:textColor="@color/black"
-        android:text="Cannot make it on this day:"/>
+        <ListView
+            android:id="@+id/can_make_it"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/standard_padding_size"></ListView>
 
-    <ListView
-        android:id="@+id/cannot_make_it"
-        android:paddingLeft="@dimen/standard_padding_size"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+    </LinearLayout>
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:padding="@dimen/standard_padding_size"
-        android:textSize="@dimen/standard_text_size"
-        android:textColor="@color/black"
-        android:text="Rejected voting:"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/rejected_voting"
-        android:paddingLeft="@dimen/standard_padding_size"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-    </ListView>
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:padding="@dimen/standard_padding_size"
+            android:text="Cannot make it on this day:"
+            android:textColor="@color/black"
+            android:textSize="@dimen/standard_text_size" />
+
+        <ListView
+            android:id="@+id/cannot_make_it"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/standard_padding_size"></ListView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:padding="@dimen/standard_padding_size"
+            android:text="Rejected voting:"
+            android:textColor="@color/black"
+            android:textSize="@dimen/standard_text_size" />
+
+        <ListView
+            android:id="@+id/rejected_voting"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/standard_padding_size"></ListView>
+
+    </LinearLayout>
 
 
 </LinearLayout>

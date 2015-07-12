@@ -87,7 +87,7 @@ public class VotingResultActivity extends ActionBarActivity {
 
             resultDatabase.storeParticipants(resultDatabase, new ResultItem("" + my_user.getSelected_event_id(),
                     my_user.getSelected_start_date(), my_user.getSelected_end_date(),
-                    my_user.getSelected_start_time(), my_user.getSelected_start_time(), "",
+                    my_user.getSelected_start_time(), my_user.getSelected_end_time(), "",
                     my_user.getSelected_my_username(), "", "", ""), action);
 
             // Reset document once data is saved in the phone

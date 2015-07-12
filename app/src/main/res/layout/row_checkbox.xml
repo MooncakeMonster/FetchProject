@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:padding="@dimen/activity_horizontal_margin"
+    android:padding="@dimen/standard_padding_size"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <CheckBox
         android:id="@+id/send_confirm_date"
+        android:layout_marginLeft="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

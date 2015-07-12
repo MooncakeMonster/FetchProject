@@ -1,7 +1,6 @@
 package mooncakemonster.orbitalcalendar.event;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -23,22 +22,34 @@ import mooncakemonster.orbitalcalendar.alarm.AlarmSetter;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
-
-/*
- * Purpose: EventActivity.java is the interface which the user may input their
- * Access via: Clicking on any dates in the CaldroidFragment
- */
+/*************************************************************************************************
+ * Purpose: EventActivity.java is the interface which the user may input their appointments.
+ *
+ * Parameters of appointment are as follows:
+ * (a) Title       (Mandatory Field)
+ * (b) Location
+ * (c) From Time   (Mandatory Field) (Format: dd/MM/yyyy, EEE    hh:mm a)
+ * (d) To Time     (Mandatory Field) (Format: dd/MM/yyyy, EEE    hh:mm a)
+ * (e) Option to set the same appointment(s) periodically     (e.g. daily, weekly, monthly, or yearly)
+ * (f) Option to set alarm prior to appointment               (e.g. N minutes, hours, or days)
+ * (g) Notes
+ * (h) Colour code appointment
+ *
+ * Access via: Double clicking on any dates in CaldroidFragment
+ * **************************************************************************************************/
 
 public class EventActivity extends ActionBarActivity {
 
-    //REquest Code
+    //Request Code: Inform CalendarFragment if appointment was set, and whether to refresh CaldroidFragment
     public static final int APPOINTMENT_SET = 9;
     public static final int APPOINTMENT_NOT_SET = 8;
 
-    //Variable for extracting date from incoming intent. Default is current time.
-    private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox;
+    //Buttons corresponding to R.layout.activity_event.xml
+    private Button beginDate, endDate, beginTime, endTime, everyNum, everyBox, remindNum, remindBox, colourInput;
+    //Default selected colour code for appointments
+    private int selected_colour = 0;
 
-    //AppointmentController variable to control the SQLite database
+    //AppointmentController to control/access SQLite database
     private AppointmentController appointmentDatabase;
 
     final Context context = this;
@@ -46,12 +57,8 @@ public class EventActivity extends ActionBarActivity {
     AlertDialog.Builder alertBw1, alertBw2;
     AlertDialog alertDw1, alertDw2;
 
-    // Select bear colours
-    Button colourInput;
-    int selected_colour = 0;
-
-    CharSequence[] everyWheel = { "day event", "week event", "month event", "year event"};
-    CharSequence[] remindWheel = { "min before event", "hour before event", "day before event" };
+    CharSequence[] everyWheel = {"day event", "week event", "month event", "year event"};
+    CharSequence[] remindWheel = {"min before event", "hour before event", "day before event"};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,15 +67,13 @@ public class EventActivity extends ActionBarActivity {
 
         getSupportActionBar().setElevation(0);
 
-        //To store the date passed from intent in millisecond
+        //To store the date passed from intent in millisecond. If unavailable, default to current time.
         long datePassedInMillisecond = 0;
         //Extract date from intent
         Bundle extras = getIntent().getExtras();
-        if (extras != null)
-        {
+        if (extras != null) {
             datePassedInMillisecond = extras.getLong("date_passed", -1L);
         }
-
         setButtonFunction(datePassedInMillisecond);
         setCheckBoxFunction();
 
@@ -80,30 +85,30 @@ public class EventActivity extends ActionBarActivity {
         colourInput = (Button) findViewById(R.id.selected_bear);
     }
 
-    // This method sets selected date by user on the button.
-    protected Dialog setButtonFunction(long datePassedInMillisecond) {
-
-        // NullPointer if the following is not coded in this method:
+    //Helper Method: Initialise date and time from intent
+    private void setButtonFunction(long datePassedInMillisecond) {
+        //Assign widgets in R.layout.activity_event.xml to buttons
         beginDate = (Button) findViewById(R.id.startD);
         endDate = (Button) findViewById(R.id.endD);
         beginTime = (Button) findViewById(R.id.startT);
         endTime = (Button) findViewById(R.id.endT);
 
+        //Set default value for date and time field
         Constant.setButtonDatePicker(EventActivity.this, beginDate, datePassedInMillisecond, "");
         Constant.setButtonDatePicker(EventActivity.this, endDate, datePassedInMillisecond, "");
 
         Constant.setButtonTimePicker(EventActivity.this, beginTime, datePassedInMillisecond, "");
-        Constant.setButtonTimePicker(EventActivity.this, endTime, datePassedInMillisecond,   "");
-
-        return null;
+        Constant.setButtonTimePicker(EventActivity.this, endTime, datePassedInMillisecond, "");
     }
 
-    public void setCheckBoxFunction() {
+    private void setCheckBoxFunction() {
+        //Assign widgets in R.layout.activity_event.xml to buttons
         everyNum = (Button) findViewById(R.id.everynum);
         everyBox = (Button) findViewById(R.id.everyweek);
         remindNum = (Button) findViewById(R.id.remindnum);
         remindBox = (Button) findViewById(R.id.remindweek);
 
+        //Set default value for repeat appointment and reminder field
         everyNum.setText("1");
         everyBox.setText("day event");
         remindNum.setText("1");
@@ -192,7 +197,7 @@ public class EventActivity extends ActionBarActivity {
         });
     }
 
-    // This method opens dialog for everyNum button.
+    //Helper Method: Opens dialog for everyNum button.
     private void setAlert1() {
         RelativeLayout relativeLayout = setNumberPicker();
 
@@ -251,7 +256,7 @@ public class EventActivity extends ActionBarActivity {
         alertDw1 = alertBw1.create();
     }
 
-    // This method opens dialog for remindNum button.
+    // Helper Method: Opens dialog for remindNum button.
     private void setAlert2() {
         RelativeLayout relativeLayout = setNumberPicker();
 
@@ -292,7 +297,7 @@ public class EventActivity extends ActionBarActivity {
         alertDw2 = alertBw2.create();
     }
 
-    // This method initialize number picker.
+    // Helper Method: Initialize number picker.
     private RelativeLayout setNumberPicker() {
         numberPicker = new NumberPicker(context);
         numberPicker.setClickable(false);
@@ -390,33 +395,31 @@ public class EventActivity extends ActionBarActivity {
             remind = beginEventMillisecond - num;
 
             //Set alarm
-            AlarmSetter.setAlarm(getApplicationContext(),event, location, remind);
+            AlarmSetter.setAlarm(getApplicationContext(), event, location, remind);
         }
 
         //(2) Start Validity Check
         // Ensure inputs are not of null value: (a) event
-        if(Constant.minStringLength(event, 1, eventInput, null) == false)
+        if (Constant.minStringLength(event, 1, eventInput, null) == false)
             return false;
             // Check length of input: (a) event, (b) location, (c) notes
-        else if(Constant.maxStringLength(event, Constant.EVENT_TITLE_MAX_LENGTH, eventInput,
+        else if (Constant.maxStringLength(event, Constant.EVENT_TITLE_MAX_LENGTH, eventInput,
                 "No more than " + Constant.EVENT_TITLE_MAX_LENGTH + " characters for event.") == false)
             return false;
-        else if(Constant.maxStringLength(location, Constant.LOCATION_MAX_LENGTH, locationInput,
+        else if (Constant.maxStringLength(location, Constant.LOCATION_MAX_LENGTH, locationInput,
                 "No more than " + Constant.LOCATION_MAX_LENGTH + " characters for location.") == false)
             return false;
-        else if(Constant.maxStringLength(notes, Constant.NOTES_MAX_LENGTH, notesInput,
+        else if (Constant.maxStringLength(notes, Constant.NOTES_MAX_LENGTH, notesInput,
                 "No more than " + Constant.NOTES_MAX_LENGTH + " characters for notes.") == false)
             return false;
         // Ensure the dates selected make sense: (a) startDate, (b) endDate
-        if(beginEventMillisecond > endEventMillisecond)
-        {
+        if (beginEventMillisecond > endEventMillisecond) {
             //If starting time occurs before ending time
             Toast.makeText(this.getApplicationContext(), "Please check the starting and ending date", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if (repeatAppointment.isChecked())
-        {
+        if (repeatAppointment.isChecked()) {
             //TODO: If checkbox, sent dialogbox, asking when is the limit date
             //BULK INSERT INTO DATABASE
             /*
@@ -435,9 +438,7 @@ public class EventActivity extends ActionBarActivity {
             alert.show();
             */
 
-        }
-        else
-        {
+        } else {
             //Insert into database
             appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
         }
@@ -445,10 +446,10 @@ public class EventActivity extends ActionBarActivity {
         return true;
     }
 
-    public void onClick(View view){
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.addAppointmentButton:
-                if(insertInDatabase()) {
+                if (insertInDatabase()) {
                     //Inform user that appointment has been created and return to previous activity
                     Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
 
@@ -494,7 +495,8 @@ public class EventActivity extends ActionBarActivity {
                 selected_colour = R.color.purplebear;
                 break;
 
-            default: break;
+            default:
+                break;
         }
     }
 

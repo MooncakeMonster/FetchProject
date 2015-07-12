@@ -17,10 +17,13 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
-/**
- * Purpose: EventView.java allows user to toggle between viewing an appointment and editing it
- * Access via: Clicking on any list item in EventFragment.java
- */
+/**************************************************************************************************
+ * Purpose: EventView.java allows user to toggle between viewing a previously set appointment
+ * and editing it.
+ *
+ * Access via: Click on the menu button on top left corner, then "Events", then any Appointments,
+ * followed by "Edit Event"
+ **************************************************************************************************/
 public class EventView extends DialogFragment
 {
     private Appointment eventViewAppointment;

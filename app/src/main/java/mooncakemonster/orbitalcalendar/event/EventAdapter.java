@@ -24,10 +24,22 @@ import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.votesend.VotingActivity;
 
+/*************************************************************************************************
+ * Purpose: EventAdapter.java serves as a "holder" which contain the interface for how an appointment
+ * "unit" will appear in EventFragment.java
+ *
+ * Moreover, by clicking on EventAdapter, users may opt to:
+ * (1) Edit/View Event
+ * (2) Set the appointment for Voting
+ * (3) Delete appointment
+ *
+ * Access via: Click on the menu button on top left corner, then Events
+ **************************************************************************************************/
+
 public class EventAdapter extends ArrayAdapter<Appointment> {
 
     //Set database to allow user to retrieve data to populate EventFragment.java
-    private AppointmentController appointmentDatabase  = new AppointmentController(getContext());
+    private AppointmentController appointmentDatabase = new AppointmentController(getContext());
     private List<Appointment> objects;
 
     public EventAdapter(Context context, int resources, List<Appointment> objects) {
@@ -177,7 +189,6 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
 
             row.setTag(holder);
         }
-
 
         return row;
     }

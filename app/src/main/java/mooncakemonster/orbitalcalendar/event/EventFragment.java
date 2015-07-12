@@ -1,14 +1,11 @@
 package mooncakemonster.orbitalcalendar.event;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
@@ -22,10 +19,11 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
-/*
- * Purpose: EventFragment.java shows the user all the appointment created in the form of a list
- * Access via: Menu tab > Events
- */
+/***********************************************************************************************
+ * Purpose: EventFragment.java shows the user all the appointment(s) created in the form of a list
+ *
+ * Access via: Click on the menu button on top left corner, then Events
+ ************************************************************************************************/
 
 public class EventFragment extends ListFragment {
 
@@ -36,7 +34,6 @@ public class EventFragment extends ListFragment {
     EventAdapter adapter;
     Appointment selected_appointment;
     Date latestDate;
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -55,49 +52,12 @@ public class EventFragment extends ListFragment {
                 Constant.TIMEFORMATTER.format(latestDate), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
         int size = allAppointment.size();
 
-        for(int i = 0; i < size; i++) {
-            if(adapter.getItem(i).getStartDate() >= todayInMillisecond) {
+        for (int i = 0; i < size; i++) {
+            if (adapter.getItem(i).getStartDate() >= todayInMillisecond) {
                 getListView().setSelectionFromTop(i, 0);
                 break;
             }
         }
-
-        //TODO: TAKE NOTE - Code had been moved to EventAdapter
-        getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
-                //Get Appointment from ArrayAdapter
-                final Appointment appointmentToDelete = adapter.getItem(position);
-
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Delete appointment");
-                alert.setMessage("Are you sure you want to delete \"" + appointmentToDelete.toString() + "\"?");
-
-                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        //Delete from SQLite database
-                        appointmentDatabase.deleteAppointment(appointmentToDelete);
-                        //Delete from ArrayAdapter & allAppointment
-                        adapter.remove(appointmentToDelete);
-                        allAppointment.remove(appointmentToDelete);
-                        adapter.notifyDataSetChanged();
-                        //Remove dialog after execution of the above
-                        dialog.dismiss();
-                    }
-                });
-
-                alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
-                    }
-                });
-                alert.show();
-                return true;
-            }
-        });
     }
 
     @Override
@@ -129,7 +89,6 @@ public class EventFragment extends ListFragment {
     @Override
     public void onPause() {
         super.onPause();
-
         if (appointmentDatabase != null) {
             appointmentDatabase.close();
             appointmentDatabase = null;
@@ -137,11 +96,9 @@ public class EventFragment extends ListFragment {
     }
 
     @Override
-    public void onResume()
-    {
+    public void onResume() {
         super.onResume();
-        if(appointmentDatabase == null)
-        {
+        if (appointmentDatabase == null) {
             appointmentDatabase = new AppointmentController(getActivity());
             appointmentDatabase.open();
         }

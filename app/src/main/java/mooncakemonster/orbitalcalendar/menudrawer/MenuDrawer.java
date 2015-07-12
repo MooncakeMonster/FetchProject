@@ -1,6 +1,7 @@
 package mooncakemonster.orbitalcalendar.menudrawer;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +19,7 @@ import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
 import mooncakemonster.orbitalcalendar.friendlist.FriendlistFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
+import mooncakemonster.orbitalcalendar.notifications.NotificationReceiveService;
 import mooncakemonster.orbitalcalendar.votereceive.VotingFragment;
 
 public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.FragmentDrawerListener {
@@ -31,6 +33,9 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menubar);
+
+        //TODO: Place this in appropriate place - tentatively here for testing
+        startService(new Intent(this, NotificationReceiveService.class));
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 

@@ -99,8 +99,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             holder.event_location.setText(appointment.getLocation());
 
             // Get date
-            SimpleDateFormat standardFormat = new SimpleDateFormat("yyyy MM dd");
-            String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), standardFormat, new SimpleDateFormat("yyyy MMM dd"));
+            String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), Constant.YYYYMMDD_FORMATTER, new SimpleDateFormat("yyyy MMM dd"));
             final String[] date = finalDate.split(" ");
             holder.event_day.setText(date[2]);
             holder.event_month_year.setText(date[1] + " " + date[0]);

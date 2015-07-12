@@ -10,8 +10,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
-
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
@@ -158,7 +156,7 @@ public class EventView extends DialogFragment
                     final String beginT = beginTimeButton.getText().toString();
                     final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
                     //Standardised format for event's starting date: YYYY-MM-DD
-                    final String startProperDate = Constant.standardYearMonthDate(beginD, Constant.DATEFORMATTER, new SimpleDateFormat("yyyy MM dd"));
+                    final String startProperDate = Constant.standardYearMonthDate(beginD, Constant.DATEFORMATTER, Constant.YYYYMMDD_FORMATTER);
                     //End date and time
                     final String endD = endDateButton.getText().toString().replace("To         ", "");
                     final String endT = endTimeButton.getText().toString();

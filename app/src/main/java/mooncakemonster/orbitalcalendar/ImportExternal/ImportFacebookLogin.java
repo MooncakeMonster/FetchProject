@@ -131,10 +131,10 @@ public class ImportFacebookLogin extends DialogFragment {
                         if(startTime.contains("+")) {
                             startTime = startTime.replaceFirst("[+]([0-9]{4})", "");
                             startTimeMillisec = Constant.stringToMillisecond(startTime, dateWithTimeFormatter);
-                            startProperDate = Constant.standardYearMonthDate(startTime, dateWithTimeFormatter, new SimpleDateFormat("yyyy MM dd"));
+                            startProperDate = Constant.standardYearMonthDate(startTime, dateWithTimeFormatter, Constant.YYYYMMDD_FORMATTER);
                         } else {
                             startTimeMillisec = Constant.stringToMillisecond(startTime, dateWithoutTimeFormatter);
-                            startProperDate = Constant.standardYearMonthDate(startTime, dateWithoutTimeFormatter, new SimpleDateFormat("yyyy MM dd"));
+                            startProperDate = Constant.standardYearMonthDate(startTime, dateWithoutTimeFormatter, Constant.YYYYMMDD_FORMATTER);
                         }
 
                         String endTime = null;

@@ -1,8 +1,5 @@
 package mooncakemonster.orbitalcalendar.event;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -11,11 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-import java.text.SimpleDateFormat;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.alarm.AlarmSetter;
@@ -52,13 +45,9 @@ public class EventActivity extends ActionBarActivity {
     //AppointmentController to control/access SQLite database
     private AppointmentController appointmentDatabase;
 
-    final Context context = this;
-    NumberPicker numberPicker;
-    AlertDialog.Builder alertBw1, alertBw2;
-    AlertDialog alertDw1, alertDw2;
-
-    CharSequence[] everyWheel = {"day event", "week event", "month event", "year event"};
-    CharSequence[] remindWheel = {"min before event", "hour before event", "day before event"};
+    private static CharSequence[] everyWheel = {"day", "week", "month", "year"};
+    private static CharSequence[] remindWheel = {"min", "hour", "day"};
+    private final static String REMIND_TAG = " before event";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,14 +56,14 @@ public class EventActivity extends ActionBarActivity {
 
         getSupportActionBar().setElevation(0);
 
-        //To store the date passed from intent in millisecond. If unavailable, default to current time.
+        //Store date passed from intent in millisecond. If unavailable, default to current time.
         long datePassedInMillisecond = 0;
         //Extract date from intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             datePassedInMillisecond = extras.getLong("date_passed", -1L);
         }
-        setButtonFunction(datePassedInMillisecond);
+        setDateFunction(datePassedInMillisecond);
         setCheckBoxFunction();
 
         //Initialise and open database
@@ -86,7 +75,7 @@ public class EventActivity extends ActionBarActivity {
     }
 
     //Helper Method: Initialise date and time from intent
-    private void setButtonFunction(long datePassedInMillisecond) {
+    private void setDateFunction(long datePassedInMillisecond) {
         //Assign widgets in R.layout.activity_event.xml to buttons
         beginDate = (Button) findViewById(R.id.startD);
         endDate = (Button) findViewById(R.id.endD);
@@ -110,218 +99,22 @@ public class EventActivity extends ActionBarActivity {
 
         //Set default value for repeat appointment and reminder field
         everyNum.setText("1");
-        everyBox.setText("day event");
         remindNum.setText("1");
-        remindBox.setText("min before event");
+        everyBox.setText(everyWheel[0]);
+        remindBox.setText(remindWheel[0] + REMIND_TAG);
 
-        everyNum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setAlert1();
-                alertDw1.show();
-            }
-        });
+        Constant.setNumberDialogWheel(EventActivity.this, everyNum, everyBox, everyWheel, "");
+        Constant.setNumberDialogWheel(EventActivity.this, remindNum, remindBox, remindWheel, REMIND_TAG);
 
-        remindNum.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setAlert2();
-                alertDw2.show();
-            }
-        });
-
-        everyBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder build1 = new AlertDialog.Builder(EventActivity.this);
-                build1.setTitle("Select type");
-                build1.setSingleChoiceItems(everyWheel, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!everyNum.getText().equals("1") && which == 0)
-                            everyBox.setText("days event");
-                        else if (!everyNum.getText().equals("1") && which == 1)
-                            everyBox.setText("weeks event");
-                        else if (!everyNum.getText().equals("1") && which == 2)
-                            everyBox.setText("months event");
-                        else if (!everyNum.getText().equals("1") && which == 3)
-                            everyBox.setText("years event");
-                        else everyBox.setText(everyWheel[which]);
-                    }
-                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog d1 = build1.create();
-                d1.show();
-            }
-        });
-
-        remindBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder build2 = new AlertDialog.Builder(EventActivity.this);
-                build2.setTitle("Select type");
-                build2.setSingleChoiceItems(remindWheel, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!remindNum.getText().equals("1") && which == 0)
-                            remindBox.setText("mins before event");
-                        else if (!remindNum.getText().equals("1") && which == 1)
-                            remindBox.setText("hours before event");
-                        else if (!remindNum.getText().equals("1") && which == 2)
-                            remindBox.setText("days before event");
-                        else remindBox.setText(remindWheel[which]);
-                    }
-                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-                AlertDialog d2 = build2.create();
-                d2.show();
-            }
-        });
-    }
-
-    //Helper Method: Opens dialog for everyNum button.
-    private void setAlert1() {
-        RelativeLayout relativeLayout = setNumberPicker();
-
-        alertBw1 = new AlertDialog.Builder(context);
-        alertBw1.setTitle("Select number");
-
-        alertBw1.setView(relativeLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                everyNum.setText(Integer.toString(numberPicker.getValue()));
-                //Remove 's' from days, weeks, months and years when 1 is selected.
-                //Conversely, append 's' to day, week, month, and year when value greater than 1 selected.
-                if (everyNum.getText().toString().equals("1")) {
-                    String frequencyOfAppointment = everyBox.getText().toString();
-                    switch (frequencyOfAppointment) {
-                        case "days event":
-                            everyBox.setText("day event");
-                            break;
-                        case "weeks event":
-                            everyBox.setText("week event");
-                            break;
-                        case "months event":
-                            everyBox.setText("month event");
-                            break;
-                        case "years event":
-                            everyBox.setText("year event");
-                            break;
-                    }
-                } else if (!everyNum.getText().toString().equals("1")) {
-                    String frequencyOfAppointment = everyBox.getText().toString();
-                    switch (frequencyOfAppointment) {
-                        case "day event":
-                            everyBox.setText("days event");
-                            break;
-                        case "week event":
-                            everyBox.setText("weeks event");
-                            break;
-                        case "month event":
-                            everyBox.setText("months event");
-                            break;
-                        case "year event":
-                            everyBox.setText("years event");
-                            break;
-                    }
-                }
-
-                dialog.dismiss();
-            }
-        });
-
-        alertDw1 = alertBw1.create();
-    }
-
-    // Helper Method: Opens dialog for remindNum button.
-    private void setAlert2() {
-        RelativeLayout relativeLayout = setNumberPicker();
-
-        alertBw2 = new AlertDialog.Builder(context);
-        alertBw2.setTitle("Select number");
-
-        alertBw2.setView(relativeLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                remindNum.setText(Integer.toString(numberPicker.getValue()));
-                //Remove 's' from mins, hours, and days when 1 is selected.
-                //Conversely, append 's' to min, hour, and day when value greater than 1 selected.
-                if (remindNum.getText().toString().equals("1")) {
-                    String reminderOption = remindBox.getText().toString();
-                    switch (reminderOption) {
-                        case "mins before event":   remindBox.setText("min before event");      break;
-                        case "hours before event":  remindBox.setText("hour before event");     break;
-                        case "days before event":   remindBox.setText("day before event");      break;
-                    }
-                } else if (!remindNum.getText().toString().equals("1")) {
-                    String reminderOption = remindBox.getText().toString();
-                    switch (reminderOption) {
-                        case "min before event":    remindBox.setText("mins before event");     break;
-                        case "hour before event":   remindBox.setText("hours before event");    break;
-                        case "day before event":    remindBox.setText("days before event");     break;
-                    }
-                }
-
-                dialog.dismiss();
-            }
-        });
-
-        alertDw2 = alertBw2.create();
-    }
-
-    // Helper Method: Initialize number picker.
-    private RelativeLayout setNumberPicker() {
-        numberPicker = new NumberPicker(context);
-        numberPicker.setClickable(false);
-        numberPicker.setEnabled(true);
-        numberPicker.setWrapSelectorWheel(true);
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(100);
-
-        final RelativeLayout linearLayout = new RelativeLayout(context);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
-        RelativeLayout.LayoutParams numPickerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        numPickerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
-        linearLayout.setLayoutParams(params);
-        linearLayout.addView(numberPicker, numPickerParams);
-        linearLayout.isClickable();
-
-        return linearLayout;
+        Constant.setTypeDialog(EventActivity.this, everyNum, everyBox, everyWheel, "");
+        Constant.setTypeDialog(EventActivity.this, remindNum, remindBox, remindWheel, REMIND_TAG);
     }
 
     public void selectItem(View view) {
         boolean checked = ((CheckBox) view).isChecked();
         switch (view.getId()) {
             case R.id.everybox:
+            case R.id.remindbox:
                 break;
 
             //Set alarm sound
@@ -359,7 +152,7 @@ public class EventActivity extends ActionBarActivity {
         final String beginT = beginTime.getText().toString();
         final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
         //Standardised format for event's starting date: YYYY-MM-DD
-        final String startProperDate = Constant.standardYearMonthDate(beginD, Constant.DATEFORMATTER, new SimpleDateFormat("yyyy MM dd"));
+        final String startProperDate = Constant.standardYearMonthDate(beginD, Constant.DATEFORMATTER, Constant.YYYYMMDD_FORMATTER);
         //End date and time
         final String endD = endDate.getText().toString();
         final String endT = endTime.getText().toString();

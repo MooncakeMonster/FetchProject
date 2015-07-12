@@ -40,7 +40,7 @@
     <!-- activity_event.xml -->
     <string name="event_title">Title</string>
     <string name="event_location">Location</string>
-    <string name="event_every">Every</string>
+    <string name="event_every">Repeat every</string>
     <string name="event_remind">Remind me</string>
     <string name="event_notes">Notes</string>
     <string name="event_participants">Participants</string>

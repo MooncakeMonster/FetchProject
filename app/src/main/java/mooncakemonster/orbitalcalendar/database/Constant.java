@@ -1,9 +1,11 @@
 package mooncakemonster.orbitalcalendar.database;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -13,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
 import java.security.MessageDigest;
@@ -22,14 +26,28 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/****************************************************************************************************
- * Abstract Constant class to store all helper method that will most likely be used across the app
+/*************************************************************************************************
+ * Purpose: Abstract Constant.java class to store all helper method that will most likely be used across the app
  * as well as all the constants.
  *
- * N.B. Do not instantiate
- ****************************************************************************************************/
-public abstract class Constant
+ * Constant.java contains the following:
+ * (1) Constants
+ * (2) Conversion Methods
+ * (3) Validity Check
+ * (4) Widget Interactivity
+ * (5) Developer's Tool (Tentatively, at the moment, for Facebook)
+ *
+ * N.B. Do not instantiate, or extend this class
+ *
+ * Access Via: Not Applicable
+ **************************************************************************************************/
+
+public final class Constant
 {
+    private Constant() {
+        //Prevent Constant.java from being instantiated
+    }
+
     /****************************************************************************************************
      * (1) CONSTANTS
      ****************************************************************************************************/
@@ -44,6 +62,7 @@ public abstract class Constant
 
     public static SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("dd/MM/yyyy, EEE");
     public static SimpleDateFormat TIMEFORMATTER = new SimpleDateFormat("hh:mma");
+    public static SimpleDateFormat YYYYMMDD_FORMATTER = new SimpleDateFormat("yyyy MM dd");
 
     private static Calendar calendar = Calendar.getInstance();
 
@@ -54,11 +73,8 @@ public abstract class Constant
     /****************************************************************************************************
      * Change strings (date and time) to corresponding millisecond
      ****************************************************************************************************/
-    public static long stringToMillisecond(String date, String time, SimpleDateFormat formatterForDate, SimpleDateFormat formatterForTime)
-    {
-        try
-        {
-            //Try-catch block placed here to prevent 'Unhandled ParseException' error
+    public static long stringToMillisecond(String date, String time, SimpleDateFormat formatterForDate, SimpleDateFormat formatterForTime) {
+        try {
             Date tempTime = formatterForTime.parse(time);
             Date tempDate = formatterForDate.parse(date);
 
@@ -66,9 +82,7 @@ public abstract class Constant
             long dateMillisecond = tempDate.getTime();
 
             return (dateMillisecond + timeMillisecond);
-        }
-        catch(ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -76,19 +90,12 @@ public abstract class Constant
         return -1;
     }
 
-    public static long stringToMillisecond(String dateTime, SimpleDateFormat formatterForDateTime)
-    {
-        try
-        {
-            //Try-catch block placed here to prevent 'Unhandled ParseException' error
+    public static long stringToMillisecond(String dateTime, SimpleDateFormat formatterForDateTime) {
+        try {
             Date tempDateTime = formatterForDateTime.parse(dateTime);
-
             long dateTimeMillisecond = tempDateTime.getTime();
-
             return (dateTimeMillisecond);
-        }
-        catch(ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
 
@@ -99,8 +106,7 @@ public abstract class Constant
     /****************************************************************************************************
      * Convert millisecond back to strings
      ****************************************************************************************************/
-    public static String getDate(long milliSeconds, String dateFormat)
-    {
+    public static String getDate(long milliSeconds, String dateFormat) {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
 
         calendar.clear();
@@ -109,8 +115,7 @@ public abstract class Constant
         return formatter.format(calendar.getTime());
     }
 
-    public static String getDate(long milliSeconds, SimpleDateFormat formatter)
-    {
+    public static String getDate(long milliSeconds, SimpleDateFormat formatter) {
         calendar.clear();
         calendar.setTimeInMillis(milliSeconds);
 
@@ -120,15 +125,11 @@ public abstract class Constant
     /****************************************************************************************************
      * Convert any string date to standardised string date format: YYYY-MM-DD
      ****************************************************************************************************/
-    public static String standardYearMonthDate(String date, SimpleDateFormat formatter, SimpleDateFormat standardFormat)
-    {
-        try
-        {
+    public static String standardYearMonthDate(String date, SimpleDateFormat formatter, SimpleDateFormat standardFormat) {
+        try {
             Date tempDate = formatter.parse(date);
             return standardFormat.format(tempDate);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //Should not reach here
@@ -138,14 +139,10 @@ public abstract class Constant
     /****************************************************************************************************
      * Convert string date to date object
      ****************************************************************************************************/
-    public static Date stringToDate(String date, SimpleDateFormat standardFormat)
-    {
-        try
-        {
+    public static Date stringToDate(String date, SimpleDateFormat standardFormat) {
+        try {
             return standardFormat.parse(date);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         //Should not reach here
@@ -160,21 +157,17 @@ public abstract class Constant
      * Ensure string extracted from an EditText widget is less than a certain length.
      * Otherwise, warn user through a custom error message, or a default error message.
      ****************************************************************************************************/
-    public static boolean maxStringLength(String input, int length, EditText edittext, String errorMessage)
-    {
-        if(length <= 0){
-            //Erronous input
+    public static boolean maxStringLength(String input, int length, EditText edittext, String errorMessage) {
+        if (length <= 0) {
             return false;
         }
-        if(input.length() > length) {
+        else if (input.length() > length) {
             if (errorMessage == null && input.length() > length) {
                 edittext.setError("" + length + " characters or less.");
-                return false;
-            } else
-            {
+            } else {
                 edittext.setError(errorMessage);
-                return false;
             }
+            return false;
         }
 
         return true;
@@ -184,26 +177,19 @@ public abstract class Constant
      * Ensure string extracted from an EditText widget is more than a certain length.
      * Otherwise, warn user through a custom error message, or a default error message.
      ****************************************************************************************************/
-    public static boolean minStringLength(String input, int length, EditText edittext, String errorMessage)
-    {
-        if(length <= 0){
+    public static boolean minStringLength(String input, int length, EditText edittext, String errorMessage) {
+        if (length <= 0) {
             return false;
-        }
-
-        else if((input.length() == 0 || input == null)) {
+        } else if ((input.length() == 0 || input == null)) {
             edittext.setError("Please do not leave this empty.");
             return false;
-        }
-
-        else if(input.length() < length){
-            if(errorMessage == null) {
+        } else if (input.length() < length) {
+            if (errorMessage == null) {
                 edittext.setError("Please key in at least " + length + " characters.");
-                return false;
-            }
-            else{
+            } else {
                 edittext.setError(errorMessage);
-                return false;
             }
+            return false;
         }
 
         return true;
@@ -216,13 +202,10 @@ public abstract class Constant
     /****************************************************************************************************
      * Set Button as DatePicker
      ****************************************************************************************************/
-    public static void setButtonDatePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString)
-    {
-        if(timeInMillisecond > 0) {
+    public static void setButtonDatePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString) {
+        if (timeInMillisecond > 0) {
             calendar.setTimeInMillis(timeInMillisecond);
-        }
-        else
-        {
+        } else {
             calendar.setTimeInMillis(System.currentTimeMillis());
         }
 
@@ -247,13 +230,10 @@ public abstract class Constant
     /****************************************************************************************************
      * Set Button as TimePicker
      ****************************************************************************************************/
-    public static void setButtonTimePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString)
-    {
-        if(timeInMillisecond > 0) {
+    public static void setButtonTimePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString) {
+        if (timeInMillisecond > 0) {
             calendar.setTimeInMillis(timeInMillisecond);
-        }
-        else
-        {
+        } else {
             calendar.setTimeInMillis(System.currentTimeMillis());
         }
 
@@ -277,6 +257,109 @@ public abstract class Constant
     }
 
     /****************************************************************************************************
+     * Append/Remove 's' to type (e.g. min, hour, day, etc) when appropriate quantity is selected
+     ****************************************************************************************************/
+    public static void setNumberDialogWheel(final Context context, final Button quantityCount, final Button typeWheel, final CharSequence[] wheel, final String additionalTag) {
+        quantityCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final NumberPicker numberPicker = new NumberPicker(context);
+                RelativeLayout relativeLayout = setNumberPicker(context, numberPicker);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Select number");
+
+                builder.setView(relativeLayout).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        quantityCount.setText(Integer.toString(numberPicker.getValue()));
+                        String reminderOption = typeWheel.getText().toString();
+                        //Remove 's' from when 1 is selected. Conversely, append 's' when value greater than 1 selected.
+                        if (quantityCount.getText().toString().equals("1")) {
+                            for (CharSequence remind : wheel) {
+                                if (reminderOption.equals(remind + "s" + additionalTag)) {
+                                    typeWheel.setText(remind + additionalTag);
+                                    break;
+                                }
+                            }
+                        } else if (!quantityCount.getText().toString().equals("1")) {
+                            for (CharSequence remind : wheel) {
+                                if (reminderOption.equals(remind + additionalTag)) {
+                                    typeWheel.setText(remind + "s" + additionalTag);
+                                    break;
+                                }
+                            }
+                        }
+
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
+        });
+    }
+
+    // Helper Method: Initialize number picker.
+    private static RelativeLayout setNumberPicker(Context context, NumberPicker numberPicker) {
+        numberPicker.setClickable(false);
+        numberPicker.setEnabled(true);
+        numberPicker.setWrapSelectorWheel(true);
+        numberPicker.setMinValue(1);
+        numberPicker.setMaxValue(100);
+
+        final RelativeLayout linearLayout = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(50, 50);
+        RelativeLayout.LayoutParams numPickerParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        numPickerParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        linearLayout.setLayoutParams(params);
+        linearLayout.addView(numberPicker, numPickerParams);
+        linearLayout.isClickable();
+
+        return linearLayout;
+    }
+
+    /****************************************************************************************************
+     * Launch dialog with appropriate type (e.g. min, versus mins; hour, versus hours... etc.)
+     ****************************************************************************************************/
+    public static void setTypeDialog(final Context context, final Button quantityCount, final Button typeWheel, final CharSequence[] wheel, final String additionalTag) {
+        typeWheel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder build = new AlertDialog.Builder(context);
+                build.setTitle("Select type");
+                build.setSingleChoiceItems(wheel, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!quantityCount.getText().toString().equals("1"))
+                            typeWheel.setText(wheel[which] + "s" + additionalTag);
+                        else typeWheel.setText(wheel[which] + additionalTag);
+                    }
+                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                AlertDialog alertDialog = build.create();
+                alertDialog.show();
+            }
+        });
+    }
+
+    /****************************************************************************************************
      * (5) Developer's Tool
      ****************************************************************************************************/
 
@@ -284,15 +367,13 @@ public abstract class Constant
      * Get Development Key Hashes for Facebook
      ****************************************************************************************************/
     public static String printKeyHash(Activity context) {
-        PackageInfo packageInfo;
         String key = null;
-        try {
-            //getting application package name, as defined in manifest
-            String packageName = context.getApplicationContext().getPackageName();
 
+        try {
+            //Getting application package name, as defined in manifest
+            String packageName = context.getApplicationContext().getPackageName();
             //Retriving package info
-            packageInfo = context.getPackageManager().getPackageInfo(packageName,
-                    PackageManager.GET_SIGNATURES);
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
 
             Log.e("Package Name=", context.getApplicationContext().getPackageName());
 
@@ -306,16 +387,13 @@ public abstract class Constant
             }
         } catch (PackageManager.NameNotFoundException e1) {
             Log.e("Name not found", e1.toString());
-        }
-        catch (NoSuchAlgorithmException e) {
+        } catch (NoSuchAlgorithmException e) {
             Log.e("No such an algorithm", e.toString());
         } catch (Exception e) {
             Log.e("Exception", e.toString());
         }
 
-
         Log.i("Key Value = ", key);
         return key;
     }
-
 }

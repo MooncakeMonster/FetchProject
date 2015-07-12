@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.roomorama.caldroid.WeekdayArrayAdapter;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -159,15 +158,14 @@ public class CalendarFragment extends ListFragment {
     // If date is not selected, set default as current date
     private void displayEventList(Date date) {
         // Change date format to the same as date in database
-        DateFormat dateFormat = new SimpleDateFormat("yyyy MM dd");
-        String finalDate = dateFormat.format(date);
+        String finalDate = Constant.YYYYMMDD_FORMATTER.format(date);
 
         //Get all the appointment
         allAppointment = appointmentDatabase.getSelectedDateAppointment(finalDate);
         adapter = new EventDayAdapter(getActivity(), R.layout.row_event_day, allAppointment);
 
         // Change date format to the same as date in database
-        dateFormat = new SimpleDateFormat("dd MMM yyyy, EEEE");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM yyyy, EEEE");
         finalDate = dateFormat.format(date);
         dateDisplay.setBackgroundResource(R.color.colorPrimary);
         dateDisplay.setText(finalDate);

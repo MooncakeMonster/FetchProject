@@ -182,8 +182,7 @@ public class ImportICSParser extends Activity {
                             endMillisec = (endMillisec == 0) ? startMillisec : endMillisec;
 
                             Date date = new Date(startMillisec);
-                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy MM dd");
-                            String dateFormatted = formatter.format(date);
+                            String dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
 
                             //Set value for appointment
                             tempAppt = new Appointment();

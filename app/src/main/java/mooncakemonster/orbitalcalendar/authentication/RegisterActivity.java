@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.net.URISyntaxException;
 import java.util.regex.Matcher;
@@ -197,13 +196,11 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
 
     // This method completes replication
     public void replicationComplete() {
-        Toast.makeText(getApplicationContext(), "Replication completed", Toast.LENGTH_SHORT).show();
         progressDialog.dismiss();
     }
 
     // This method is called if there is an error in replication
     public void replicationError() {
-        Toast.makeText(getApplicationContext(), "Replication error", Toast.LENGTH_SHORT).show();
         progressDialog.dismiss();
     }
 

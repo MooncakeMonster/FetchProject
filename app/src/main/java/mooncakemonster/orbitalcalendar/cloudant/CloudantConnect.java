@@ -163,18 +163,23 @@ public class CloudantConnect {
         if (indexManager.isTextSearchEnabled()) {
             String user_details = indexManager.ensureIndexed(Arrays.<Object>asList(
                             "user_details.email_address", "user_details.username", "user_details.password",
-                            "voting_options.my_username", "voting_options.event_title",
-                            "voting_options.event_location", "voting_options.event_notes",
+                            "voting_options.option_my_username", "voting_options.option_event_title",
+                            "voting_options.option_event_location", "voting_options.option_event_notes",
                             "voting_options.option_start_date", "voting_options.option_end_date",
                             "voting_options.option_start_time", "voting_options.option_end_time",
-                            "voting_selected.my_username", "voting_selected.event_title",
-                            "voting_selected.event_location", "voting_selected.event_notes",
+                            "voting_selected.selected_my_username", "voting_selected.selected_event_title",
+                            "voting_selected.selected_event_location", "voting_selected.selected_event_notes",
                             "voting_selected.selected_start_date", "voting_selected.selected_end_date",
                             "voting_selected.selected_start_time", "voting_selected.selected_end_time",
                             "voting_selected.not_selected_start_date", "voting_selected.not_selected_end_date",
                             "voting_selected.not_selected_start_time", "voting_selected.not_selected_end_time",
-                            "voting_selected.reject_reason"),
-                            "user", "json");
+                            "voting_selected.reject_reason", "voting_confirmed.confirm_my_username",
+                            "voting_confirmed.confirm_event_id", "voting_confirmed.confirm_event_colour",
+                            "voting_confirmed.confirm_event_title", "voting_confirmed.confirm_start_date",
+                            "voting_confirmed.confirm_end_date", "voting_confirmed.confirm_start_time",
+                            "voting_confirmed.confirm_end_time", "voting_remind.reminder_my_username",
+                            "voting_remind.reminder_event_id", "voting_remind.reminder_event_colour",
+                            "voting_remind.reminder_event_title"), "user", "json");
 
             if (user_details == null) Log.e(TAG, "Unable to create user index");
             else Log.d(TAG, "Successfully created index" + user_details);
@@ -315,6 +320,67 @@ public class CloudantConnect {
     }
 
     /**
+     * This method sends the voting confirmation to the target participants.
+     */
+    public void sendConfirmationToTargetParticipants(String my_username, String participants, int event_id,
+                                                     int event_colour, String event_title, String start_date,
+                                                     String end_date, String start_time, String end_time) {
+        // Retrieve all participants username
+        String[] username = participants.split(" ");
+        int size = username.length;
+
+        for (int i = 0; i < size; i++) {
+            User user = getTargetUser(username[i]);
+            // Set options into target user's document
+            user.setConfirm_my_username(my_username);
+            user.setConfirm_event_id(event_id);
+            user.setConfirm_event_colour(event_colour);
+            user.setConfirm_event_title(event_title);
+            user.setConfirm_start_date(start_date);
+            user.setConfirm_end_date(end_date);
+            user.setConfirm_start_time(start_time);
+            user.setConfirm_end_time(end_time);
+
+            // Retrieve user's documents
+            try {
+                // Update the latest targeted user's items back into Cloudant document
+                updateUserDetailsDocument(user);
+                Log.d(TAG, "Successfully updated target user's information");
+            } catch (ConflictException e) {
+                Log.e(TAG, "Unable to update target user's information");
+            }
+        }
+    }
+
+    /**
+     * This method sends the voting reminder to the target participants.
+     */
+    public void sendReminderToTargetParticipants(String my_username, String participants, int event_id,
+                                                 int event_colour, String event_title) {
+        // Retrieve all participants username
+        String[] username = participants.split(" ");
+        int size = username.length;
+
+        for (int i = 0; i < size; i++) {
+            User user = getTargetUser(username[i]);
+            // Set options into target user's document
+            user.setReminder_my_username(my_username);
+            user.setReminder_event_id(event_id);
+            user.setReminder_event_colour(event_colour);
+            user.setReminder_event_title(event_title);
+
+            // Retrieve user's documents
+            try {
+                // Update the latest targeted user's items back into Cloudant document
+                updateUserDetailsDocument(user);
+                Log.d(TAG, "Successfully updated target user's information");
+            } catch (ConflictException e) {
+                Log.e(TAG, "Unable to update target user's information");
+            }
+        }
+    }
+
+    /**
      * Retrieve the target user's document from Cloudant
      *
      * @param username
@@ -341,33 +407,11 @@ public class CloudantConnect {
     }
 
     /**
-     * Check if there is any voting request
-     *
-     * @param user
-     * @return true if there is voting request, else false
-     */
-    public boolean checkVotingRequest(User user) {
-        if (user.getOption_event_title() != null) return true;
-        return false;
-    }
-
-    /**
-     * Check if there is any voting response
-     *
-     * @param user
-     * @return true if there is voting request, else false
-     */
-    public boolean checkVotingResponse(User user) {
-        if (user.getSelected_event_title() != null) return true;
-        return false;
-    }
-
-    /**
      * Reset voting options once saved in user's phone
      *
      * @param user to reset the document of target user
      */
-    public void resetVotingOptions(User user) {
+    public void resetVotingRequest(User user) {
         // Set options into target user's document
         user.setOption_my_username(null);
         user.setOption_event_id(0);
@@ -408,6 +452,54 @@ public class CloudantConnect {
         user.setSelected_start_time(null);
         user.setSelected_end_time(null);
         user.setReject_reason(null);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully reset target user's voting selection");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to reset target user's voting selection");
+        }
+    }
+
+    /**
+     * Reset voting response once saved in user's phone
+     *
+     * @param user to reset the document of target username
+     */
+    public void resetVotingConfirmation(User user) {
+        // Set options into target user's document
+        user.setConfirm_my_username(null);
+        user.setConfirm_event_id(0);
+        user.setConfirm_event_colour(0);
+        user.setConfirm_event_title(null);
+        user.setConfirm_start_date(null);
+        user.setConfirm_end_date(null);
+        user.setConfirm_start_time(null);
+        user.setConfirm_end_time(null);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully reset target user's voting selection");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to reset target user's voting selection");
+        }
+    }
+
+    /**
+     * Reset voting response once saved in user's phone
+     *
+     * @param user to reset the document of target username
+     */
+    public void resetVotingReminder(User user) {
+        // Set options into target user's document
+        user.setReminder_my_username(null);
+        user.setReminder_event_id(0);
+        user.setReminder_event_colour(0);
+        user.setReminder_event_title(null);
 
         // Retrieve user's documents
         try {

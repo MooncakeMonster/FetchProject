@@ -23,6 +23,7 @@ import java.util.HashMap;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 
 /**
@@ -44,7 +45,7 @@ public class VoteInvitation extends ActionBarActivity {
 
     Button reject_event;
     TextView invite_sender, invite_title, invite_location, invite_notes;
-    String username = "", start_date = "", end_date = "", start_time = "", end_time = "",
+    String my_username = "", start_date = "", end_date = "", start_time = "", end_time = "",
             not_start_date = "", not_end_date = "", not_start_time = "", not_end_time = "", reject_reason = "";
 
     @Override
@@ -66,9 +67,14 @@ public class VoteInvitation extends ActionBarActivity {
         db = new UserDatabase(this);
         // Fetch user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
-        username = user.get("username");
+        my_username = user.get("username");
+        User my_user = cloudantConnect.getTargetUser(my_username);
 
         getSupportActionBar().setElevation(0);
+
+        // Reset voting option received here
+        cloudantConnect.resetVotingRequest(my_user);
+        cloudantConnect.startPushReplication();
 
         //(1) Get intent that started this activity
         Intent intent = getIntent();
@@ -107,7 +113,7 @@ public class VoteInvitation extends ActionBarActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         resetAllDateTime();
-                        pushItem(username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
+                        pushItem(my_username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
                                 notificationItem.getSender_event(), notificationItem.getSender_location(),
                                 notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
                         dialog.dismiss();
@@ -220,7 +226,7 @@ public class VoteInvitation extends ActionBarActivity {
 
             // Save data
             else {
-                pushItem(username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
+                pushItem(my_username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
                         notificationItem.getSender_event(), notificationItem.getSender_location(),
                         notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
 

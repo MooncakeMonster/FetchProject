@@ -132,10 +132,12 @@
 
         </receiver>
 
+        <!--
         <service
             android:name= "mooncakemonster.orbitalcalendar.notifications.NotificationReceiveService"
             android:label="NotificationReceiveService" >
         </service>
+        -->
 
     </application>
 

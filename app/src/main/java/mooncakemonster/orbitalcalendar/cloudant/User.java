@@ -46,6 +46,21 @@ public class User {
     // Reject event
     private String reject_reason;
 
+    // Voting Confirm data and time
+    private String confirm_my_username;
+    private int confirm_event_id;
+    private int confirm_event_colour;
+    private String confirm_event_title;
+    private String confirm_start_date;
+    private String confirm_end_date;
+    private String confirm_start_time;
+    private String confirm_end_time;
+
+    // Voting Reminder
+    private String reminder_my_username;
+    private int reminder_event_id;
+    private int reminder_event_colour;
+    private String reminder_event_title;
 
     // Document in database representing this user to be revised
     private BasicDocumentRevision revision;
@@ -288,6 +303,102 @@ public class User {
         return revision;
     }
 
+    public String getConfirm_my_username() {
+        return confirm_my_username;
+    }
+
+    public void setConfirm_my_username(String confirm_my_username) {
+        this.confirm_my_username = confirm_my_username;
+    }
+
+    public int getConfirm_event_id() {
+        return confirm_event_id;
+    }
+
+    public void setConfirm_event_id(int confirm_event_id) {
+        this.confirm_event_id = confirm_event_id;
+    }
+
+    public int getConfirm_event_colour() {
+        return confirm_event_colour;
+    }
+
+    public void setConfirm_event_colour(int confirm_event_colour) {
+        this.confirm_event_colour = confirm_event_colour;
+    }
+
+    public String getConfirm_event_title() {
+        return confirm_event_title;
+    }
+
+    public void setConfirm_event_title(String confirm_event_title) {
+        this.confirm_event_title = confirm_event_title;
+    }
+
+    public String getConfirm_start_date() {
+        return confirm_start_date;
+    }
+
+    public void setConfirm_start_date(String confirm_start_date) {
+        this.confirm_start_date = confirm_start_date;
+    }
+
+    public String getConfirm_end_date() {
+        return confirm_end_date;
+    }
+
+    public void setConfirm_end_date(String confirm_end_date) {
+        this.confirm_end_date = confirm_end_date;
+    }
+
+    public String getConfirm_start_time() {
+        return confirm_start_time;
+    }
+
+    public void setConfirm_start_time(String confirm_start_time) {
+        this.confirm_start_time = confirm_start_time;
+    }
+
+    public String getConfirm_end_time() {
+        return confirm_end_time;
+    }
+
+    public void setConfirm_end_time(String confirm_end_time) {
+        this.confirm_end_time = confirm_end_time;
+    }
+
+    public String getReminder_my_username() {
+        return reminder_my_username;
+    }
+
+    public void setReminder_my_username(String reminder_my_username) {
+        this.reminder_my_username = reminder_my_username;
+    }
+
+    public int getReminder_event_id() {
+        return reminder_event_id;
+    }
+
+    public void setReminder_event_id(int reminder_event_id) {
+        this.reminder_event_id = reminder_event_id;
+    }
+
+    public int getReminder_event_colour() {
+        return reminder_event_colour;
+    }
+
+    public void setReminder_event_colour(int reminder_event_colour) {
+        this.reminder_event_colour = reminder_event_colour;
+    }
+
+    public String getReminder_event_title() {
+        return reminder_event_title;
+    }
+
+    public void setReminder_event_title(String reminder_event_title) {
+        this.reminder_event_title = reminder_event_title;
+    }
+
     // This method returns user details from revision
     public static User fromRevision(BasicDocumentRevision revision) {
         User user = new User();
@@ -328,9 +439,23 @@ public class User {
         user.setNot_selected_end_date((String) ((Map) user_revised.get("voting_selected")).get("not_selected_end_date"));
         user.setNot_selected_start_time((String) ((Map) user_revised.get("voting_selected")).get("not_selected_start_time"));
         user.setNot_selected_end_time((String) ((Map) user_revised.get("voting_selected")).get("not_selected_end_time"));
-
-        // Reject event
         user.setSelected_end_time((String) ((Map) user_revised.get("voting_selected")).get("reject_reason"));
+
+        // Voting confirm
+        user.setConfirm_my_username((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_my_username"));
+        user.setConfirm_event_id((int) ((Map) user_revised.get("voting_confirmed")).get("confirm_event_id"));
+        user.setConfirm_event_id((int) ((Map) user_revised.get("voting_confirmed")).get("confirm_event_colour"));
+        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_event_title"));
+        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_start_date"));
+        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_date"));
+        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_start_time"));
+        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_time"));
+
+        // Voting reminder
+        user.setReminder_my_username((String) ((Map) user_revised.get("voting_reminder")).get("reminder_my_username"));
+        user.setReminder_event_id((int) ((Map) user_revised.get("voting_reminder")).get("reminder_event_id"));
+        user.setReminder_event_id((int) ((Map) user_revised.get("voting_reminder")).get("reminder_event_colour"));
+        user.setReminder_event_title((String) ((Map) user_revised.get("voting_reminder")).get("reminder_event_title"));
 
         return user;
     }
@@ -374,14 +499,32 @@ public class User {
         voting_selected.put("not_selected_end_date", not_selected_end_date);
         voting_selected.put("not_selected_start_time", not_selected_start_time);
         voting_selected.put("not_selected_end_time", not_selected_end_time);
-
-        // Reject event
         voting_selected.put("reject_reason", reject_reason);
+
+        // Confirm date for event
+        HashMap<String, Object> voting_confirmed = new HashMap<>();
+        voting_confirmed.put("confirm_my_username", confirm_my_username);
+        voting_confirmed.put("confirm_event_id", confirm_event_id);
+        voting_confirmed.put("confirm_event_colour", confirm_event_colour);
+        voting_confirmed.put("confirm_event_title", confirm_event_title);
+        voting_confirmed.put("confirm_start_date", confirm_start_date);
+        voting_confirmed.put("confirm_end_date", confirm_end_date);
+        voting_confirmed.put("confirm_start_time", confirm_start_time);
+        voting_confirmed.put("confirm_end_time", confirm_end_time);
+
+        // Reminder for event
+        HashMap<String, Object> voting_remind = new HashMap<>();
+        voting_remind.put("reminder_my_username", reminder_my_username);
+        voting_remind.put("reminder_event_id", reminder_event_id);
+        voting_remind.put("reminder_event_colour", reminder_event_colour);
+        voting_remind.put("reminder_event_title", reminder_event_title);
 
         // User
         user.put("user_details", user_details);
         user.put("voting_options", voting_options);
         user.put("voting_selected", voting_selected);
+        user.put("voting_confirmed", voting_confirmed);
+        user.put("voting_reminder", voting_remind);
 
         return user;
     }

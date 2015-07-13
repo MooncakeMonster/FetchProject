@@ -19,6 +19,7 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmDateAdapter;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmParticipants;
+import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
  * Created by BAOJUN on 10/7/15.
@@ -26,6 +27,7 @@ import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmParticipants;
 public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
     CloudantConnect cloudantConnect;
+    VotingDatabase votingDatabase;
     private List<ResultItem> objects;
 
     public ResultAdapter(Context context, int resource, List<ResultItem> objects) {
@@ -99,6 +101,11 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                             // TODO: Send out to Cloudant
                             String participants = confirmParticipants(adapter_can_make_it)
                                     + confirmParticipants(adapter_cannot_make_it) + confirmParticipants(adapter_rejected_voting);
+
+                            // Update confirmed date and time participants into SQLite database
+                            votingDatabase = new VotingDatabase(getContext());
+                            votingDatabase.updateInformation(votingDatabase, votingDatabase.getTargetVoting(votingDatabase,
+                                            resultItem.getEvent_id()), participants, null, null, null, null);
 
                             dialog.dismiss();
                         }

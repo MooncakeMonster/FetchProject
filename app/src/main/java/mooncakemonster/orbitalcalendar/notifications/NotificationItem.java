@@ -15,17 +15,13 @@ public class NotificationItem implements Serializable {
     private String action;
     private String sender_location;
     private String sender_notes;
-    private String selected_date;
     private String start_date;
     private String end_date;
     private String start_time;
     private String end_time;
-    private String intent;
 
     public NotificationItem(int notificationId, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
-                            String sender_location, String sender_notes, String selected_date,
-                            String start_date, String end_date, String start_time,
-                            String end_time, String intent) {
+                            String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time) {
         this.notificationId = notificationId;
         this.eventId = eventId;
         this.imageId = imageId;
@@ -35,12 +31,10 @@ public class NotificationItem implements Serializable {
         this.action = action;
         this.sender_location = sender_location;
         this.sender_notes = sender_notes;
-        this.selected_date = selected_date;
         this.start_date = start_date;
         this.end_date = end_date;
         this.start_time = start_time;
         this.end_time = end_time;
-        this.intent = intent;
     }
 
     public int getNotificationId() {
@@ -115,14 +109,6 @@ public class NotificationItem implements Serializable {
         this.sender_notes = sender_notes;
     }
 
-    public String getSelected_date() {
-        return selected_date;
-    }
-
-    public void setSelected_date(String selected_date) {
-        this.selected_date = selected_date;
-    }
-
     public String getStart_date() {
         return start_date;
     }
@@ -153,13 +139,5 @@ public class NotificationItem implements Serializable {
 
     public void setEnd_time(String end_time) {
         this.end_time = end_time;
-    }
-
-    public String getIntent() {
-        return intent;
-    }
-
-    public void setIntent(String intent) {
-        this.intent = intent;
     }
 }

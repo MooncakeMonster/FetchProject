@@ -37,6 +37,8 @@ public class NotificationReceiveService extends Service {
     private static final String VOTING_REQUEST_FOUND = "Voting Request Found!";
     private static final String VOTING_RESPONSE_ACCEPTED = "Event Voted!";
     private static final String VOTING_RESPONSE_REJECTED = "Event Rejected!";
+    private static final String VOTING_CONFIRMATION = "Event Confirmation";
+    private static final String VOTING_REMINDER = "Voting Reminder";
 
     /**
      * Simply return null, since our Service will not be communicating with
@@ -78,12 +80,11 @@ public class NotificationReceiveService extends Service {
          */
         @Override
         protected Void doInBackground(Void... params) {
-            while(true) {
+            while (true) {
                 onReceiveUpdate();
                 try {
                     //Thread.sleep(1000l * 60);
-                } catch (Exception e)
-                {
+                } catch (Exception e) {
 
                 }
             }
@@ -96,12 +97,12 @@ public class NotificationReceiveService extends Service {
          * and push any notifications you need to the status bar, using the
          * NotificationManager. I will not cover this here, go check the docs on
          * NotificationManager.
-         *
+         * <p/>
          * What you HAVE to do is call stopSelf() after you've pushed your
          * notification(s). This will:
          * 1) Kill the service so it doesn't waste precious resources
          * 2) Call onDestroy() which will release the wake lock, so the device
-         *    can go to sleep again and save precious battery.
+         * can go to sleep again and save precious battery.
          */
         @Override
         protected void onPostExecute(Void result) {
@@ -110,8 +111,7 @@ public class NotificationReceiveService extends Service {
         }
     }
 
-    private void onReceiveUpdate()
-    {
+    private void onReceiveUpdate() {
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this, "user");
 
@@ -127,31 +127,31 @@ public class NotificationReceiveService extends Service {
         cloudantConnect.startPullReplication();
         User my_user = cloudantConnect.getTargetUser(my_username);
 
-        if(cloudantConnect.checkVotingRequest(my_user)) {
+        if (my_user.getOption_event_title() != null) {
             Log.d(TAG, VOTING_REQUEST_FOUND);
-
             setNotification(this, VOTING_REQUEST_FOUND, my_user.getOption_my_username() + " has requested you to vote for the event - " + my_user.getOption_event_title());
 
-        } else if(cloudantConnect.checkVotingResponse(my_user)) {
+        } if (my_user.getSelected_event_title() != null) {
             Log.d(TAG, "Voting response found");
 
             String action;
 
             // case 1: Target participant has chosen the dates they can make it
             // case 2: Target participant has rejected the event
-            if(my_user.getSelected_start_date() != null) {
+            if (my_user.getReject_reason() != null) {
                 action = " has responded to your event - ";
                 setNotification(this, VOTING_RESPONSE_ACCEPTED, my_user.getOption_my_username() + action + my_user.getOption_event_title());
-
 
             } else {
                 action = " has rejected your event - ";
                 setNotification(this, VOTING_RESPONSE_REJECTED, my_user.getOption_my_username() + action + my_user.getOption_event_title());
             }
 
-        // Do not reset here; reset at VotingFragment when data is stored under "Voting result"
-        } else {
-            Log.d(TAG, "Nothing found");
+        } if (my_user.getConfirm_event_title() != null) {
+            setNotification(this, VOTING_CONFIRMATION, my_user.getOption_my_username() + " has confirmed the date and time of the event - " + my_user.getOption_event_title());
+
+        } if (my_user.getReminder_event_title() != null) {
+            setNotification(this, VOTING_REMINDER, my_user.getOption_my_username() + " reminds you to vote for the event - " + my_user.getOption_event_title());
         }
     }
 
@@ -163,7 +163,7 @@ public class NotificationReceiveService extends Service {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         //Set notification design: Set the icon, scrolling text and timestamp
-        Notification notification  = new Notification.Builder(context)
+        Notification notification = new Notification.Builder(context)
                 .setContentTitle("Fetch: " + titleOfNotification)
                 .setContentText(contentOfNotification)
                 .setSmallIcon(R.drawable.bearicon)

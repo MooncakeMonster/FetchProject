@@ -1,19 +1,27 @@
 package mooncakemonster.orbitalcalendar.votereceive;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 
 /**
@@ -22,6 +30,8 @@ import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 
 public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
 
+    UserDatabase db;
+    CloudantConnect cloudantConnect;
     List<VoteOptionItem> objects;
 
     public VotingAdapter(Context context, int resource, List<VoteOptionItem> objects) {
@@ -30,7 +40,9 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
     }
 
     static class Holder {
-        ImageView event_image;
+        RelativeLayout relativeLayout;
+        TextView vote_total;
+        TextView total;
         TextView event_title;
         TextView event_location;
         TextView event_start_end_date;
@@ -54,7 +66,9 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
         if(voteItem != null) {
             holder = new Holder();
 
-            //holder.event_image = (ImageView) row.findViewById(R.id.history_image);
+            holder.relativeLayout = (RelativeLayout) row.findViewById(R.id.history_set_colour);
+            holder.vote_total = (TextView) row.findViewById(R.id.history_vote_total);
+            holder.total = (TextView) row.findViewById(R.id.history_total);
             holder.event_title = (TextView) row.findViewById(R.id.history_title);
             holder.event_location = (TextView) row.findViewById(R.id.history_location);
             holder.event_start_end_date = (TextView) row.findViewById(R.id.history_start_end_date);
@@ -67,17 +81,26 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
 
             //Picasso.with(getContext()).load(getBackgroundResource(voteItem)).fit().noFade().into(holder.event_image);
             //holder.event_image.setBackgroundResource(R.color.redbear);
-            holder.event_title.setText(voteItem.getEvent_title());
-            holder.event_location.setText("@" + voteItem.getEvent_location());
+            holder.relativeLayout.setBackgroundResource(Integer.parseInt(voteItem.getImageId()));
 
-            // TODO Update if statement when possible
-            // Only show final confirmed date, else show number of votes response received
-            if(false) {
-                holder.event_start_end_date.setText(voteItem.getEvent_start_date() + " - " + voteItem.getEvent_end_date());
-                holder.event_start_end_time.setText(voteItem.getEvent_start_time() + " - " + voteItem.getEvent_end_time());
+            // Retrieve the number of particpants that cast votes
+            String[] participants = voteItem.getEvent_participants().split(" ");
+            Log.d("VotingAdapter", participants[0]);
+            String[] voted_participants = voteItem.getEvent_voted_participants().split(" ");
+            holder.vote_total.setText("" + voted_participants.length);
+            holder.total.setText("/" + participants.length);
+
+            // Set event title and location
+            holder.event_title.setText(voteItem.getEvent_title());
+            holder.event_location.setText(voteItem.getEvent_location());
+
+            // Display final confirmed date
+            if(voteItem.getEvent_confirm_start_date() != null) {
+                holder.event_start_end_date.setText(voteItem.getEvent_confirm_start_date() + " - " + voteItem.getEvent_confirm_end_date());
+                holder.event_start_end_time.setText(voteItem.getEvent_confirm_start_time() + " - " + voteItem.getEvent_confirm_end_time());
             } else {
-                holder.event_start_end_date.setText("Votes received: 3");
-                holder.event_start_end_time.setText("No responses yet: 7");
+                holder.event_start_end_date.setText("Date not confirmed");
+                holder.event_start_end_time.setText("Time not confirmed");
             }
 
             final View view = row;
@@ -96,14 +119,54 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
 
             holder.send_reminder.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
+                public void onClick(final View v) {
+                    final String[] split_not_voted = checkNotVoted(voteItem.getEvent_voted_participants(), voteItem.getEvent_participants());
+                    final ArrayList<String> list = new ArrayList<String>();
 
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+                    alertBuilder.setTitle("Send reminder").setMultiChoiceItems(split_not_voted, null, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                            if(isChecked) {
+                                list.add(split_not_voted[which]);
+                            } else if(list.contains(split_not_voted[which])) {
+                                list.remove(split_not_voted[which]);
+                            }
+                        }
+                    }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // TODO: Send out to Cloudant
+                            if (cloudantConnect == null)
+                                cloudantConnect = new CloudantConnect(getContext(), "user");
+
+                            db = new UserDatabase(getContext());
+                            HashMap<String, String> user = db.getUserDetails();
+                            String my_username = user.get("username");
+
+                            cloudantConnect.startPullReplication();
+                            cloudantConnect.sendReminderToTargetParticipants(my_username, sendReminder(list), Integer.parseInt(voteItem.getEventId()),
+                                    Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title());
+                            cloudantConnect.startPushReplication();
+
+                            dialog.dismiss();
+                        }
+                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    Dialog dialog = alertBuilder.create();
+                    dialog.show();
                 }
             });
 
             holder.fetch_help.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Only can help if user has not confirmed date
 
                 }
             });
@@ -114,22 +177,27 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
         return row;
     }
 
-    private int getBackgroundResource(VoteOptionItem voteItem) {
-        switch (voteItem.getImageId()) {
-            case R.color.redbear:
-                return R.drawable.backgroundred;
-            case R.color.yellowbear:
-                return R.drawable.backgroundyellow;
-            case R.color.greenbear:
-                return R.drawable.backgroundgreen;
-            case R.color.bluebear:
-                return R.drawable.backgroundblue;
-            case R.color.purplebear:
-                return R.drawable.backgroundpurple;
+    // This method checks which participant has not cast vote.
+    private String[] checkNotVoted(String voted_participants, String participants) {
+        String[] split_voted_participants = voted_participants.split(" ");
+        int size = split_voted_participants.length;
+
+        for(int i = 0; i < size; i++) {
+            participants = participants.replace(split_voted_participants[i], "");
         }
 
-        // Should not reach here
-        return -1;
+        return participants.split(" ");
+    }
+
+    // This method checks the participants to send reminder to.
+    private String sendReminder(ArrayList<String> list) {
+        String send_participants = "";
+        int size = list.size();
+
+        for(int i = 0; i < size; i++) {
+           send_participants += list.get(i) + " ";
+        }
+        return send_participants;
     }
 
 }

@@ -59,7 +59,7 @@ public class VotingResultActivity extends ActionBarActivity {
             listView = (ListView) findViewById(R.id.vote_result_list);
             saveDateSelectedByTargetParticipants();
             resultAdapter = new ResultAdapter(this, R.layout.row_vote_result,
-                    resultDatabase.getAllTargetResults(resultDatabase, voteItem.getEventId()));
+                    resultDatabase.getAllTargetResults(resultDatabase, Integer.parseInt(voteItem.getEventId())));
             listView.setAdapter(resultAdapter);
             resultAdapter.notifyDataSetChanged();
         }
@@ -74,7 +74,7 @@ public class VotingResultActivity extends ActionBarActivity {
         String my_username = user.get("username");
         User my_user = cloudantConnect.getTargetUser(my_username);
 
-        if(cloudantConnect.checkVotingResponse(my_user)) {
+        if(my_user.getSelected_event_title() != null) {
             // Store participants according to date and time selected into SQLite
             // TODO: END TIME is empty, find out why!
             Log.d("ResultDatabase", "START TIME " + my_user.getSelected_start_time());

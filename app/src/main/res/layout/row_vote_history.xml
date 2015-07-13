@@ -9,70 +9,88 @@
         android:id="@+id/history_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/event_list_margin"
         android:layout_marginBottom="@dimen/event_list_margin"
+        android:layout_marginTop="@dimen/event_list_margin"
         android:orientation="horizontal">
 
         <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/standard_margin_size">
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/standard_margin_size"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/history_vote_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="right"
+                    android:text="8"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="55sp" />
+
+                <TextView
+                    android:id="@+id/history_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="left"
+                    android:text="/10"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="12dp" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="Vote casted:"
-                android:textSize="12dp"
                 android:gravity="center"
-                android:layout_above="@id/event_day"
-                android:textColor="@color/caldroid_black" />
-
-            <TextView
-                android:id="@+id/history_total"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="20"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
+                android:text="CAST VOTES"
                 android:textColor="@color/caldroid_black"
-                android:textSize="45dp" />
+                android:textSize="11dp" />
 
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:id="@+id/history_set_colour"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
+            android:layout_marginRight="@dimen/feed_item_profile_info_padd"
             android:orientation="vertical"
-            android:paddingTop="@dimen/standard_padding_size"
             android:paddingBottom="@dimen/standard_padding_size"
             android:paddingLeft="@dimen/feed_item_profile_info_padd"
             android:paddingRight="@dimen/feed_item_profile_info_padd"
-            android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
-            android:layout_marginRight="@dimen/feed_item_profile_info_padd"
-            android:id="@+id/event_set_colour">
+            android:paddingTop="@dimen/standard_padding_size">
 
             <TextView
                 android:id="@+id/history_title"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Title"
-                android:textStyle="bold"
                 android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/standard_text_size" />
+                android:textSize="@dimen/standard_text_size"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/history_location"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Singapore"
                 android:layout_below="@id/history_title"
+                android:text="Singapore"
                 android:textColor="@color/caldroid_black"
                 android:textSize="@dimen/feed_item_profile_name" />
 
             <TextView
                 android:id="@+id/history_start_end_date"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/history_location"
                 android:text="28 May 2015, Saturday"
@@ -81,7 +99,7 @@
 
             <TextView
                 android:id="@+id/history_start_end_time"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/history_start_end_date"
                 android:text="28 May 2015, Saturday"

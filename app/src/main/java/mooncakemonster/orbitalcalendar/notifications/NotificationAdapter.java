@@ -6,7 +6,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitation;
 
 /**
  * Created by BAOJUN on 7/7/15.
@@ -71,7 +70,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);
             holder.action_image = (ImageView) row.findViewById(R.id.action_image);
             // TODO: Set appropriate background image
-            holder.action_image.setBackgroundResource(setBackground(notificationItem.getNotificationId(), R.color.redbear));
+            holder.action_image.setBackgroundResource(setBackground(notificationItem.getNotificationId(), notificationItem.getImageId()));
 
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
@@ -81,18 +80,39 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    /*
+                     * case 1: Target participants receive voting request
+                     * case 2: Sender received voting response from target participants that is voted
+                     * case 3: Sender received voting response from target participants that is rejected
+                     * case 4: Target participants received confirmed date and time of an event
+                     * case 5: Target participants gets reminder to vote for an event
+                     */
 
-                    if (notificationItem.getNotificationId() == 1) {
-                        try {
-                            intent = Intent.parseUri(notificationItem.getIntent(), 0);
-                        } catch (URISyntaxException e) {
-                            Log.e(TAG, "Unable to retrieve intent");
-                        }
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("vote_item", notificationItem);
 
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("vote_item", notificationItem);
-                        intent.putExtras(bundle);
-                        inner_view.getContext().startActivity(intent);
+                    switch (notificationItem.getNotificationId()) {
+                        case 1:
+                            intent = new Intent(getContext(), VoteInvitation.class);
+                            intent.putExtras(bundle);
+                            inner_view.getContext().startActivity(intent);
+                            break;
+                        case 2:
+                            // TODO: Show voting result fragment or VotingResultActivity if possible
+                            break;
+                        case 3:
+                            // TODO: Show reason in dialog
+                            break;
+                        case 4:
+                            // TODO: Show dialog that allows user to confirm attendance for the event
+                            break;
+                        case 5:
+                            intent = new Intent(getContext(), VoteInvitation.class);
+                            intent.putExtras(bundle);
+                            inner_view.getContext().startActivity(intent);
+                            break;
+                        default:
+                            break;
                     }
                 }
             });

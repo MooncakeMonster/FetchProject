@@ -21,13 +21,10 @@ public class NotificationData {
         public static final String SENDER_LOCATION = "sender_location";
         public static final String SENDER_NOTES = "sender_notes";
 
-        public static final String VOTE_TYPE = "vote_type";
         public static final String START_DATE = "start_date";
         public static final String END_DATE = "end_date";
         public static final String START_TIME = "start_time";
         public static final String END_TIME = "end_time";
-
-        public static final String INTENT = "notification_intent";
 
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_NAME = "notification_storage";

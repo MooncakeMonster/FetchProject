@@ -16,6 +16,7 @@ import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.votereceive.ResultDatabase;
 import mooncakemonster.orbitalcalendar.votereceive.ResultItem;
+import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 public class NotificationFragment extends ListFragment {
@@ -41,12 +42,13 @@ public class NotificationFragment extends ListFragment {
         // Retrieve own username
         db = new UserDatabase(getActivity().getApplicationContext());
         HashMap<String, String> user = db.getUserDetails();
+
         notificationDatabase = new NotificationDatabase(getActivity());
         votingDatabase = new VotingDatabase(getActivity());
+        resultDatabase = new ResultDatabase(getActivity());
 
         // (1) Retrieve latest voting request
         String my_username = user.get("username");
-        Log.d(TAG, my_username);
         cloudantConnect.startPullReplication();
         User my_user = cloudantConnect.getTargetUser(my_username);
 
@@ -105,12 +107,33 @@ public class NotificationFragment extends ListFragment {
                     voted_participant, action1, my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
                     my_user.getSelected_event_notes(), start_date, end_date, start_time, end_time, reject_reason);
 
-            resultDatabase = new ResultDatabase(getActivity());
-            resultDatabase.storeParticipants(resultDatabase, new ResultItem("" + event_id,
-                        start_date, end_date, start_time, end_time, my_user.getSelected_my_username(), "", "", "", ""), action);
+            // (1) Update the voted participants for that event to indicate the number of voted participants in VotingFragment
+            // TODO: Cannot update!
+            votingDatabase.updateInformation(votingDatabase, event_id, voted_participant, null, null, null, null);
+            VoteItem voteItem = votingDatabase.getTargetVoting(votingDatabase, event_id);
+            // TODO: DEBUG!! This line must appear! (Else means votingDatabase did not successfully updated)
+            if(voteItem.getEvent_voted_participants() != null) Log.d(TAG, "hey " + voteItem.getEvent_voted_participants());
 
-            votingDatabase.updateInformation(votingDatabase, votingDatabase.getTargetVoting(votingDatabase,
-                    event_id), voted_participant, null, null, null, null);
+            Log.d(TAG, "0");
+
+            if(action.equals("accept")) {
+                // (2) Update the voted participant's selected dates
+                Log.d(TAG, "1");
+                resultDatabase.storeParticipants(resultDatabase, new ResultItem("" + event_id,
+                        start_date, end_date, start_time, end_time, null, voted_participant, null, null, null));
+                Log.d(TAG, "2");
+                // (3) Update the voted participant's not selected dates
+                resultDatabase.storeParticipants(resultDatabase, new ResultItem("" + event_id,
+                        my_user.getNot_selected_start_date(), my_user.getNot_selected_end_date(), my_user.getNot_selected_start_time(),
+                        my_user.getNot_selected_end_time(), null, null, voted_participant, null, null));
+                Log.d(TAG, "3");
+            } else if(action.equals("reject")) {
+                // (4) Add in the reject participants into database
+                Log.d(TAG, "4");
+                resultDatabase.storeParticipants(resultDatabase, new ResultItem("" + event_id,
+                        null, null, null, null, null, null, null, voted_participant, null));
+                Log.d(TAG, "5");
+            }
 
             cloudantConnect.resetVotingResponse(my_user);
             cloudantConnect.startPushReplication();

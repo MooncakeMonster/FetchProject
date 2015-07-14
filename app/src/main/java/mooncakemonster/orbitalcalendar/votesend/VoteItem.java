@@ -1,11 +1,11 @@
-package mooncakemonster.orbitalcalendar.voteinvitation;
+package mooncakemonster.orbitalcalendar.votesend;
 
 import java.io.Serializable;
 
 /**
  * This class represents the voting options sent out to target participants to vote the dates they are available.
  */
-public class VoteOptionItem implements Serializable {
+public class VoteItem implements Serializable {
     private String eventId;
     private String imageId;
     private String event_title;
@@ -21,11 +21,11 @@ public class VoteOptionItem implements Serializable {
     private String event_confirm_start_time;
     private String event_confirm_end_time;
 
-    public VoteOptionItem() { }
+    public VoteItem() { }
 
-    public VoteOptionItem(String eventId, String imageId, String event_title, String event_location, String event_participants, String event_voted_participants,
-                          String event_start_date, String event_end_date, String event_start_time, String event_end_time,
-                          String event_confirm_start_date, String event_confirm_end_date, String event_confirm_start_time, String event_confirm_end_time) {
+    public VoteItem(String eventId, String imageId, String event_title, String event_location, String event_participants, String event_voted_participants,
+                    String event_start_date, String event_end_date, String event_start_time, String event_end_time,
+                    String event_confirm_start_date, String event_confirm_end_date, String event_confirm_start_time, String event_confirm_end_time) {
         this.eventId = eventId;
         this.imageId = imageId;
         this.event_title = event_title;

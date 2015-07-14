@@ -22,19 +22,19 @@ import java.util.List;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
+import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 
 /**
  * Created by BAOJUN on 20/6/15.
  */
 
-public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
+public class VotingAdapter extends ArrayAdapter<VoteItem> {
 
     UserDatabase db;
     CloudantConnect cloudantConnect;
-    List<VoteOptionItem> objects;
+    List<VoteItem> objects;
 
-    public VotingAdapter(Context context, int resource, List<VoteOptionItem> objects) {
+    public VotingAdapter(Context context, int resource, List<VoteItem> objects) {
         super(context, resource, objects);
         this.objects = objects;
     }
@@ -61,7 +61,7 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
             row = inflater.inflate(R.layout.row_vote_history, parent, false);
         }
 
-        final VoteOptionItem voteItem = objects.get(position);
+        final VoteItem voteItem = objects.get(position);
 
         if(voteItem != null) {
             holder = new Holder();

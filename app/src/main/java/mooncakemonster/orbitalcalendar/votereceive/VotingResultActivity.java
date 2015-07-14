@@ -10,7 +10,7 @@ import android.widget.ListView;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
+import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
@@ -46,7 +46,7 @@ public class VotingResultActivity extends ActionBarActivity {
         //(1) Get intent that started this activity
         Intent intent = getIntent();
         final Bundle bundle = intent.getExtras();
-        VoteOptionItem voteItem = (VoteOptionItem) bundle.getSerializable("voteItem");
+        VoteItem voteItem = (VoteItem) bundle.getSerializable("voteItem");
 
         if(voteItem != null) {
             // Set title for action bar

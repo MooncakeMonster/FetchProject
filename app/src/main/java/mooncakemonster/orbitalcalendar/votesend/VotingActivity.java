@@ -36,6 +36,8 @@ import mooncakemonster.orbitalcalendar.votereceive.ResultItem;
  */
 public class VotingActivity extends ActionBarActivity {
 
+    private static final String TAG = VotingActivity.class.getSimpleName();
+
     // Connect to cloudant database
     CloudantConnect cloudantConnect;
 
@@ -224,6 +226,7 @@ public class VotingActivity extends ActionBarActivity {
                 String location = vote_location.getText().toString().replace(" @ ", "");
 
                 eventId = votingDatabase.eventSize(votingDatabase);
+                Log.d(TAG, "" + eventId);
 
                 Log.d("VotingActivity", "EVENT ID " + eventId);
 

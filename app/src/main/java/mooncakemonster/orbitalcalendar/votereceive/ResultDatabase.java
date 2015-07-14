@@ -89,65 +89,78 @@ public class ResultDatabase extends SQLiteOpenHelper {
     }
 
     // This method stores the participants according to the date and time they had selected.
-    public void storeParticipants(ResultDatabase data, ResultItem resultItem, String action) {
+    public void storeParticipants(ResultDatabase data, ResultItem resultItem) {
         Cursor cursor = getInformation(data);
         cursor.moveToFirst();
 
-        String[] split_start_date = resultItem.getStart_date().split(" ");
-        String[] split_end_date = resultItem.getEnd_date().split(" ");
-        String[] split_start_time = resultItem.getStart_time().split(" ");
-        String[] split_end_time = resultItem.getEnd_time().split(" ");
+        ContentValues values = new ContentValues();
+        String selection = ResultData.ResultInfo.EVENT_ID + " LIKE ? AND " +
+                ResultData.ResultInfo.START_DATE + " LIKE ? AND " +
+                ResultData.ResultInfo.END_DATE + " LIKE ? AND " +
+                ResultData.ResultInfo.START_TIME + " LIKE ? AND " +
+                ResultData.ResultInfo.END_TIME + " LIKE ? AND " +
+                ResultData.ResultInfo.EVENT_PARTICIPANTS + " LIKE ? AND " +
+                ResultData.ResultInfo.SELECT_PARTICIPANTS + " LIKE ? AND " +
+                ResultData.ResultInfo.NOT_SELECTED_PARTICIPANTS + " LIKE ? AND " +
+                ResultData.ResultInfo.REJECT_PARTICIPANTS + " LIKE ? AND " +
+                ResultData.ResultInfo.TOTAL + " LIKE ? ";
 
-        int size = split_start_date.length;
-        Log.d("ResultDatabase", "size " + size);
+        // (1) Participant has cast votes
+        while (!cursor.isAfterLast()) {
+            if (resultItem.getUsername_rejected() == null) {
+                String[] split_start_date = resultItem.getStart_date().split(" ");
+                String[] split_end_date = resultItem.getEnd_date().split(" ");
+                String[] split_start_time = resultItem.getStart_time().split(" ");
+                String[] split_end_time = resultItem.getEnd_time().split(" ");
 
-        for (int i = 0; i < size; i++) {
-            if (resultItem.getEvent_id().equals(cursor.getString(0)) &&
-                    split_start_date[i].equals(cursor.getString(1)) &&
-                    split_end_date[i].equals(cursor.getString(2)) &&
-                    split_start_time[i].equals(cursor.getString(3)) &&
-                    split_end_time[i].equals(cursor.getString(4))) {
+                int size = split_start_date.length;
 
-                Log.d("ResultDatabase", "passed");
+                for (int i = 0; i < size; i++) {
+                    if (resultItem.getEvent_id().equals(cursor.getString(0)) &&
+                            split_start_date[i].equals(cursor.getString(1)) &&
+                            split_end_date[i].equals(cursor.getString(2)) &&
+                            split_start_time[i].equals(cursor.getString(3)) &&
+                            split_end_time[i].equals(cursor.getString(4))) {
 
-                String selection = ResultData.ResultInfo.EVENT_ID + " LIKE ? AND " +
-                        ResultData.ResultInfo.START_DATE + " LIKE ? AND " +
-                        ResultData.ResultInfo.END_DATE + " LIKE ? AND " +
-                        ResultData.ResultInfo.START_TIME + " LIKE ? AND " +
-                        ResultData.ResultInfo.END_TIME + " LIKE ? AND " +
-                        ResultData.ResultInfo.EVENT_PARTICIPANTS + " LIKE ? AND " +
-                        ResultData.ResultInfo.SELECT_PARTICIPANTS + " LIKE ? AND " +
-                        ResultData.ResultInfo.NOT_SELECTED_PARTICIPANTS + " LIKE ? AND " +
-                        ResultData.ResultInfo.REJECT_PARTICIPANTS + " LIKE ? AND " +
-                        ResultData.ResultInfo.TOTAL + " LIKE ? ";
+                        Log.d("ResultDatabase", "passed");
 
-                ContentValues values = new ContentValues();
-                String[] args = { cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
-                        cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9) };
+                        if (resultItem.getSelected_username() != null) {
+                            String stored_username = cursor.getString(6);
+                            int total = Integer.parseInt(cursor.getString(9));
+                            stored_username += resultItem.getSelected_username() + " ";
+                            values.put(ResultData.ResultInfo.SELECT_PARTICIPANTS, stored_username);
+                            values.put(ResultData.ResultInfo.TOTAL, "" + (total + 1));
+                        } else if (resultItem.getNot_selected_username() != null) {
+                            String stored_username = cursor.getString(7);
+                            stored_username += resultItem.getNot_selected_username() + " ";
+                            values.put(ResultData.ResultInfo.NOT_SELECTED_PARTICIPANTS, stored_username);
+                        }
 
-                if(action.equals("accept")) {
-                    String stored_username = cursor.getString(6);
-                    int total = Integer.parseInt(cursor.getString(9));
-                    stored_username += resultItem.getSelected_username() + " ";
+                        String[] args = {cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                                cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9)};
 
-                    values.put(ResultData.ResultInfo.SELECT_PARTICIPANTS, stored_username);
-                    values.put(ResultData.ResultInfo.TOTAL, "" + (total + 1));
-
-                } else if(action.equals("reject")) {
-                    String stored_username = cursor.getString(8);
-                    stored_username += resultItem.getUsername_rejected() + " ";
-
-                    values.put(ResultData.ResultInfo.REJECT_PARTICIPANTS, stored_username);
+                        SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
+                        sqLiteDatabase.update(ResultData.ResultInfo.TABLE_NAME, values, selection, args);
+                    }
                 }
+                cursor.moveToNext();
+            } else if(resultItem.getUsername_rejected() != null){
+                String stored_username = cursor.getString(8);
+                stored_username += resultItem.getUsername_rejected() + " ";
+
+                String[] args = {cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                        cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9)};
+
+                values.put(ResultData.ResultInfo.REJECT_PARTICIPANTS, stored_username);
 
                 SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
                 sqLiteDatabase.update(ResultData.ResultInfo.TABLE_NAME, values, selection, args);
-            } else if(Integer.parseInt(resultItem.getEvent_id()) < Integer.parseInt(cursor.getString(0))) {
+
+            } else if(Integer.parseInt(resultItem.getEvent_id()) < Integer.parseInt(cursor.getString(0))){
                 break;
             } else {
-                Log.d("ResultDatabase", "failed");
+                cursor.moveToNext();
             }
-            cursor.moveToNext();
         }
         cursor.close();
     }

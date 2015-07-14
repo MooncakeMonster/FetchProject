@@ -30,6 +30,6 @@ public class VotingData {
 
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_NAME = "voting_storage";
-        public static final String TABLE_NAME = "user_voting";
+        public static final String TABLE_NAME = "voting_table";
     }
 }

@@ -23,7 +23,7 @@ import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmDateAdapter;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmParticipants;
-import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
+import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
@@ -115,8 +115,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
                             // Update confirmed date and time into SQLite database
                             votingDatabase = new VotingDatabase(getContext());
-                            votingDatabase.updateInformation(votingDatabase, votingDatabase.getTargetVoting(votingDatabase,
-                                            resultItem.getEvent_id()), null, start_date, end_date, start_time, end_time);
+                            votingDatabase.updateInformation(votingDatabase,resultItem.getEvent_id(), null, start_date, end_date, start_time, end_time);
 
                             // Retrieve own username
                             db = new UserDatabase(getContext());
@@ -124,7 +123,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                             String my_username = user.get("username");
                             // Send out confirmation date and time to target participants
                             String event_id = resultItem.getEvent_id();
-                            VoteOptionItem voteItem = votingDatabase.getTargetVoting(votingDatabase, event_id);
+                            VoteItem voteItem = votingDatabase.getTargetVoting(votingDatabase, event_id);
                             cloudantConnect.sendConfirmationToTargetParticipants(my_username, participants, Integer.parseInt(resultItem.getEvent_id()),
                                     Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title(), start_date, end_date, start_time, end_time);
                             cloudantConnect.startPushReplication();

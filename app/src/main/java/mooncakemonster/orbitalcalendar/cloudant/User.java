@@ -414,7 +414,7 @@ public class User {
 
         // Voting options
         user.setOption_my_username((String) ((Map) user_revised.get("voting_options")).get("option_my_username"));
-        user.setOption_event_colour((int) ((Map) user_revised.get("voting_options")).get("option_event_id"));
+        user.setOption_event_id((int) ((Map) user_revised.get("voting_options")).get("option_event_id"));
         user.setOption_event_colour((int) ((Map) user_revised.get("voting_options")).get("option_event_colour"));
         user.setOption_event_title((String) ((Map) user_revised.get("voting_options")).get("option_event_title"));
         user.setOption_event_location((String) ((Map) user_revised.get("voting_options")).get("option_event_location"));

@@ -226,9 +226,6 @@ public class VotingActivity extends ActionBarActivity {
                 String location = vote_location.getText().toString().replace(" @ ", "");
 
                 eventId = votingDatabase.eventSize(votingDatabase);
-                Log.d(TAG, "" + eventId);
-
-                Log.d("VotingActivity", "EVENT ID " + eventId);
 
                 votingDatabase.putInformation(votingDatabase, "" + eventId, "" + colour, title, location,
                         participants, null, start_date, end_date, start_time, end_time, null, null, null, null);

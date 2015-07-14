@@ -187,6 +187,7 @@ public class VoteInvitation extends ActionBarActivity {
         cloudantConnect.sendSelectedOptionsBackToRequester(my_username, sender_username, eventId, imageId, event, location, notes,
                                         start_date, end_date, start_time, end_time, not_start_date, not_end_date,
                                         not_start_time, not_end_time, reject_reason);
+
         // Push all options to other targeted participants
         cloudantConnect.startPushReplication();
     }

@@ -23,7 +23,6 @@ import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmDateAdapter;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmParticipants;
-import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
@@ -123,9 +122,8 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                             String my_username = user.get("username");
                             // Send out confirmation date and time to target participants
                             String event_id = resultItem.getEvent_id();
-                            VoteItem voteItem = votingDatabase.getTargetVoting(votingDatabase, event_id);
                             cloudantConnect.sendConfirmationToTargetParticipants(my_username, participants, Integer.parseInt(resultItem.getEvent_id()),
-                                    Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title(), start_date, end_date, start_time, end_time);
+                                    -1, null, start_date, end_date, start_time, end_time);
                             cloudantConnect.startPushReplication();
 
                             dialog.dismiss();

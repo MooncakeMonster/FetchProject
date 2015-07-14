@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,12 +86,10 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
             String[] split_participants = voteItem.getEvent_participants().split(" "), split_voted_participants = {};
             String voted_participants = voteItem.getEvent_voted_participants();
 
-            if(voted_participants != null)
-                Log.d("VotingDatabaseAdapter", voted_participants);
-
             if(voted_participants != null) {
                 split_voted_participants = voted_participants.split(" ");
             }
+
             holder.vote_total.setText("" + split_voted_participants.length);
             holder.total.setText("/" + split_participants.length);
 
@@ -150,7 +147,6 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
                             HashMap<String, String> user = db.getUserDetails();
                             String my_username = user.get("username");
 
-                            cloudantConnect.startPullReplication();
                             cloudantConnect.sendReminderToTargetParticipants(my_username, sendReminder(list), Integer.parseInt(voteItem.getEventId()),
                                     Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title());
                             cloudantConnect.startPushReplication();

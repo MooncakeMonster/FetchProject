@@ -78,9 +78,10 @@ public class VotingDatabase extends SQLiteOpenHelper {
         Log.d("Votebase operations", "One vote row inserted");
     }
 
-    // Update data from database
+    // Update data from database TODO: Problem with updating latest voted participants into database
     public void updateInformation(VotingDatabase data, VoteOptionItem voteItem, String updated_voted_participants,
                                   String confirmed_start_date, String confirmed_end_date, String confirmed_start_time, String confirmed_end_time) {
+
 
         String selection = VotingData.VotingInfo.EVENT_ID + " LIKE ? AND " + VotingData.VotingInfo.EVENT_COLOUR + " LIKE ? AND " +
                 VotingData.VotingInfo.EVENT_TITLE + " LIKE ? AND " + VotingData.VotingInfo.EVENT_LOCATION  + " LIKE ? AND " +
@@ -97,11 +98,18 @@ public class VotingDatabase extends SQLiteOpenHelper {
                             voteItem.getEvent_confirm_start_time(), voteItem.getEvent_confirm_end_time()};
 
         ContentValues values = new ContentValues();
-        values.put(VotingData.VotingInfo.EVENT_VOTED_PARTICIPANTS, voteItem.getEvent_voted_participants() + " " + updated_voted_participants);
-        values.put(VotingData.VotingInfo.CONFIRM_START_DATE, confirmed_start_date);
-        values.put(VotingData.VotingInfo.CONFIRM_END_DATE, confirmed_end_date);
-        values.put(VotingData.VotingInfo.CONFIRM_START_TIME, confirmed_start_time);
-        values.put(VotingData.VotingInfo.CONFIRM_END_TIME, confirmed_end_time);
+        if(updated_voted_participants != null) {
+            values.put(VotingData.VotingInfo.EVENT_VOTED_PARTICIPANTS,
+                    voteItem.getEvent_voted_participants() + " " + updated_voted_participants);
+            Log.d("VotingDatabase", values.get(VotingData.VotingInfo.EVENT_VOTED_PARTICIPANTS).toString());
+        }
+
+        if(confirmed_start_date != null) {
+            values.put(VotingData.VotingInfo.CONFIRM_START_DATE, confirmed_start_date);
+            values.put(VotingData.VotingInfo.CONFIRM_END_DATE, confirmed_end_date);
+            values.put(VotingData.VotingInfo.CONFIRM_START_TIME, confirmed_start_time);
+            values.put(VotingData.VotingInfo.CONFIRM_END_TIME, confirmed_end_time);
+        }
 
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         sqLiteDatabase.update(VotingData.VotingInfo.TABLE_NAME, values, selection, args);
@@ -132,13 +140,13 @@ public class VotingDatabase extends SQLiteOpenHelper {
 
     // This method retrieves the targeted voting.
     public VoteOptionItem getTargetVoting(VotingDatabase data, String eventId) {
-        VoteOptionItem voteOptionItem = new VoteOptionItem();
+        VoteOptionItem voteItem = new VoteOptionItem();
         Cursor cursor = getInformation(data);
         cursor.moveToFirst();
 
         while (!cursor.isAfterLast()) {
             if(cursor.getString(0).equals(eventId)) {
-                voteOptionItem = new VoteOptionItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                voteItem = new VoteOptionItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
                         cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
                         cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13));
                 break;
@@ -148,7 +156,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        return voteOptionItem;
+        return voteItem;
     }
 
     // This method retrieves all votings.

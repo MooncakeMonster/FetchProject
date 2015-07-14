@@ -14,6 +14,9 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.cloudant.User;
+import mooncakemonster.orbitalcalendar.votereceive.ResultDatabase;
+import mooncakemonster.orbitalcalendar.votereceive.ResultItem;
+import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 public class NotificationFragment extends ListFragment {
 
@@ -24,6 +27,8 @@ public class NotificationFragment extends ListFragment {
 
     // Connect to cloudant
     UserDatabase db;
+    VotingDatabase votingDatabase;
+    ResultDatabase resultDatabase;
     CloudantConnect cloudantConnect;
 
     @Override
@@ -37,6 +42,7 @@ public class NotificationFragment extends ListFragment {
         db = new UserDatabase(getActivity().getApplicationContext());
         HashMap<String, String> user = db.getUserDetails();
         notificationDatabase = new NotificationDatabase(getActivity());
+        votingDatabase = new VotingDatabase(getActivity());
 
         // (1) Retrieve latest voting request
         String my_username = user.get("username");
@@ -55,27 +61,41 @@ public class NotificationFragment extends ListFragment {
 
             Log.d(TAG, "Voting request found");
             notificationDatabase.putInformation(notificationDatabase, 1, my_user.getOption_event_id(), my_user.getOption_event_colour(),
-                    my_user.getOption_my_username(), " has requested you to vote for the event - ",
-                    my_user.getOption_event_title(), ", vote now!", my_user.getOption_event_location(),
+                    my_user.getOption_my_username(), " has requested you to vote for the event \"",
+                    my_user.getOption_event_title(), "\". Vote now!", my_user.getOption_event_location(),
                     my_user.getOption_event_notes(), my_user.getOption_start_date(), my_user.getOption_end_date(),
-                    my_user.getOption_start_time(), my_user.getOption_end_time());
+                    my_user.getOption_start_time(), my_user.getOption_end_time(), null);
+
+            cloudantConnect.resetVotingRequest(my_user);
+            cloudantConnect.startPushReplication();
 
         } if(my_user.getSelected_event_title() != null) {
 
             Log.d(TAG, "Voting response found");
             int notification_id;
-            String action1, action2;
+            String action, action1, action2, reject_reason = "", start_date = null, end_date = null, start_time = null, end_time = null;
 
             // case 1: Target participant has chosen the dates they can make it
             // case 2: Target participant has rejected the event
-            if(my_user.getReject_reason() != null) {
+            if(my_user.getReject_reason() == null) {
                 notification_id = 2;
-                action1 = " has responded to your event - ";
-                action2 = ", checkout the current voting result now!";
+
+                start_date = my_user.getSelected_start_date();
+                end_date = my_user.getSelected_end_date();
+                start_time =  my_user.getSelected_start_time();
+                end_time = my_user.getSelected_end_time();
+
+                action = "accept";
+                action1 = " has responded to your event \"";
+                action2 = "\". Checkout the current voting result now!";
             } else {
                 notification_id = 3;
-                action1 = " has rejected your event - ";
-                action2 = ", find out why!";
+
+                reject_reason = my_user.getReject_reason();
+
+                action = "reject";
+                action1 = " has rejected voting for your event \"";
+                action2 = "\". Find out why!";
             }
 
             String event_id = "" + my_user.getSelected_event_id();
@@ -83,8 +103,17 @@ public class NotificationFragment extends ListFragment {
 
             notificationDatabase.putInformation(notificationDatabase, notification_id, Integer.parseInt(event_id), my_user.getSelected_event_colour(),
                     voted_participant, action1, my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
-                    my_user.getSelected_event_notes(), my_user.getSelected_start_date(), my_user.getSelected_end_date(),
-                    my_user.getSelected_start_time(), my_user.getSelected_end_time());
+                    my_user.getSelected_event_notes(), start_date, end_date, start_time, end_time, reject_reason);
+
+            resultDatabase = new ResultDatabase(getActivity());
+            resultDatabase.storeParticipants(resultDatabase, new ResultItem("" + event_id,
+                        start_date, end_date, start_time, end_time, my_user.getSelected_my_username(), "", "", "", ""), action);
+
+            votingDatabase.updateInformation(votingDatabase, votingDatabase.getTargetVoting(votingDatabase,
+                    event_id), voted_participant, null, null, null, null);
+
+            cloudantConnect.resetVotingResponse(my_user);
+            cloudantConnect.startPushReplication();
 
         } if(my_user.getConfirm_event_title() != null) {
 
@@ -95,29 +124,30 @@ public class NotificationFragment extends ListFragment {
             String end_time = my_user.getConfirm_end_time();
 
             notificationDatabase.putInformation(notificationDatabase, 4, my_user.getConfirm_event_id(), my_user.getConfirm_event_colour(),
-                    my_user.getConfirm_my_username(), " has confirmed the event - ", my_user.getConfirm_event_title(),
-                    " to be from " + start_date + " to " + end_date + ", " + start_time + " - " + end_time, null, null,
-                    start_date, end_date, start_time, end_time);
+                    my_user.getConfirm_my_username(), " has confirmed the event \"", my_user.getConfirm_event_title(),
+                    "\" to be from " + start_date + " to " + end_date + ", " + start_time + " - " + end_time, null, null,
+                    start_date, end_date, start_time, end_time, null);
 
-            //cloudantConnect.resetVotingConfirmation(my_user);
+            cloudantConnect.resetVotingConfirmation(my_user);
             cloudantConnect.startPushReplication();
 
         } if(my_user.getReminder_event_title() != null) {
 
             Log.d(TAG, "Voting reminder found");
             notificationDatabase.putInformation(notificationDatabase, 5, my_user.getReminder_event_id(), my_user.getReminder_event_colour(),
-                    my_user.getReminder_my_username(), " reminds you to vote for the event - ", my_user.getConfirm_event_title(),
-                    ", vote now!", null, null, null, null, null, null);
+                    my_user.getReminder_my_username(), " reminds you to vote for the event \"", my_user.getReminder_event_title(),
+                    "\". Vote now!", null, null, null, null, null, null, null);
 
-            //cloudantConnect.resetVotingReminder(my_user);
+            cloudantConnect.resetVotingReminder(my_user);
             cloudantConnect.startPushReplication();
-
         }
 
         // Get all notifications
         allNotifications = notificationDatabase.getAllNotifications(notificationDatabase);
         // Get adapter view
         adapter = new NotificationAdapter(getActivity(), R.layout.row_notifications, allNotifications);
+        adapter.clear();
+        adapter.addAll(notificationDatabase.getAllNotifications(notificationDatabase));
         setListAdapter(adapter);
     }
 

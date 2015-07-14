@@ -33,7 +33,9 @@ public class VotingFragment extends ListFragment {
         votingAdapter = new VotingAdapter(getActivity(), R.layout.row_vote_history, votingDatabase.getAllVotings(votingDatabase));
         setListAdapter(new SlideExpandableListAdapter(votingAdapter, R.id.history_layout, R.id.expandable_vote));
 
-        return rootView;
+        votingAdapter.clear();
+        votingAdapter.addAll(votingDatabase.getAllVotings(votingDatabase));
 
+        return rootView;
     }
 }

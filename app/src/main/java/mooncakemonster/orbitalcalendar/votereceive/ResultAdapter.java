@@ -12,13 +12,18 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmDateAdapter;
 import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmParticipants;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteOptionItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
@@ -26,6 +31,7 @@ import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
  */
 public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
+    UserDatabase db;
     CloudantConnect cloudantConnect;
     VotingDatabase votingDatabase;
     private List<ResultItem> objects;
@@ -40,7 +46,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         TextView result_start_date;
         TextView result_end_date;
         TextView result_time;
-        TextView result_name;
+        //TextView result_name;
         TextView result_total;
     }
 
@@ -67,7 +73,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
             holder.result_start_date = (TextView) row.findViewById(R.id.result_start_date);
             holder.result_end_date = (TextView) row.findViewById(R.id.result_end_date);
             holder.result_time = (TextView) row.findViewById(R.id.result_time);
-            holder.result_name = (TextView) row.findViewById(R.id.result_name);
+            //holder.result_name = (TextView) row.findViewById(R.id.result_name);
             holder.result_total = (TextView) row.findViewById(R.id.result_total);
 
             holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -102,10 +108,26 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                             String participants = confirmParticipants(adapter_can_make_it)
                                     + confirmParticipants(adapter_cannot_make_it) + confirmParticipants(adapter_rejected_voting);
 
-                            // Update confirmed date and time participants into SQLite database
+                            String start_date = resultItem.getStart_date();
+                            String end_date = resultItem.getEnd_date();
+                            String start_time = resultItem.getStart_time();
+                            String end_time = resultItem.getEnd_time();
+
+                            // Update confirmed date and time into SQLite database
                             votingDatabase = new VotingDatabase(getContext());
                             votingDatabase.updateInformation(votingDatabase, votingDatabase.getTargetVoting(votingDatabase,
-                                            resultItem.getEvent_id()), participants, null, null, null, null);
+                                            resultItem.getEvent_id()), null, start_date, end_date, start_time, end_time);
+
+                            // Retrieve own username
+                            db = new UserDatabase(getContext());
+                            HashMap<String, String> user = db.getUserDetails();
+                            String my_username = user.get("username");
+                            // Send out confirmation date and time to target participants
+                            String event_id = resultItem.getEvent_id();
+                            VoteOptionItem voteItem = votingDatabase.getTargetVoting(votingDatabase, event_id);
+                            cloudantConnect.sendConfirmationToTargetParticipants(my_username, participants, Integer.parseInt(resultItem.getEvent_id()),
+                                    Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title(), start_date, end_date, start_time, end_time);
+                            cloudantConnect.startPushReplication();
 
                             dialog.dismiss();
                         }
@@ -121,10 +143,10 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 }
             });
 
-            holder.result_start_date.setText(resultItem.getStart_date());
-            holder.result_end_date.setText(resultItem.getEnd_date());
+            holder.result_start_date.setText(Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
+            holder.result_end_date.setText(Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
             holder.result_time.setText(resultItem.getStart_time() + " - " + resultItem.getEnd_time());
-            holder.result_name.setText(resultItem.getSelected_username());
+            //holder.result_name.setText(resultItem.getSelected_username());
             holder.result_total.setText(resultItem.getTotal());
 
             row.setTag(holder);

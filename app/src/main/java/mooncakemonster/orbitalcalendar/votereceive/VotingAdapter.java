@@ -84,11 +84,17 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
             holder.relativeLayout.setBackgroundResource(Integer.parseInt(voteItem.getImageId()));
 
             // Retrieve the number of particpants that cast votes
-            String[] participants = voteItem.getEvent_participants().split(" ");
-            Log.d("VotingAdapter", participants[0]);
-            String[] voted_participants = voteItem.getEvent_voted_participants().split(" ");
-            holder.vote_total.setText("" + voted_participants.length);
-            holder.total.setText("/" + participants.length);
+            String[] split_participants = voteItem.getEvent_participants().split(" "), split_voted_participants = {};
+            String voted_participants = voteItem.getEvent_voted_participants();
+
+            if(voted_participants != null)
+                Log.d("VotingDatabaseAdapter", voted_participants);
+
+            if(voted_participants != null) {
+                split_voted_participants = voted_participants.split(" ");
+            }
+            holder.vote_total.setText("" + split_voted_participants.length);
+            holder.total.setText("/" + split_participants.length);
 
             // Set event title and location
             holder.event_title.setText(voteItem.getEvent_title());
@@ -124,7 +130,7 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
                     final ArrayList<String> list = new ArrayList<String>();
 
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
-                    alertBuilder.setTitle("Send reminder").setMultiChoiceItems(split_not_voted, null, new DialogInterface.OnMultiChoiceClickListener() {
+                    alertBuilder.setTitle("Send Voting Reminder").setMultiChoiceItems(split_not_voted, null, new DialogInterface.OnMultiChoiceClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which, boolean isChecked) {
                             if(isChecked) {
@@ -179,7 +185,9 @@ public class VotingAdapter extends ArrayAdapter<VoteOptionItem> {
 
     // This method checks which participant has not cast vote.
     private String[] checkNotVoted(String voted_participants, String participants) {
-        String[] split_voted_participants = voted_participants.split(" ");
+        String[] split_voted_participants = {};
+
+        if(voted_participants != null) split_voted_participants = voted_participants.split(" ");
         int size = split_voted_participants.length;
 
         for(int i = 0; i < size; i++) {

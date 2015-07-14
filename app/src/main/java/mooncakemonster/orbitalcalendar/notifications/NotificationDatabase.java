@@ -30,7 +30,8 @@ public class NotificationDatabase extends SQLiteOpenHelper {
             NotificationData.NotificationInfo.START_DATE + " TEXT, " +
             NotificationData.NotificationInfo.END_DATE + " TEXT, " +
             NotificationData.NotificationInfo.START_TIME + " TEXT, " +
-            NotificationData.NotificationInfo.END_TIME + " TEXT); ";
+            NotificationData.NotificationInfo.END_TIME + " TEXT, " +
+            NotificationData.NotificationInfo.REJECT_REASON + " TEXT); ";
 
     public NotificationDatabase (Context context) {
         super(context, NotificationData.NotificationInfo.DATABASE_NAME, null, NotificationData.NotificationInfo.DATABASE_VERSION);
@@ -52,7 +53,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
     // This method insets information into the database.
     public void putInformation(NotificationDatabase data, int notification_id, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
-                               String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time) {
+                               String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -73,6 +74,8 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         contentValues.put(NotificationData.NotificationInfo.START_TIME, start_time);
         contentValues.put(NotificationData.NotificationInfo.END_TIME, end_time);
 
+        contentValues.put(NotificationData.NotificationInfo.REJECT_REASON, reject_reason);
+
         // Insert into sqlite database
         sqLiteDatabase.insert(NotificationData.NotificationInfo.TABLE_NAME, null, contentValues);
         Log.d(TAG, "One notification row inserted");
@@ -88,7 +91,8 @@ public class NotificationDatabase extends SQLiteOpenHelper {
                             NotificationData.NotificationInfo.SENDER_EVENT, NotificationData.NotificationInfo.ACTION,
                             NotificationData.NotificationInfo.SENDER_LOCATION, NotificationData.NotificationInfo.SENDER_NOTES,
                             NotificationData.NotificationInfo.START_DATE, NotificationData.NotificationInfo.END_DATE,
-                            NotificationData.NotificationInfo.START_TIME, NotificationData.NotificationInfo.END_TIME};
+                            NotificationData.NotificationInfo.START_TIME, NotificationData.NotificationInfo.END_TIME,
+                            NotificationData.NotificationInfo.REJECT_REASON};
 
         // Points to first row of table
         return sqLiteDatabase.query(NotificationData.NotificationInfo.TABLE_NAME, columns, null, null, null, null, null);
@@ -103,7 +107,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         while (!cursor.isAfterLast()) {
             NotificationItem notificationItem = new NotificationItem(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4),
                                                 cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
-                                                cursor.getString(10), cursor.getString(11), cursor.getString(12));
+                                                cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13));
             notificationItems.add(notificationItem);
             cursor.moveToNext();
         }

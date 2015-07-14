@@ -26,6 +26,8 @@ public class NotificationData {
         public static final String START_TIME = "start_time";
         public static final String END_TIME = "end_time";
 
+        public static final String REJECT_REASON = "reject_reason";
+
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_NAME = "notification_storage";
         public static final String TABLE_NAME = "notification_intent_storage";

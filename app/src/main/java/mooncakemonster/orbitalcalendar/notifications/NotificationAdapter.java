@@ -1,5 +1,6 @@
 package mooncakemonster.orbitalcalendar.notifications;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -60,17 +61,17 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             String sender_event = notificationItem.getSender_event();
             String action = notificationItem.getAction();
 
-            // Create a new spannable TODO: Unable to bold properly
+            // Create a new spannable
             SpannableString spannable = new SpannableString(sender_username + sender_message + sender_event + action);
             spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, sender_username.length(), 0);
-            //spannable.setSpan(new StyleSpan(Typeface.NORMAL), sender_username.length(), sender_message.length(), 0);
-            //spannable.setSpan(new StyleSpan(Typeface.BOLD), sender_message.length(), sender_event.length(), 0);
+            spannable.setSpan(new StyleSpan(Typeface.BOLD), sender_username.length() + sender_message.length(),
+                    sender_username.length() + sender_message.length() + sender_event.length(), 0);
 
             // Set the text of a textView with the spannable object
             holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);
             holder.action_image = (ImageView) row.findViewById(R.id.action_image);
             // TODO: Set appropriate background image
-            holder.action_image.setBackgroundResource(setBackground(notificationItem.getNotificationId(), notificationItem.getImageId()));
+            holder.action_image.setBackgroundResource(notificationItem.getImageId());
 
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
@@ -101,7 +102,12 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                             // TODO: Show voting result fragment or VotingResultActivity if possible
                             break;
                         case 3:
-                            // TODO: Show reason in dialog
+                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                            dialogBuilder.setTitle("Reason for Vote Rejection");
+                            dialogBuilder.setMessage(notificationItem.getSender_username() +
+                                    ": \"" + notificationItem.getReject_reason() + "\"");
+                            dialogBuilder.setPositiveButton("Ok", null);
+                            dialogBuilder.show();
                             break;
                         case 4:
                             // TODO: Show dialog that allows user to confirm attendance for the event
@@ -139,6 +145,6 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         }
 
         // Should not reach here
-        return -1;
+        return R.color.redbear;
     }
 }

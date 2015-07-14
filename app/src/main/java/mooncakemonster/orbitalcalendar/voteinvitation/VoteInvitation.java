@@ -23,7 +23,6 @@ import java.util.HashMap;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 
 /**
@@ -46,7 +45,7 @@ public class VoteInvitation extends ActionBarActivity {
     Button reject_event;
     TextView invite_sender, invite_title, invite_location, invite_notes;
     String my_username = "", start_date = "", end_date = "", start_time = "", end_time = "",
-            not_start_date = "", not_end_date = "", not_start_time = "", not_end_time = "", reject_reason = "";
+            not_start_date = "", not_end_date = "", not_start_time = "", not_end_time = "", reject_reason = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,13 +67,8 @@ public class VoteInvitation extends ActionBarActivity {
         // Fetch user details from sqlite
         HashMap<String, String> user = db.getUserDetails();
         my_username = user.get("username");
-        User my_user = cloudantConnect.getTargetUser(my_username);
 
         getSupportActionBar().setElevation(0);
-
-        // Reset voting option received here
-        cloudantConnect.resetVotingRequest(my_user);
-        cloudantConnect.startPushReplication();
 
         //(1) Get intent that started this activity
         Intent intent = getIntent();

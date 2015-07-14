@@ -102,13 +102,6 @@ public class ResultDatabase extends SQLiteOpenHelper {
         Log.d("ResultDatabase", "size " + size);
 
         for (int i = 0; i < size; i++) {
-            Log.d("ResultDatabase", "count " + i);
-            Log.d("ResultDatabase", "event id " + resultItem.getEvent_id() + "/" + cursor.getString(0));
-            Log.d("ResultDatabase", "start date " + split_start_date[i] + "/" + cursor.getString(1));
-            Log.d("ResultDatabase", "end date " + split_end_date[i] + "/" + cursor.getString(2));
-            Log.d("ResultDatabase", "start time " + split_start_time[i] + "/" + cursor.getString(3));
-            Log.d("ResultDatabase", "end time " + split_end_time[i] + "/" + cursor.getString(4));
-
             if (resultItem.getEvent_id().equals(cursor.getString(0)) &&
                     split_start_date[i].equals(cursor.getString(1)) &&
                     split_end_date[i].equals(cursor.getString(2)) &&

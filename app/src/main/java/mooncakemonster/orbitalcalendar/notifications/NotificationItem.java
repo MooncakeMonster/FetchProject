@@ -19,9 +19,10 @@ public class NotificationItem implements Serializable {
     private String end_date;
     private String start_time;
     private String end_time;
+    private String reject_reason;
 
     public NotificationItem(int notificationId, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
-                            String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time) {
+                            String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
         this.notificationId = notificationId;
         this.eventId = eventId;
         this.imageId = imageId;
@@ -35,6 +36,7 @@ public class NotificationItem implements Serializable {
         this.end_date = end_date;
         this.start_time = start_time;
         this.end_time = end_time;
+        this.reject_reason = reject_reason;
     }
 
     public int getNotificationId() {
@@ -139,5 +141,13 @@ public class NotificationItem implements Serializable {
 
     public void setEnd_time(String end_time) {
         this.end_time = end_time;
+    }
+
+    public String getReject_reason() {
+        return reject_reason;
+    }
+
+    public void setReject_reason(String reject_reason) {
+        this.reject_reason = reject_reason;
     }
 }

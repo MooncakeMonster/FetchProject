@@ -50,7 +50,7 @@ public class ConfirmDateAdapter extends ArrayAdapter<ConfirmParticipants> {
 
             if(username.isEmpty()) {
                 holder.checkBox.setVisibility(View.INVISIBLE);
-                holder.username.setText("No response yet");
+                holder.username.setText("None");
             } else {
                 holder.username.setText(username);
                 holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

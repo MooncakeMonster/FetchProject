@@ -228,7 +228,7 @@ public class VotingActivity extends ActionBarActivity {
                 Log.d("VotingActivity", "EVENT ID " + eventId);
 
                 votingDatabase.putInformation(votingDatabase, "" + eventId, "" + colour, title, location,
-                        participants, "", start_date, end_date, start_time, end_time, null, null, null, null);
+                        participants, null, start_date, end_date, start_time, end_time, null, null, null, null);
 
                 // Save options in SQLite for voting result
                 saveOptions(new ResultItem("" + eventId, start_date, end_date, start_time, end_time, participants, "", "", "", ""));

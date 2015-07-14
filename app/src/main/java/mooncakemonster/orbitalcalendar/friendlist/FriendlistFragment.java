@@ -65,6 +65,8 @@ public class FriendlistFragment extends ListFragment {
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: Get friend's image and replace with "redbear"
                         friendDatabase.putInformation(friendDatabase, "" + R.color.redbear, input_username.getText().toString());
+                        adapter.clear();
+                        adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
                         adapter.notifyDataSetChanged();
                         dialog.dismiss();
                     }

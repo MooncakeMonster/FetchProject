@@ -451,6 +451,10 @@ public class CloudantConnect {
         user.setSelected_end_date(null);
         user.setSelected_start_time(null);
         user.setSelected_end_time(null);
+        user.setNot_selected_start_date(null);
+        user.setNot_selected_end_date(null);
+        user.setNot_selected_start_time(null);
+        user.setNot_selected_end_time(null);
         user.setReject_reason(null);
 
         // Retrieve user's documents

@@ -426,8 +426,8 @@ public class User {
 
         // Voting selected options
         user.setSelected_my_username((String) ((Map) user_revised.get("voting_selected")).get("selected_my_username"));
+        user.setSelected_event_id((int) ((Map) user_revised.get("voting_selected")).get("selected_event_id"));
         user.setSelected_event_colour((int) ((Map) user_revised.get("voting_selected")).get("selected_event_colour"));
-        user.setSelected_event_colour((int) ((Map) user_revised.get("voting_selected")).get("selected_event_id"));
         user.setSelected_event_title((String) ((Map) user_revised.get("voting_selected")).get("selected_event_title"));
         user.setSelected_event_location((String) ((Map) user_revised.get("voting_selected")).get("selected_event_location"));
         user.setSelected_event_notes((String) ((Map) user_revised.get("voting_selected")).get("selected_event_notes"));
@@ -439,22 +439,22 @@ public class User {
         user.setNot_selected_end_date((String) ((Map) user_revised.get("voting_selected")).get("not_selected_end_date"));
         user.setNot_selected_start_time((String) ((Map) user_revised.get("voting_selected")).get("not_selected_start_time"));
         user.setNot_selected_end_time((String) ((Map) user_revised.get("voting_selected")).get("not_selected_end_time"));
-        user.setSelected_end_time((String) ((Map) user_revised.get("voting_selected")).get("reject_reason"));
+        user.setReject_reason((String) ((Map) user_revised.get("voting_selected")).get("reject_reason"));
 
         // Voting confirm
         user.setConfirm_my_username((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_my_username"));
         user.setConfirm_event_id((int) ((Map) user_revised.get("voting_confirmed")).get("confirm_event_id"));
-        user.setConfirm_event_id((int) ((Map) user_revised.get("voting_confirmed")).get("confirm_event_colour"));
+        user.setConfirm_event_colour((int) ((Map) user_revised.get("voting_confirmed")).get("confirm_event_colour"));
         user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_event_title"));
-        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_start_date"));
-        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_date"));
-        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_start_time"));
-        user.setConfirm_event_title((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_time"));
+        user.setConfirm_start_date((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_start_date"));
+        user.setConfirm_end_date((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_date"));
+        user.setConfirm_start_time((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_start_time"));
+        user.setConfirm_end_time((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_time"));
 
         // Voting reminder
         user.setReminder_my_username((String) ((Map) user_revised.get("voting_reminder")).get("reminder_my_username"));
         user.setReminder_event_id((int) ((Map) user_revised.get("voting_reminder")).get("reminder_event_id"));
-        user.setReminder_event_id((int) ((Map) user_revised.get("voting_reminder")).get("reminder_event_colour"));
+        user.setReminder_event_colour((int) ((Map) user_revised.get("voting_reminder")).get("reminder_event_colour"));
         user.setReminder_event_title((String) ((Map) user_revised.get("voting_reminder")).get("reminder_event_title"));
 
         return user;

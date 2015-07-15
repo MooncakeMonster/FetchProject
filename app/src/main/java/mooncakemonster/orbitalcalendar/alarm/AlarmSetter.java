@@ -27,6 +27,10 @@ public class AlarmSetter extends BroadcastReceiver {
      ****************************************************************************************************/
     public static void setAlarm(Context context, String event, String location, long millisecond)
     {
+        if(millisecond == 0) {
+            return;
+        }
+
         Intent intent = new Intent(context, AlarmReceiver.class);
         intent.setAction(AlarmReceiver.SOMEACTION);
         intent.putExtra("appointmentName", event);

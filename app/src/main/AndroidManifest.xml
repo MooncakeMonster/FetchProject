@@ -16,19 +16,21 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name=".key.KeyActivity"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/app_id" />
+
         <activity
             android:name=".main.MainActivity"
             android:largeHeap="true"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -38,86 +40,72 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/app_id" />
-
         <activity
             android:name=".event.EventActivity"
             android:label="@string/title_activity_event"
             android:theme="@style/AppThemeMenu"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".authentication.LoginActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_login" >
-        </activity>
+            android:label="@string/title_activity_login"></activity>
         <activity
             android:name=".authentication.RegisterActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_register" >
-        </activity>
+            android:label="@string/title_activity_register"></activity>
         <activity
             android:name=".menudrawer.MenuDrawer"
             android:label="Fetch"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme" >
-        </activity>
-        <activity android:name=".accountsettings.SettingActivity"
+            android:theme="@style/MyMaterialTheme"></activity>
+        <activity
+            android:name=".accountsettings.SettingActivity"
             android:label="Account Settings"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMenu">
-        </activity>
-        <activity android:name=".picoftheday.CreatePicture"
+            android:theme="@style/AppThemeMenu"></activity>
+        <activity
+            android:name=".picoftheday.CreatePicture"
             android:label="Add New Picture"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMenu">
-        </activity>
-        <activity android:name=".voteinvitation.VoteInvitation"
+            android:theme="@style/AppThemeMenu"></activity>
+        <activity
+            android:name=".voteinvitation.VoteInvitation"
             android:label="Vote Event"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMenu">
-        </activity>
+            android:theme="@style/AppThemeMenu"></activity>
         <activity
             android:name=".votesend.VotingActivity"
             android:label="Vote Event"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppThemeMenu"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".votereceive.VotingResultActivity"
             android:label="Voting Result"
             android:theme="@style/AppThemeMenu"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <!--For parsing data from .ics extension-->
-
-        <activity
-            android:name=".ImportExternal.ImportICSParser">
-        <!--
-        <intent-filter>
-            <action android:name="android.intent.action.VIEW" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <category android:name="android.intent.category.BROWSABLE" />
-            <data android:scheme="file" />
-            <data android:mimeType="\*/\*" />
-            <data android:pathPattern=".*\\.ics" />
-            <data android:host="*" />
-        </intent-filter>
-        -->
+        <activity android:name=".ImportExternal.ImportICSParser">
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:mimeType="\*/\*" />
+                <data android:pathPattern=".*\\.ics" />
+                <data android:host="*" />
+            </intent-filter>
+            -->
         </activity>
-
 
         <receiver android:name="mooncakemonster.orbitalcalendar.alarm.AlarmReceiver">
             <intent-filter>
-                <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION"/>
-                <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION2"/>
+                <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION" />
+                <action android:name="mooncakemonster.orbitalcalendar.alarm.ACTION2" />
             </intent-filter>
         </receiver>
 
@@ -126,8 +114,7 @@
             android:label="AlarmSetter">
 
             <intent-filter>
-                <action
-                    android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
 
         </receiver>
@@ -140,7 +127,6 @@
         -->
 
     </application>
-
 
 
 </manifest>

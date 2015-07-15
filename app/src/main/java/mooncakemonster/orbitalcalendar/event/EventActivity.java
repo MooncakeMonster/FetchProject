@@ -1,5 +1,7 @@
 package mooncakemonster.orbitalcalendar.event;
 
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -7,8 +9,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.alarm.AlarmSetter;
@@ -47,7 +52,10 @@ public class EventActivity extends ActionBarActivity {
 
     private static CharSequence[] everyWheel = {"day", "week", "month", "year"};
     private static CharSequence[] remindWheel = {"min", "hour", "day"};
-    private final static String REMIND_TAG = " before event";
+    public final static String REMIND_TAG = " before event";
+
+    //Obtain maximm date before repetition
+    long maxDate;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -114,6 +122,9 @@ public class EventActivity extends ActionBarActivity {
         boolean checked = ((CheckBox) view).isChecked();
         switch (view.getId()) {
             case R.id.everybox:
+                if(checked){
+                    launchMaxDatePicker();
+                }
             case R.id.remindbox:
                 break;
 
@@ -129,6 +140,37 @@ public class EventActivity extends ActionBarActivity {
         }
     }
 
+    private void launchMaxDatePicker(){
+        final String beginD = beginDate.getText().toString();
+        final String beginT = beginTime.getText().toString();
+        final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(beginEventMillisecond);
+
+        final DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                //Set as empty as method is not called.
+            }
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+        datePicker.setTitle("Set Recurring Event's Limit");
+        datePicker.getDatePicker().setMinDate(beginEventMillisecond);
+        datePicker.setCancelable(false);
+        datePicker.setButton(DialogInterface.BUTTON_POSITIVE, "Set", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                DatePicker temp = datePicker.getDatePicker();
+                calendar.clear();
+                calendar.set(temp.getYear(), temp.getMonth(), temp.getDayOfMonth());
+                maxDate = calendar.getTimeInMillis();
+                dialog.dismiss();
+            }
+        });
+        datePicker.show();
+    }
+
     protected boolean insertInDatabase() {
         final EditText eventInput = (EditText) findViewById(R.id.title);
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
@@ -136,13 +178,6 @@ public class EventActivity extends ActionBarActivity {
 
         final CheckBox repeatAppointment = (CheckBox) findViewById(R.id.everybox);
         final CheckBox reminderCheckBox = (CheckBox) findViewById(R.id.remindbox);
-
-        if (beginDate == null || beginTime == null || endDate == null || endTime == null) {
-            beginDate = (Button) findViewById(R.id.startD);
-            endDate = (Button) findViewById(R.id.endD);
-            beginTime = (Button) findViewById(R.id.startT);
-            endTime = (Button) findViewById(R.id.endT);
-        }
 
         //(1) Data Extraction Begins Here
         //Get Event Name
@@ -162,8 +197,30 @@ public class EventActivity extends ActionBarActivity {
         //Get any miscellaneous notes
         final String notes = notesInput.getText().toString();
 
+        //(2) Start Validity Check
+        // Ensure inputs are not of null value: (a) event
+        if (!Constant.minStringLength(event, 1, eventInput, null))
+            return false;
+            // Check length of input: (a) event, (b) location, (c) notes
+        else if (!Constant.maxStringLength(event, Constant.EVENT_TITLE_MAX_LENGTH, eventInput,
+                "No more than " + Constant.EVENT_TITLE_MAX_LENGTH + " characters for event."))
+            return false;
+        else if (!Constant.maxStringLength(location, Constant.LOCATION_MAX_LENGTH, locationInput,
+                "No more than " + Constant.LOCATION_MAX_LENGTH + " characters for location."))
+            return false;
+        else if (!Constant.maxStringLength(notes, Constant.NOTES_MAX_LENGTH, notesInput,
+                "No more than " + Constant.NOTES_MAX_LENGTH + " characters for notes."))
+            return false;
+            // Ensure the dates selected make sense: (a) startDate, (b) endDate
+        else if (beginEventMillisecond > endEventMillisecond) {
+            //If starting time occurs before ending time
+            Toast.makeText(this.getApplicationContext(), "Please check the starting and ending date", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
         //Default value for reminder
         long remind = 0;
+
         if (reminderCheckBox.isChecked()) {
             //Get number, removing any whitespace
             long num = Long.parseLong(remindNum.getText().toString().replaceAll("\\s+", ""));
@@ -186,52 +243,80 @@ public class EventActivity extends ActionBarActivity {
             }
             //Set reminder in milliseconds
             remind = beginEventMillisecond - num;
-
-            //Set alarm
-            AlarmSetter.setAlarm(getApplicationContext(), event, location, remind);
-        }
-
-        //(2) Start Validity Check
-        // Ensure inputs are not of null value: (a) event
-        if (Constant.minStringLength(event, 1, eventInput, null) == false)
-            return false;
-            // Check length of input: (a) event, (b) location, (c) notes
-        else if (Constant.maxStringLength(event, Constant.EVENT_TITLE_MAX_LENGTH, eventInput,
-                "No more than " + Constant.EVENT_TITLE_MAX_LENGTH + " characters for event.") == false)
-            return false;
-        else if (Constant.maxStringLength(location, Constant.LOCATION_MAX_LENGTH, locationInput,
-                "No more than " + Constant.LOCATION_MAX_LENGTH + " characters for location.") == false)
-            return false;
-        else if (Constant.maxStringLength(notes, Constant.NOTES_MAX_LENGTH, notesInput,
-                "No more than " + Constant.NOTES_MAX_LENGTH + " characters for notes.") == false)
-            return false;
-        // Ensure the dates selected make sense: (a) startDate, (b) endDate
-        if (beginEventMillisecond > endEventMillisecond) {
-            //If starting time occurs before ending time
-            Toast.makeText(this.getApplicationContext(), "Please check the starting and ending date", Toast.LENGTH_SHORT).show();
-            return false;
         }
 
         if (repeatAppointment.isChecked()) {
-            //TODO: If checkbox, sent dialogbox, asking when is the limit date
-            //BULK INSERT INTO DATABASE
-            /*
-            final DatePickerDialog.Builder alert = new DatePickerDialog.Builder(this);
-            alert.setTitle("Set Recurring Event");
-            alert.setMessage("Pick the maximum date for the event: ");
+            //Get number, removing any whitespace
+            int factor = Integer.parseInt(everyNum.getText().toString().replaceAll("\\s+", ""));
+            Calendar start = Calendar.getInstance();
+            start.setTimeInMillis(beginEventMillisecond);
+            Calendar end = Calendar.getInstance();
+            end.setTimeInMillis(endEventMillisecond);
+            //Get "quantity"
+            String value = everyBox.getText().toString();
 
-            alert.setPositiveButton("Set", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    //Get date and start setting appointments
-                    dialog.dismiss();
-                }
-            });
+            switch (value) {
+                case "day":
+                case "days":
+                    while(start.getTimeInMillis() <= maxDate)
+                    {
+                        long startMil = start.getTimeInMillis();
+                        long endMil = end.getTimeInMillis();
 
-            alert.show();
-            */
+                        String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
+                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+
+                        start.add(Calendar.DATE, factor);
+                        end.add(Calendar.DATE, factor);
+                    }
+                    break;
+                case "week":
+                case "weeks":
+                    factor *= 7;
+                    while(start.getTimeInMillis() <= maxDate)
+                    {
+                        long startMil = start.getTimeInMillis();
+                        long endMil = end.getTimeInMillis();
+                        String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
+                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+
+                        start.add(Calendar.DATE, factor);
+                        end.add(Calendar.DATE, factor);
+                    }
+                    break;
+                case "month":
+                case "months":
+                    while(start.getTimeInMillis() <= maxDate)
+                    {
+                        long startMil = start.getTimeInMillis();
+                        long endMil = end.getTimeInMillis();
+                        String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
+                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+
+                        start.add(Calendar.MONTH, factor);
+                        end.add(Calendar.MONTH, factor);
+                    }
+                    break;
+                case "year":
+                case "years":
+                    while(start.getTimeInMillis() <= maxDate)
+                    {
+                        long startMil = start.getTimeInMillis();
+                        long endMil = end.getTimeInMillis();
+                        String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
+                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+
+                        start.add(Calendar.YEAR, factor);
+                        end.add(Calendar.YEAR, factor);
+                    }
+                    break;
+            }
+
+
 
         } else {
+            //Set alarm
+            AlarmSetter.setAlarm(getApplicationContext(), event, location, remind);
             //Insert into database
             appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
         }

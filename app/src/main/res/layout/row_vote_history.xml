@@ -132,11 +132,11 @@
             android:text="Send reminder" />
 
         <Button
-            android:id="@+id/expand_fetch_help"
+            android:id="@+id/expand_attendance"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/standard_icon_size"
             android:layout_weight="1"
             android:background="@color/colorPrimary"
-            android:text="Fetch help" />
+            android:text="Attendance" />
     </LinearLayout>
 </LinearLayout>

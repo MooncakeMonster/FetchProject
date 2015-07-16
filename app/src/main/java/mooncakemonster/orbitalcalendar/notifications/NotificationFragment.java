@@ -53,9 +53,10 @@ public class NotificationFragment extends ListFragment {
 
         /*
          * case 1: Target participants receive voting request
-         * case 2: Sender received voting response from target participants (either voted, or rejected voting)
-         * case 3: Target participants received confirmed date and time of an event
-         * case 4: Target participants gets reminder to vote for an event
+         * case 2,3: Sender received voting response from target participants (either voted, or rejected voting)
+         * case 4: Target participants received confirmed date and time of an event
+         * case 5: Target participants gets reminder to vote for an event
+         * case 6: Target participants gets attendance
          */
 
         if(my_user.getOption_event_title() != null) {
@@ -108,9 +109,10 @@ public class NotificationFragment extends ListFragment {
 
             // (1) Update the voted participants for that event to indicate the number of voted participants in VotingFragment
             // TODO: Cannot update!
-            votingDatabase.updateInformation(votingDatabase, event_id, voted_participant, null, null, null, null);
+            votingDatabase.updateInformation(votingDatabase, event_id, voted_participant, null, null, null, null, null);
 
             if(action.equals("accept")) {
+                Log.d(TAG, "accept");
                 // (2) Update the voted participant's selected dates
                 resultDatabase.storeParticipants(resultDatabase, new ResultItem(event_id,
                         start_date, end_date, start_time, end_time, null, voted_participant, null, null, null));
@@ -119,6 +121,7 @@ public class NotificationFragment extends ListFragment {
                         my_user.getNot_selected_start_date(), my_user.getNot_selected_end_date(), my_user.getNot_selected_start_time(),
                         my_user.getNot_selected_end_time(), null, null, voted_participant, null, null));
             } else if(action.equals("reject")) {
+                Log.d(TAG, "reject");
                 // (4) Add in the reject participants into database
                 resultDatabase.storeParticipants(resultDatabase, new ResultItem(event_id,
                         null, null, null, null, null, null, null, voted_participant, null));
@@ -151,6 +154,18 @@ public class NotificationFragment extends ListFragment {
                     "\". Vote now!", null, null, null, null, null, null, null);
 
             cloudantConnect.resetVotingReminder(my_user);
+            cloudantConnect.startPushReplication();
+        } if(my_user.getAttendance_event_title() != null) {
+
+            Log.d(TAG, "Voting attendance found");
+            notificationDatabase.putInformation(notificationDatabase, 6, my_user.getAttendance_event_id(), my_user.getAttendance_event_colour(),
+                    my_user.getAttendance_my_username(), " has confirmed attendance for the event \"", my_user.getAttendance_event_title(),
+                    "\"!", null, null, null, null, null, null, null);
+
+            // TODO: Cannot update!
+            votingDatabase.updateInformation(votingDatabase, "" + my_user.getAttendance_event_id(), my_user.getAttendance_my_username(), null, null, null, null, null);
+
+            cloudantConnect.resetVotingAttendance(my_user);
             cloudantConnect.startPushReplication();
         }
 

@@ -94,19 +94,19 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
         });
     }
 
-    // TODO: This method vertifies login details in Cloudant database.
+    // This method vertifies login details in Cloudant database.
     private void checkLogin(final String username, final String password) {
         progressDialog.setMessage("Logging in...");
         showDialog();
 
-        // TODO: Check Cloudant database for existing users
+        // Check Cloudant database for existing users
         if(cloudantConnect.authenticateUser(username, password)) {
             // User already logged in, next time do not have to login again when using app
             loginManager.setLogin(true);
 
             // Store user in SQLite once successfully stored in Cloudant
             User user = cloudantConnect.saveUserDetails(username, password);
-            userDatabase.addUser(user.getEmail_address(), username);
+            userDatabase.addUser("" + R.drawable.profile, user.getEmail_address(), username);
 
             // Take user to next activity
             startActivity(new Intent(LoginActivity.this, MenuDrawer.class));

@@ -17,6 +17,7 @@ public class VotingData {
         public static final String EVENT_LOCATION = "event_location";
         public static final String EVENT_PARTICIPANTS = "event_participants";
         public static final String EVENT_VOTED_PARTICIPANTS = "event_voted_participants";
+        public static final String EVENT_ATTENDANCE = "event_attendance";
 
         public static final String START_DATE = "start_date";
         public static final String END_DATE = "end_date";

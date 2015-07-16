@@ -2,6 +2,7 @@ package mooncakemonster.orbitalcalendar.notifications;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,10 +15,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitation;
 
 /**
@@ -27,6 +32,8 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
     private static final String TAG = NotificationAdapter.class.getSimpleName();
     private List<NotificationItem> objects;
+    CloudantConnect cloudantConnect;
+    UserDatabase db;
     Intent intent;
 
     public NotificationAdapter(Context context, int resource, List<NotificationItem> objects) {
@@ -92,6 +99,8 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("vote_item", notificationItem);
 
+                    final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+
                     switch (notificationItem.getNotificationId()) {
                         case 1:
                             intent = new Intent(getContext(), VoteInvitation.class);
@@ -102,7 +111,6 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                             // TODO: Show voting result fragment or VotingResultActivity if possible
                             break;
                         case 3:
-                            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                             dialogBuilder.setTitle("Reason for Vote Rejection");
                             dialogBuilder.setMessage(notificationItem.getSender_username() +
                                     ": \"" + notificationItem.getReject_reason() + "\"");
@@ -110,12 +118,37 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                             dialogBuilder.show();
                             break;
                         case 4:
-                            // TODO: Show dialog that allows user to confirm attendance for the event
+                            dialogBuilder.setTitle("Confirm attendance");
+                            dialogBuilder.setMessage("Would you like to confirm attendance for the event \""
+                                + notificationItem.getSender_event() + "\" with " + notificationItem.getSender_username() + "?");
+                            dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (cloudantConnect == null)
+                                        cloudantConnect = new CloudantConnect(getContext(), "user");
+
+                                    // Retrieve own username
+                                    db = new UserDatabase(getContext());
+                                    HashMap<String, String> user = db.getUserDetails();
+                                    String my_username = user.get("username");
+
+                                    cloudantConnect.sendAttendanceToTargetParticipants(my_username, notificationItem.getSender_username(),
+                                            notificationItem.getEventId(), notificationItem.getImageId(), notificationItem.getSender_event());
+                                    cloudantConnect.startPushReplication();
+
+                                    Toast.makeText(getContext(), "Attendance sent successfully", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            dialogBuilder.setNegativeButton("Cancel", null);
+                            dialogBuilder.show();
                             break;
                         case 5:
                             intent = new Intent(getContext(), VoteInvitation.class);
                             intent.putExtras(bundle);
                             inner_view.getContext().startActivity(intent);
+                            break;
+                        case 6:
+                            
                             break;
                         default:
                             break;

@@ -8,9 +8,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,8 +22,7 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Constant;
-import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmDateAdapter;
-import mooncakemonster.orbitalcalendar.voteconfirmdate.ConfirmParticipants;
+import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
@@ -47,6 +47,8 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         TextView result_time;
         //TextView result_name;
         TextView result_total;
+
+        Button can_make_it, cannot_make_it, rejected_vote;
     }
 
     @Override
@@ -55,14 +57,14 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         LayoutInflater inflater;
         final Holder holder;
 
-        if(row == null) {
+        if (row == null) {
             inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             row = inflater.inflate(R.layout.row_vote_result, parent, false);
         }
 
         final ResultItem resultItem = objects.get(position);
 
-        if(resultItem != null) {
+        if (resultItem != null) {
             holder = new Holder();
 
             if (cloudantConnect == null)
@@ -75,68 +77,37 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
             //holder.result_name = (TextView) row.findViewById(R.id.result_name);
             holder.result_total = (TextView) row.findViewById(R.id.result_total);
 
-            holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            holder.can_make_it = (Button) row.findViewById(R.id.expand_can_make_it);
+            holder.cannot_make_it = (Button) row.findViewById(R.id.expand_cannot_make_it);
+            holder.rejected_vote = (Button) row.findViewById(R.id.expand_rejected);
+
+            // Show list of participants who can make it
+            holder.can_make_it.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String[] split_can_make_it = resultItem.getSelected_username().split(" ");
-                    String[] split_cannot_make_it = resultItem.getNot_selected_username().split(" ");
-                    String[] split_rejected_voting = resultItem.getUsername_rejected().split(" ");
+                    String participants = resultItem.getSelected_username();
+                    if (!participants.isEmpty()) openDialog(participants.split(" "), resultItem);
+                    else alertUser("Confirm date and time", "No participant can make it on this day yet.");
+                }
+            });
 
-                    final View dialogview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_confirm_date, null);
+            // Show list of participants who can't make it
+            holder.cannot_make_it.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String participants = resultItem.getNot_selected_username();
+                    if (!participants.isEmpty()) openDialog(participants.split(" "), resultItem);
+                    else alertUser("Confirm date and time", "No participant cannot make it on this day yet.");
+                }
+            });
 
-                    final ListView can_make_it = (ListView) dialogview.findViewById(R.id.can_make_it);
-                    final ListView cannot_make_it = (ListView) dialogview.findViewById(R.id.cannot_make_it);
-                    final ListView rejected_voting = (ListView) dialogview.findViewById(R.id.rejected_voting);
-
-                    final ConfirmDateAdapter adapter_can_make_it = new ConfirmDateAdapter(getContext(), R.layout.row_checkbox, splitParticipants(split_can_make_it));
-                    final ConfirmDateAdapter adapter_cannot_make_it = new ConfirmDateAdapter(getContext(), R.layout.row_checkbox, splitParticipants(split_cannot_make_it));
-                    final ConfirmDateAdapter adapter_rejected_voting = new ConfirmDateAdapter(getContext(), R.layout.row_checkbox, splitParticipants(split_rejected_voting));
-
-                    can_make_it.setAdapter(adapter_can_make_it);
-                    cannot_make_it.setAdapter(adapter_cannot_make_it);
-                    rejected_voting.setAdapter(adapter_rejected_voting);
-
-                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
-                    alertBuilder.setTitle("Confirm date and time");
-                    alertBuilder.setView(dialogview);
-
-                    alertBuilder.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // TODO: Send out to Cloudant
-                            String participants = confirmParticipants(adapter_can_make_it)
-                                    + confirmParticipants(adapter_cannot_make_it) + confirmParticipants(adapter_rejected_voting);
-
-                            String start_date = resultItem.getStart_date();
-                            String end_date = resultItem.getEnd_date();
-                            String start_time = resultItem.getStart_time();
-                            String end_time = resultItem.getEnd_time();
-
-                            // Update confirmed date and time into SQLite database
-                            votingDatabase = new VotingDatabase(getContext());
-                            votingDatabase.updateInformation(votingDatabase,resultItem.getEvent_id(), null, start_date, end_date, start_time, end_time);
-
-                            // Retrieve own username
-                            db = new UserDatabase(getContext());
-                            HashMap<String, String> user = db.getUserDetails();
-                            String my_username = user.get("username");
-                            // Send out confirmation date and time to target participants
-                            String event_id = resultItem.getEvent_id();
-                            cloudantConnect.sendConfirmationToTargetParticipants(my_username, participants, Integer.parseInt(resultItem.getEvent_id()),
-                                    -1, null, start_date, end_date, start_time, end_time);
-                            cloudantConnect.startPushReplication();
-
-                            dialog.dismiss();
-                        }
-                    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    Dialog dialog = alertBuilder.create();
-                    dialog.show();
+            // Show list of participants who rejected voting
+            holder.rejected_vote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String participants = resultItem.getUsername_rejected();
+                    if (!participants.isEmpty()) openDialog(participants.split(" "), resultItem);
+                    else alertUser("Confirm date and time", "No participant has rejected voting for this event yet.");
                 }
             });
 
@@ -152,28 +123,83 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         return row;
     }
 
-    // This method stores each participants into individual object.
-    private List<ConfirmParticipants> splitParticipants(String[] split_participants) {
-        List<ConfirmParticipants> list = new ArrayList<>();
-        int size = split_participants.length;
-
-        for(int i = 0; i < size; i++) {
-            list.add(new ConfirmParticipants(false, split_participants[i]));
-        }
-        return list;
-    }
-
     // This method checks the participants to send the date confirmed.
-    private String confirmParticipants(ConfirmDateAdapter adapter) {
+    private String confirmParticipants(ArrayList list) {
         String participants = "";
-        int size = adapter.getCount();
-        for(int i = 0; i < size; i++) {
-            ConfirmParticipants confirm = adapter.getItem(i);
-            if(confirm.getSend()) {
-                participants += confirm.getUsername() + " ";
-            }
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            participants += list.get(i);
         }
 
         return participants;
+    }
+
+    // This method calls alert dialog to display the list of names.
+    private void openDialog(final String[] split_participants, final ResultItem resultItem) {
+        final ArrayList<String> list = new ArrayList<>();
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
+        alertBuilder.setTitle("Confirm date and time").setMultiChoiceItems(split_participants, null, new DialogInterface.OnMultiChoiceClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                if (isChecked) {
+                    list.add(split_participants[which]);
+                } else if (list.contains(split_participants[which])) {
+                    list.remove(split_participants[which]);
+                }
+            }
+        }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Send out to Cloudant only if there are participants to send out to
+                if (list.size() > 0) {
+                    pushData(confirmParticipants(list), resultItem);
+                    Toast.makeText(getContext(), "Details successfully sent", Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        Dialog dialog = alertBuilder.create();
+        dialog.show();
+    }
+
+    // This method calls alert dialog to inform users a message.
+    private void alertUser(String title, String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setMessage(message);
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.show();
+    }
+
+    // This method push the items in Cloudant database
+    private void pushData(String participants, ResultItem resultItem) {
+        String start_date = resultItem.getStart_date();
+        String end_date = resultItem.getEnd_date();
+        String start_time = resultItem.getStart_time();
+        String end_time = resultItem.getEnd_time();
+        String event_id = resultItem.getEvent_id();
+
+        // Update confirmed date and time into SQLite database
+        votingDatabase = new VotingDatabase(getContext());
+        votingDatabase.updateInformation(votingDatabase, event_id, null, null, start_date, end_date, start_time, end_time);
+
+        // Retrieve own username
+        db = new UserDatabase(getContext());
+        HashMap<String, String> user = db.getUserDetails();
+        String my_username = user.get("username");
+
+        // Retrieve event information
+        VoteItem voteItem = votingDatabase.getVoteItem(votingDatabase, event_id);
+        // Send out confirmation date and time to target participants
+        cloudantConnect.sendConfirmationToTargetParticipants(my_username, participants, Integer.parseInt(event_id),
+                Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title(), start_date, end_date, start_time, end_time);
+        cloudantConnect.startPushReplication();
     }
 }

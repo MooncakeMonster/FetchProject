@@ -162,24 +162,24 @@ public class CloudantConnect {
         indexManager = new IndexManager(datastore);
         if (indexManager.isTextSearchEnabled()) {
             String user_details = indexManager.ensureIndexed(Arrays.<Object>asList(
-                            "user_details.email_address", "user_details.username", "user_details.password",
-                            "voting_options.option_my_username", "voting_options.option_event_title",
-                            "voting_options.option_event_location", "voting_options.option_event_notes",
-                            "voting_options.option_start_date", "voting_options.option_end_date",
-                            "voting_options.option_start_time", "voting_options.option_end_time",
-                            "voting_selected.selected_my_username", "voting_selected.selected_event_title",
-                            "voting_selected.selected_event_location", "voting_selected.selected_event_notes",
-                            "voting_selected.selected_start_date", "voting_selected.selected_end_date",
-                            "voting_selected.selected_start_time", "voting_selected.selected_end_time",
-                            "voting_selected.not_selected_start_date", "voting_selected.not_selected_end_date",
-                            "voting_selected.not_selected_start_time", "voting_selected.not_selected_end_time",
-                            "voting_selected.reject_reason", "voting_confirmed.confirm_my_username",
-                            "voting_confirmed.confirm_event_id", "voting_confirmed.confirm_event_colour",
-                            "voting_confirmed.confirm_event_title", "voting_confirmed.confirm_start_date",
-                            "voting_confirmed.confirm_end_date", "voting_confirmed.confirm_start_time",
-                            "voting_confirmed.confirm_end_time", "voting_remind.reminder_my_username",
-                            "voting_remind.reminder_event_id", "voting_remind.reminder_event_colour",
-                            "voting_remind.reminder_event_title"), "user", "json");
+                    "user_details.email_address", "user_details.username", "user_details.password",
+                    "voting_options.option_my_username", "voting_options.option_event_title",
+                    "voting_options.option_event_location", "voting_options.option_event_notes",
+                    "voting_options.option_start_date", "voting_options.option_end_date",
+                    "voting_options.option_start_time", "voting_options.option_end_time",
+                    "voting_selected.selected_my_username", "voting_selected.selected_event_title",
+                    "voting_selected.selected_event_location", "voting_selected.selected_event_notes",
+                    "voting_selected.selected_start_date", "voting_selected.selected_end_date",
+                    "voting_selected.selected_start_time", "voting_selected.selected_end_time",
+                    "voting_selected.not_selected_start_date", "voting_selected.not_selected_end_date",
+                    "voting_selected.not_selected_start_time", "voting_selected.not_selected_end_time",
+                    "voting_selected.reject_reason", "voting_confirmed.confirm_my_username",
+                    "voting_confirmed.confirm_event_id", "voting_confirmed.confirm_event_colour",
+                    "voting_confirmed.confirm_event_title", "voting_confirmed.confirm_start_date",
+                    "voting_confirmed.confirm_end_date", "voting_confirmed.confirm_start_time",
+                    "voting_confirmed.confirm_end_time", "voting_remind.reminder_my_username",
+                    "voting_remind.reminder_event_id", "voting_remind.reminder_event_colour",
+                    "voting_remind.reminder_event_title"), "user", "json");
 
             if (user_details == null) Log.e(TAG, "Unable to create user index");
             else Log.d(TAG, "Successfully created index" + user_details);
@@ -381,6 +381,29 @@ public class CloudantConnect {
     }
 
     /**
+     * This method sends the voting reminder to the target participants.
+     */
+    public void sendAttendanceToTargetParticipants(String my_username, String participant, int event_id,
+                                                   int event_colour, String event_title) {
+
+        User user = getTargetUser(participant);
+        // Set options into target user's document
+        user.setAttendance_my_username(my_username);
+        user.setAttendance_event_id(event_id);
+        user.setAttendance_event_colour(event_colour);
+        user.setAttendance_event_title(event_title);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /**
      * Retrieve the target user's document from Cloudant
      *
      * @param username
@@ -468,7 +491,7 @@ public class CloudantConnect {
     }
 
     /**
-     * Reset voting response once saved in user's phone
+     * Reset voting confirmation once saved in user's phone
      *
      * @param user to reset the document of target username
      */
@@ -504,6 +527,28 @@ public class CloudantConnect {
         user.setReminder_event_id(0);
         user.setReminder_event_colour(0);
         user.setReminder_event_title(null);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully reset target user's voting selection");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to reset target user's voting selection");
+        }
+    }
+
+    /**
+     * Reset voting attendance once saved in user's phone
+     *
+     * @param user to reset the document of target username
+     */
+    public void resetVotingAttendance(User user) {
+        // Set options into target user's document
+        user.setAttendance_my_username(null);
+        user.setAttendance_event_id(0);
+        user.setAttendance_event_colour(0);
+        user.setAttendance_event_title(null);
 
         // Retrieve user's documents
         try {

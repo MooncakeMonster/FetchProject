@@ -12,6 +12,7 @@ public class VoteItem implements Serializable {
     private String event_location;
     private String event_participants;
     private String event_voted_participants;
+    private String event_attendance;
     private String event_start_date;
     private String event_end_date;
     private String event_start_time;
@@ -24,7 +25,7 @@ public class VoteItem implements Serializable {
     public VoteItem() { }
 
     public VoteItem(String eventId, String imageId, String event_title, String event_location, String event_participants, String event_voted_participants,
-                    String event_start_date, String event_end_date, String event_start_time, String event_end_time,
+                    String event_attendance, String event_start_date, String event_end_date, String event_start_time, String event_end_time,
                     String event_confirm_start_date, String event_confirm_end_date, String event_confirm_start_time, String event_confirm_end_time) {
         this.eventId = eventId;
         this.imageId = imageId;
@@ -32,6 +33,7 @@ public class VoteItem implements Serializable {
         this.event_location = event_location;
         this.event_participants = event_participants;
         this.event_voted_participants = event_voted_participants;
+        this.event_attendance = event_attendance;
         this.event_start_date = event_start_date;
         this.event_end_date = event_end_date;
         this.event_start_time = event_start_time;
@@ -88,6 +90,14 @@ public class VoteItem implements Serializable {
 
     public void setEvent_voted_participants(String event_voted_participants) {
         this.event_voted_participants = event_voted_participants;
+    }
+
+    public String getEvent_attendance() {
+        return event_attendance;
+    }
+
+    public void setEvent_attendance(String event_attendance) {
+        this.event_attendance = event_attendance;
     }
 
     public String getEvent_start_date() {

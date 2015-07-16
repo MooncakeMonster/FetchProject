@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:focusableInTouchMode="true"
-    android:padding="@dimen/activity_horizontal_margin">
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/confirm_send_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -131,4 +132,39 @@
             android:textSize="45dp" />
     </RelativeLayout>
 
-</FrameLayout>
+    <!-- Expandable view that is initially hidden and will slide out when the more button is pressed -->
+    <LinearLayout
+        android:id="@+id/expandable_vote_result"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/expand_can_make_it"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:text="Can make it" />
+
+        <Button
+            android:id="@+id/expand_cannot_make_it"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:text="Can't make it" />
+
+        <Button
+            android:id="@+id/expand_rejected"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/standard_icon_size"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white"
+            android:text="Reject vote" />
+    </LinearLayout>
+
+</LinearLayout>

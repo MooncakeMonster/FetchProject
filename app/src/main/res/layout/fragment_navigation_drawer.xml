@@ -11,12 +11,12 @@
         android:layout_alignParentTop="true"
         android:background="@color/colorPrimary">
 
-        <Button
+        <ImageView
             android:layout_width="@dimen/nav_icon"
             android:layout_height="@dimen/nav_icon"
             android:id="@+id/usericon"
             android:layout_marginBottom="@dimen/standard_margin_size"
-            android:background="@mipmap/ic_launcher"
+            android:background="@drawable/profile"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
 

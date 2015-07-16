@@ -19,7 +19,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     private static final String TABLE_LOGIN = "login";
 
     // Column items
-    private static final String KEY_ID = "id";
+    private static final String KEY_IMAGE = "image";
     private static final String KEY_EMAIL = "email";
     private static final String KEY_USERNAME = "username";
 
@@ -31,7 +31,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_LOGIN + "("
-                + KEY_ID + " INTEGER PRIMARY KEY,"
+                + KEY_IMAGE + " TEXT, "
                 + KEY_EMAIL + " TEXT,"
                 + KEY_USERNAME + " TEXT " + ");";
 
@@ -55,10 +55,11 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
     // This method stores user details in database.
-    public void addUser(String email, String username) {
+    public void addUser(String image, String email, String username) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(KEY_IMAGE, image); // Image
         values.put(KEY_EMAIL, email); // Email
         values.put(KEY_USERNAME, username); // Username
 
@@ -79,6 +80,7 @@ public class UserDatabase extends SQLiteOpenHelper {
         // Move to first row
         cursor.moveToFirst();
         if (cursor.getCount() > 0) {
+            user.put("image", cursor.getString(0));
             user.put("email", cursor.getString(1));
             user.put("username", cursor.getString(2));
         }
@@ -101,6 +103,20 @@ public class UserDatabase extends SQLiteOpenHelper {
 
         // return row count
         return rowCount;
+    }
+
+    // This method updates user information.
+    public void updateUsers(String image, String email, String username, String latest_image) {
+        String selection = KEY_IMAGE + " LIKE ? AND " +
+                           KEY_EMAIL + " LIKE ? AND " +
+                           KEY_USERNAME + " LIKE ? ";
+        String[] args = { image, email, username };
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_IMAGE, latest_image);
+
+        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        sqLiteDatabase.update(TABLE_LOGIN, values, selection, args);
     }
 
     // This method deletes user from database.

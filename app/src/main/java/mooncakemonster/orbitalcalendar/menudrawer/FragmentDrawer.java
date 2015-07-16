@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +34,7 @@ public class FragmentDrawer extends Fragment {
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
-    private Button userIcon;
+    private ImageView userIcon;
     private ImageView settings;
     private TextView displayUsername;
     private static String[] titles = null;
@@ -74,13 +73,20 @@ public class FragmentDrawer extends Fragment {
         // Inflating view layout
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
-        userIcon = (Button) layout.findViewById(R.id.usericon);
+        userIcon = (ImageView) layout.findViewById(R.id.usericon);
         userIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity().getApplicationContext(), SettingActivity.class));
             }
         });
+
+        db = new UserDatabase(getActivity().getApplicationContext());
+
+        // Fetch user details from sqlite
+        HashMap<String, String> user = db.getUserDetails();
+
+        //db.updateUsers(user.get("image"), user.get("email"), user.get("username"), userIcon.);
 
         settings = (ImageView) layout.findViewById(R.id.settings);
         settings.setOnClickListener(new View.OnClickListener() {
@@ -91,10 +97,6 @@ public class FragmentDrawer extends Fragment {
         });
 
         displayUsername = (TextView) layout.findViewById(R.id.displayusername);
-        db = new UserDatabase(getActivity().getApplicationContext());
-
-        // Fetch user details from sqlite
-        HashMap<String, String> user = db.getUserDetails();
         displayUsername.setText("Hello " + user.get("username") + "!");
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);

@@ -62,6 +62,12 @@ public class User {
     private int reminder_event_colour;
     private String reminder_event_title;
 
+    // Voting attendance
+    private String attendance_my_username;
+    private int attendance_event_id;
+    private int attendance_event_colour;
+    private String attendance_event_title;
+
     // Document in database representing this user to be revised
     private BasicDocumentRevision revision;
 
@@ -399,6 +405,38 @@ public class User {
         this.reminder_event_title = reminder_event_title;
     }
 
+    public String getAttendance_my_username() {
+        return attendance_my_username;
+    }
+
+    public void setAttendance_my_username(String attendance_my_username) {
+        this.attendance_my_username = attendance_my_username;
+    }
+
+    public int getAttendance_event_id() {
+        return attendance_event_id;
+    }
+
+    public void setAttendance_event_id(int attendance_event_id) {
+        this.attendance_event_id = attendance_event_id;
+    }
+
+    public int getAttendance_event_colour() {
+        return attendance_event_colour;
+    }
+
+    public void setAttendance_event_colour(int attendance_event_colour) {
+        this.attendance_event_colour = attendance_event_colour;
+    }
+
+    public String getAttendance_event_title() {
+        return attendance_event_title;
+    }
+
+    public void setAttendance_event_title(String attendance_event_title) {
+        this.attendance_event_title = attendance_event_title;
+    }
+
     // This method returns user details from revision
     public static User fromRevision(BasicDocumentRevision revision) {
         User user = new User();
@@ -456,6 +494,12 @@ public class User {
         user.setReminder_event_id((int) ((Map) user_revised.get("voting_reminder")).get("reminder_event_id"));
         user.setReminder_event_colour((int) ((Map) user_revised.get("voting_reminder")).get("reminder_event_colour"));
         user.setReminder_event_title((String) ((Map) user_revised.get("voting_reminder")).get("reminder_event_title"));
+
+        // Voting attendance
+        user.setAttendance_my_username((String) ((Map) user_revised.get("voting_attendance")).get("attendance_my_username"));
+        user.setAttendance_event_id((int) ((Map) user_revised.get("voting_attendance")).get("attendance_event_id"));
+        user.setAttendance_event_colour((int) ((Map) user_revised.get("voting_attendance")).get("attendance_event_colour"));
+        user.setAttendance_event_title((String) ((Map) user_revised.get("voting_attendance")).get("attendance_event_title"));
 
         return user;
     }
@@ -519,12 +563,20 @@ public class User {
         voting_remind.put("reminder_event_colour", reminder_event_colour);
         voting_remind.put("reminder_event_title", reminder_event_title);
 
+        // Confirm attendance
+        HashMap<String, Object> voting_attendance = new HashMap<>();
+        voting_attendance.put("attendance_my_username", attendance_my_username);
+        voting_attendance.put("attendance_event_id", attendance_event_id);
+        voting_attendance.put("attendance_event_colour", attendance_event_colour);
+        voting_attendance.put("attendance_event_title", attendance_event_title);
+
         // User
         user.put("user_details", user_details);
         user.put("voting_options", voting_options);
         user.put("voting_selected", voting_selected);
         user.put("voting_confirmed", voting_confirmed);
         user.put("voting_reminder", voting_remind);
+        user.put("voting_attendance", voting_attendance);
 
         return user;
     }

@@ -87,7 +87,7 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
             }
         });
 
-        // (3) TODO If user is not logged in yet, allow for registration
+        // (3) if user is not logged in yet, allow for registration
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,13 +105,13 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
                     resetDetails(1);
                 }
 
-                // TODO: Prevent users from creating account with email address already in database
+                // Prevent users from creating account with email address already in database
                 else if(cloudantConnect.checkExistingItems("email_address", inputEmail)) {
                     alertUser("Email address exist!", "Please input other email address.");
                     resetDetails(1);
                 }
 
-                // TODO: Prevent users from creating account with username already in database
+                // Prevent users from creating account with username already in database
                 else if(cloudantConnect.checkExistingItems("username", inputUsername)) {
                     alertUser("Username exist!", "Please input other username.");
                     resetDetails(2);

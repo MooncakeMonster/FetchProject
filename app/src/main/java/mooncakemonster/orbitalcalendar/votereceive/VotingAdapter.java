@@ -46,7 +46,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
         TextView event_location;
         TextView event_start_end_date;
         TextView event_start_end_time;
-        Button view_result, send_reminder, fetch_help;
+        Button view_result, send_reminder, attendance;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
             // Child
             holder.view_result = (Button) row.findViewById(R.id.expand_view_result);
             holder.send_reminder = (Button) row.findViewById(R.id.expand_send_reminder);
-            holder.fetch_help = (Button) row.findViewById(R.id.expand_fetch_help);
+            holder.attendance = (Button) row.findViewById(R.id.expand_attendance);
 
             //Picasso.with(getContext()).load(getBackgroundResource(voteItem)).fit().noFade().into(holder.event_image);
             //holder.event_image.setBackgroundResource(R.color.redbear);
@@ -165,10 +165,9 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
                 }
             });
 
-            holder.fetch_help.setOnClickListener(new View.OnClickListener() {
+            holder.attendance.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Only can help if user has not confirmed date
 
                 }
             });

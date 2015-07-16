@@ -99,6 +99,8 @@ public class VoteInvitation extends ActionBarActivity {
                 final View dialogview = LayoutInflater.from(VoteInvitation.this).inflate(R.layout.dialog_edittext, null);
                 final EditText input_username = (EditText) dialogview.findViewById(R.id.input_text);
 
+                reject_reason = input_username.getText().toString();
+
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(VoteInvitation.this);
                 alertBuilder.setTitle("State your reason: ");
                 alertBuilder.setView(dialogview);

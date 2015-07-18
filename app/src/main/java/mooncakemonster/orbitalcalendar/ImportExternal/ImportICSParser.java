@@ -4,12 +4,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.ical.compat.jodatime.DateTimeIterator;
+import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
+
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.ReadableDateTime;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +25,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import mooncakemonster.orbitalcalendar.alarm.AlarmSetter;
 import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
@@ -74,7 +81,13 @@ public class ImportICSParser extends Activity {
             long endMillisec = 0;
             String notes = null;
             boolean hasAlarm = false;
+            //Difference from start time
             long alarmMillisec = 0;
+            //Variable for RRULE
+            String RRULE = "";
+            String EXRULE = "";
+            String RDATE = "";
+            String EXDATE = "";
 
             for (int counter = 0; counter < numLine; counter++) {
 
@@ -161,10 +174,18 @@ public class ImportICSParser extends Activity {
                         }
                         break;
 
-
                     //Is there a repeat appointment in the future?
                     case "RRULE":
-                        //TODO: Make for repeat
+                        RRULE = line + "\n";
+                        break;
+                    case "EXRULE":
+                        EXRULE = line + "\n";
+                        break;
+                    case "RDATE":
+                        RDATE = line + "\n";
+                        break;
+                    case "EXDATE":
+                        EXDATE = line + "\n";
                         break;
 
                     //Ensure alarm was turned on
@@ -173,7 +194,7 @@ public class ImportICSParser extends Activity {
                             //Set if only alarm is made to trigger before the beginning of event commencement
                             if (value.contains("+")) break;
                             else if (value.contains("-")) value = value.substring(1, value.length());
-                            alarmMillisec = startMillisec - processDuration(value);
+                            alarmMillisec = processDuration(value);
                         }
 
                     case "END":
@@ -181,10 +202,11 @@ public class ImportICSParser extends Activity {
                             //Insert into database, with what is available
                             endMillisec = (endMillisec == 0) ? startMillisec : endMillisec;
 
+                            //Get startProperDate
                             Date date = new Date(startMillisec);
                             String dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
 
-                            //Set value for appointment
+                            //Set value for initial appointment
                             tempAppt = new Appointment();
                             tempAppt.setEvent(event);
                             tempAppt.setStartDate(startMillisec);
@@ -192,12 +214,39 @@ public class ImportICSParser extends Activity {
                             tempAppt.setEndDate(endMillisec);
                             tempAppt.setLocation(location);
                             tempAppt.setNotes(notes);
-                            tempAppt.setRemind(alarmMillisec);
+                            tempAppt.setRemind(startMillisec - alarmMillisec);
 
-                            //Set alarm
-                            AlarmSetter.setAlarm(getApplicationContext(), event, location, alarmMillisec);
+                            timetable.add(tempAppt);
 
-                            appointmentDatabase.createAppointment(tempAppt);
+                            //RRULE
+                            String blockLine = RRULE + EXRULE + RDATE + EXDATE;
+                            ReadableDateTime jodaTime = new DateTime(startMillisec);
+                            DateTimeZone tzid = DateTimeZone.getDefault();
+
+                            DateTimeIterator timeList = null;
+
+                            try {
+                                timeList = DateTimeIteratorFactory.createDateTimeIterator(blockLine, jodaTime, tzid, true);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+
+                            while(timeList.hasNext()) {
+                                DateTime tempDate = timeList.next();
+                                long startMillisecond = tempDate.getMillis();
+                                //Get startProperDate
+                                date = new Date(startMillisecond);
+                                dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
+
+                                tempAppt = new Appointment();
+                                tempAppt.setEvent(event);
+                                tempAppt.setStartDate(startMillisecond);
+                                tempAppt.setStartProperDate(dateFormatted);
+                                tempAppt.setEndDate(endMillisec);
+                                tempAppt.setLocation(location);
+                                tempAppt.setNotes(notes);
+                                tempAppt.setRemind(startMillisecond - alarmMillisec);
+                            }
 
                         } else if (value.equals("VALARM")) {
                             //Nuke hasAlarm value
@@ -211,8 +260,7 @@ public class ImportICSParser extends Activity {
             }
 
             //Add in database
-            for(Appointment s: timetable)
-            {
+            for (Appointment s : timetable) {
                 appointmentDatabase.createAppointment(s);
             }
 
@@ -266,7 +314,14 @@ public class ImportICSParser extends Activity {
         return answer;
     }
 
-    //Need a builder to take in inputs and create appointments
+    //Helper method to process RRULE : Remove this shell
+    private static void processRrule(String blockRead, ReadableDateTime start,DateTimeZone tzid, boolean strict)
+    {
+        try {
+            DateTimeIteratorFactory.createDateTimeIterator(blockRead, start, tzid, strict);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
-    //Once appointments are created, let user verify themselves personally
 }

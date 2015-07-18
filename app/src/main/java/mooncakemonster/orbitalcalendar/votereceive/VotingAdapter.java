@@ -83,7 +83,8 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
             holder.relativeLayout.setBackgroundResource(Integer.parseInt(voteItem.getImageId()));
 
             // Retrieve the number of particpants that cast votes
-            String[] split_participants = voteItem.getEvent_participants().split(" "), split_voted_participants = {};
+            String[] split_participants = voteItem.getEvent_participants().split(" ");
+            String[]split_voted_participants = {};
             String voted_participants = voteItem.getEvent_voted_participants();
 
             if(voted_participants != null) {

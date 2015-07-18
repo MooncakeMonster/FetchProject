@@ -16,7 +16,6 @@ import android.widget.RelativeLayout;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.LoginActivity;
 
-
 public class MainActivity extends ActionBarActivity {
 
     @Override
@@ -48,7 +47,6 @@ public class MainActivity extends ActionBarActivity {
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 //TODO: When login is successful, redirect to LoginActivity
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);

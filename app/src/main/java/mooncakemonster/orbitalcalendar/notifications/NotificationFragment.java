@@ -108,7 +108,6 @@ public class NotificationFragment extends ListFragment {
                     my_user.getSelected_event_notes(), start_date, end_date, start_time, end_time, reject_reason);
 
             // (1) Update the voted participants for that event to indicate the number of voted participants in VotingFragment
-            // TODO: Cannot update!
             votingDatabase.updateInformation(votingDatabase, event_id, voted_participant, null, null, null, null, null);
 
             if(action.equals("accept")) {
@@ -162,7 +161,6 @@ public class NotificationFragment extends ListFragment {
                     my_user.getAttendance_my_username(), " has confirmed attendance for the event \"", my_user.getAttendance_event_title(),
                     "\"!", null, null, null, null, null, null, null);
 
-            // TODO: Cannot update!
             votingDatabase.updateInformation(votingDatabase, "" + my_user.getAttendance_event_id(), my_user.getAttendance_my_username(), null, null, null, null, null);
 
             cloudantConnect.resetVotingAttendance(my_user);

@@ -25,6 +25,7 @@
         android:layout_marginBottom="@dimen/standard_margin_size"
         android:background="@color/caldroid_white"
         android:padding="@dimen/standard_padding_size"
+        android:singleLine="true"
         android:layout_gravity="center_horizontal"
         android:layout_above="@+id/password" />
 

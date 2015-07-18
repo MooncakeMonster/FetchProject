@@ -23,9 +23,17 @@ import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 
-/**
- * Created by BAOJUN on 20/6/15.
- */
+/*************************************************************************************************
+ * Purpose: VotingAdapter.java serves as a "holder" which contain the interface for how a voting
+ * "unit" will appear in VotingFragment.java
+ *
+ * VotingAdapter.java will display:
+ * (a) Number of votes casted, compared to expected votes.
+ * (b) Event name
+ * (c) Confirmation status of both date and time
+ *
+ * Access via: Click on the menu button on top left corner, then Voting Results
+ **************************************************************************************************/
 
 public class VotingAdapter extends ArrayAdapter<VoteItem> {
 
@@ -50,8 +58,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View row = convertView;
+    public View getView(int position, View row, ViewGroup parent) {
         LayoutInflater inflater;
         Holder holder;
 
@@ -84,7 +91,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
 
             // Retrieve the number of particpants that cast votes
             String[] split_participants = voteItem.getEvent_participants().split(" ");
-            String[]split_voted_participants = {};
+            String[] split_voted_participants = {};
             String voted_participants = voteItem.getEvent_voted_participants();
 
             if(voted_participants != null) {

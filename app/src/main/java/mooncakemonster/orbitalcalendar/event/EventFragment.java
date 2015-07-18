@@ -67,9 +67,6 @@ public class EventFragment extends ListFragment {
         return rootView;
     }
 
-    //TODO: TAKE NOTE - Code had been moved to EventAdapter
-    //TODO: on selection of event
-
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);

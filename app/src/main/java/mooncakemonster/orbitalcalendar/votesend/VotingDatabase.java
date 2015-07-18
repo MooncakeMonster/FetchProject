@@ -104,47 +104,68 @@ public class VotingDatabase extends SQLiteOpenHelper {
         return sqLiteDatabase.query(VotingData.VotingInfo.TABLE_NAME, columns, null, null, null, null, null);
     }
 
-    // Update data from database TODO: Problem with updating latest voted participants into database
+    // Update data from database
     public void updateInformation(VotingDatabase data, String event_id, String updated_voted_participants, String attendance,
                                   String confirmed_start_date, String confirmed_end_date, String confirmed_start_time, String confirmed_end_time) {
 
         Cursor cursor = getInformation(data);
         cursor.moveToFirst();
 
-        String selection = VotingData.VotingInfo.EVENT_ID + " LIKE ? AND " +
-                VotingData.VotingInfo.EVENT_COLOUR + " LIKE ? AND " +
-                VotingData.VotingInfo.EVENT_TITLE + " LIKE ? AND " +
-                VotingData.VotingInfo.EVENT_LOCATION + " LIKE ? AND " +
-                VotingData.VotingInfo.EVENT_PARTICIPANTS + " LIKE ? AND " +
-                VotingData.VotingInfo.EVENT_VOTED_PARTICIPANTS + " LIKE ? AND " +
-                VotingData.VotingInfo.EVENT_ATTENDANCE + " LIKE ? AND " +
-                VotingData.VotingInfo.START_DATE + " LIKE ? AND " +
-                VotingData.VotingInfo.END_DATE + " LIKE ? AND " +
-                VotingData.VotingInfo.START_TIME + " LIKE ? AND " +
-                VotingData.VotingInfo.END_TIME + " LIKE ? AND " +
-                VotingData.VotingInfo.CONFIRM_START_DATE + " LIKE ? AND " +
-                VotingData.VotingInfo.CONFIRM_END_DATE + " LIKE ? AND " +
-                VotingData.VotingInfo.CONFIRM_START_TIME + " LIKE ? AND " +
-                VotingData.VotingInfo.CONFIRM_END_TIME + " LIKE ? ";
+        /**************************************************************
+        String selection = VotingData.VotingInfo.EVENT_ID + "=? AND " +
+                VotingData.VotingInfo.EVENT_COLOUR + "=? AND " +
+                VotingData.VotingInfo.EVENT_TITLE + "=? AND " +
+                VotingData.VotingInfo.EVENT_LOCATION + "=? AND " +
+                VotingData.VotingInfo.EVENT_PARTICIPANTS + "=? AND " +
+                VotingData.VotingInfo.EVENT_VOTED_PARTICIPANTS + "=? AND " +
+                VotingData.VotingInfo.EVENT_ATTENDANCE + "=? AND " +
+                VotingData.VotingInfo.START_DATE + "=? AND " +
+                VotingData.VotingInfo.END_DATE + "=? AND " +
+                VotingData.VotingInfo.START_TIME + "=? AND " +
+                VotingData.VotingInfo.END_TIME + "=? AND " +
+                VotingData.VotingInfo.CONFIRM_START_DATE + "=? AND " +
+                VotingData.VotingInfo.CONFIRM_END_DATE + "=? AND " +
+                VotingData.VotingInfo.CONFIRM_START_TIME + "=? AND " +
+                VotingData.VotingInfo.CONFIRM_END_TIME + "=?";
+         ***************************************************************/
 
-        while (!cursor.moveToLast()) {
+        //TODO: NOTE - Assumption: ALL EVENT_ID are unique
+        //This is to ensure that ONLY the targeted row is updated.
+        String selection = VotingData.VotingInfo.EVENT_ID + "=?";
+
+        do {
             if (cursor.getString(0).equals(event_id)) {
                 // Previous items
+                /*******************************************************
                 String[] args = {cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
                         cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
                         cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14)};
+                ********************************************************/
+                String[] args = {cursor.getString(0)};
 
                 // Update voted participants
                 ContentValues values = new ContentValues();
                 if (updated_voted_participants != null) {
-                    String stored_username = cursor.getString(5) + updated_voted_participants + " ";
+                    String stored_username = cursor.getString(5);
+                    //Cursor will return null string if field was previously empty, thus ensure it is not null before appending
+                    if(stored_username == null || stored_username.isEmpty()) {
+                        stored_username = updated_voted_participants + " ";
+                    } else {
+                        stored_username += (updated_voted_participants + " ");
+                    }
                     values.put(VotingData.VotingInfo.EVENT_VOTED_PARTICIPANTS, stored_username);
                     Log.d("VotingDatabase", values.get(VotingData.VotingInfo.EVENT_VOTED_PARTICIPANTS).toString());
                 }
 
                 // Update attendance
-                if(attendance != null) {
-                    String stored_attendance= cursor.getString(6) + attendance + " ";
+                if (attendance != null) {
+                    String stored_attendance = cursor.getString(6);
+                    //Cursor will return null string if field was previously empty, thus ensure it is not null before appending
+                    if(stored_attendance == null || stored_attendance.isEmpty()) {
+                        stored_attendance = attendance + " ";
+                    } else {
+                        stored_attendance += (attendance + " ");
+                    }
                     values.put(VotingData.VotingInfo.EVENT_ATTENDANCE, stored_attendance);
                 }
 
@@ -161,8 +182,8 @@ public class VotingDatabase extends SQLiteOpenHelper {
 
                 break;
             }
-            cursor.moveToNext();
-        }
+        } while (cursor.moveToNext());
+
 
         cursor.close();
     }

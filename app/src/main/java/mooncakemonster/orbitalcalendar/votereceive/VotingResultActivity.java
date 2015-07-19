@@ -18,6 +18,8 @@ import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.voteresult.ResultAdapter;
+import mooncakemonster.orbitalcalendar.voteresult.ResultDatabase;
 import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 

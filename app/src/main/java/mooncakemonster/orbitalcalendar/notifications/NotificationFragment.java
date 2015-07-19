@@ -14,8 +14,8 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.cloudant.User;
-import mooncakemonster.orbitalcalendar.votereceive.ResultDatabase;
-import mooncakemonster.orbitalcalendar.votereceive.ResultItem;
+import mooncakemonster.orbitalcalendar.voteresult.ResultDatabase;
+import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 public class NotificationFragment extends ListFragment {
@@ -126,7 +126,7 @@ public class NotificationFragment extends ListFragment {
                         null, null, null, null, null, null, null, voted_participant, null));
             }
 
-            //cloudantConnect.resetVotingResponse(my_user);
+            cloudantConnect.resetVotingResponse(my_user);
             cloudantConnect.startPushReplication();
 
         } if(my_user.getConfirm_event_title() != null) {
@@ -158,10 +158,10 @@ public class NotificationFragment extends ListFragment {
 
             Log.d(TAG, "Voting attendance found");
             notificationDatabase.putInformation(notificationDatabase, 6, my_user.getAttendance_event_id(), my_user.getAttendance_event_colour(),
-                    my_user.getAttendance_my_username(), " has confirmed attendance for the event \"", my_user.getAttendance_event_title(),
+                    my_user.getAttendance_my_username(), " will be coming to your event \"", my_user.getAttendance_event_title(),
                     "\"!", null, null, null, null, null, null, null);
 
-            votingDatabase.updateInformation(votingDatabase, "" + my_user.getAttendance_event_id(), my_user.getAttendance_my_username(), null, null, null, null, null);
+            votingDatabase.updateInformation(votingDatabase, "" + my_user.getAttendance_event_id(), null, my_user.getAttendance_my_username(), null, null, null, null);
 
             cloudantConnect.resetVotingAttendance(my_user);
             cloudantConnect.startPushReplication();

@@ -27,8 +27,8 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.friendlist.FriendItem;
-import mooncakemonster.orbitalcalendar.votereceive.ResultDatabase;
-import mooncakemonster.orbitalcalendar.votereceive.ResultItem;
+import mooncakemonster.orbitalcalendar.voteresult.ResultDatabase;
+import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
 
 /**
  * This class allows users to send a list of date

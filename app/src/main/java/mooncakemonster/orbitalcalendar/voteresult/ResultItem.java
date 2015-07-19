@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.votereceive;
+package mooncakemonster.orbitalcalendar.voteresult;
 
 /**
  * Created by BAOJUN on 10/7/15.

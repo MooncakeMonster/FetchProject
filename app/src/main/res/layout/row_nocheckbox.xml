@@ -5,14 +5,8 @@
     android:orientation="horizontal"
     android:padding="@dimen/standard_padding_size">
 
-    <CheckBox
-        android:id="@+id/send_confirm_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@android:style/Widget.Holo.CompoundButton.RadioButton" />
-
     <TextView
-        android:id="@+id/participant_username"
+        android:id="@+id/nocheck_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/standard_padding_size"

@@ -99,8 +99,6 @@ public class VoteInvitation extends ActionBarActivity {
                 final View dialogview = LayoutInflater.from(VoteInvitation.this).inflate(R.layout.dialog_edittext, null);
                 final EditText input_username = (EditText) dialogview.findViewById(R.id.input_text);
 
-                reject_reason = input_username.getText().toString();
-
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(VoteInvitation.this);
                 alertBuilder.setTitle("State your reason: ");
                 alertBuilder.setView(dialogview);
@@ -111,7 +109,7 @@ public class VoteInvitation extends ActionBarActivity {
                         resetAllDateTime();
                         pushItem(my_username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
                                 notificationItem.getSender_event(), notificationItem.getSender_location(),
-                                notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);
+                                notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, input_username.getText().toString());
                         dialog.dismiss();
                         Toast.makeText(getApplicationContext(), "Rejected event successfully", Toast.LENGTH_SHORT).show();
                         finish();

@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.votereceive;
+package mooncakemonster.orbitalcalendar.voteresult;
 
 import android.provider.BaseColumns;
 

@@ -26,9 +26,10 @@
                 <TextView
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
-                    android:text="Start Date: "
                     android:textColor="@color/black"
-                    android:textSize="@dimen/standard_text_size" />
+                    android:textSize="@dimen/standard_text_size"
+                    android:text="Start Date: "
+                    android:id="@+id/grey_start_date" />
 
                 <TextView
                     android:id="@+id/result_start_date"
@@ -50,7 +51,8 @@
                     android:layout_height="wrap_content"
                     android:text="End Date: "
                     android:textColor="@color/black"
-                    android:textSize="@dimen/standard_text_size" />
+                    android:textSize="@dimen/standard_text_size"
+                    android:id="@+id/grey_end_date" />
 
                 <TextView
                     android:id="@+id/result_end_date"
@@ -71,7 +73,8 @@
                     android:layout_height="wrap_content"
                     android:text="Time: "
                     android:textColor="@color/black"
-                    android:textSize="@dimen/standard_text_size" />
+                    android:textSize="@dimen/standard_text_size"
+                    android:id="@+id/grey_time" />
 
                 <TextView
                     android:id="@+id/result_time"

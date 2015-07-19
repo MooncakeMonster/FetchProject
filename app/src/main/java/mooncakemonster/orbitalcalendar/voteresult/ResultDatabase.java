@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.votereceive;
+package mooncakemonster.orbitalcalendar.voteresult;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -144,7 +144,7 @@ public class ResultDatabase extends SQLiteOpenHelper {
                     }
                 }
                 cursor.moveToNext();
-            } else if(resultItem.getUsername_rejected() != null){
+            } else if(resultItem.getUsername_rejected() != null && resultItem.getEvent_id().equals(cursor.getString(0))){
                 String stored_username = cursor.getString(8);
                 stored_username += resultItem.getUsername_rejected() + " ";
 
@@ -152,9 +152,12 @@ public class ResultDatabase extends SQLiteOpenHelper {
                         cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9)};
 
                 values.put(ResultData.ResultInfo.REJECT_PARTICIPANTS, stored_username);
+                Log.d("ResultDatabase", stored_username);
 
                 SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
                 sqLiteDatabase.update(ResultData.ResultInfo.TABLE_NAME, values, selection, args);
+
+                cursor.moveToNext();
 
             } else if(Integer.parseInt(resultItem.getEvent_id()) < Integer.parseInt(cursor.getString(0))){
                 break;

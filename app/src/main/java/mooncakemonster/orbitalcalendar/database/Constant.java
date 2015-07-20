@@ -29,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import mooncakemonster.orbitalcalendar.R;
+
 /*************************************************************************************************
  * Purpose: Abstract Constant.java class to store all helper method that will most likely be used across the app
  * as well as all the constants.
@@ -206,7 +208,7 @@ public final class Constant
     /****************************************************************************************************
      * Set Button as DatePicker
      ****************************************************************************************************/
-    public static void setButtonDatePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString) {
+    public static String setButtonDatePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString) {
         if (timeInMillisecond > 0) {
             calendar.setTimeInMillis(timeInMillisecond);
         } else {
@@ -229,12 +231,14 @@ public final class Constant
                 date.show();
             }
         });
+
+        return button.getText().toString();
     }
 
     /****************************************************************************************************
      * Set Button as TimePicker
      ****************************************************************************************************/
-    public static void setButtonTimePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString) {
+    public static String setButtonTimePicker(final Context context, final Button button, final long timeInMillisecond, final String additionalString) {
         if (timeInMillisecond > 0) {
             calendar.setTimeInMillis(timeInMillisecond);
         } else {
@@ -258,6 +262,8 @@ public final class Constant
                 time.show();
             }
         });
+
+        return button.getText().toString();
     }
 
     /****************************************************************************************************
@@ -440,5 +446,22 @@ public final class Constant
 
         Log.i("Key Value = ", key);
         return key;
+    }
+
+    /****************************************************************************************************
+     * (7) BEAR COLOUR ICON
+     ****************************************************************************************************/
+
+    public static int getBearColour(int chosenColour) {
+        switch (chosenColour) {
+            case R.color.redbear: return R.drawable.beared;
+            case R.color.yellowbear: return R.drawable.bearyellow;
+            case R.color.greenbear: return R.drawable.beargreen;
+            case R.color.bluebear: return R.drawable.bearblue;
+            case R.color.purplebear: return R.drawable.bearpurple;
+        }
+
+        // Should not reach here
+        return -1;
     }
 }

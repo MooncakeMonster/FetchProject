@@ -15,11 +15,17 @@ import android.widget.TextView;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.voteresult.ResultAdapter;
 import mooncakemonster.orbitalcalendar.voteresult.ResultDatabase;
+import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
 import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
@@ -36,10 +42,11 @@ public class VotingResultActivity extends ActionBarActivity {
 
     private ListView listView;
     ResultAdapter resultAdapter;
+    private List<ResultItem> list;
 
     private TextView event_title, event_location;
+    int selection;
     private Button sort_list;
-    private int selection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,15 +73,13 @@ public class VotingResultActivity extends ActionBarActivity {
         final Bundle bundle = intent.getExtras();
         VoteItem voteItem = (VoteItem) bundle.getSerializable("voteItem");
 
+        list = resultDatabase.getAllTargetResults(resultDatabase, Integer.parseInt(voteItem.getEventId()));
+
         if(voteItem != null) {
             event_title.setText(voteItem.getEvent_title());
             event_location.setText("@ " + voteItem.getEvent_location());
 
             listView = (ListView) findViewById(R.id.vote_result_list);
-            resultAdapter = new ResultAdapter(this, R.layout.row_vote_result,
-                    resultDatabase.getAllTargetResults(resultDatabase, Integer.parseInt(voteItem.getEventId())));
-            listView.setAdapter(new SlideExpandableListAdapter(resultAdapter, R.id.confirm_send_date, R.id.expandable_vote_result));
-            resultAdapter.notifyDataSetChanged();
         }
 
         // Sort the list according to user's preference
@@ -95,15 +100,48 @@ public class VotingResultActivity extends ActionBarActivity {
                         switch(which) {
                             case 0:
                                 // (1) Sort according to total votes
-                                selection = 0;
+                                Collections.sort(list, new Comparator<ResultItem>() {
+                                    @Override
+                                    public int compare(ResultItem lhs, ResultItem rhs) {
+                                        int this_total = Integer.parseInt(lhs.getTotal());
+                                        int that_total = Integer.parseInt(rhs.getTotal());
+
+                                        if(this_total < that_total) return -1;
+                                        else if(this_total > that_total) return 1;
+
+                                        return 0;
+                                    }
+                                });
                                 break;
                             case 1:
                                 // (2) Sort according to date
-                                selection = 1;
+                                Collections.sort(list, new Comparator<ResultItem>() {
+                                    @Override
+                                    public int compare(ResultItem lhs, ResultItem rhs) {
+                                        long this_start_date = Constant.stringToMillisecond(lhs.getStart_date(), lhs.getStart_time(), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
+                                        long that_start_date = Constant.stringToMillisecond(rhs.getStart_date(), rhs.getStart_time(), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
+
+                                        if(this_start_date < that_start_date) return -1;
+                                        else if(this_start_date > that_start_date) return 1;
+
+                                        return 0;
+                                    }
+                                });
                                 break;
                             case 2:
                                 // (3) Sort according to time
-                                selection = 2;
+                                Collections.sort(list, new Comparator<ResultItem>() {
+                                    @Override
+                                    public int compare(ResultItem lhs, ResultItem rhs) {
+                                        long this_start_time = Constant.stringToMillisecond(lhs.getStart_time(), Constant.TIMEFORMATTER);
+                                        long that_start_time = Constant.stringToMillisecond(rhs.getStart_time(), Constant.TIMEFORMATTER);
+
+                                        if (this_start_time < that_start_time) return -1;
+                                        else if (this_start_time > that_start_time) return 1;
+
+                                        return 0;
+                                    }
+                                });
                                 break;
                         }
                         dialog.dismiss();
@@ -119,6 +157,11 @@ public class VotingResultActivity extends ActionBarActivity {
                 dialog.show();
             }
         });
+
+        resultAdapter = new ResultAdapter(this, R.layout.row_vote_result,
+                resultDatabase.getAllTargetResults(resultDatabase, Integer.parseInt(voteItem.getEventId())));
+        listView.setAdapter(new SlideExpandableListAdapter(resultAdapter, R.id.confirm_send_date, R.id.expandable_vote_result));
+        resultAdapter.notifyDataSetChanged();
     }
 
     @Override

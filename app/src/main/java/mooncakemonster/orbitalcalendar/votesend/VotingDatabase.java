@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -203,6 +204,8 @@ public class VotingDatabase extends SQLiteOpenHelper {
         }
 
         cursor.close();
+        Collections.reverse(votings);
+
         return votings;
     }
 

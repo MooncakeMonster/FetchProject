@@ -47,7 +47,7 @@ public class EventDayAdapter extends ArrayAdapter<Appointment>{
             holder.event_title = (TextView) row.findViewById(R.id.eventName);
             holder.event_time = (TextView) row.findViewById(R.id.eventTime);
 
-            holder.event_colour.setImageResource(getImageID(appointment.getColour()));
+            holder.event_colour.setImageResource(Constant.getBearColour(appointment.getColour()));
             holder.event_title.setText(appointment.getEvent());
 
             // Get time
@@ -59,19 +59,5 @@ public class EventDayAdapter extends ArrayAdapter<Appointment>{
         }
 
         return row;
-    }
-
-    // Get bear colour corresponding to colour chosen by user
-    private int getImageID(int chosenColour) {
-        switch (chosenColour) {
-            case R.color.redbear: return R.drawable.beared;
-            case R.color.yellowbear: return R.drawable.bearyellow;
-            case R.color.greenbear: return R.drawable.beargreen;
-            case R.color.bluebear: return R.drawable.bearblue;
-            case R.color.purplebear: return R.drawable.bearpurple;
-        }
-
-        // Should not reach here
-        return -1;
     }
 }

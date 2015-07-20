@@ -83,6 +83,10 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
             //holder.result_name = (TextView) row.findViewById(R.id.result_name);
             holder.result_total = (TextView) row.findViewById(R.id.result_total);
 
+            holder.can_make_it = (Button) row.findViewById(R.id.expand_can_make_it);
+            holder.cannot_make_it = (Button) row.findViewById(R.id.expand_cannot_make_it);
+            holder.rejected_vote = (Button) row.findViewById(R.id.expand_rejected);
+
             holder.grey_start_date = (TextView) row.findViewById(R.id.grey_start_date);
             holder.grey_end_date = (TextView) row.findViewById(R.id.grey_end_date);
             holder.grey_time = (TextView) row.findViewById(R.id.grey_time);
@@ -99,10 +103,6 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 holder.result_time.setTextColor(colour);
                 holder.result_total.setTextColor(colour);
             }
-
-            holder.can_make_it = (Button) row.findViewById(R.id.expand_can_make_it);
-            holder.cannot_make_it = (Button) row.findViewById(R.id.expand_cannot_make_it);
-            holder.rejected_vote = (Button) row.findViewById(R.id.expand_rejected);
 
             // Show list of participants who can make it
             holder.can_make_it.setOnClickListener(new View.OnClickListener() {
@@ -199,9 +199,9 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         final ListView listView = (ListView) dialogview.findViewById(R.id.result_list);
         final List<ResultOption> list = new ArrayList<>();
 
-        input_username.setText("Event title : " + retrieveVoteItem(event_id).getEvent_title() + "\nStart date : " + Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) +
-                "\nEnd date   : " + Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + "\nTime          : " +
-                resultItem.getStart_time() + " - " + resultItem.getEnd_time() + "\n\nPlease select the participants you would like to confirm the event's date and time with.");
+        input_username.setText("Event : " + retrieveVoteItem(event_id).getEvent_title() + "\nStart  : " + Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + ", " + resultItem.getStart_time() +
+                "\nEnd    : " + Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + ", " + resultItem.getEnd_time()
+                 + "\n\nPlease select the participants you would like to confirm the event's date and time with.");
 
         final int size = split_participants.length;
         for(int i = 0; i < size; i++) {
@@ -248,9 +248,9 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
         VoteItem voteItem = retrieveVoteItem(event_id);
 
-        input_username.setText("Please note that you had confirmed the event's date and time as follows:\n\n" + "Event title : " + voteItem.getEvent_title() + "\nStart date : " + Constant.standardYearMonthDate(voteItem.getEvent_confirm_start_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) +
-                "\nEnd date   : " + Constant.standardYearMonthDate(voteItem.getEvent_confirm_end_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + "\nTime          : " +
-                voteItem.getEvent_confirm_start_time() + " - " + voteItem.getEvent_confirm_end_time() + "\n\nTo change the event's confirmed date and time to the current selected option, simply press the \"confirm\" button.");
+        input_username.setText("Please note that you had confirmed the event's date and time as follows:\n\n" + "Event : " + voteItem.getEvent_title() + "\nStart  : " + Constant.standardYearMonthDate(voteItem.getEvent_confirm_start_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) +
+                ", " + voteItem.getEvent_confirm_start_time() + "\nEnd    : " + Constant.standardYearMonthDate(voteItem.getEvent_confirm_end_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + ", " + voteItem.getEvent_confirm_end_time()
+                + "\n\nTo change the event's confirmed date and time to the current selected option, simply press the \"confirm\" button.");
 
         final int size = split_participants.length;
         for(int i = 0; i < size; i++) {

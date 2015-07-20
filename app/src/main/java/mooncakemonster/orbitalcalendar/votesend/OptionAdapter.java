@@ -65,11 +65,6 @@ public class OptionAdapter extends ArrayAdapter<OptionItem> {
             holder.vote_start_time.setText(optionItem.getEvent_start_time());
             holder.vote_end_time.setText(optionItem.getEvent_end_time());
 
-            optionItem.setEvent_start_date(holder.vote_start_date.getText().toString());
-            optionItem.setEvent_end_date(holder.vote_end_date.getText().toString());
-            optionItem.setEvent_start_time(holder.vote_start_time.getText().toString());
-            optionItem.setEvent_end_time(holder.vote_end_time.getText().toString());
-
             // Remove option from list
             holder.remove_option.setOnClickListener(new View.OnClickListener() {
                 @Override

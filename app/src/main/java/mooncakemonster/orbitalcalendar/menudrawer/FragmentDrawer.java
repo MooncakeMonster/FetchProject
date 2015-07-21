@@ -1,21 +1,14 @@
 package mooncakemonster.orbitalcalendar.menudrawer;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -24,14 +17,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.accountsettings.SettingActivity;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.cloudant.User;
+import mooncakemonster.orbitalcalendar.database.Constant;
+import mooncakemonster.orbitalcalendar.profilepicture.CropImage;
 import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 
 public class FragmentDrawer extends Fragment {
@@ -45,11 +42,12 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private RoundImage roundImage;
-    private ImageView userIcon;
+    private CircleImageView userIcon;
     private ImageView settings;
     private TextView displayUsername;
     private static String[] titles = null;
     private FragmentDrawerListener drawerListener;
+    private CloudantConnect cloudantConnect;
     private UserDatabase db;
     private HashMap<String, String> user;
 
@@ -88,13 +86,19 @@ public class FragmentDrawer extends Fragment {
         db = new UserDatabase(getActivity().getApplicationContext());
         user = db.getUserDetails();
 
-        userIcon = (ImageView) layout.findViewById(R.id.usericon);
-        userIcon.setImageResource(R.drawable.profile);
+        if (cloudantConnect == null)
+            this.cloudantConnect = new CloudantConnect(getActivity(), "user");
+        String my_username = user.get("username");
+        cloudantConnect.startPullReplication();
+        User my_user = cloudantConnect.getTargetUser(my_username);
+
+        userIcon = (CircleImageView) layout.findViewById(R.id.usericon);
+        //roundImage = new RoundImage(Constant.stringToBitmap(my_user.getImage()));
+        userIcon.setImageBitmap(Constant.stringToBitmap(my_user.getImage()));
         userIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, SELECTED_PICTURE);
+                startActivity(new Intent(getActivity(), CropImage.class));
             }
         });
 
@@ -107,7 +111,7 @@ public class FragmentDrawer extends Fragment {
         });
 
         displayUsername = (TextView) layout.findViewById(R.id.displayusername);
-        displayUsername.setText("Hello " + user.get("username") + "!");
+        displayUsername.setText("Hello " + my_username + "!");
 
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
         adapter = new NavigationDrawerAdapter(getActivity(), getData());
@@ -208,61 +212,5 @@ public class FragmentDrawer extends Fragment {
 
     public interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);
-    }
-
-    public static String encodeTobase64(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b,Base64.DEFAULT);
-    }
-
-    public static Bitmap decodeBase64(String input) {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
-    }
-
-    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float)width / (float) height;
-        if (bitmapRatio > 0) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch(requestCode) {
-            case SELECTED_PICTURE:
-                if(resultCode == Activity.RESULT_OK) {
-                    final Uri uri = data.getData();
-                    String[] projection = { MediaStore.Images.Media.DATA };
-
-                    Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-                    cursor.moveToFirst();
-
-                    int columnIndex = cursor.getColumnIndex(projection[0]);
-                    String filePath = cursor.getString(columnIndex);
-                    cursor.close();
-
-                    final Bitmap selectedImage = getResizedBitmap(BitmapFactory.decodeFile(filePath), 100);
-                    roundImage = new RoundImage(selectedImage);
-                    userIcon.setImageDrawable(roundImage);
-
-                    //db.updateUsers(user.get("image"), user.get("email"), user.get("username"), encodeTobase64(selectedImage));
-
-                    //Log.d(TAG, user.get("image"));
-                }
-                break;
-        }
     }
 }

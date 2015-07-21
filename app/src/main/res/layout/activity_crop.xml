@@ -1,0 +1,55 @@
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cloudy"
+    android:orientation="vertical">
+
+    <com.theartofdev.edmodo.cropper.CropImageView
+        android:id="@+id/CropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:scaleType="fitCenter"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp">
+
+        <Button
+            android:id="@+id/button_rotate_left"
+            android:layout_width="@dimen/event_icon_size"
+            android:layout_height="@dimen/event_icon_size"
+            android:layout_marginLeft="@dimen/standard_padding_size"
+            android:background="@drawable/rotateleft"
+            android:inputType="textCapCharacters" />
+
+        <Button
+            android:id="@+id/button_load"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/event_icon_size"
+            android:background="@color/colorPrimary"
+            android:inputType="textCapCharacters"
+            android:text="Change image"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/event_text_size"/>
+
+        <Button
+            android:id="@+id/button_rotate_right"
+            android:layout_width="@dimen/event_icon_size"
+            android:layout_height="@dimen/event_icon_size"
+            android:background="@drawable/rotateright"
+            android:layout_marginRight="@dimen/standard_padding_size"
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:inputType="textCapCharacters"
+            android:paddingLeft="@dimen/standard_padding_size"
+            android:paddingRight="@dimen/standard_padding_size" />
+
+    </LinearLayout>
+
+</LinearLayout>

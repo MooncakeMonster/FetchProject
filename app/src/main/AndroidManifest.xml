@@ -84,6 +84,11 @@
             android:label="Voting Result"
             android:theme="@style/AppThemeMenu"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".profilepicture.CropImage"
+            android:label="Crop Image"
+            android:theme="@style/AppThemeMenu"
+            android:screenOrientation="portrait"></activity>
 
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 

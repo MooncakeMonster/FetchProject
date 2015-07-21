@@ -162,7 +162,7 @@ public class CloudantConnect {
         indexManager = new IndexManager(datastore);
         if (indexManager.isTextSearchEnabled()) {
             String user_details = indexManager.ensureIndexed(Arrays.<Object>asList(
-                    "user_details.email_address", "user_details.username", "user_details.password",
+                    "user_details.image", "user_details.email_address", "user_details.username", "user_details.password",
                     "voting_options.option_my_username", "voting_options.option_event_title",
                     "voting_options.option_event_location", "voting_options.option_event_notes",
                     "voting_options.option_start_date", "voting_options.option_end_date",
@@ -236,6 +236,23 @@ public class CloudantConnect {
 
         // Reach here if no existing username found
         return false;
+    }
+
+    /**
+     * This method updates the user's image into database.
+     */
+    public void updateUserImage(String image, String username) {
+        User user = getTargetUser(username);
+        user.setImage(image);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
     }
 
     /****************************************************************************************************

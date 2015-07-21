@@ -22,6 +22,7 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 
+import java.io.ByteArrayOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
@@ -463,5 +464,21 @@ public final class Constant
 
         // Should not reach here
         return -1;
+    }
+
+    /****************************************************************************************************
+     * (8) Convert Bitmap to String format or vice versa
+     ****************************************************************************************************/
+
+    public static String bitmapToString(Bitmap image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b,Base64.DEFAULT);
+    }
+
+    public static Bitmap stringToBitmap(String input) {
+        byte[] decodedByte = Base64.decode(input, 0);
+        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
 }

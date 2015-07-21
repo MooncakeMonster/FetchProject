@@ -11,6 +11,7 @@ import java.util.Map;
 public class User {
 
     // User details
+    private String image;
     private String email_address;
     private String username;
     private String password;
@@ -75,10 +76,19 @@ public class User {
 
     }
 
-    public User(String email_address, String username, String password) {
+    public User(String image, String email_address, String username, String password) {
+        this.setImage(image);
         this.setEmail_address(email_address);
         this.setUsername(username);
         this.setPassword(password);
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getEmail_address() {
@@ -446,6 +456,7 @@ public class User {
         Map<String, Object> user_revised = revision.asMap();
 
         // User details
+        user.setImage((String) ((Map) user_revised.get("user_details")).get("image"));
         user.setEmail_address((String) ((Map) user_revised.get("user_details")).get("email_address"));
         user.setUsername((String) ((Map) user_revised.get("user_details")).get("username"));
         user.setPassword((String) ((Map) user_revised.get("user_details")).get("encrypted_password"));
@@ -510,6 +521,7 @@ public class User {
 
         // User details
         HashMap<String, Object> user_details = new HashMap<>();
+        user_details.put("image", image);
         user_details.put("email_address", email_address);
         user_details.put("username", username);
         user_details.put("encrypted_password", password);

@@ -38,7 +38,7 @@
 
     <!-- fragment_navigation.xml -->
     <dimen name="nav_layout">200dp</dimen>
-    <dimen name="nav_icon">80dp</dimen>
+    <dimen name="nav_icon">90dp</dimen>
 
     <!-- fragment_picture.xml -->
     <dimen name="picture_button_size">60dp</dimen>

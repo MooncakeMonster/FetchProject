@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -20,6 +22,7 @@ import java.util.regex.Pattern;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.cloudant.User;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**
@@ -168,7 +171,8 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
 
     // This method creates new user document into Cloudant
     private boolean createNewUser(String email_address, String username, String password) {
-        User user = new User(email_address, username, password);
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.profile);
+        User user = new User(Constant.bitmapToString(image), email_address, username, password);
         try {
             User final_user = cloudantConnect.createNewUserDocument(user);
             Log.d(TAG, "Saved new user " + final_user.getEmail_address() + " successfully");

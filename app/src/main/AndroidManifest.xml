@@ -93,7 +93,7 @@
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <!--For parsing data from .ics extension-->
-        <activity android:name=".ImportExternal.ImportICSParser">
+        <activity android:name=".importexternals.ImportICSParser">
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

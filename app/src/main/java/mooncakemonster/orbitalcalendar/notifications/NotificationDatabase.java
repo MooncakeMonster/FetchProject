@@ -22,6 +22,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
             NotificationData.NotificationInfo.EVENT_ID + " INTEGER, " +
             NotificationData.NotificationInfo.IMAGE_ID + " INTEGER, " +
             NotificationData.NotificationInfo.SENDER_USERNAME + " TEXT, " +
+            NotificationData.NotificationInfo.SENDER_IMAGE + " BLOB, " +
             NotificationData.NotificationInfo.MESSAGE + " TEXT, " +
             NotificationData.NotificationInfo.SENDER_EVENT + " TEXT, " +
             NotificationData.NotificationInfo.ACTION + " TEXT, " +
@@ -52,7 +53,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database.
-    public void putInformation(NotificationDatabase data, int notification_id, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
+    public void putInformation(NotificationDatabase data, int notification_id, int eventId, int imageId, String sender_username, byte[] sender_image, String message, String sender_event, String action,
                                String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
@@ -63,6 +64,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         contentValues.put(NotificationData.NotificationInfo.EVENT_ID, eventId);
         contentValues.put(NotificationData.NotificationInfo.IMAGE_ID, imageId);
         contentValues.put(NotificationData.NotificationInfo.SENDER_USERNAME, sender_username);
+        contentValues.put(NotificationData.NotificationInfo.SENDER_IMAGE, sender_image);
         contentValues.put(NotificationData.NotificationInfo.MESSAGE, message);
         contentValues.put(NotificationData.NotificationInfo.SENDER_EVENT, sender_event);
         contentValues.put(NotificationData.NotificationInfo.ACTION, action);
@@ -85,9 +87,9 @@ public class NotificationDatabase extends SQLiteOpenHelper {
     public Cursor getInformation(NotificationDatabase data) {
         // Read data from sqlite database
         SQLiteDatabase sqLiteDatabase = data.getReadableDatabase();
-        String[] columns = {NotificationData.NotificationInfo.NOTIFICATION_ID,
-                            NotificationData.NotificationInfo.EVENT_ID, NotificationData.NotificationInfo.IMAGE_ID,
-                            NotificationData.NotificationInfo.SENDER_USERNAME, NotificationData.NotificationInfo.MESSAGE,
+        String[] columns = {NotificationData.NotificationInfo.NOTIFICATION_ID, NotificationData.NotificationInfo.EVENT_ID,
+                            NotificationData.NotificationInfo.IMAGE_ID, NotificationData.NotificationInfo.SENDER_USERNAME,
+                            NotificationData.NotificationInfo.SENDER_IMAGE, NotificationData.NotificationInfo.MESSAGE,
                             NotificationData.NotificationInfo.SENDER_EVENT, NotificationData.NotificationInfo.ACTION,
                             NotificationData.NotificationInfo.SENDER_LOCATION, NotificationData.NotificationInfo.SENDER_NOTES,
                             NotificationData.NotificationInfo.START_DATE, NotificationData.NotificationInfo.END_DATE,
@@ -105,9 +107,9 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            NotificationItem notificationItem = new NotificationItem(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4),
+            NotificationItem notificationItem = new NotificationItem(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getBlob(4),
                                                 cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
-                                                cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13));
+                                                cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14));
             notificationItems.add(notificationItem);
             cursor.moveToNext();
         }

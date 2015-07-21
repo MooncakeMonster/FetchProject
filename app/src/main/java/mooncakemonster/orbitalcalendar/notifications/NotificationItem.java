@@ -10,6 +10,7 @@ public class NotificationItem implements Serializable {
     private int eventId;
     private int imageId;
     private String sender_username;
+    private byte[] sender_image;
     private String message;
     private String sender_event;
     private String action;
@@ -21,12 +22,13 @@ public class NotificationItem implements Serializable {
     private String end_time;
     private String reject_reason;
 
-    public NotificationItem(int notificationId, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
+    public NotificationItem(int notificationId, int eventId, int imageId, String sender_username, byte[] sender_image, String message, String sender_event, String action,
                             String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
         this.notificationId = notificationId;
         this.eventId = eventId;
         this.imageId = imageId;
         this.sender_username = sender_username;
+        this.sender_image = sender_image;
         this.message = message;
         this.sender_event = sender_event;
         this.action = action;
@@ -69,6 +71,14 @@ public class NotificationItem implements Serializable {
 
     public void setSender_username(String sender_username) {
         this.sender_username = sender_username;
+    }
+
+    public byte[] getSender_image() {
+        return sender_image;
+    }
+
+    public void setSender_image(byte[] sender_image) {
+        this.sender_image = sender_image;
     }
 
     public String getMessage() {

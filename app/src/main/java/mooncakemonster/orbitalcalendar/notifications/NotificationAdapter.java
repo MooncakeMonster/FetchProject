@@ -23,6 +23,7 @@ import java.util.List;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitation;
 
 /**
@@ -42,7 +43,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
     }
 
     static class Holder {
-        LinearLayout linearLayout;
+        LinearLayout layout;
         ImageView action_image;
         TextView message;
     }
@@ -75,17 +76,17 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                     sender_username.length() + sender_message.length() + sender_event.length(), 0);
 
             // Set the text of a textView with the spannable object
-            holder.linearLayout = (LinearLayout) row.findViewById(R.id.notification_layout);
+            holder.layout = (LinearLayout) row.findViewById(R.id.notification_layout);
             holder.action_image = (ImageView) row.findViewById(R.id.action_image);
-            // TODO: Set appropriate background image
-            holder.action_image.setBackgroundResource(notificationItem.getImageId());
+            String bitmap_string = new String (notificationItem.getSender_image());
+            holder.action_image.setImageBitmap(Constant.stringToBitmap(bitmap_string));
 
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
 
 
             final View inner_view = row;
-            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            holder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     /*
@@ -120,7 +121,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                         case 4:
                             dialogBuilder.setTitle("Confirm attendance");
                             dialogBuilder.setMessage("Would you like to confirm attendance for the event \""
-                                + notificationItem.getSender_event() + "\" with " + notificationItem.getSender_username() + "?");
+                                    + notificationItem.getSender_event() + "\" with " + notificationItem.getSender_username() + "?");
                             dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -148,7 +149,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                             inner_view.getContext().startActivity(intent);
                             break;
                         case 6:
-                            
+
                             break;
                         default:
                             break;

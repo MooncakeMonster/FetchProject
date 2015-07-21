@@ -3,6 +3,7 @@ package mooncakemonster.orbitalcalendar.friendlist;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -15,6 +16,9 @@ import android.widget.ImageButton;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.cloudant.User;
+import mooncakemonster.orbitalcalendar.database.Constant;
 
 public class FriendlistFragment extends ListFragment {
 
@@ -23,6 +27,7 @@ public class FriendlistFragment extends ListFragment {
     private List<FriendItem> allFriends;
     FriendlistAdapter adapter;
     ImageButton add_friends;
+    CloudantConnect cloudantConnect;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,8 +68,13 @@ public class FriendlistFragment extends ListFragment {
                 alertBuilder.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // TODO: Get friend's image and replace with "redbear"
-                        friendDatabase.putInformation(friendDatabase, "" + R.color.redbear, input_username.getText().toString());
+                        // Retrieve friend's image
+                        if (cloudantConnect == null) cloudantConnect = new CloudantConnect(getActivity(), "user");
+                        cloudantConnect.startPullReplication();
+                        User friend_user = cloudantConnect.getTargetUser(input_username.getText().toString());
+                        Bitmap bitmap = Constant.stringToBitmap(friend_user.getImage());
+                        friendDatabase.putInformation(friendDatabase, Constant.bitmapToBytes(bitmap), input_username.getText().toString());
+
                         adapter.clear();
                         adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
                         adapter.notifyDataSetChanged();
@@ -103,7 +113,7 @@ public class FriendlistFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //Update latest username into SQLite database
-                        friendDatabase.updateInformation(friendDatabase, friendItem.getImage(), previous_username, input_username.getText().toString());
+                        friendDatabase.updateInformation(friendDatabase, previous_username, input_username.getText().toString());
                         adapter.clear();
                         adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
                         adapter.notifyDataSetChanged();
@@ -140,7 +150,7 @@ public class FriendlistFragment extends ListFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         //Delete from SQLite database
-                        friendDatabase.deleteInformation(friendDatabase, friendItem.getImage(), friendItem.getUsername());
+                        friendDatabase.deleteInformation(friendDatabase, friendItem.getUsername());
                         //Delete from ArrayAdapter & allFriends
                         adapter.remove(friendItem);
                         allFriends.remove(friendItem);

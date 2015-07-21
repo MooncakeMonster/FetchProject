@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
     android:id="@+id/notification_layout"
+    android:layout_margin="@dimen/standard_padding_size"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/action_image"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="@dimen/standard_padding_size"
+        android:layout_marginBottom="@dimen/standard_padding_size"
+        android:layout_marginLeft="@dimen/standard_padding_size"
+        app:border_width="2dp"
+        app:border_color="@color/white"/>
 
     <LinearLayout
-        android:layout_width="@dimen/standard_padding_size"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center">
-
-        <ImageView
-            android:id="@+id/action_image"
-            android:layout_width="@dimen/standard_padding_size"
-            android:layout_height="fill_parent"
-            android:layout_centerVertical="true"
-            android:textColor="@color/black"
-            android:textSize="23dp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:scaleType="centerCrop"
-            android:background="@color/redbear" />
-    </LinearLayout>
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_padding_size"
+        android:orientation="vertical">
 
     <TextView
         android:id="@+id/message"
+        android:layout_toRightOf="@id/action_image"
+        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/standard_padding_size"
-        android:singleLine="false"
         android:textColor="@color/black"
-        android:textSize="@dimen/standard_text_size" />
+        android:text="Username"
+        android:singleLine="false"
+        android:textSize="16dp" />
 
+    <TextView
+        android:id="@+id/timestamp"
+        android:layout_below="@id/message"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/timestamp"
+        android:text="About a minute ago"
+        android:singleLine="false"
+        android:paddingTop="1dp"
+        android:textSize="11dp" />
+
+    </LinearLayout>
 </LinearLayout>

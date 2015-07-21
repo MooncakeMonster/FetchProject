@@ -18,7 +18,7 @@ public class FriendDatabase extends SQLiteOpenHelper {
     private static final String TAG = FriendDatabase.class.getSimpleName();
 
     public String query = "CREATE TABLE " + FriendData.FriendInfo.TABLE_NAME + " (" +
-                                            FriendData.FriendInfo.FRIEND_IMAGE + " TEXT, " +
+                                            FriendData.FriendInfo.FRIEND_IMAGE + " BLOB, " +
                                             FriendData.FriendInfo.FRIEND_USERNAME + " TEXT); ";
 
     public FriendDatabase (Context context) {
@@ -40,7 +40,7 @@ public class FriendDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database
-    public void putInformation(FriendDatabase data, String image, String username) {
+    public void putInformation(FriendDatabase data, byte[] image, String username) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -65,9 +65,9 @@ public class FriendDatabase extends SQLiteOpenHelper {
     }
 
     // Update data from database
-    public void updateInformation(FriendDatabase data, String image, String previous_username, String username) {
-        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ? ";
-        String[] args = { image, previous_username };
+    public void updateInformation(FriendDatabase data, String previous_username, String username) {
+        String selection = FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ? ";
+        String[] args = { previous_username };
 
         ContentValues values = new ContentValues();
         values.put(FriendData.FriendInfo.FRIEND_USERNAME, username);
@@ -78,10 +78,10 @@ public class FriendDatabase extends SQLiteOpenHelper {
 
 
     // Delete data from database
-    public void deleteInformation(FriendDatabase data, String image, String username) {
+    public void deleteInformation(FriendDatabase data, String username) {
 
-        String selection = FriendData.FriendInfo.FRIEND_IMAGE + " LIKE ? AND " + FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ? ";
-        String[] args = { image, username };
+        String selection = FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ? ";
+        String[] args = { username };
 
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         sqLiteDatabase.delete(FriendData.FriendInfo.TABLE_NAME, selection, args);
@@ -94,7 +94,7 @@ public class FriendDatabase extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            FriendItem friend = new FriendItem(cursor.getString(0), cursor.getString(1));
+            FriendItem friend = new FriendItem(cursor.getBlob(0), cursor.getString(1));
             friend_list.add(friend);
             cursor.moveToNext();
         }

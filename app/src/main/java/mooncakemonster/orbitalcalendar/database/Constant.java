@@ -467,7 +467,7 @@ public final class Constant
     }
 
     /****************************************************************************************************
-     * (8) Convert Bitmap to String format or vice versa
+     * (8) Convert Bitmap to String/byte[] format or vice versa
      ****************************************************************************************************/
 
     public static String bitmapToString(Bitmap image) {
@@ -480,5 +480,17 @@ public final class Constant
     public static Bitmap stringToBitmap(String input) {
         byte[] decodedByte = Base64.decode(input, 0);
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
+    }
+
+    // Convert from bitmap to byte array
+    public static byte[] bitmapToBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    // Convert from byte array to bitmap
+    public static Bitmap bytesToBitmap(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }

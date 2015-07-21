@@ -15,6 +15,7 @@ public class NotificationData {
         public static final String IMAGE_ID = "image_id";
 
         public static final String SENDER_USERNAME = "sender_username";
+        public static final String SENDER_IMAGE = "sender_image";
         public static final String MESSAGE = "message";
         public static final String SENDER_EVENT = "sender_event";
         public static final String ACTION = "action";

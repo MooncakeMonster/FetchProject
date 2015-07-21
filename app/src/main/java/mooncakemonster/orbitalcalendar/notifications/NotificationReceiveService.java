@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
@@ -16,8 +15,6 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.HashMap;
 
@@ -44,10 +41,6 @@ public class NotificationReceiveService extends Service {
     VotingDatabase votingDatabase;
     ResultDatabase resultDatabase;
     NotificationDatabase notificationDatabase;
-
-    // Custom notification items
-    private ImageView notification_image;
-    private TextView notification_title, notification_text;
 
     private static final String TAG = NotificationReceiveService.class.getSimpleName();
 
@@ -153,13 +146,14 @@ public class NotificationReceiveService extends Service {
          * case 6: Target participants gets attendance
          */
 
-        if(my_user.getOption_event_title() != null) {
+        if (my_user.getOption_event_title() != null) {
 
             Log.d(TAG, "Voting request found");
-            setNotification(my_user.getOption_event_colour(), VOTING_REQUEST_FOUND, my_user.getOption_my_username() + " has requested you to vote for the event \"" + my_user.getOption_event_title() + "\". Vote now!");
+            User friend_user = cloudantConnect.getTargetUser(my_user.getOption_my_username());
+            setNotification(Constant.stringToBitmap(friend_user.getImage()), my_user.getOption_event_colour(), VOTING_REQUEST_FOUND, my_user.getOption_my_username() + " has requested you to vote for the event \"" + my_user.getOption_event_title() + "\". Vote now!");
 
             notificationDatabase.putInformation(notificationDatabase, 1, my_user.getOption_event_id(), my_user.getOption_event_colour(),
-                    my_user.getOption_my_username(), " has requested you to vote for the event \"",
+                    my_user.getOption_my_username(), friend_user.getImage().getBytes(), " has requested you to vote for the event \"",
                     my_user.getOption_event_title(), "\". Vote now!", my_user.getOption_event_location(),
                     my_user.getOption_event_notes(), my_user.getOption_start_date(), my_user.getOption_end_date(),
                     my_user.getOption_start_time(), my_user.getOption_end_time(), null);
@@ -167,23 +161,25 @@ public class NotificationReceiveService extends Service {
             cloudantConnect.resetVotingRequest(my_user);
             cloudantConnect.startPushReplication();
 
-        } if(my_user.getSelected_event_title() != null) {
+        }
+        if (my_user.getSelected_event_title() != null) {
 
             Log.d(TAG, "Voting response found");
             int notification_id;
             String notification_action, action, action1, action2, reject_reason = "", start_date = null, end_date = null, start_time = null, end_time = null;
+            User friend_user = cloudantConnect.getTargetUser(my_user.getSelected_my_username());
 
             // case 1: Target participant has chosen the dates they can make it
             // case 2: Target participant has rejected the event
-            if(my_user.getReject_reason() == null) {
+            if (my_user.getReject_reason() == null) {
                 notification_id = 2;
 
                 notification_action = " has responded to your event \"";
-                setNotification(my_user.getSelected_event_colour(), VOTING_RESPONSE_ACCEPTED, my_user.getSelected_my_username() + notification_action + my_user.getSelected_event_title() + "\". Checkout the current voting result now!");
+                setNotification(Constant.stringToBitmap(friend_user.getImage()), my_user.getSelected_event_colour(), VOTING_RESPONSE_ACCEPTED, my_user.getSelected_my_username() + notification_action + my_user.getSelected_event_title() + "\". Checkout the current voting result now!");
 
                 start_date = my_user.getSelected_start_date();
                 end_date = my_user.getSelected_end_date();
-                start_time =  my_user.getSelected_start_time();
+                start_time = my_user.getSelected_start_time();
                 end_time = my_user.getSelected_end_time();
 
                 action = "accept";
@@ -193,7 +189,7 @@ public class NotificationReceiveService extends Service {
                 notification_id = 3;
 
                 notification_action = " has rejected your event \"";
-                setNotification(my_user.getSelected_event_colour(), VOTING_RESPONSE_REJECTED, my_user.getSelected_my_username() + notification_action + my_user.getSelected_event_title()  + "\". Find out why!");
+                setNotification(Constant.stringToBitmap(friend_user.getImage()), my_user.getSelected_event_colour(), VOTING_RESPONSE_REJECTED, my_user.getSelected_my_username() + notification_action + my_user.getSelected_event_title() + "\". Find out why!");
 
                 reject_reason = my_user.getReject_reason();
 
@@ -206,13 +202,13 @@ public class NotificationReceiveService extends Service {
             String voted_participant = my_user.getSelected_my_username();
 
             notificationDatabase.putInformation(notificationDatabase, notification_id, Integer.parseInt(event_id), my_user.getSelected_event_colour(),
-                    voted_participant, action1, my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
+                    voted_participant, friend_user.getImage().getBytes(), action1, my_user.getSelected_event_title(), action2, my_user.getSelected_event_location(),
                     my_user.getSelected_event_notes(), start_date, end_date, start_time, end_time, reject_reason);
 
             // (1) Update the voted participants for that event to indicate the number of voted participants in VotingFragment
             votingDatabase.updateInformation(votingDatabase, event_id, voted_participant, null, null, null, null, null);
 
-            if(action.equals("accept")) {
+            if (action.equals("accept")) {
                 Log.d(TAG, "accept");
                 // (2) Update the voted participant's selected dates
                 resultDatabase.storeParticipants(resultDatabase, new ResultItem(event_id,
@@ -221,7 +217,7 @@ public class NotificationReceiveService extends Service {
                 resultDatabase.storeParticipants(resultDatabase, new ResultItem(event_id,
                         my_user.getNot_selected_start_date(), my_user.getNot_selected_end_date(), my_user.getNot_selected_start_time(),
                         my_user.getNot_selected_end_time(), null, null, voted_participant, null, null));
-            } else if(action.equals("reject")) {
+            } else if (action.equals("reject")) {
                 Log.d(TAG, "reject");
                 // (4) Add in the reject participants into database
                 resultDatabase.storeParticipants(resultDatabase, new ResultItem(event_id,
@@ -231,10 +227,12 @@ public class NotificationReceiveService extends Service {
             cloudantConnect.resetVotingResponse(my_user);
             cloudantConnect.startPushReplication();
 
-        } if(my_user.getConfirm_event_title() != null) {
+        }
+        if (my_user.getConfirm_event_title() != null) {
 
             Log.d(TAG, "Voting confirmation found");
-            setNotification(my_user.getConfirm_event_colour(), VOTING_CONFIRMATION, my_user.getConfirm_my_username() + " has confirmed the date and time of the event \"" + my_user.getConfirm_event_title()  + "\"!");
+            User friend_user = cloudantConnect.getTargetUser(my_user.getConfirm_my_username());
+            setNotification(Constant.stringToBitmap(friend_user.getImage()), my_user.getConfirm_event_colour(), VOTING_CONFIRMATION, my_user.getConfirm_my_username() + " has confirmed the date and time of the event \"" + my_user.getConfirm_event_title() + "\"!");
 
             String start_date = my_user.getConfirm_start_date();
             String end_date = my_user.getConfirm_end_date();
@@ -242,31 +240,35 @@ public class NotificationReceiveService extends Service {
             String end_time = my_user.getConfirm_end_time();
 
             notificationDatabase.putInformation(notificationDatabase, 4, my_user.getConfirm_event_id(), my_user.getConfirm_event_colour(),
-                    my_user.getConfirm_my_username(), " has confirmed the event \"", my_user.getConfirm_event_title(),
+                    my_user.getConfirm_my_username(), friend_user.getImage().getBytes(), " has confirmed the event \"", my_user.getConfirm_event_title(),
                     "\" to be from " + start_date + " to " + end_date + ", " + start_time + " - " + end_time, null, null,
                     start_date, end_date, start_time, end_time, null);
 
             cloudantConnect.resetVotingConfirmation(my_user);
             cloudantConnect.startPushReplication();
 
-        } if(my_user.getReminder_event_title() != null) {
+        }
+        if (my_user.getReminder_event_title() != null) {
 
             Log.d(TAG, "Voting reminder found");
-            setNotification(my_user.getReminder_event_colour(), VOTING_REMINDER, my_user.getReminder_my_username() + " reminds you to vote for the event \"" + my_user.getReminder_event_title()  + "\"!");
+            User friend_user = cloudantConnect.getTargetUser(my_user.getReminder_my_username());
+            setNotification(Constant.stringToBitmap(friend_user.getImage()), my_user.getReminder_event_colour(), VOTING_REMINDER, my_user.getReminder_my_username() + " reminds you to vote for the event \"" + my_user.getReminder_event_title() + "\"!");
 
-                    notificationDatabase.putInformation(notificationDatabase, 5, my_user.getReminder_event_id(), my_user.getReminder_event_colour(),
-                            my_user.getReminder_my_username(), " reminds you to vote for the event \"", my_user.getReminder_event_title(),
-                            "\". Vote now!", null, null, null, null, null, null, null);
+            notificationDatabase.putInformation(notificationDatabase, 5, my_user.getReminder_event_id(), my_user.getReminder_event_colour(),
+                    my_user.getReminder_my_username(), friend_user.getImage().getBytes(), " reminds you to vote for the event \"", my_user.getReminder_event_title(),
+                    "\". Vote now!", null, null, null, null, null, null, null);
 
             cloudantConnect.resetVotingReminder(my_user);
             cloudantConnect.startPushReplication();
-        } if(my_user.getAttendance_event_title() != null) {
+        }
+        if (my_user.getAttendance_event_title() != null) {
 
             Log.d(TAG, "Voting attendance found");
-            setNotification(my_user.getAttendance_event_colour(), VOTING_REMINDER, my_user.getAttendance_my_username() + " will be coming to your event \"" + my_user.getAttendance_event_title()  + "\"!");
+            User friend_user = cloudantConnect.getTargetUser(my_user.getConfirm_my_username());
+            setNotification(Constant.stringToBitmap(friend_user.getImage()), my_user.getAttendance_event_colour(), VOTING_REMINDER, my_user.getAttendance_my_username() + " will be coming to your event \"" + my_user.getAttendance_event_title() + "\"!");
 
             notificationDatabase.putInformation(notificationDatabase, 6, my_user.getAttendance_event_id(), my_user.getAttendance_event_colour(),
-                    my_user.getAttendance_my_username(), " will be coming to your event \"", my_user.getAttendance_event_title(),
+                    my_user.getAttendance_my_username(), friend_user.getImage().getBytes(), " will be coming to your event \"", my_user.getAttendance_event_title(),
                     "\"!", null, null, null, null, null, null, null);
 
             votingDatabase.updateInformation(votingDatabase, "" + my_user.getAttendance_event_id(), null, my_user.getAttendance_my_username(), null, null, null, null);
@@ -277,21 +279,20 @@ public class NotificationReceiveService extends Service {
     }
 
     //Helper Method for Setting Notification
-    public void setNotification(int event_colour, String titleOfNotification, String contentOfNotification) {
+    public void setNotification(Bitmap bitmap, int event_colour, String titleOfNotification, String contentOfNotification) {
 
         Log.i(TAG, "Intent received!");
         int notification_id = 1;
 
         // TODO: Link user to notification fragment
 
-        Bitmap largeIcon = BitmapFactory.decodeResource(getResources(), Constant.getBearColour(event_colour));
         Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                 .setContentTitle("Fetch: " + titleOfNotification)
                 .setContentText(contentOfNotification)
                 .setLights(Color.CYAN, 1000, 1000)
-                .setLargeIcon(largeIcon)
+                .setLargeIcon(bitmap)
                 .setSmallIcon(Constant.getBearColour(event_colour))
                 .setVibrate(new long[]{1000, 1000})
                 .setWhen(System.currentTimeMillis())

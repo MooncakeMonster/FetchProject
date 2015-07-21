@@ -1,8 +1,9 @@
-package mooncakemonster.orbitalcalendar.ImportExternal;
+package mooncakemonster.orbitalcalendar.importexternal;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ListAdapter;
 
 import com.google.ical.compat.jodatime.DateTimeIterator;
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
@@ -25,8 +26,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
-import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
 /**
@@ -34,7 +35,7 @@ import mooncakemonster.orbitalcalendar.database.Constant;
  * Based on RFC 2445 iCalendar specification
  * Note: This parser recognizes only "vevent" components.
  */
-public class ImportICSParser extends Activity {
+public class ImportICSParser extends ListActivity {
 
     //Date format
     private static final SimpleDateFormat ICS_PARSER_DATE_FORMAT = new SimpleDateFormat("yyyyMMdd");
@@ -55,16 +56,26 @@ public class ImportICSParser extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle extras = getIntent().getExtras();
+        List<Appointment> listOfInput = null;
+
+        if (extras != null) {
+
+            //Assuming user got here from ImportExternalFragment.java
+            String filePath = extras.getString("filePath");
+            //Get list of appointments
+            listOfInput = icsReader(filePath);
+        }
+
+        ListAdapter adapter = new ImportExternalAdapter(this, R.layout.row_import_external, listOfInput);
+        setListAdapter(adapter);
     }
 
-    public void icsReader(String file) {
+    public List<Appointment> icsReader(String file) {
 
         //For storing actual appointments in
         List<Appointment> timetable = new ArrayList<Appointment>();
         Appointment tempAppt;
-
-        //AppointmentController variable to control the SQLite database
-        AppointmentController appointmentDatabase = new AppointmentController(this.getApplicationContext());
 
         try {
             //Open resources
@@ -223,30 +234,30 @@ public class ImportICSParser extends Activity {
                             ReadableDateTime jodaTime = new DateTime(startMillisec);
                             DateTimeZone tzid = DateTimeZone.getDefault();
 
-                            DateTimeIterator timeList = null;
-
                             try {
-                                timeList = DateTimeIteratorFactory.createDateTimeIterator(blockLine, jodaTime, tzid, true);
+                                DateTimeIterator timeList = DateTimeIteratorFactory.createDateTimeIterator(blockLine, jodaTime, tzid, true);
+
+                                while(timeList.hasNext()) {
+                                    DateTime tempDate = timeList.next();
+                                    long startMillisecond = tempDate.getMillis();
+                                    //Get startProperDate
+                                    date = new Date(startMillisecond);
+                                    dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
+
+                                    tempAppt = new Appointment();
+                                    tempAppt.setEvent(event);
+                                    tempAppt.setStartDate(startMillisecond);
+                                    tempAppt.setStartProperDate(dateFormatted);
+                                    tempAppt.setEndDate(endMillisec);
+                                    tempAppt.setLocation(location);
+                                    tempAppt.setNotes(notes);
+                                    tempAppt.setRemind(startMillisecond - alarmMillisec);
+                                }
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
 
-                            while(timeList.hasNext()) {
-                                DateTime tempDate = timeList.next();
-                                long startMillisecond = tempDate.getMillis();
-                                //Get startProperDate
-                                date = new Date(startMillisecond);
-                                dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
 
-                                tempAppt = new Appointment();
-                                tempAppt.setEvent(event);
-                                tempAppt.setStartDate(startMillisecond);
-                                tempAppt.setStartProperDate(dateFormatted);
-                                tempAppt.setEndDate(endMillisec);
-                                tempAppt.setLocation(location);
-                                tempAppt.setNotes(notes);
-                                tempAppt.setRemind(startMillisecond - alarmMillisec);
-                            }
 
                         } else if (value.equals("VALARM")) {
                             //Nuke hasAlarm value
@@ -258,20 +269,15 @@ public class ImportICSParser extends Activity {
                         break;
                 }
             }
-
-            //Add in database
-            for (Appointment s : timetable) {
-                appointmentDatabase.createAppointment(s);
-            }
-
             //Close resources
-            appointmentDatabase.close();
             bufferedDataFile.close();
             dataFile.close();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return timetable;
     }
 
     //Helper method for counting lines in file
@@ -313,15 +319,4 @@ public class ImportICSParser extends Activity {
 
         return answer;
     }
-
-    //Helper method to process RRULE : Remove this shell
-    private static void processRrule(String blockRead, ReadableDateTime start,DateTimeZone tzid, boolean strict)
-    {
-        try {
-            DateTimeIteratorFactory.createDateTimeIterator(blockRead, start, tzid, strict);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

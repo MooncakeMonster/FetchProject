@@ -44,56 +44,56 @@
             android:name=".event.EventActivity"
             android:label="@string/title_activity_event"
             android:theme="@style/AppThemeMenu"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".authentication.LoginActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login"/>
         <activity
             android:name=".authentication.RegisterActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_register"></activity>
+            android:label="@string/title_activity_register"/>
         <activity
             android:name=".menudrawer.MenuDrawer"
             android:label="Fetch"
             android:screenOrientation="portrait"
-            android:theme="@style/MyMaterialTheme"></activity>
+            android:theme="@style/MyMaterialTheme"/>
         <activity
             android:name=".accountsettings.SettingActivity"
             android:label="Account Settings"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMenu"></activity>
+            android:theme="@style/AppThemeMenu"/>
         <activity
             android:name=".picoftheday.CreatePicture"
             android:label="Add New Picture"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMenu"></activity>
+            android:theme="@style/AppThemeMenu"/>
         <activity
             android:name=".voteinvitation.VoteInvitation"
             android:label="Vote Event"
             android:screenOrientation="portrait"
-            android:theme="@style/AppThemeMenu"></activity>
+            android:theme="@style/AppThemeMenu"/>
         <activity
             android:name=".votesend.VotingActivity"
             android:label="Vote Event"
             android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppThemeMenu"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".votereceive.VotingResultActivity"
             android:label="Voting Result"
             android:theme="@style/AppThemeMenu"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".profilepicture.CropImage"
             android:label="Crop Image"
             android:theme="@style/AppThemeMenu"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait"/>
 
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <!--For parsing data from .ics extension-->
-        <activity android:name=".ImportExternal.ImportICSParser">
+        <activity android:name=".importexternal.ImportICSParser">
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

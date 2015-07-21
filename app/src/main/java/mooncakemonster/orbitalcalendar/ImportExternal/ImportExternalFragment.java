@@ -1,5 +1,6 @@
-package mooncakemonster.orbitalcalendar.ImportExternal;
+package mooncakemonster.orbitalcalendar.importexternal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,8 @@ import android.widget.Button;
 import mooncakemonster.orbitalcalendar.R;
 
 public class ImportExternalFragment extends Fragment {
+
+    public static final int ICS_IMPORT_REQUEST = 1;
 
     public ImportExternalFragment() {
     }
@@ -38,7 +41,15 @@ public class ImportExternalFragment extends Fragment {
         nusTimetable.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Insert code for nus timetable
+                //Get file path from file picker
+                Intent intentFilePath = new Intent(Intent.ACTION_GET_CONTENT);
+                intentFilePath.setType("*/*");
+                startActivityForResult(intentFilePath, ICS_IMPORT_REQUEST);
+
+                String filePath = intentFilePath.getData().getPath();
+                Intent intent = new Intent(getActivity(), ImportICSParser.class);
+                intent.putExtra("filePath", filePath);
+                startActivity(intent);
             }
         });
 

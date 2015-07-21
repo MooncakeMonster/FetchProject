@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.ImportExternal;
+package mooncakemonster.orbitalcalendar.importexternal;
 
 import android.content.Intent;
 import android.os.Bundle;

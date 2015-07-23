@@ -1,5 +1,6 @@
 package mooncakemonster.orbitalcalendar.importexternals;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,14 +46,28 @@ public class ImportExternalFragment extends Fragment {
                 Intent intentFilePath = new Intent(Intent.ACTION_GET_CONTENT);
                 intentFilePath.setType("*/*");
                 startActivityForResult(intentFilePath, ICS_IMPORT_REQUEST);
-
-                String filePath = intentFilePath.getData().getPath();
-                Intent intent = new Intent(getActivity(), ImportICSParser.class);
-                intent.putExtra("filePath", filePath);
-                startActivity(intent);
             }
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(resultCode == Activity.RESULT_CANCELED) {
+            return;
+        }
+        //If manager to get chosen file
+        switch(requestCode){
+            case ICS_IMPORT_REQUEST:
+                String filePath = data.getData().getPath();
+                Intent intent = new Intent(getActivity(), ImportICSParser.class);
+                intent.putExtra("filePath", filePath);
+                startActivity(intent);
+                break;
+
+            default:
+                break;
+        }
     }
 }

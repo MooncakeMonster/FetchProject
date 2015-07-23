@@ -3,7 +3,11 @@ package mooncakemonster.orbitalcalendar.importexternals;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ListAdapter;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.ical.compat.jodatime.DateTimeIterator;
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
@@ -21,13 +25,13 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
 /**
@@ -56,26 +60,33 @@ public class ImportICSParser extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.row_import_external_list);
         Bundle extras = getIntent().getExtras();
-        List<Appointment> listOfInput = null;
+        List<ImportedAppointment> listOfInput = null;
 
         if (extras != null) {
-
             //Assuming user got here from ImportExternalFragment.java
             String filePath = extras.getString("filePath");
             //Get list of appointments
             listOfInput = icsReader(filePath);
         }
 
-        ListAdapter adapter = new ImportExternalAdapter(this, R.layout.row_import_external, listOfInput);
+        ArrayAdapter adapter = new ImportExternalAdapter(this, R.layout.row_import_external, listOfInput);
         setListAdapter(adapter);
     }
 
-    public List<Appointment> icsReader(String file) {
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        ImportedAppointment appt = (ImportedAppointment) l.getItemAtPosition(position);
+        appt.toggle();
+    }
+
+    public List<ImportedAppointment> icsReader(String file) {
 
         //For storing actual appointments in
-        List<Appointment> timetable = new ArrayList<Appointment>();
-        Appointment tempAppt;
+        List<ImportedAppointment> timetable = new ArrayList<ImportedAppointment>();
+        ImportedAppointment tempAppt;
 
         try {
             //Open resources
@@ -218,7 +229,7 @@ public class ImportICSParser extends ListActivity {
                             String dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
 
                             //Set value for initial appointment
-                            tempAppt = new Appointment();
+                            tempAppt = new ImportedAppointment();
                             tempAppt.setEvent(event);
                             tempAppt.setStartDate(startMillisec);
                             tempAppt.setStartProperDate(dateFormatted);
@@ -226,6 +237,7 @@ public class ImportICSParser extends ListActivity {
                             tempAppt.setLocation(location);
                             tempAppt.setNotes(notes);
                             tempAppt.setRemind(startMillisec - alarmMillisec);
+                            tempAppt.setToImport();
 
                             timetable.add(tempAppt);
 
@@ -244,7 +256,7 @@ public class ImportICSParser extends ListActivity {
                                     date = new Date(startMillisecond);
                                     dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
 
-                                    tempAppt = new Appointment();
+                                    tempAppt = new ImportedAppointment();
                                     tempAppt.setEvent(event);
                                     tempAppt.setStartDate(startMillisecond);
                                     tempAppt.setStartProperDate(dateFormatted);
@@ -252,12 +264,11 @@ public class ImportICSParser extends ListActivity {
                                     tempAppt.setLocation(location);
                                     tempAppt.setNotes(notes);
                                     tempAppt.setRemind(startMillisecond - alarmMillisec);
+                                    tempAppt.setToImport();
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-
-
 
                         } else if (value.equals("VALARM")) {
                             //Nuke hasAlarm value
@@ -277,6 +288,7 @@ public class ImportICSParser extends ListActivity {
             e.printStackTrace();
         }
 
+        Collections.sort(timetable);
         return timetable;
     }
 
@@ -319,4 +331,35 @@ public class ImportICSParser extends ListActivity {
 
         return answer;
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_plus, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_add) {
+            //Open database
+            //Get array from adapter
+            List<ImportedAppointment> timetable = null;
+            //insert in database
+            for(ImportedAppointment appt: timetable) {
+                if(appt.isToImport()) {
+
+                }
+            }
+            //Close database
+            finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

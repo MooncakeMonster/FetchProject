@@ -119,6 +119,7 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
                     startActivity(new Intent(LoginActivity.this, MenuDrawer.class));
                     finish();
 
+                    //Toast.makeText(getApplicationContext(), "Login successfully", Toast.LENGTH_SHORT).show();
                     hideDialog();
                 }
             }, 3000);

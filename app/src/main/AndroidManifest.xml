@@ -115,6 +115,7 @@
         </receiver>
 
         <receiver
+
             android:name="mooncakemonster.orbitalcalendar.alarm.AlarmSetter"
             android:label="AlarmSetter">
 
@@ -124,10 +125,12 @@
 
         </receiver>
 
+        <!--
         <service
             android:name= "mooncakemonster.orbitalcalendar.notifications.NotificationReceiveService"
             android:label="NotificationReceiveService" >
         </service>
+        -->
 
     </application>
 

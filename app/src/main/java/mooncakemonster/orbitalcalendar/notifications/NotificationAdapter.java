@@ -48,6 +48,13 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
     UserDatabase db;
     Intent intent;
 
+    private static final int DIVISION = 1000;
+    private static final int MINUTES = 60;
+    private static final int HOURS = 3600;
+    private static final int DAYS = 86400;
+    private static final int YESTERDAY = 172800;
+    private static final int WEEK = 604800;
+
     public NotificationAdapter(Context context, int resource, List<NotificationItem> objects) {
         super(context, resource, objects);
         this.objects = objects;
@@ -57,6 +64,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         LinearLayout layout;
         SimpleDraweeView action_image;
         TextView message;
+        TextView timestamp;
     }
 
     @Override
@@ -90,6 +98,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
             // Set the text of a textView with the spannable object
             holder.layout = (LinearLayout) row.findViewById(R.id.notification_layout);
             holder.action_image = (SimpleDraweeView) row.findViewById(R.id.action_image);
+            holder.timestamp = (TextView) row.findViewById(R.id.timestamp);
 
             if (cloudantConnect == null)
                 cloudantConnect = new CloudantConnect(getContext(), "user");
@@ -99,6 +108,9 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
             holder.message = (TextView) row.findViewById(R.id.message);
             holder.message.setText(spannable);
+
+            // Get the timestamp
+            holder.timestamp.setText(getTimestampText(notificationItem.getTimestamp()));
 
             progressDialog = new ProgressDialog(getContext());
             progressDialog.setCancelable(false);
@@ -158,6 +170,8 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                                             HashMap<String, String> user = db.getUserDetails();
                                             String my_username = user.get("username");
                                             cloudantConnect.sendFriendAccepted(my_username, notificationItem.getSender_username());
+
+                                            //Toast.makeText(getContext(), "Friend request accepted", Toast.LENGTH_SHORT).show();
 
                                             hideDialog();
                                         }
@@ -235,6 +249,26 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         }
 
         return row;
+    }
+
+    // This method computes the time received the notification
+    private String getTimestampText(long timestamp) {
+        long timestamp_second = timestamp / DIVISION;
+        long current_second = Calendar.getInstance().getTimeInMillis() / DIVISION;
+
+        long difference = current_second - timestamp_second;
+        // (1) Received less than a minute
+        if(difference < MINUTES) return "A few seconds ago";
+        // (2) Received less than an hour
+        else if(difference < HOURS) return "About " + (difference / MINUTES) + " mins ago";
+        // (3) Received less than a day
+        else if(difference < DAYS) return "About " + (difference / HOURS) + " hours ago";
+        // (4) Received yesterday
+        else if(difference < YESTERDAY) return "Yesterday at" + Constant.getDate(timestamp, Constant.TIMEFORMATTER);
+        // (5) Received within this week
+        else if(difference < WEEK) return Constant.getDate(timestamp, Constant.NOTIFICATION_WEEK_DATEFORMATTER);
+        // (6) Received other days
+        else return Constant.getDate(timestamp, Constant.NOTIFICATION_DATEFORMATTER);
     }
 
     // This method shows progress dialog when not showing

@@ -169,9 +169,10 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
                     startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                     finish();
                 }
+                //Toast.makeText(getApplicationContext(), "Successfully registered", Toast.LENGTH_SHORT).show();
                 hideDialog();
             }
-        }, 3000);
+        }, 1500);
     }
 
     /****************************************************************************************************

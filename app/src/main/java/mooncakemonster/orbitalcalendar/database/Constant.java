@@ -71,6 +71,9 @@ public final class Constant
     public static final int LOCATION_MAX_LENGTH = 50;
     public static final int NOTES_MAX_LENGTH = 200;
 
+    public static SimpleDateFormat NOTIFICATION_DATEFORMATTER = new SimpleDateFormat("dd/MM/yyyy, hh:mma");
+    public static SimpleDateFormat NOTIFICATION_WEEK_DATEFORMATTER = new SimpleDateFormat("EEEE, hh:mma");
+
     public static SimpleDateFormat DATEFORMATTER = new SimpleDateFormat("dd/MM/yyyy, EEE");
     public static SimpleDateFormat TIMEFORMATTER = new SimpleDateFormat("hh:mma");
     public static SimpleDateFormat YYYYMMDD_FORMATTER = new SimpleDateFormat("yyyy MM dd");
@@ -385,6 +388,9 @@ public final class Constant
         dialogBuilder.setMessage(message);
         dialogBuilder.setPositiveButton("Ok", null);
         dialogBuilder.show();
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
     }
 
     /****************************************************************************************************

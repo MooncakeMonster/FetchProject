@@ -10,12 +10,14 @@ public class NotificationData {
     public NotificationData() { }
 
     public static abstract class NotificationInfo implements BaseColumns {
+        public static final String ACTION_DONE = "action_done";
+        public static final String ROW_ID = "row_id";
         public static final String NOTIFICATION_ID = "notification_id";
+        public static final String TIMESTAMP = "timestamp";
         public static final String EVENT_ID = "event_id";
         public static final String IMAGE_ID = "image_id";
 
         public static final String SENDER_USERNAME = "sender_username";
-        public static final String SENDER_IMAGE = "sender_image";
         public static final String MESSAGE = "message";
         public static final String SENDER_EVENT = "sender_event";
         public static final String ACTION = "action";

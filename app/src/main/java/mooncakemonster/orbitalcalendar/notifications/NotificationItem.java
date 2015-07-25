@@ -6,11 +6,13 @@ import java.io.Serializable;
  * Created by BAOJUN on 7/7/15.
  */
 public class NotificationItem implements Serializable {
+    private String action_done;
+    private String row_id;
     private int notificationId;
+    private long timestamp;
     private int eventId;
     private int imageId;
     private String sender_username;
-    private byte[] sender_image;
     private String message;
     private String sender_event;
     private String action;
@@ -22,13 +24,15 @@ public class NotificationItem implements Serializable {
     private String end_time;
     private String reject_reason;
 
-    public NotificationItem(int notificationId, int eventId, int imageId, String sender_username, byte[] sender_image, String message, String sender_event, String action,
+    public NotificationItem(String action_done, String row_id, int notificationId, int timestamp, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
                             String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
+        this.action_done = action_done;
+        this.row_id = row_id;
         this.notificationId = notificationId;
+        this.timestamp = timestamp;
         this.eventId = eventId;
         this.imageId = imageId;
         this.sender_username = sender_username;
-        this.sender_image = sender_image;
         this.message = message;
         this.sender_event = sender_event;
         this.action = action;
@@ -41,12 +45,36 @@ public class NotificationItem implements Serializable {
         this.reject_reason = reject_reason;
     }
 
+    public String getAction_done() {
+        return action_done;
+    }
+
+    public void setAction_done(String action_done) {
+        this.action_done = action_done;
+    }
+
+    public String getRow_id() {
+        return row_id;
+    }
+
+    public void setRow_id(String row_id) {
+        this.row_id = row_id;
+    }
+
     public int getNotificationId() {
         return notificationId;
     }
 
     public void setNotificationId(int notificationId) {
         this.notificationId = notificationId;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getEventId() {
@@ -71,14 +99,6 @@ public class NotificationItem implements Serializable {
 
     public void setSender_username(String sender_username) {
         this.sender_username = sender_username;
-    }
-
-    public byte[] getSender_image() {
-        return sender_image;
-    }
-
-    public void setSender_image(byte[] sender_image) {
-        this.sender_image = sender_image;
     }
 
     public String getMessage() {

@@ -104,6 +104,7 @@ public class FriendlistFragment extends ListFragment {
                                     cloudantConnect.sendFriendRequest(my_username, username);
                                     cloudantConnect.startPushReplication();
 
+                                    //Toast.makeText(getActivity(), "Friend request sent successfully", Toast.LENGTH_SHORT).show();
                                     hideDialog();
                                 }
                             }, 1500);
@@ -127,11 +128,7 @@ public class FriendlistFragment extends ListFragment {
     );
 
     // Delete friend's username
-    getListView()
-
-            .
-
-            setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
                 @Override
                 public void onItemClick (AdapterView < ? > arg0, View view,int position, long id){

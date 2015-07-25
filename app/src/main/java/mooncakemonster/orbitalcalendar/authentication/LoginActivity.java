@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.net.URISyntaxException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
@@ -95,29 +97,36 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
     }
 
     // This method vertifies login details in Cloudant database.
-    private void checkLogin(final String username, final String password) {
+    private void checkLogin(final String text_username, final String text_password) {
         progressDialog.setMessage("Logging in...");
         showDialog();
 
-        // Check Cloudant database for existing users
-        if(cloudantConnect.authenticateUser(username, password)) {
-            // User already logged in, next time do not have to login again when using app
-            loginManager.setLogin(true);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                // Check Cloudant database for existing users
+                if(cloudantConnect.authenticateUser(text_username, text_password)) {
+                    // User already logged in, next time do not have to login again when using app
+                    loginManager.setLogin(true);
 
-            // Store user in SQLite once successfully stored in Cloudant
-            User user = cloudantConnect.saveUserDetails(username, password);
-            userDatabase.addUser("" + R.drawable.profile, user.getEmail_address(), username);
+                    // Store user in SQLite once successfully stored in Cloudant
+                    User user = cloudantConnect.saveUserDetails(text_username, text_password);
+                    userDatabase.addUser("" + R.drawable.profile, user.getEmail_address(), text_username);
 
-            // Take user to next activity
-            startActivity(new Intent(LoginActivity.this, MenuDrawer.class));
-            finish();
-        } else {
-            alertUser("Error logging in!", "Please check again.");
-            // Resets username and password
-            this.username.setText("");
-            this.password.setText("");
-            hideDialog();
-        }
+                    // Take user to next activity
+                    startActivity(new Intent(LoginActivity.this, MenuDrawer.class));
+                    finish();
+                } else {
+                    alertUser("Error logging in!", "Please check again.");
+                    // Resets username and password
+                    username.setText("");
+                    password.setText("");
+                }
+
+                hideDialog();
+            }
+        }, 3000);
     }
 
     // This method reloads replication settings

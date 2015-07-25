@@ -2,11 +2,15 @@ package mooncakemonster.orbitalcalendar.cloudant;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.cloudant.sync.datastore.Attachment;
 import com.cloudant.sync.datastore.BasicDocumentRevision;
 import com.cloudant.sync.datastore.ConflictException;
 import com.cloudant.sync.datastore.Datastore;
@@ -16,6 +20,7 @@ import com.cloudant.sync.datastore.DocumentBodyFactory;
 import com.cloudant.sync.datastore.DocumentException;
 import com.cloudant.sync.datastore.DocumentRevision;
 import com.cloudant.sync.datastore.MutableDocumentRevision;
+import com.cloudant.sync.datastore.UnsavedFileAttachment;
 import com.cloudant.sync.notifications.ReplicationCompleted;
 import com.cloudant.sync.notifications.ReplicationErrored;
 import com.cloudant.sync.query.IndexManager;
@@ -27,6 +32,7 @@ import com.cloudant.sync.replication.ReplicatorFactory;
 import com.google.common.eventbus.Subscribe;
 
 import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -108,6 +114,30 @@ public class CloudantConnect {
         } catch (DocumentException e) {
             return null;
         }
+    }
+
+    /**
+     * Retrieves the user's document from the database.
+     *
+     * @param username to search for the user's document
+     */
+    public BasicDocumentRevision retrieveUserDocument(String username) {
+        int size_doc = this.datastore.getDocumentCount();
+
+        List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);
+
+        // Check through all email address in user datastore
+        for (BasicDocumentRevision revision : all_doc) {
+            User user = User.fromRevision(revision);
+
+            if (user != null && user.getUsername().equals(username)) {
+                Log.d(TAG, "Successfully found user to vote");
+                return revision;
+            }
+        }
+        // Reach here if no existing emails found
+        Log.e(TAG, "Unable to find user to vote");
+        return null;
     }
 
 
@@ -239,11 +269,34 @@ public class CloudantConnect {
     }
 
     /**
-     * This method updates the user's image into database.
+     * Updates the user's image into database.
      */
-    public void updateUserImage(String image, String username) {
+    public User updateUserImage(File file, User user) {
+        // Retrieve the original version from Cloudant document
+        MutableDocumentRevision revision = user.getDocumentRevision().mutableCopy();
+        revision.body = DocumentBodyFactory.create(user.asMap());
+
+        UnsavedFileAttachment attachment = new UnsavedFileAttachment(file, "profile/jpeg");
+        revision.attachments = new HashMap<String, Attachment>();
+        revision.attachments.put("profile_image", attachment);
+
+        try {
+            BasicDocumentRevision updated = this.datastore.updateDocumentFromRevision(revision);
+            Log.d(TAG, "Image uploaded successfully");
+            return User.fromRevision(updated);
+        } catch (DocumentException e) {
+            Log.e(TAG, "Cannot upload image");
+            return null;
+        }
+    }
+
+    /*
+     * Set user image to filename
+     */
+    public void setImageFilename(String username, String filename) {
         User user = getTargetUser(username);
-        user.setImage(image);
+
+        user.setImage(filename);
 
         // Retrieve user's documents
         try {
@@ -253,6 +306,28 @@ public class CloudantConnect {
         } catch (ConflictException e) {
             Log.e(TAG, "Unable to update target user's information");
         }
+
+        startPushReplication();
+    }
+
+    /*
+     * Returns the image in byte array from database
+     */
+    public Bitmap retrieveUserImage(String username) {
+        BasicDocumentRevision document = retrieveUserDocument(username);
+        Attachment attachment = document.getAttachments().get(getTargetUser(username).getImage());
+
+        try {
+            InputStream inputStream = attachment.getInputStream();
+            Log.e(TAG, "Retrieved image successfully");
+            Drawable drawable = Drawable.createFromStream(inputStream, "profile_image");
+            return ((BitmapDrawable) drawable).getBitmap();
+        } catch (Exception e) {
+            Log.e(TAG, "Unable to retrieve image");
+        }
+
+        // Should not reach here
+        return null;
     }
 
     /****************************************************************************************************

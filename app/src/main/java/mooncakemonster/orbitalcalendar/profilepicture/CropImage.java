@@ -26,7 +26,6 @@ import java.util.List;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
 /**
@@ -57,10 +56,15 @@ public class CropImage extends ActionBarActivity {
 
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this, "user");
-        User my_user = cloudantConnect.getTargetUser(my_username);
 
         cropImageView = (CropImageView) findViewById(R.id.CropImageView);
-        cropImageView.setImageBitmap(Constant.stringToBitmap(my_user.getImage()));
+
+        try {
+            cropImageView.setImageBitmap(cloudantConnect.retrieveUserImage(my_username));
+        } catch (Exception e) {
+            cropImageView.setImageResource(R.drawable.profile);
+        }
+
         cropImageView.setAspectRatio(DEFAULT_ASPECT_RATIO_VALUES, DEFAULT_ASPECT_RATIO_VALUES);
         // Ensure cropped image is a square
         cropImageView.setFixedAspectRatio(true);
@@ -193,14 +197,16 @@ public class CropImage extends ActionBarActivity {
 
             db = new UserDatabase(getApplicationContext());
             HashMap<String, String> user = db.getUserDetails();
-            String my_username = user.get("username");
+            final String my_username = user.get("username");
 
-            Bitmap cropped = cropImageView.getCroppedImage(500, 500);
-            cloudantConnect.updateUserImage(Constant.bitmapToString(cropped), my_username);
+            Bitmap bitmap = cropImageView.getCroppedImage();
+
+            Uri uri = Constant.getImageUri(getApplicationContext(), bitmap);
+            String filename = Constant.getFileName(this, uri);
+            cloudantConnect.setImageFilename(my_username, filename);
+            cloudantConnect.updateUserImage(new File(Constant.getRealPathFromURI(getApplicationContext(), uri)), cloudantConnect.getTargetUser(my_username));
             cloudantConnect.startPushReplication();
 
-            //if (cropped != null)
-                //cropImageView.setImageBitmap(cropped);
             finish();
             return true;
         }

@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,13 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.accountsettings.SettingActivity;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.cloudant.User;
-import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.profilepicture.CropImage;
 import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 
@@ -42,7 +40,7 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private RoundImage roundImage;
-    private CircleImageView userIcon;
+    private ImageView userIcon;
     private ImageView settings;
     private TextView displayUsername;
     private static String[] titles = null;
@@ -90,11 +88,17 @@ public class FragmentDrawer extends Fragment {
             this.cloudantConnect = new CloudantConnect(getActivity(), "user");
         String my_username = user.get("username");
         cloudantConnect.startPullReplication();
-        User my_user = cloudantConnect.getTargetUser(my_username);
 
-        userIcon = (CircleImageView) layout.findViewById(R.id.usericon);
-        //roundImage = new RoundImage(Constant.stringToBitmap(my_user.getImage()));
-        userIcon.setImageBitmap(Constant.stringToBitmap(my_user.getImage()));
+        userIcon = (ImageView) layout.findViewById(R.id.usericon);
+
+        try {
+            roundImage = new RoundImage(cloudantConnect.retrieveUserImage(my_username));
+            userIcon.setImageDrawable(roundImage);
+        } catch (Exception e) {
+            Log.e(TAG, "No profile image set yet");
+            userIcon.setImageResource(R.drawable.profile);
+        }
+
         userIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

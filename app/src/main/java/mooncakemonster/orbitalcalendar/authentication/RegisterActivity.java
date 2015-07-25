@@ -16,13 +16,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.net.URISyntaxException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.cloudant.User;
-import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**
@@ -151,18 +152,26 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
      ****************************************************************************************************/
 
     // This method registers new users and store user data in Cloudant
-    private void registerUser(String email_address, String username, String password) {
+    private void registerUser(final String email_address, final String username, final String password) {
         progressDialog.setMessage("Registering...");
         showDialog();
 
-        //Save user details into Cloudant; if successful, take user to login activity
-        if (createNewUser(email_address, username, password)) {
-            // Push new user details into Cloudant
-            cloudantConnect.startPushReplication();
-            // Launch Login Activity
-            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-            finish();
-        }
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //Save user details into Cloudant; if successful, take user to login activity
+                if (createNewUser(email_address, username, password)) {
+                    // Push new user details into Cloudant
+                    cloudantConnect.startPushReplication();
+
+                    // Launch Login Activity
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    finish();
+                }
+                hideDialog();
+            }
+        }, 3000);
     }
 
     /****************************************************************************************************
@@ -171,8 +180,8 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
 
     // This method creates new user document into Cloudant
     private boolean createNewUser(String email_address, String username, String password) {
-        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.profile);
-        User user = new User(Constant.bitmapToString(image), email_address, username, password);
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.drawable.bearicon);
+        User user = new User("", email_address, username, password);
         try {
             User final_user = cloudantConnect.createNewUserDocument(user);
             Log.d(TAG, "Saved new user " + final_user.getEmail_address() + " successfully");

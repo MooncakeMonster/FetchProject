@@ -16,6 +16,11 @@ public class User {
     private String username;
     private String password;
 
+    // Friend request
+    private String friend_request_username;
+    private String friend_accept_username;
+    private String friend_remove;
+
     // Voting options
     private String option_my_username;
     private int option_event_id;
@@ -113,6 +118,30 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getFriend_request_username() {
+        return friend_request_username;
+    }
+
+    public void setFriend_request_username(String friend_request_username) {
+        this.friend_request_username = friend_request_username;
+    }
+
+    public String getFriend_accept_username() {
+        return friend_accept_username;
+    }
+
+    public void setFriend_accept_username(String friend_accept_username) {
+        this.friend_accept_username = friend_accept_username;
+    }
+
+    public String getFriend_remove() {
+        return friend_remove;
+    }
+
+    public void setFriend_remove(String friend_remove) {
+        this.friend_remove = friend_remove;
     }
 
     public String getOption_my_username() {
@@ -461,6 +490,11 @@ public class User {
         user.setUsername((String) ((Map) user_revised.get("user_details")).get("username"));
         user.setPassword((String) ((Map) user_revised.get("user_details")).get("encrypted_password"));
 
+        // Friend request
+        user.setFriend_request_username((String) ((Map) user_revised.get("friend")).get("friend_request_username"));
+        user.setFriend_accept_username((String) ((Map) user_revised.get("friend")).get("friend_accept_username"));
+        user.setFriend_remove((String) ((Map) user_revised.get("friend")).get("friend_remove"));
+
         // Voting options
         user.setOption_my_username((String) ((Map) user_revised.get("voting_options")).get("option_my_username"));
         user.setOption_event_id((int) ((Map) user_revised.get("voting_options")).get("option_event_id"));
@@ -526,6 +560,12 @@ public class User {
         user_details.put("username", username);
         user_details.put("encrypted_password", password);
 
+        // Friend request
+        HashMap<String, Object> friend = new HashMap<>();
+        friend.put("friend_request_username", friend_request_username);
+        friend.put("friend_accept_username", friend_accept_username);
+        friend.put("friend_remove", friend_remove);
+
         // Voting options
         HashMap<String, Object> voting_options = new HashMap<>();
         voting_options.put("option_my_username", option_my_username);
@@ -584,6 +624,7 @@ public class User {
 
         // User
         user.put("user_details", user_details);
+        user.put("friend", friend);
         user.put("voting_options", voting_options);
         user.put("voting_selected", voting_selected);
         user.put("voting_confirmed", voting_confirmed);

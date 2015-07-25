@@ -1,7 +1,6 @@
 package mooncakemonster.orbitalcalendar.authentication;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,6 +19,7 @@ import java.util.TimerTask;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.cloudant.User;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer;
 
 /**
@@ -62,7 +62,7 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
 
         // Check if user is already logged in
-        if(loginManager.isLoggedIn()) {
+        if (loginManager.isLoggedIn()) {
             startActivity(new Intent(LoginActivity.this, MenuDrawer.class));
             finish();
         }
@@ -77,11 +77,11 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
                 String inputUsername = username.getText().toString().trim();
                 String inputPassword = password.getText().toString().trim();
 
-                if(inputUsername.length() > 0 && inputPassword.length() > 0) {
+                if (inputUsername.length() > 0 && inputPassword.length() > 0) {
                     checkLogin(inputUsername, inputPassword);
                 } else {
-                    if(username.length() < 1) username.setError("Please enter username.");
-                    else if(password.length() < 1) password.setError("Please enter password.");
+                    if (username.length() < 1) username.setError("Please enter username.");
+                    else if (password.length() < 1) password.setError("Please enter password.");
                 }
             }
         });
@@ -98,15 +98,16 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
 
     // This method vertifies login details in Cloudant database.
     private void checkLogin(final String text_username, final String text_password) {
-        progressDialog.setMessage("Logging in...");
-        showDialog();
+        // Check Cloudant database for existing users
+        if (cloudantConnect.authenticateUser(text_username, text_password)) {
+            progressDialog.setMessage("Logging in...");
+            showDialog();
 
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                // Check Cloudant database for existing users
-                if(cloudantConnect.authenticateUser(text_username, text_password)) {
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+
                     // User already logged in, next time do not have to login again when using app
                     loginManager.setLogin(true);
 
@@ -117,16 +118,16 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
                     // Take user to next activity
                     startActivity(new Intent(LoginActivity.this, MenuDrawer.class));
                     finish();
-                } else {
-                    alertUser("Error logging in!", "Please check again.");
-                    // Resets username and password
-                    username.setText("");
-                    password.setText("");
-                }
 
-                hideDialog();
-            }
-        }, 3000);
+                    hideDialog();
+                }
+            }, 3000);
+        } else {
+            Constant.alertUser(this, "Error logging in!", "Please check again.");
+            // Resets username and password
+            username.setText("");
+            password.setText("");
+        }
     }
 
     // This method reloads replication settings
@@ -136,15 +137,6 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
         } catch (URISyntaxException e) {
             Log.e(TAG, "Unable to construct remote URI from configuration", e);
         }
-    }
-
-    // This method calls alert dialog to inform users a message.
-    private void alertUser(String title, String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
-        dialogBuilder.setTitle(title);
-        dialogBuilder.setMessage(message);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
     }
 
     // This method shows progress dialog when not showing

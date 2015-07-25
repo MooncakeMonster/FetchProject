@@ -10,7 +10,7 @@ public class FriendData {
     public FriendData() { }
 
     public static abstract class FriendInfo implements BaseColumns {
-        public static final String FRIEND_IMAGE = "friend_image";
+        public static final String FRIEND_TIMESTAMP = "friend_timestamp";
         public static final String FRIEND_USERNAME = "friend_username";
 
         public static final int DATABASE_VERSION = 1;

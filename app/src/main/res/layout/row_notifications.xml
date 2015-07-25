@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:id="@+id/notification_layout"
     android:layout_margin="@dimen/standard_padding_size"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView
+    <com.facebook.drawee.view.SimpleDraweeView
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:id="@+id/action_image"
-        android:scaleType="centerCrop"
+        fresco:actualImageScaleType="fitCenter"
         android:layout_marginTop="@dimen/standard_padding_size"
         android:layout_marginBottom="@dimen/standard_padding_size"
-        android:layout_marginLeft="@dimen/standard_padding_size"
-        app:border_width="2dp"
-        app:border_color="@color/white"/>
+        android:layout_marginLeft="@dimen/standard_padding_size" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -31,9 +29,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
+        android:layout_marginTop="@dimen/standard_padding_size"
         android:text="Username"
         android:singleLine="false"
-        android:textSize="16dp" />
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/timestamp"
@@ -41,11 +40,11 @@
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/timestamp"
+        android:textColor="@color/colorPrimary"
         android:text="About a minute ago"
         android:singleLine="false"
         android:paddingTop="1dp"
-        android:textSize="11dp" />
+        android:textSize="10dp" />
 
     </LinearLayout>
 </LinearLayout>

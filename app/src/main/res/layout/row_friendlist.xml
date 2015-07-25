@@ -1,29 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+    android:id="@+id/notification_layout"
     android:layout_margin="@dimen/standard_padding_size"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:id="@+id/friend_image"
-        android:scaleType="centerCrop"
-        android:layout_margin="@dimen/standard_padding_size"
-        app:border_width="2dp"
-        app:border_color="@color/white"/>
+        fresco:actualImageScaleType="fitCenter"
+        android:layout_marginTop="@dimen/standard_padding_size"
+        android:layout_marginBottom="@dimen/standard_padding_size"
+        android:layout_marginLeft="@dimen/standard_padding_size" />
 
-    <TextView
-        android:id="@+id/friend_username"
-        android:layout_toRightOf="@id/friend_image"
-        android:layout_centerVertical="true"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
-        android:text="Username"
-        android:paddingLeft="20dp"
-        android:textSize="18dp" />
+        android:layout_margin="@dimen/standard_padding_size"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/friend_username"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/standard_padding_size"
+            android:text="Username"
+            android:singleLine="false"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/friend_timestamp"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Became friends on 25 July 2015, Sat @ 2:35pm"
+            android:singleLine="false"
+            android:paddingTop="1dp"
+            android:textSize="11dp" />
+
+    </LinearLayout>
+</LinearLayout>

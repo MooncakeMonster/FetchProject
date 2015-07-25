@@ -40,13 +40,11 @@ dependencies {
     compile 'com.soundcloud.android:android-crop:1.0.0@aar'
     compile 'com.squareup.picasso:picasso:2.4.0'
     compile (group: 'it.sephiroth.android.library.fork.slideexpandable', name: 'slideexpandable', version: '1.0.3.1', ext: 'aar')
-    compile 'com.alexvasilkov:foldable-layout:1.0.1'
-    compile 'com.alexvasilkov:android-commons:1.2.3'
     compile 'com.github.flavienlaurent.discrollview:library:0.0.2@aar'
     compile 'com.theartofdev.edmodo:android-image-cropper:1.0.+'
     compile 'de.hdodenhof:circleimageview:1.3.0'
-    compile 'com.github.airk000:sobitmap:0.1.+'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.4'
+    compile 'com.facebook.fresco:fresco:0.6.0+'
     compile files('libs/volley.jar')
     compile 'net.danlew:android.joda:2.8.1'
     compile files('libs/rfc2445-4Mar2011.jar')

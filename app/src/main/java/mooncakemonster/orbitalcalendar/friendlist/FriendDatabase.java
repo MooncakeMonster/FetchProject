@@ -18,7 +18,7 @@ public class FriendDatabase extends SQLiteOpenHelper {
     private static final String TAG = FriendDatabase.class.getSimpleName();
 
     public String query = "CREATE TABLE " + FriendData.FriendInfo.TABLE_NAME + " (" +
-                                            FriendData.FriendInfo.FRIEND_IMAGE + " BLOB, " +
+                                            FriendData.FriendInfo.FRIEND_TIMESTAMP + " TEXT, " +
                                             FriendData.FriendInfo.FRIEND_USERNAME + " TEXT); ";
 
     public FriendDatabase (Context context) {
@@ -40,13 +40,13 @@ public class FriendDatabase extends SQLiteOpenHelper {
     }
 
     // This method insets information into the database
-    public void putInformation(FriendDatabase data, byte[] image, String username) {
+    public void putInformation(FriendDatabase data, String timestamp, String username) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         // Add value from each column into contentvalue
-        contentValues.put(FriendData.FriendInfo.FRIEND_IMAGE, image);
+        contentValues.put(FriendData.FriendInfo.FRIEND_TIMESTAMP, timestamp);
         contentValues.put(FriendData.FriendInfo.FRIEND_USERNAME, username);
 
         // Insert into sqlite database
@@ -58,19 +58,19 @@ public class FriendDatabase extends SQLiteOpenHelper {
     public Cursor getInformation(FriendDatabase data) {
         // Read data from sqlite database
         SQLiteDatabase sqLiteDatabase = data.getReadableDatabase();
-        String[] columns = {FriendData.FriendInfo.FRIEND_IMAGE, FriendData.FriendInfo.FRIEND_USERNAME };
+        String[] columns = {FriendData.FriendInfo.FRIEND_TIMESTAMP, FriendData.FriendInfo.FRIEND_USERNAME };
 
         // Points to first row of table
         return sqLiteDatabase.query(FriendData.FriendInfo.TABLE_NAME, columns, null, null, null, null, null);
     }
 
     // Update data from database
-    public void updateInformation(FriendDatabase data, String previous_username, String username) {
+    public void updateInformation(FriendDatabase data, String username, String timestamp) {
         String selection = FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ? ";
-        String[] args = { previous_username };
+        String[] args = { username };
 
         ContentValues values = new ContentValues();
-        values.put(FriendData.FriendInfo.FRIEND_USERNAME, username);
+        values.put(FriendData.FriendInfo.FRIEND_TIMESTAMP, timestamp);
 
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         sqLiteDatabase.update(FriendData.FriendInfo.TABLE_NAME, values, selection, args);
@@ -94,7 +94,7 @@ public class FriendDatabase extends SQLiteOpenHelper {
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            FriendItem friend = new FriendItem(cursor.getBlob(0), cursor.getString(1));
+            FriendItem friend = new FriendItem(cursor.getString(0), cursor.getString(1));
             friend_list.add(friend);
             cursor.moveToNext();
         }

@@ -2,25 +2,21 @@ package mooncakemonster.orbitalcalendar.friendlist;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.database.Constant;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.cloudant.User;
+import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 
 /**
  * Created by BAOJUN on 6/7/15.
@@ -28,6 +24,7 @@ import mooncakemonster.orbitalcalendar.database.Constant;
 public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
 
     private List<FriendItem> objects;
+    private CloudantConnect cloudantConnect;
 
     public FriendlistAdapter(Context context, int resource, List<FriendItem> objects) {
         super(context, resource, objects);
@@ -35,8 +32,9 @@ public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
     }
 
     static class Holder {
-        ImageView friend_image;
+        SimpleDraweeView friend_image;
         TextView friend_username;
+        TextView friend_timestamp;
     }
 
     @Override
@@ -46,6 +44,7 @@ public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
 
         if(row == null) {
             LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            Fresco.initialize(getContext());
             row = inflater.inflate(R.layout.row_friendlist, parent, false);
         }
 
@@ -53,34 +52,23 @@ public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
 
         if(friend != null) {
             holder = new Holder();
-            holder.friend_image = (ImageView) row.findViewById(R.id.friend_image);
+            holder.friend_image = (SimpleDraweeView) row.findViewById(R.id.friend_image);
             holder.friend_username = (TextView) row.findViewById(R.id.friend_username);
+            holder.friend_timestamp = (TextView) row.findViewById(R.id.friend_timestamp);
 
-            Bitmap bitmap = Constant.bytesToBitmap(friend.getImage());
-            Drawable drawable = new BitmapDrawable(getContext().getResources(), bitmap);
-            DisplayImageOptions options = new DisplayImageOptions.Builder()
-                    .showImageOnLoading(drawable)
-                    .showImageForEmptyUri(R.drawable.profile)
-                    .showImageOnFail(R.drawable.profile)
-                    .cacheInMemory(true)
-                    .cacheOnDisk(true)
-                    .considerExifParams(true)
-                    .build();
+            if (cloudantConnect == null) cloudantConnect = new CloudantConnect(getContext(), "user");
+            cloudantConnect.startPullReplication();
+            User friend_user = cloudantConnect.getTargetUser(friend.getUsername());
 
-            ImageLoader.getInstance().displayImage(getImageUri(getContext(), bitmap).toString(), holder.friend_image, options);
+            Bitmap bitmap = cloudantConnect.retrieveUserImage(friend_user.getUsername());
+            RoundImage roundImage = new RoundImage(bitmap);
+            holder.friend_image.setImageDrawable(roundImage);
             holder.friend_username.setText(friend.getUsername());
+            holder.friend_timestamp.setText("Became friends on " + friend.getTimestamp());
 
             row.setTag(holder);
         }
 
         return row;
-    }
-
-    // This method converts bitmap to URI.
-    public Uri getImageUri(Context context, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
 }

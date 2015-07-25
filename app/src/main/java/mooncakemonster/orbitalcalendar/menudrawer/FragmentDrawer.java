@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +43,7 @@ public class FragmentDrawer extends Fragment {
     private NavigationDrawerAdapter adapter;
     private View containerView;
     private RoundImage roundImage;
-    private ImageView userIcon;
+    private SimpleDraweeView userIcon;
     private ImageView settings;
     private TextView displayUsername;
     private static String[] titles = null;
@@ -79,6 +82,7 @@ public class FragmentDrawer extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflating view layout
+        Fresco.initialize(getActivity());
         View layout = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
 
         db = new UserDatabase(getActivity().getApplicationContext());
@@ -89,7 +93,7 @@ public class FragmentDrawer extends Fragment {
         String my_username = user.get("username");
         cloudantConnect.startPullReplication();
 
-        userIcon = (ImageView) layout.findViewById(R.id.usericon);
+        userIcon = (SimpleDraweeView) layout.findViewById(R.id.usericon);
 
         try {
             roundImage = new RoundImage(cloudantConnect.retrieveUserImage(my_username));

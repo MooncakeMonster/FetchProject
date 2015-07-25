@@ -375,6 +375,19 @@ public final class Constant
     }
 
     /****************************************************************************************************
+     * Launch alert dialog
+     ****************************************************************************************************/
+
+    // This method calls alert dialog to inform users a message.
+    public static void alertUser(Context context, String title, String message) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setTitle(title);
+        dialogBuilder.setMessage(message);
+        dialogBuilder.setPositiveButton("Ok", null);
+        dialogBuilder.show();
+    }
+
+    /****************************************************************************************************
      * (5) BITMAP (IMAGE) MANAGEMENT
      ****************************************************************************************************/
 
@@ -512,33 +525,5 @@ public final class Constant
 
         // Should not reach here
         return -1;
-    }
-
-    /****************************************************************************************************
-     * (8) Convert Bitmap to String/byte[] format or vice versa
-     ****************************************************************************************************/
-
-    public static String bitmapToString(Bitmap image) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b,Base64.DEFAULT);
-    }
-
-    public static Bitmap stringToBitmap(String input) {
-        byte[] decodedByte = Base64.decode(input, 0);
-        return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
-    }
-
-    // Convert from bitmap to byte array
-    public static byte[] bitmapToBytes(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 0, stream);
-        return stream.toByteArray();
-    }
-
-    // Convert from byte array to bitmap
-    public static Bitmap bytesToBitmap(byte[] image) {
-        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }

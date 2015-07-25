@@ -193,7 +193,7 @@ public class CloudantConnect {
         if (indexManager.isTextSearchEnabled()) {
             String user_details = indexManager.ensureIndexed(Arrays.<Object>asList(
                     "user_details.image", "user_details.email_address", "user_details.username", "user_details.password",
-                    "voting_options.option_my_username", "voting_options.option_event_title",
+                    "friend_request.friend_username", "voting_options.option_my_username", "voting_options.option_event_title",
                     "voting_options.option_event_location", "voting_options.option_event_notes",
                     "voting_options.option_start_date", "voting_options.option_end_date",
                     "voting_options.option_start_time", "voting_options.option_end_time",
@@ -268,6 +268,10 @@ public class CloudantConnect {
         return false;
     }
 
+    /****************************************************************************************************
+     * (2) IMAGE DOCUMENT
+     ****************************************************************************************************/
+
     /**
      * Updates the user's image into database.
      */
@@ -331,7 +335,114 @@ public class CloudantConnect {
     }
 
     /****************************************************************************************************
-     * (2) VOTING DOCUMENT
+     * (3) FRIEND REQUEST
+     ****************************************************************************************************/
+
+    /**
+     * This method sends friend request to the target participants.
+     */
+    public void sendFriendRequest(String my_username, String sender_username) {
+        User user = getTargetUser(sender_username);
+        user.setFriend_request_username(my_username);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /**
+     * This method resets friend request upon received by target participants.
+     */
+    public void resetFriendRequest(String my_username) {
+        User user = getTargetUser(my_username);
+        user.setFriend_request_username(null);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /**
+     * This method sends friend accepted to the target participants.
+     */
+    public void sendFriendAccepted(String my_username, String sender_username) {
+        User user = getTargetUser(sender_username);
+        user.setFriend_accept_username(my_username);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /**
+     * This method resets friend accepted upon received by target participants.
+     */
+    public void resetFriendAccepted(String my_username) {
+        User user = getTargetUser(my_username);
+        user.setFriend_accept_username(null);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+
+    /**
+     * This method removes friend from friend list if that friend has removed the user from his/her friendlist
+     */
+    public void sendFriendRemoved(String my_username, String sender_username) {
+        User user = getTargetUser(sender_username);
+        user.setFriend_remove(my_username);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /**
+     * This method resets friend removed once received by user.
+     */
+    public void resetFriendRemoved(String my_username) {
+        User user = getTargetUser(my_username);
+        user.setFriend_remove(null);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /****************************************************************************************************
+     * (4) VOTING DOCUMENT
      ****************************************************************************************************/
 
     /**
@@ -653,7 +764,7 @@ public class CloudantConnect {
     }
 
     /****************************************************************************************************
-     * (3) REPLICATION
+     * (5) REPLICATION
      ****************************************************************************************************/
 
     /**

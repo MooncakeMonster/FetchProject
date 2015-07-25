@@ -199,7 +199,7 @@ public class CropImage extends ActionBarActivity {
             HashMap<String, String> user = db.getUserDetails();
             final String my_username = user.get("username");
 
-            Bitmap bitmap = cropImageView.getCroppedImage();
+            Bitmap bitmap = cropImageView.getCroppedImage(500, 500);
 
             Uri uri = Constant.getImageUri(getApplicationContext(), bitmap);
             String filename = Constant.getFileName(this, uri);

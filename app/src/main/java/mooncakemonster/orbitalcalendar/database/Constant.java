@@ -62,9 +62,11 @@ public final class Constant
     /****************************************************************************************************
      * (1) CONSTANTS
      ****************************************************************************************************/
+    public static final long SECOND_IN_MILLISECOND = 1000L;
     public static final long MIN_IN_MILLISECOND = 60000L;
     public static final long HOUR_IN_MILLISECOND = 3600000L;
     public static final long DAY_IN_MILLISECOND = 86400000L;
+    public static final long YESTERDAY_IN_MILLISECOND = 172800000L;
     public static final long WEEK_IN_MILLISECOND = 604800000L;
 
     public static final int EVENT_TITLE_MAX_LENGTH = 50;
@@ -161,6 +163,15 @@ public final class Constant
         }
         //Should not reach here
         return new Date();
+    }
+
+    public static long retrieveCurrentTime() {
+        Calendar current = Calendar.getInstance();
+        long offset = current.get(Calendar.ZONE_OFFSET) +
+                current.get(Calendar.DST_OFFSET);
+
+        Log.d("Constant", "" + (current.getTimeInMillis() + offset) % (24 * 60 * 60 * 1000));
+        return (current.getTimeInMillis() + offset) % (24 * 60 * 60 * 1000);
     }
 
     /****************************************************************************************************

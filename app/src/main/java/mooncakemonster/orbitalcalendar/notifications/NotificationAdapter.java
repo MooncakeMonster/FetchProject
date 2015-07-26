@@ -9,6 +9,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +50,6 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
     Intent intent;
 
     private static final int DIVISION = 1000;
-    private static final int MINUTES = 60;
-    private static final int HOURS = 3600;
-    private static final int DAYS = 86400;
-    private static final int YESTERDAY = 172800;
-    private static final int WEEK = 604800;
 
     public NotificationAdapter(Context context, int resource, List<NotificationItem> objects) {
         super(context, resource, objects);
@@ -253,21 +249,36 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
     // This method computes the time received the notification
     private String getTimestampText(long timestamp) {
-        long timestamp_second = timestamp / DIVISION;
-        long current_second = Calendar.getInstance().getTimeInMillis() / DIVISION;
+        long current_second = Constant.retrieveCurrentTime();
+        long difference = current_second - timestamp;
 
-        long difference = current_second - timestamp_second;
-        // (1) Received less than a minute
-        if(difference < MINUTES) return "A few seconds ago";
-        // (2) Received less than an hour
-        else if(difference < HOURS) return "About " + (difference / MINUTES) + " mins ago";
-        // (3) Received less than a day
-        else if(difference < DAYS) return "About " + (difference / HOURS) + " hours ago";
-        // (4) Received yesterday
-        else if(difference < YESTERDAY) return "Yesterday at" + Constant.getDate(timestamp, Constant.TIMEFORMATTER);
-        // (5) Received within this week
-        else if(difference < WEEK) return Constant.getDate(timestamp, Constant.NOTIFICATION_WEEK_DATEFORMATTER);
-        // (6) Received other days
+        Log.d(TAG, "current " + current_second);
+        Log.d(TAG, "timestamp " + timestamp);
+        Log.d(TAG, "difference" + difference);
+
+        // (1) Received less than 10 seconds
+        if(difference <= Constant.MIN_IN_MILLISECOND / 6) return "A few seconds ago";
+        // (2) Received less than a minute (< 60 secs)
+        else if(difference <= Constant.MIN_IN_MILLISECOND) return (difference / Constant.SECOND_IN_MILLISECOND) + " seconds ago";
+        // (3) Received less than an hour (< 60 mins)
+        else if(difference <= Constant.HOUR_IN_MILLISECOND) {
+            long final_time = difference / Constant.MIN_IN_MILLISECOND;
+            if (final_time == 1) return "1 min ago";
+            return final_time + " mins ago";
+        }
+        // (4) Received an hour ago
+        else if(difference <= Constant.DAY_IN_MILLISECOND && ((difference / Constant.HOUR_IN_MILLISECOND) < 2)) return "About an hour ago";
+        // (5) Received less than a day (< 24 hours)
+        else if(difference <= Constant.DAY_IN_MILLISECOND) {
+            long final_time = difference / Constant.HOUR_IN_MILLISECOND;
+            if (final_time == 1) return "1 hour ago";
+            return final_time + " hours ago";
+        }
+        // (6) Received yesterday
+        else if(difference <= Constant.YESTERDAY_IN_MILLISECOND) return "Yesterday at" + Constant.getDate(timestamp, Constant.TIMEFORMATTER);
+        // (7) Received within this week
+        else if(difference <= Constant.WEEK_IN_MILLISECOND) return Constant.getDate(timestamp, Constant.NOTIFICATION_WEEK_DATEFORMATTER);
+        // (8) Received other days
         else return Constant.getDate(timestamp, Constant.NOTIFICATION_DATEFORMATTER);
     }
 

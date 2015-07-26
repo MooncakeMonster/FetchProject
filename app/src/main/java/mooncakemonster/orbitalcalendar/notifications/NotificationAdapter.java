@@ -35,6 +35,7 @@ import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitation;
+import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitationSent;
 
 /**
  * Created by BAOJUN on 7/7/15.
@@ -45,11 +46,10 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
     private List<NotificationItem> objects;
     CloudantConnect cloudantConnect;
     ProgressDialog progressDialog;
+    NotificationDatabase notificationDatabase;
     FriendDatabase friendDatabase;
     UserDatabase db;
     Intent intent;
-
-    private static final int DIVISION = 1000;
 
     public NotificationAdapter(Context context, int resource, List<NotificationItem> objects) {
         super(context, resource, objects);
@@ -133,53 +133,65 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
                     switch (notificationItem.getNotificationId()) {
                         case 1:
-                            dialogBuilder.setTitle("Friend request");
-                            dialogBuilder.setMessage("Would you like to accept friend request from \"" + notificationItem.getSender_username() + "\"?");
-                            dialogBuilder.setNegativeButton("Cancel", null);
-                            dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    progressDialog.setMessage("Informing " + notificationItem.getSender_username() + " ...");
-                                    showDialog();
 
-                                    Timer timer = new Timer();
-                                    timer.schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            // Also add sender into friend list once friend request is accepted
-                                            // Get date and time when friend is added
-                                            Calendar c = Calendar.getInstance();
-                                            Date date = c.getTime();
-                                            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, EEE @ hh:mma");
+                            if(notificationItem.getAction_done().equals("false")) {
+                                dialogBuilder.setTitle("Friend request");
+                                dialogBuilder.setMessage("Would you like to accept friend request from \"" + notificationItem.getSender_username() + "\"?");
+                                dialogBuilder.setNegativeButton("Cancel", null);
+                                dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        notificationDatabase = new NotificationDatabase(getContext());
+                                        notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), "true", null);
 
-                                            // Save friend into friendlist database
-                                            friendDatabase = new FriendDatabase(getContext());
-                                            friendDatabase.putInformation(friendDatabase, format.format(date), notificationItem.getSender_username());
+                                        dialog.dismiss();
+                                        progressDialog.setMessage("Informing " + notificationItem.getSender_username() + " ...");
+                                        showDialog();
 
-                                            // Send back to user to inform about friend request acceptance
-                                            if (cloudantConnect == null)
-                                                cloudantConnect = new CloudantConnect(getContext(), "user");
+                                        Timer timer = new Timer();
+                                        timer.schedule(new TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                // Also add sender into friend list once friend request is accepted
+                                                // Get date and time when friend is added
+                                                Calendar c = Calendar.getInstance();
+                                                Date date = c.getTime();
+                                                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, EEE @ hh:mma");
 
-                                            // Retrieve own username
-                                            db = new UserDatabase(getContext());
-                                            HashMap<String, String> user = db.getUserDetails();
-                                            String my_username = user.get("username");
-                                            cloudantConnect.sendFriendAccepted(my_username, notificationItem.getSender_username());
+                                                // Save friend into friendlist database
+                                                friendDatabase = new FriendDatabase(getContext());
+                                                friendDatabase.putInformation(friendDatabase, format.format(date), notificationItem.getSender_username());
 
-                                            //Toast.makeText(getContext(), "Friend request accepted", Toast.LENGTH_SHORT).show();
+                                                // Send back to user to inform about friend request acceptance
+                                                if (cloudantConnect == null)
+                                                    cloudantConnect = new CloudantConnect(getContext(), "user");
 
-                                            hideDialog();
-                                        }
-                                    }, 1500);
-                                }
-                            });
-                            dialogBuilder.show();
+                                                // Retrieve own username
+                                                db = new UserDatabase(getContext());
+                                                HashMap<String, String> user = db.getUserDetails();
+                                                String my_username = user.get("username");
+                                                cloudantConnect.sendFriendAccepted(my_username, notificationItem.getSender_username());
+
+                                                //Toast.makeText(getContext(), "Friend request accepted", Toast.LENGTH_SHORT).show();
+
+                                                hideDialog();
+                                            }
+                                        }, 1500);
+                                    }
+                                });
+                                dialogBuilder.show();
+                            } else {
+                                Constant.alertUser(getContext(), "Friend request", "You had already accepted friend request from \"" + notificationItem.getSender_username() + "\".");
+                            }
                             break;
                         case 2:
                             break;
                         case 3:
-                            intent = new Intent(getContext(), VoteInvitation.class);
+                            if(notificationItem.getAction_done().equals("false")) {
+                                intent = new Intent(getContext(), VoteInvitation.class);
+                            } else {
+                                intent = new Intent(getContext(), VoteInvitationSent.class);
+                            }
                             intent.putExtras(bundle);
                             inner_view.getContext().startActivity(intent);
                             break;
@@ -191,41 +203,49 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                                     ": \"" + notificationItem.getReject_reason() + "\"");
                             break;
                         case 6:
-                            dialogBuilder.setTitle("Confirm attendance");
-                            dialogBuilder.setMessage("Would you like to confirm attendance for the event \""
-                                    + notificationItem.getSender_event() + "\" with " + sender_username + "?");
-                            dialogBuilder.setNegativeButton("Cancel", null);
-                            dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    progressDialog.setMessage("Confirm attendance with " + sender_username + "...");
-                                    showDialog();
+                            if(notificationItem.getAction_done().equals("false")) {
+                                dialogBuilder.setTitle("Confirm attendance");
+                                dialogBuilder.setMessage("Would you like to confirm attendance for the event \""
+                                        + notificationItem.getSender_event() + "\" with " + sender_username + "?");
+                                dialogBuilder.setNegativeButton("Cancel", null);
+                                dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        notificationDatabase = new NotificationDatabase(getContext());
+                                        notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), "true", null);
 
-                                    Timer timer = new Timer();
-                                    timer.schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            if (cloudantConnect == null)
-                                                cloudantConnect = new CloudantConnect(getContext(), "user");
-                                            // Retrieve own username
-                                            db = new UserDatabase(getContext());
-                                            HashMap<String, String> user = db.getUserDetails();
-                                            String my_username = user.get("username");
+                                        dialog.dismiss();
+                                        progressDialog.setMessage("Confirm attendance with " + sender_username + "...");
+                                        showDialog();
 
-                                            cloudantConnect.sendAttendanceToTargetParticipants(my_username, sender_username,
-                                                    notificationItem.getEventId(), notificationItem.getImageId(), notificationItem.getSender_event());
-                                            cloudantConnect.startPushReplication();
+                                        Timer timer = new Timer();
+                                        timer.schedule(new TimerTask() {
+                                            @Override
+                                            public void run() {
+                                                if (cloudantConnect == null)
+                                                    cloudantConnect = new CloudantConnect(getContext(), "user");
+                                                // Retrieve own username
+                                                db = new UserDatabase(getContext());
+                                                HashMap<String, String> user = db.getUserDetails();
+                                                String my_username = user.get("username");
 
-                                            //Toast.makeText(getContext(), "Attendance sent successfully", Toast.LENGTH_SHORT).show();
+                                                cloudantConnect.sendAttendanceToTargetParticipants(my_username, sender_username,
+                                                        notificationItem.getEventId(), notificationItem.getImageId(), notificationItem.getSender_event());
+                                                cloudantConnect.startPushReplication();
 
-                                            hideDialog();
-                                        }
-                                    }, 1500);
+                                                //Toast.makeText(getContext(), "Attendance sent successfully", Toast.LENGTH_SHORT).show();
 
-                                }
-                            });
-                            dialogBuilder.show();
+                                                hideDialog();
+                                            }
+                                        }, 1500);
+
+                                    }
+                                });
+                                dialogBuilder.show();
+                            } else {
+                                Constant.alertUser(getContext(), "Confirm attendance", "You had already confirmed your attendance for the event \"" +
+                                        notificationItem.getSender_event() + "\" with " + sender_username + ".");
+                            }
                             break;
                         case 7:
                             intent = new Intent(getContext(), VoteInvitation.class);

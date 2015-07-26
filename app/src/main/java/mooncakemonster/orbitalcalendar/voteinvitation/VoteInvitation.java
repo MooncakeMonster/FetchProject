@@ -23,6 +23,8 @@ import java.util.HashMap;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.database.Constant;
+import mooncakemonster.orbitalcalendar.notifications.NotificationDatabase;
 import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 
 /**
@@ -40,11 +42,12 @@ public class VoteInvitation extends ActionBarActivity {
 
     // Retrieve username from SQLite
     UserDatabase db;
+    NotificationDatabase notificationDatabase;
     NotificationItem notificationItem;
 
     Button reject_event;
     TextView invite_sender, invite_title, invite_location, invite_notes;
-    String my_username = "", start_date = "", end_date = "", start_time = "", end_time = "",
+    String my_username = "", selected_option = "", start_date = "", end_date = "", start_time = "", end_time = "",
             not_start_date = "", not_end_date = "", not_start_time = "", not_end_time = "", reject_reason = null;
 
     @Override
@@ -82,7 +85,7 @@ public class VoteInvitation extends ActionBarActivity {
             invite_sender.setText(notificationItem.getSender_username());
             invite_title.setText(notificationItem.getSender_event());
             invite_location.setText(notificationItem.getSender_location());
-            if(!notes.isEmpty()) invite_notes.setText(notes);
+            if(notes != null && !notes.isEmpty()) invite_notes.setText(notes);
             else invite_notes.setText("No notes");
         }
 
@@ -164,12 +167,14 @@ public class VoteInvitation extends ActionBarActivity {
             if(item.getSelected_date()) {
                 Log.d("VoteInvitation", "pass");
                 // Space to split all dates later when retrieving
+                selected_option += "true ";
                 start_date += item.getEvent_start_date() + " ";
                 end_date += item.getEvent_end_date() + " ";
                 start_time += item.getEvent_start_time() + " ";
                 end_time += item.getEvent_end_time() + " ";
             } else {
                 // Space to split all dates later when retrieving
+                selected_option += "false ";
                 not_start_date += item.getEvent_start_date() + " ";
                 not_end_date += item.getEvent_end_date() + " ";
                 not_start_time += item.getEvent_start_time() + " ";
@@ -192,15 +197,6 @@ public class VoteInvitation extends ActionBarActivity {
         cloudantConnect.startPushReplication();
     }
 
-    // This method calls alert dialog to inform users a message.
-    private void alertUser(String title, String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VoteInvitation.this);
-        dialogBuilder.setTitle(title);
-        dialogBuilder.setMessage(message);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -216,11 +212,14 @@ public class VoteInvitation extends ActionBarActivity {
             collateDateTime();
             // Do not save data if no checkboxes ticked
             if (start_date.isEmpty()) {
-                alertUser("Sending failed!", "Please select at least one option.");
+                Constant.alertUser(getApplicationContext(), "Sending failed!", "Please select at least one option.");
             }
 
             // Save data
             else {
+                notificationDatabase = new NotificationDatabase(this);
+                notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), "true", selected_option);
+
                 pushItem(my_username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
                         notificationItem.getSender_event(), notificationItem.getSender_location(),
                         notificationItem.getSender_notes(), start_date, end_date, start_time, end_time, reject_reason);

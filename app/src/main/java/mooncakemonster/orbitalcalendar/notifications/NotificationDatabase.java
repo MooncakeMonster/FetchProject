@@ -31,6 +31,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
             NotificationData.NotificationInfo.ACTION + " TEXT, " +
             NotificationData.NotificationInfo.SENDER_LOCATION + " TEXT, " +
             NotificationData.NotificationInfo.SENDER_NOTES + " TEXT, " +
+            NotificationData.NotificationInfo.SELECTED_OPTION + " TEXT, " +
             NotificationData.NotificationInfo.START_DATE + " TEXT, " +
             NotificationData.NotificationInfo.END_DATE + " TEXT, " +
             NotificationData.NotificationInfo.START_TIME + " TEXT, " +
@@ -57,7 +58,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
     // This method insets information into the database.
     public void putInformation(NotificationDatabase data, String action_done, String row_id, int notification_id, long timestamp, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
-                               String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
+                               String sender_location, String sender_notes, String selected_option, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -76,6 +77,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
         contentValues.put(NotificationData.NotificationInfo.SENDER_LOCATION, sender_location);
         contentValues.put(NotificationData.NotificationInfo.SENDER_NOTES, sender_notes);
+        contentValues.put(NotificationData.NotificationInfo.SELECTED_OPTION, selected_option);
         contentValues.put(NotificationData.NotificationInfo.START_DATE, start_date);
         contentValues.put(NotificationData.NotificationInfo.END_DATE, end_date);
         contentValues.put(NotificationData.NotificationInfo.START_TIME, start_time);
@@ -98,23 +100,23 @@ public class NotificationDatabase extends SQLiteOpenHelper {
                             NotificationData.NotificationInfo.SENDER_USERNAME, NotificationData.NotificationInfo.MESSAGE,
                             NotificationData.NotificationInfo.SENDER_EVENT, NotificationData.NotificationInfo.ACTION,
                             NotificationData.NotificationInfo.SENDER_LOCATION, NotificationData.NotificationInfo.SENDER_NOTES,
-                            NotificationData.NotificationInfo.START_DATE, NotificationData.NotificationInfo.END_DATE,
-                            NotificationData.NotificationInfo.START_TIME, NotificationData.NotificationInfo.END_TIME,
-                            NotificationData.NotificationInfo.REJECT_REASON};
+                            NotificationData.NotificationInfo.SELECTED_OPTION, NotificationData.NotificationInfo.START_DATE,
+                            NotificationData.NotificationInfo.END_DATE, NotificationData.NotificationInfo.START_TIME,
+                            NotificationData.NotificationInfo.END_TIME, NotificationData.NotificationInfo.REJECT_REASON};
 
         // Points to first row of table
         return sqLiteDatabase.query(NotificationData.NotificationInfo.TABLE_NAME, columns, null, null, null, null, null);
     }
 
 
-    // Update data from database
-    public void updateInformation(NotificationDatabase data, String row_id, String action_done, String timestamp) {
-        String selection = NotificationData.NotificationInfo.ROW_ID;
+    // Update action to database
+    public void updateInformation(NotificationDatabase data, String row_id, String action_done, String selected_option) {
+        String selection = NotificationData.NotificationInfo.ROW_ID + "=?";
         String[] args = { row_id };
 
         ContentValues values = new ContentValues();
         if(action_done != null) values.put(NotificationData.NotificationInfo.ACTION_DONE, action_done);
-        if(timestamp != null) values.put(NotificationData.NotificationInfo.TIMESTAMP, timestamp);
+        if(selected_option != null) values.put(NotificationData.NotificationInfo.SELECTED_OPTION, selected_option);
 
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         sqLiteDatabase.update(NotificationData.NotificationInfo.TABLE_NAME, values, selection, args);
@@ -129,7 +131,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         while (!cursor.isAfterLast()) {
             NotificationItem notificationItem = new NotificationItem(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5),
                                                 cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11),
-                                                cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16));
+                                                cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17));
             notificationItems.add(notificationItem);
             cursor.moveToNext();
         }

@@ -24,6 +24,7 @@ public class NotificationData {
         public static final String SENDER_LOCATION = "sender_location";
         public static final String SENDER_NOTES = "sender_notes";
 
+        public static final String SELECTED_OPTION = "selected_option";
         public static final String START_DATE = "start_date";
         public static final String END_DATE = "end_date";
         public static final String START_TIME = "start_time";

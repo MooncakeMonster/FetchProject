@@ -18,6 +18,7 @@ public class NotificationItem implements Serializable {
     private String action;
     private String sender_location;
     private String sender_notes;
+    private String selected_option;
     private String start_date;
     private String end_date;
     private String start_time;
@@ -25,7 +26,7 @@ public class NotificationItem implements Serializable {
     private String reject_reason;
 
     public NotificationItem(String action_done, String row_id, int notificationId, int timestamp, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
-                            String sender_location, String sender_notes, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
+                            String sender_location, String sender_notes, String selected_option, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
         this.action_done = action_done;
         this.row_id = row_id;
         this.notificationId = notificationId;
@@ -38,6 +39,7 @@ public class NotificationItem implements Serializable {
         this.action = action;
         this.sender_location = sender_location;
         this.sender_notes = sender_notes;
+        this.selected_option = selected_option;
         this.start_date = start_date;
         this.end_date = end_date;
         this.start_time = start_time;
@@ -139,6 +141,14 @@ public class NotificationItem implements Serializable {
 
     public void setSender_notes(String sender_notes) {
         this.sender_notes = sender_notes;
+    }
+
+    public String getSelected_option() {
+        return selected_option;
+    }
+
+    public void setSelected_option(String selected_option) {
+        this.selected_option = selected_option;
     }
 
     public String getStart_date() {

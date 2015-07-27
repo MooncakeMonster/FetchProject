@@ -160,11 +160,13 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
     // This method calls alert dialog to display the list of names that had not cast votes.
     private void openReminderDialog(final String[] split_participants, final VoteItem voteItem) {
         final View dialogview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_result, null);
-        final TextView input_username = (TextView) dialogview.findViewById(R.id.result_notice);
+        final View header = LayoutInflater.from(getContext()).inflate(R.layout.header_result, null);
+        final TextView input_username = (TextView) header.findViewById(R.id.result_notice);
         final ListView listView = (ListView) dialogview.findViewById(R.id.result_list);
+        listView.addHeaderView(header);
         final List<ResultOption> list = new ArrayList<>();
 
-        input_username.setText("Select the participants to remind them to vote for this event.");
+        input_username.setText("Select the participants to remind them to vote for this event:");
 
         final int size = split_participants.length;
         for(int i = 0; i < size; i++) {

@@ -418,6 +418,7 @@ public final class Constant
         final View header = LayoutInflater.from(context).inflate(R.layout.header_result, null);
         final TextView input_username = (TextView) header.findViewById(R.id.result_notice);
         final ListView listView = (ListView) dialogview.findViewById(R.id.result_list);
+        listView.addHeaderView(header);
         final List<ResultOption> list = new ArrayList<>();
 
         input_username.setText("The following participants will be coming to your event:");

@@ -5,13 +5,14 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 
@@ -24,14 +25,17 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Constant;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class FriendlistFragment extends ListFragment implements PullRefreshLayout.OnRefreshListener {
+public class FriendlistFragment extends Fragment implements PullRefreshLayout.OnRefreshListener {
 
     private static final String TAG = FriendlistFragment.class.getSimpleName();
     private FriendDatabase friendDatabase;
     private UserDatabase db;
     private ProgressDialog progressDialog;
     private List<FriendItem> allFriends;
+    private StickyListHeadersListView listview;
+    private TextView friendlist_empty;
     FriendlistAdapter adapter;
     PullRefreshLayout swipeRefreshLayout;
     ImageButton add_friends;
@@ -40,13 +44,6 @@ public class FriendlistFragment extends ListFragment implements PullRefreshLayou
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Get all friends' username
-        friendDatabase = new FriendDatabase(getActivity());
-        allFriends = friendDatabase.getAllFriendUsername(friendDatabase);
-        // Get adapter view
-        adapter = new FriendlistAdapter(getActivity(), R.layout.row_friendlist, allFriends);
-        setListAdapter(adapter);
     }
 
     @Override
@@ -54,6 +51,17 @@ public class FriendlistFragment extends ListFragment implements PullRefreshLayou
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_friendlist, container, false);
+
+        // Get all friends' username
+        friendDatabase = new FriendDatabase(getActivity());
+        allFriends = friendDatabase.getAllFriendUsername(friendDatabase);
+        // Get adapter view
+        adapter = new FriendlistAdapter(getActivity(), R.layout.row_friendlist, allFriends);
+        listview = (StickyListHeadersListView) rootView.findViewById(R.id.friend_list);
+        listview.setAdapter(adapter);
+
+        friendlist_empty = (TextView) rootView.findViewById(R.id.friendlist_empty);
+        if(allFriends.size() > 0) friendlist_empty.setVisibility(View.INVISIBLE);
 
         swipeRefreshLayout = (PullRefreshLayout) rootView.findViewById(R.id.swipe_refresh_friendlist);
         swipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
@@ -143,52 +151,52 @@ public class FriendlistFragment extends ListFragment implements PullRefreshLayou
     );
 
     // Delete friend's username
-    getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+        @Override
+        public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+            //Get FriendItem from ArrayAdapter
+            final FriendItem friendItem = adapter.getItem(position);
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("Delete friend");
+            alert.setMessage("Are you sure you want to delete \"" + friendItem.getUsername() + "\" from your friend list?\n\n" +
+                    "Note that you will not be able to send or receive vote request from \"" + friendItem.getUsername() + "\" anymore.");
+
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                 @Override
-                public void onItemClick (AdapterView < ? > arg0, View view,int position, long id){
-                    //Get FriendItem from ArrayAdapter
-                    final FriendItem friendItem = adapter.getItem(position);
+                public void onClick(DialogInterface dialog, int id) {
+                    //Delete from SQLite database
+                    friendDatabase.deleteInformation(friendDatabase, friendItem.getUsername());
+                    //Delete from ArrayAdapter & allFriends
+                    adapter.remove(friendItem);
+                    allFriends.remove(friendItem);
+                    adapter.notifyDataSetChanged();
 
-                    AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                    alert.setTitle("Delete friend");
-                    alert.setMessage("Are you sure you want to delete \"" + friendItem.getUsername() + "\" from your friend list?\n\n" +
-                            "Note that you will not be able to send or receive vote request from \"" + friendItem.getUsername() + "\" anymore.");
+                    // Remove user from friend's list as well to prevent user from sending vote request
+                    if (cloudantConnect == null)
+                        cloudantConnect = new CloudantConnect(getActivity(), "user");
+                    db = new UserDatabase(getActivity());
+                    HashMap<String, String> user = db.getUserDetails();
+                    String my_username = user.get("username");
+                    cloudantConnect.sendFriendRemoved(my_username, friendItem.getUsername());
+                    cloudantConnect.startPushReplication();
 
-                    alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            //Delete from SQLite database
-                            friendDatabase.deleteInformation(friendDatabase, friendItem.getUsername());
-                            //Delete from ArrayAdapter & allFriends
-                            adapter.remove(friendItem);
-                            allFriends.remove(friendItem);
-                            adapter.notifyDataSetChanged();
-
-                            // Remove user from friend's list as well to prevent user from sending vote request
-                            if (cloudantConnect == null)
-                                cloudantConnect = new CloudantConnect(getActivity(), "user");
-                            db = new UserDatabase(getActivity());
-                            HashMap<String, String> user = db.getUserDetails();
-                            String my_username = user.get("username");
-                            cloudantConnect.sendFriendRemoved(my_username, friendItem.getUsername());
-                            cloudantConnect.startPushReplication();
-
-                            //Remove dialog after execution of the above
-                            dialog.dismiss();
-                        }
-                    });
-
-                    alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    alert.show();
+                    //Remove dialog after execution of the above
+                    dialog.dismiss();
                 }
-         });
+            });
+
+            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+
+            alert.show();
+        }
+    });
 }
 
     @Override

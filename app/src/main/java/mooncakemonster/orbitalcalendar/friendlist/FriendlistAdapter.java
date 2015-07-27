@@ -18,17 +18,20 @@ import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.cloudant.User;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
+import se.emilsjolander.stickylistheaders.StickyListHeadersAdapter;
 
 /**
  * Created by BAOJUN on 6/7/15.
  */
-public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
+public class FriendlistAdapter extends ArrayAdapter<FriendItem> implements StickyListHeadersAdapter {
 
+    private LayoutInflater inflater;
     private List<FriendItem> objects;
     private CloudantConnect cloudantConnect;
 
     public FriendlistAdapter(Context context, int resource, List<FriendItem> objects) {
         super(context, resource, objects);
+        inflater = LayoutInflater.from(context);
         this.objects = objects;
     }
 
@@ -36,6 +39,7 @@ public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
         SimpleDraweeView friend_image;
         TextView friend_username;
         TextView friend_timestamp;
+        TextView letter_text;
     }
 
     @Override
@@ -44,7 +48,7 @@ public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
         Holder holder;
 
         if(row == null) {
-            LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            //LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             Fresco.initialize(getContext());
             row = inflater.inflate(R.layout.row_friendlist, parent, false);
         }
@@ -81,6 +85,31 @@ public class FriendlistAdapter extends ArrayAdapter<FriendItem> {
         }
 
         return row;
+    }
+
+
+    @Override
+    public View getHeaderView(int i, View view, ViewGroup viewGroup) {
+        Holder holder;
+        if(view == null) {
+            holder = new Holder();
+            view = inflater.inflate(R.layout.header_sticky, viewGroup, false);
+            holder.letter_text = (TextView) view.findViewById(R.id.letter_text);
+            view.setTag(holder);
+        } else {
+            holder = (Holder) view.getTag();
+        }
+
+        // Set header text as first character in friend's username
+        String headertext = "" + objects.get(i).getUsername().toUpperCase().subSequence(0, 1).charAt(0);
+        holder.letter_text.setText(headertext);
+
+        return view;
+    }
+
+    @Override
+    public long getHeaderId(int i) {
+       return objects.get(i).getUsername().toUpperCase().subSequence(0, 1).charAt(0);
     }
 
     // This method computes the time received the notification

@@ -263,7 +263,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
         input_username.setText("Please note that you had confirmed the event's date and time as follows:\n\n" + "Event : " + voteItem.getEvent_title() + "\nStart  : " + Constant.standardYearMonthDate(voteItem.getEvent_confirm_start_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) +
                 ", " + voteItem.getEvent_confirm_start_time() + "\nEnd    : " + Constant.standardYearMonthDate(voteItem.getEvent_confirm_end_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + ", " + voteItem.getEvent_confirm_end_time()
-                + "\n\nTo change the event's confirmed date and time to the current selected option, simply press the \"confirm\" button.");
+                + "\n\nTo change the event's confirmed date and time to the current selected option, simply select the participants to confirm with and press the \"confirm\" button.");
 
         final int size = split_participants.length;
         for(int i = 0; i < size; i++) {

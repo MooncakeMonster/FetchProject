@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.baoyz.widget.PullRefreshLayout;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +26,10 @@ import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Constant;
+import mooncakemonster.orbitalcalendar.friendsfeed.FriendsFeedActivity;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
-public class FriendlistFragment extends Fragment implements PullRefreshLayout.OnRefreshListener {
+public class FriendlistFragment extends Fragment {
 
     private static final String TAG = FriendlistFragment.class.getSimpleName();
     private FriendDatabase friendDatabase;
@@ -36,10 +38,9 @@ public class FriendlistFragment extends Fragment implements PullRefreshLayout.On
     private List<FriendItem> allFriends;
     private StickyListHeadersListView listview;
     private TextView friendlist_empty;
-    FriendlistAdapter adapter;
-    PullRefreshLayout swipeRefreshLayout;
-    ImageButton add_friends;
-    CloudantConnect cloudantConnect;
+    private FriendlistAdapter adapter;
+    private ImageButton add_friends;
+    private CloudantConnect cloudantConnect;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +53,7 @@ public class FriendlistFragment extends Fragment implements PullRefreshLayout.On
 
         View rootView = inflater.inflate(R.layout.fragment_friendlist, container, false);
 
+        Fresco.initialize(getActivity());
         // Get all friends' username
         friendDatabase = new FriendDatabase(getActivity());
         allFriends = friendDatabase.getAllFriendUsername(friendDatabase);
@@ -62,17 +64,6 @@ public class FriendlistFragment extends Fragment implements PullRefreshLayout.On
 
         friendlist_empty = (TextView) rootView.findViewById(R.id.friendlist_empty);
         if(allFriends.size() > 0) friendlist_empty.setVisibility(View.INVISIBLE);
-
-        swipeRefreshLayout = (PullRefreshLayout) rootView.findViewById(R.id.swipe_refresh_friendlist);
-        swipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-                retrieveNotifications();
-            }
-        }, 3000);
 
         return rootView;
     }
@@ -146,15 +137,30 @@ public class FriendlistFragment extends Fragment implements PullRefreshLayout.On
             Dialog dialog = alertBuilder.create();
             dialog.show();
         }
-    }
+    });
 
-    );
+    // Opens the notifications received from the target friend
+    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            //Get FriendItem from ArrayAdapter
+            final FriendItem friendItem = adapter.getItem(position);
+
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("friend_item", friendItem);
+            Intent intent = new Intent(getActivity(), FriendsFeedActivity.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
+    });
+
+
 
     // Delete friend's username
-    listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
         @Override
-        public void onItemClick(AdapterView<?> arg0, View view, int position, long id) {
+        public boolean onItemLongClick(AdapterView<?> arg0, View view, int position, long id) {
             //Get FriendItem from ArrayAdapter
             final FriendItem friendItem = adapter.getItem(position);
 
@@ -195,6 +201,8 @@ public class FriendlistFragment extends Fragment implements PullRefreshLayout.On
             });
 
             alert.show();
+
+            return true;
         }
     });
 }
@@ -202,15 +210,6 @@ public class FriendlistFragment extends Fragment implements PullRefreshLayout.On
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-    }
-
-    // This method retrieves the latest notifications from the database
-    private void retrieveNotifications() {
-        swipeRefreshLayout.setRefreshing(true);
-        adapter.clear();
-        adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
-        adapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     // This method shows progress dialog when not showing
@@ -225,8 +224,4 @@ public class FriendlistFragment extends Fragment implements PullRefreshLayout.On
             progressDialog.dismiss();
     }
 
-    @Override
-    public void onRefresh() {
-        retrieveNotifications();
-    }
 }

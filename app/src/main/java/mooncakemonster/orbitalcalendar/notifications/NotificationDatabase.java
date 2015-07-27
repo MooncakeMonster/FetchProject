@@ -145,6 +145,27 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         return notificationItems;
     }
 
+    // This method retrieves all notifications of a target user.
+    public List<NotificationItem> getUserNotifications(NotificationDatabase data, String username) {
+        List<NotificationItem> notificationItems = new ArrayList<>();
+        Cursor cursor = getInformation(data);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            if(cursor.getString(6).equals(username)) {
+                NotificationItem notificationItem = new NotificationItem(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5),
+                        cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11),
+                        cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17), cursor.getString(18));
+                notificationItems.add(notificationItem);
+            }
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        Collections.reverse(notificationItems);
+        return notificationItems;
+    }
+
     // This method returns the number of notifications saved.
     public int notificationSize(NotificationDatabase data) {
         return data.getInformation(data).getCount();

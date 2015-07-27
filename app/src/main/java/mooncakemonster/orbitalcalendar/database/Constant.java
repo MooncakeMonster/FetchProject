@@ -55,6 +55,7 @@ import mooncakemonster.orbitalcalendar.voteresult.ResultOption;
  * (4) Widget Interactivity
  * (5) Bitmap (Image) Management
  * (6) Developer's Tool (Tentatively, at the moment, for Facebook)
+ * (7) Event colour
  *
  * N.B. Do not instantiate, or extend this class
  *
@@ -569,7 +570,7 @@ public final class Constant
     }
 
     /****************************************************************************************************
-     * (7) BEAR COLOUR ICON
+     * (7) COLOUR ICON
      ****************************************************************************************************/
 
     public static int getBearColour(int chosenColour) {
@@ -583,5 +584,17 @@ public final class Constant
 
         // Should not reach here
         return -1;
+    }
+
+    public static int getCircleColour(int chosenColour) {
+        switch (chosenColour) {
+            case R.color.redbear: return R.drawable.ballred;
+            case R.color.yellowbear: return R.drawable.ballyellow;
+            case R.color.greenbear: return R.drawable.ballgreen;
+            case R.color.bluebear: return R.drawable.ballblue;
+            case R.color.purplebear: return R.drawable.ballpurple;
+        }
+
+        return R.drawable.ballpurple;
     }
 }

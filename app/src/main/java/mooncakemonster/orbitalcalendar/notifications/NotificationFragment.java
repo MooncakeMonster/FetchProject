@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.baoyz.widget.PullRefreshLayout;
+import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class NotificationFragment extends ListFragment implements PullRefreshLay
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Fresco.initialize(getActivity());
         notificationDatabase = new NotificationDatabase(getActivity());
         // Get all notifications
         allNotifications = notificationDatabase.getAllNotifications(notificationDatabase);

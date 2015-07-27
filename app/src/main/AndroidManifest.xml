@@ -74,6 +74,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeMenu"/>
         <activity
+            android:name=".friendsfeed.FriendsFeedActivity"
+            android:label="Friend"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeMenu"/>
+        <activity
             android:name=".voteinvitation.VoteInvitationSent"
             android:label="Vote Event History"
             android:screenOrientation="portrait"

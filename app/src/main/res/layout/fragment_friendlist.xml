@@ -5,22 +5,13 @@
     android:clipToPadding="false"
     android:orientation="vertical">
 
-    <com.baoyz.widget.PullRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/swipe_refresh_friendlist"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!--For friend display-->
+   <!--For friend display-->
         <se.emilsjolander.stickylistheaders.StickyListHeadersListView
             android:id="@+id/friend_list"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
             android:divider="@color/caldroid_transparent" />
-
-    </com.baoyz.widget.PullRefreshLayout>
-
 
     <!--In the event when there are no friends added-->
     <TextView

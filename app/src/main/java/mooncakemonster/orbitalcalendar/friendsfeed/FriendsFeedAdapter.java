@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.notifications;
+package mooncakemonster.orbitalcalendar.friendsfeed;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -30,7 +30,8 @@ import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
-import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
+import mooncakemonster.orbitalcalendar.notifications.NotificationDatabase;
+import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitation;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitationSent;
 import mooncakemonster.orbitalcalendar.votesend.VoteItem;
@@ -39,9 +40,9 @@ import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 /**
  * Created by BAOJUN on 7/7/15.
  */
-public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
+public class FriendsFeedAdapter extends ArrayAdapter<NotificationItem> {
 
-    private static final String TAG = NotificationAdapter.class.getSimpleName();
+    private static final String TAG = FriendsFeedAdapter.class.getSimpleName();
     private List<NotificationItem> objects;
     CloudantConnect cloudantConnect;
     ProgressDialog progressDialog;
@@ -51,7 +52,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
     UserDatabase db;
     Intent intent;
 
-    public NotificationAdapter(Context context, int resource, List<NotificationItem> objects) {
+    public FriendsFeedAdapter(Context context, int resource, List<NotificationItem> objects) {
         super(context, resource, objects);
         this.objects = objects;
     }
@@ -72,7 +73,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         if (row == null) {
             inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             Fresco.initialize(getContext());
-            row = inflater.inflate(R.layout.row_notifications, parent, false);
+            row = inflater.inflate(R.layout.row_friendsfeed, parent, false);
         }
 
         final NotificationItem notificationItem = objects.get(position);
@@ -92,20 +93,17 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                     sender_username.length() + sender_message.length() + sender_event.length(), 0);
 
             // Set the text of a textView with the spannable object
-            holder.layout = (LinearLayout) row.findViewById(R.id.notification_layout);
-            holder.action_image = (SimpleDraweeView) row.findViewById(R.id.action_image);
-            holder.timestamp = (TextView) row.findViewById(R.id.timestamp);
+            holder.layout = (LinearLayout) row.findViewById(R.id.friend_layout);
+            holder.action_image = (SimpleDraweeView) row.findViewById(R.id.friendsfeed_image);
+            holder.timestamp = (TextView) row.findViewById(R.id.friendsfeed_timestamp);
 
             if (cloudantConnect == null)
                 cloudantConnect = new CloudantConnect(getContext(), "user");
 
-            // Set darker colour to indicate user has not read the notification
-            if(notificationItem.getAction_done().equals("false")) holder.layout.setBackgroundResource(R.drawable.header);
+            //RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(notificationItem.getSender_username()));
+            holder.action_image.setImageResource(Constant.getCircleColour(notificationItem.getImageId()));
 
-            RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(notificationItem.getSender_username()));
-            holder.action_image.setImageDrawable(roundImage);
-
-            holder.message = (TextView) row.findViewById(R.id.message);
+            holder.message = (TextView) row.findViewById(R.id.friendsfeed_message);
             holder.message.setText(spannable);
 
             // Get the timestamp
@@ -292,9 +290,9 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
         // (1) Received less than 10 seconds
         if(difference <= Constant.MIN_IN_MILLISECOND / 6) return "A few seconds ago";
-        // (2) Received less than a minute (< 60 secs)
+            // (2) Received less than a minute (< 60 secs)
         else if(difference <= Constant.MIN_IN_MILLISECOND) return (difference / Constant.SECOND_IN_MILLISECOND) + " seconds ago";
-        // (3) Received less than an hour (< 60 mins)
+            // (3) Received less than an hour (< 60 mins)
         else if(difference <= Constant.HOUR_IN_MILLISECOND) {
             long final_time = difference / Constant.MIN_IN_MILLISECOND;
             if (final_time == 1) return "1 min ago";
@@ -302,7 +300,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         }
         // (4) Received an hour ago
         else if(difference <= Constant.DAY_IN_MILLISECOND && ((difference / Constant.HOUR_IN_MILLISECOND) < 2)) return "About an hour ago";
-        // (5) Received less than a day (< 24 hours)
+            // (5) Received less than a day (< 24 hours)
         else if(difference <= Constant.DAY_IN_MILLISECOND) {
             long final_time = difference / Constant.HOUR_IN_MILLISECOND;
             if (final_time == 1) return "1 hour ago";
@@ -310,9 +308,9 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         }
         // (6) Received yesterday
         else if(difference <= Constant.YESTERDAY_IN_MILLISECOND) return "Yesterday at" + Constant.getDate(timestamp, Constant.TIMEFORMATTER);
-        // (7) Received within this week
+            // (7) Received within this week
         else if(difference <= Constant.WEEK_IN_MILLISECOND) return Constant.getDate(timestamp, Constant.NOTIFICATION_WEEK_DATEFORMATTER);
-        // (8) Received other days
+            // (8) Received other days
         else return Constant.getDate(timestamp, Constant.NOTIFICATION_DATEFORMATTER);
     }
 

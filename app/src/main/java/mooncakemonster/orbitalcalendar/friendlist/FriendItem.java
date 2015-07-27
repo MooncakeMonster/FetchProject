@@ -2,10 +2,12 @@ package mooncakemonster.orbitalcalendar.friendlist;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
+
 /**
  * Created by BAOJUN on 6/7/15.
  */
-public class FriendItem implements Comparable<FriendItem>{
+public class FriendItem implements Comparable<FriendItem>, Serializable {
     private String friend_added;
     private long timestamp;
     private String username;

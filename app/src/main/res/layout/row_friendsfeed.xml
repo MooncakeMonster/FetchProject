@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:id="@+id/friend_layout"
+    android:layout_margin="@dimen/standard_padding_size"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="@dimen/standard_padding_size"
+        android:layout_height="@dimen/standard_padding_size"
+        android:id="@+id/friendsfeed_image"
+        fresco:actualImageScaleType="fitCenter"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/standard_padding_size"
+        android:layout_marginBottom="@dimen/standard_padding_size"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="20dp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/standard_padding_size"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/friendsfeed_message"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:layout_marginTop="@dimen/standard_padding_size"
+            android:text="Username"
+            android:singleLine="false"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/friendsfeed_timestamp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:text="About a minute ago"
+            android:singleLine="false"
+            android:paddingTop="1dp"
+            android:textSize="10dp" />
+
+    </LinearLayout>
+</LinearLayout>

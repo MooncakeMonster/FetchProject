@@ -36,7 +36,7 @@
                 android:text="JAN 2015"
                 android:textSize="12dp"
                 android:gravity="center"
-                android:layout_below="@id/event_day"
+                android:layout_below="@id/import_event_day"
                 android:textColor="@color/caldroid_black" />
 
         </RelativeLayout>
@@ -51,7 +51,7 @@
             android:paddingRight="@dimen/feed_item_profile_info_padd"
             android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
             android:layout_marginRight="@dimen/feed_item_profile_info_padd"
-            android:id="@+id/event_set_colour">
+            android:id="@+id/import_event_set_colour">
 
             <TextView
                 android:id="@+id/import_event_title"
@@ -67,7 +67,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Singapore"
-                android:layout_below="@id/event_title"
+                android:layout_below="@id/import_event_title"
                 android:textColor="@color/caldroid_black"
                 android:textSize="@dimen/feed_item_profile_name" />
 
@@ -75,7 +75,7 @@
                 android:id="@+id/import_event_start_end_time"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/event_location"
+                android:layout_below="@id/import_event_location"
                 android:text="28 May 2015, Saturday"
                 android:textColor="@color/caldroid_black"
                 android:textSize="@dimen/feed_item_profile_name" />
@@ -84,8 +84,8 @@
                 android:id="@+id/to_import"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/event_location"
-                android:layout_alignBottom="@+id/event_location"
+                android:layout_alignBaseline="@+id/import_event_location"
+                android:layout_alignBottom="@+id/import_event_location"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
         </RelativeLayout>

@@ -24,4 +24,13 @@
         android:textSize="@dimen/standard_text_size"
         android:textColor="#000000"/>
 
+    <Button
+        android:id="@+id/add_imported"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="ADD"
+        android:layout_alignParentBottom="true"/>
+
 </RelativeLayout>

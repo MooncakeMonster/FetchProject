@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.ical.compat.jodatime.DateTimeIterator;
@@ -63,6 +64,8 @@ public class ImportICSParser extends ListActivity {
         setContentView(R.layout.row_import_external_list);
         Bundle extras = getIntent().getExtras();
         List<ImportedAppointment> listOfInput = null;
+
+        Button import_external_events = (Button) findViewById(R.id.add_imported);
 
         if (extras != null) {
             //Assuming user got here from ImportExternalFragment.java

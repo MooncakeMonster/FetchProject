@@ -3,6 +3,7 @@ package mooncakemonster.orbitalcalendar.database;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -18,12 +19,15 @@ import android.provider.MediaStore;
 import android.provider.OpenableColumns;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.io.ByteArrayOutputStream;
@@ -31,10 +35,14 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.voteresult.AttendanceAdapter;
+import mooncakemonster.orbitalcalendar.voteresult.ResultOption;
 
 /*************************************************************************************************
  * Purpose: Abstract Constant.java class to store all helper method that will most likely be used across the app
@@ -371,7 +379,7 @@ public final class Constant
                             typeWheel.setText(wheel[which] + "s" + additionalTag);
                         else typeWheel.setText(wheel[which] + additionalTag);
                     }
-                }).setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -398,10 +406,42 @@ public final class Constant
         dialogBuilder.setTitle(title);
         dialogBuilder.setMessage(message);
         dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
+        //dialogBuilder.show();
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
+    }
+
+    // This method calls alert dialog to display the list of names that had confirmed their attendance.
+    public static void openAttendanceDialog(Context context, String[] split_participants) {
+        final View dialogview = LayoutInflater.from(context).inflate(R.layout.dialog_result, null);
+        final View header = LayoutInflater.from(context).inflate(R.layout.header_result, null);
+        final TextView input_username = (TextView) header.findViewById(R.id.result_notice);
+        final ListView listView = (ListView) dialogview.findViewById(R.id.result_list);
+        final List<ResultOption> list = new ArrayList<>();
+
+        input_username.setText("The following participants will be coming to your event:");
+
+        final int size = split_participants.length;
+        for(int i = 0; i < size; i++) {
+            list.add(i, new ResultOption(true, split_participants[i]));
+        }
+
+        final AttendanceAdapter adapter = new AttendanceAdapter(context, R.id.result_list, list);
+        listView.setAdapter(adapter);
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setTitle("Attendance");
+        alertBuilder.setView(dialogview);
+        alertBuilder.setCancelable(true).setNegativeButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        Dialog dialog = alertBuilder.create();
+        dialog.show();
     }
 
     /****************************************************************************************************

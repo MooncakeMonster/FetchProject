@@ -61,6 +61,7 @@ public class User {
     private String confirm_end_date;
     private String confirm_start_time;
     private String confirm_end_time;
+    private String confirm_action;
 
     // Voting Reminder
     private String reminder_my_username;
@@ -412,6 +413,14 @@ public class User {
         this.confirm_end_time = confirm_end_time;
     }
 
+    public String getConfirm_action() {
+        return confirm_action;
+    }
+
+    public void setConfirm_action(String confirm_action) {
+        this.confirm_action = confirm_action;
+    }
+
     public String getReminder_my_username() {
         return reminder_my_username;
     }
@@ -533,6 +542,7 @@ public class User {
         user.setConfirm_end_date((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_date"));
         user.setConfirm_start_time((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_start_time"));
         user.setConfirm_end_time((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_end_time"));
+        user.setConfirm_action((String) ((Map) user_revised.get("voting_confirmed")).get("confirm_action"));
 
         // Voting reminder
         user.setReminder_my_username((String) ((Map) user_revised.get("voting_reminder")).get("reminder_my_username"));
@@ -607,6 +617,7 @@ public class User {
         voting_confirmed.put("confirm_end_date", confirm_end_date);
         voting_confirmed.put("confirm_start_time", confirm_start_time);
         voting_confirmed.put("confirm_end_time", confirm_end_time);
+        voting_confirmed.put("confirm_action", confirm_action);
 
         // Reminder for event
         HashMap<String, Object> voting_remind = new HashMap<>();

@@ -55,13 +55,24 @@ public class VoteInvitation extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_invitation);
 
-        //(0) Instantiate layout
-        invite_sender = (TextView) findViewById(R.id.invite_sender);
-        invite_title = (TextView) findViewById(R.id.invite_title);
-        invite_location = (TextView) findViewById(R.id.invite_location);
-        invite_notes = (TextView) findViewById(R.id.invite_notes);
-        // Initialise ArrayAdapter adapter for view
+        // Get intent that started this activity
+        Intent intent = getIntent();
+        final Bundle bundle = intent.getExtras();
+        notificationItem = (NotificationItem) bundle.getSerializable("vote_item");
+
+        // Get voting options from sender
+        adapter = new SelectAdapter(this, R.layout.row_selected_checkbox, new ArrayList<SelectItem>());
+        View header = getLayoutInflater().inflate(R.layout.header_vote_invitation, null);
         listView = (ListView) findViewById(R.id.select_list);
+        listView.addHeaderView(header);
+        listView.setAdapter(adapter);
+        retrieveAllOptions(notificationItem);
+
+        // Instantiate layout
+        invite_sender = (TextView) header.findViewById(R.id.invite_sender);
+        invite_title = (TextView) header.findViewById(R.id.invite_title);
+        invite_location = (TextView) header.findViewById(R.id.invite_location);
+        invite_notes = (TextView) header.findViewById(R.id.invite_notes);
 
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");
@@ -73,12 +84,7 @@ public class VoteInvitation extends ActionBarActivity {
 
         getSupportActionBar().setElevation(0);
 
-        //(1) Get intent that started this activity
-        Intent intent = getIntent();
-        final Bundle bundle = intent.getExtras();
-        notificationItem = (NotificationItem) bundle.getSerializable("vote_item");
-
-        //(2) Extract data from notification
+        // Extract data from notification
         if(notificationItem != null) {
             String notes = notificationItem.getSender_notes();
 
@@ -88,11 +94,6 @@ public class VoteInvitation extends ActionBarActivity {
             if(notes != null && !notes.isEmpty()) invite_notes.setText(notes);
             else invite_notes.setText("No notes");
         }
-
-        //(3) Get voting options from sender
-        adapter = new SelectAdapter(this, R.layout.row_selected_checkbox, new ArrayList<SelectItem>());
-        listView.setAdapter(adapter);
-        retrieveAllOptions(notificationItem);
 
         // Dialog edittext appears for user to state reason for rejection if they choose to reject voting
         reject_event = (Button) findViewById(R.id.reject_event);

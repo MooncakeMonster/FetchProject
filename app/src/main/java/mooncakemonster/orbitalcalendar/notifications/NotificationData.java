@@ -32,6 +32,8 @@ public class NotificationData {
 
         public static final String REJECT_REASON = "reject_reason";
 
+        public static final String CONFIRM_ACTION = "confirm_action";
+
         public static final int DATABASE_VERSION = 1;
         public static final String DATABASE_NAME = "notification_storage";
         public static final String TABLE_NAME = "notification_intent_storage";

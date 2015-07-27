@@ -41,13 +41,16 @@ public class VoteInvitationSent extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vote_invitation);
 
-        //(0) Instantiate layout
-        invite_sender = (TextView) findViewById(R.id.invite_sender);
-        invite_title = (TextView) findViewById(R.id.invite_title);
-        invite_location = (TextView) findViewById(R.id.invite_location);
-        invite_notes = (TextView) findViewById(R.id.invite_notes);
         // Initialise ArrayAdapter adapter for view
+        View header = getLayoutInflater().inflate(R.layout.header_vote_invitation, null);
         listView = (ListView) findViewById(R.id.select_list);
+        listView.addHeaderView(header);
+
+        //(0) Instantiate layout
+        invite_sender = (TextView) header.findViewById(R.id.invite_sender);
+        invite_title = (TextView) header.findViewById(R.id.invite_title);
+        invite_location = (TextView) header.findViewById(R.id.invite_location);
+        invite_notes = (TextView) header.findViewById(R.id.invite_notes);
 
         db = new UserDatabase(this);
         // Fetch user details from sqlite

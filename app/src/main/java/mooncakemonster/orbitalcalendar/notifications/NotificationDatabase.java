@@ -36,7 +36,8 @@ public class NotificationDatabase extends SQLiteOpenHelper {
             NotificationData.NotificationInfo.END_DATE + " TEXT, " +
             NotificationData.NotificationInfo.START_TIME + " TEXT, " +
             NotificationData.NotificationInfo.END_TIME + " TEXT, " +
-            NotificationData.NotificationInfo.REJECT_REASON + " TEXT); ";
+            NotificationData.NotificationInfo.REJECT_REASON + " TEXT, " +
+            NotificationData.NotificationInfo.CONFIRM_ACTION + " TEXT); ";
 
     public NotificationDatabase (Context context) {
         super(context, NotificationData.NotificationInfo.DATABASE_NAME, null, NotificationData.NotificationInfo.DATABASE_VERSION);
@@ -58,7 +59,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
     // This method insets information into the database.
     public void putInformation(NotificationDatabase data, String action_done, String row_id, int notification_id, long timestamp, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
-                               String sender_location, String sender_notes, String selected_option, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
+                               String sender_location, String sender_notes, String selected_option, String start_date, String end_date, String start_time, String end_time, String reject_reason, String confirm_action) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -85,6 +86,8 @@ public class NotificationDatabase extends SQLiteOpenHelper {
 
         contentValues.put(NotificationData.NotificationInfo.REJECT_REASON, reject_reason);
 
+        contentValues.put(NotificationData.NotificationInfo.CONFIRM_ACTION, confirm_action);
+
         // Insert into sqlite database
         sqLiteDatabase.insert(NotificationData.NotificationInfo.TABLE_NAME, null, contentValues);
         Log.d(TAG, "One notification row inserted");
@@ -102,7 +105,8 @@ public class NotificationDatabase extends SQLiteOpenHelper {
                             NotificationData.NotificationInfo.SENDER_LOCATION, NotificationData.NotificationInfo.SENDER_NOTES,
                             NotificationData.NotificationInfo.SELECTED_OPTION, NotificationData.NotificationInfo.START_DATE,
                             NotificationData.NotificationInfo.END_DATE, NotificationData.NotificationInfo.START_TIME,
-                            NotificationData.NotificationInfo.END_TIME, NotificationData.NotificationInfo.REJECT_REASON};
+                            NotificationData.NotificationInfo.END_TIME, NotificationData.NotificationInfo.REJECT_REASON,
+                            NotificationData.NotificationInfo.CONFIRM_ACTION};
 
         // Points to first row of table
         return sqLiteDatabase.query(NotificationData.NotificationInfo.TABLE_NAME, columns, null, null, null, null, null);
@@ -131,7 +135,7 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         while (!cursor.isAfterLast()) {
             NotificationItem notificationItem = new NotificationItem(cursor.getString(0), cursor.getString(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5),
                                                 cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11),
-                                                cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17));
+                                                cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17), cursor.getString(18));
             notificationItems.add(notificationItem);
             cursor.moveToNext();
         }

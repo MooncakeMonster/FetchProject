@@ -9,9 +9,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 
 /**
  * Created by BAOJUN on 19/7/15.
@@ -19,6 +23,7 @@ import mooncakemonster.orbitalcalendar.R;
 public class ResultOptionAdapter extends ArrayAdapter<ResultOption> {
 
     private List<ResultOption> objects;
+    CloudantConnect cloudantConnect;
 
     public ResultOptionAdapter(Context context, int resource, List<ResultOption> objects) {
         super(context, resource, objects);
@@ -27,6 +32,7 @@ public class ResultOptionAdapter extends ArrayAdapter<ResultOption> {
 
     static class Holder {
         CheckBox checkbox;
+        SimpleDraweeView image;
         TextView username;
     }
 
@@ -45,9 +51,16 @@ public class ResultOptionAdapter extends ArrayAdapter<ResultOption> {
         if(resultOption != null) {
             holder = new Holder();
             holder.checkbox = (CheckBox) row.findViewById(R.id.send_confirm_date);
+            holder.image = (SimpleDraweeView) row.findViewById(R.id.check_image);
             holder.username = (TextView) row.findViewById(R.id.participant_username);
 
             holder.username.setText(resultOption.getUsername());
+
+            // Retrieve user image from cloudant database
+            if (cloudantConnect == null) this.cloudantConnect = new CloudantConnect(getContext(), "user");
+            RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(resultOption.getUsername()));
+            holder.image.setImageDrawable(roundImage);
+
             holder.checkbox.setChecked(true);
 
             holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

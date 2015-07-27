@@ -65,14 +65,17 @@ public class VotingActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_voting);
 
-        //(0) Instantiate layout
-        vote_title = (TextView) findViewById(R.id.vote_title);
-        vote_location = (TextView) findViewById(R.id.vote_location);
-        vote_participants = (MultiAutoCompleteTextView) findViewById(R.id.vote_participants);
-        add_option = (Button) findViewById(R.id.add_option);
         // Initialise ArrayAdapter adapter for view
+        View header = getLayoutInflater().inflate(R.layout.header_voting, null);
         listView = (ListView) findViewById(R.id.option_list);
+        listView.addHeaderView(header);
         votingDatabase = new VotingDatabase(getBaseContext());
+
+        // Instantiate layout
+        vote_title = (TextView) header.findViewById(R.id.vote_title);
+        vote_location = (TextView) header.findViewById(R.id.vote_location);
+        vote_participants = (MultiAutoCompleteTextView) header.findViewById(R.id.vote_participants);
+        add_option = (Button) header.findViewById(R.id.add_option);
 
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this.getApplicationContext(), "user");

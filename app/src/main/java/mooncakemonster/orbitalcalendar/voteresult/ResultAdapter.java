@@ -4,6 +4,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,8 +95,8 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
             holder.grey_time = (TextView) row.findViewById(R.id.grey_time);
             holder.total_text = (TextView) row.findViewById(R.id.total_text);
 
-            if(confirmNotDateTime(event_id, resultItem.getStart_date())) {
-                int colour = getContext().getResources().getColor(R.color.timestamp);
+            if(confirmDateTime(event_id, resultItem.getStart_date()) != null) {
+                int colour = getContext().getResources().getColor(R.color.colorPrimary);
                 holder.grey_start_date.setTextColor(colour);
                 holder.grey_end_date.setTextColor(colour);
                 holder.grey_time.setTextColor(colour);
@@ -102,6 +105,24 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 holder.result_end_date.setTextColor(colour);
                 holder.result_time.setTextColor(colour);
                 holder.result_total.setTextColor(colour);
+
+                holder.grey_start_date.setText(boldText("Start Date:"));
+                holder.grey_end_date.setText(boldText("End Date:"));
+                holder.grey_time.setText(boldText("Time:"));
+                holder.total_text.setText(boldText("TOTAL"));
+
+                holder.result_start_date.setText(boldText(Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER)));
+                holder.result_end_date.setText(boldText(Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER)));
+                holder.result_time.setText(boldText(resultItem.getStart_time() + " - " + resultItem.getEnd_time()));
+                //holder.result_name.setText(resultItem.getSelected_username());
+                holder.result_total.setText(resultItem.getTotal());
+
+            } else {
+                holder.result_start_date.setText(Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
+                holder.result_end_date.setText(Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
+                holder.result_time.setText(resultItem.getStart_time() + " - " + resultItem.getEnd_time());
+                //holder.result_name.setText(resultItem.getSelected_username());
+                holder.result_total.setText(resultItem.getTotal());
             }
 
             // Show list of participants who can make it
@@ -109,9 +130,9 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 @Override
                 public void onClick(View v) {
                     String participants = resultItem.getSelected_username();
-                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem);
-                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem);
-                    else alertUser("No participant can make it on this day yet.");
+                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem, "can");
+                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem, "can");
+                    else Constant.alertUser(getContext(), "Confirm date and time", "No participant can make it on this day yet.");
                 }
             });
 
@@ -120,9 +141,9 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 @Override
                 public void onClick(View v) {
                     String participants = resultItem.getNot_selected_username();
-                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem);
-                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem);
-                    else alertUser("No participant cannot make it on this day yet.");
+                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem, "cannot");
+                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem, "cannot");
+                    else Constant.alertUser(getContext(), "Confirm date and time", "No participant cannot make it on this day yet.");
                 }
             });
 
@@ -131,17 +152,11 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 @Override
                 public void onClick(View v) {
                     String participants = resultItem.getUsername_rejected();
-                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem);
-                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem);
-                    else alertUser("No participant has rejected voting for this event yet.");
+                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem, "reject");
+                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem, "reject");
+                    else Constant.alertUser(getContext(), "Confirm date and time", "No participant has rejected voting for this event yet.");
                 }
             });
-
-            holder.result_start_date.setText(Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
-            holder.result_end_date.setText(Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
-            holder.result_time.setText(resultItem.getStart_time() + " - " + resultItem.getEnd_time());
-            //holder.result_name.setText(resultItem.getSelected_username());
-            holder.result_total.setText(resultItem.getTotal());
 
             row.setTag(holder);
         }
@@ -149,17 +164,11 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         return row;
     }
 
-    // This method checks if the event already has date and time confirmed, and the current option is not the confirmed one.
-    private boolean confirmNotDateTime(String event_id, String start_date) {
-        votingDatabase = new VotingDatabase(getContext());
-        VoteItem voteItem = votingDatabase.getVoteItem(votingDatabase, event_id);
-
-        if(voteItem.getEvent_confirm_start_date() != null && !voteItem.getEvent_confirm_start_date().equals(start_date)) {
-            return true;
-        }
-
-        // Reach here when no date and time is confirmed yet
-        return false;
+    // This method returns bold texts.
+    private SpannableString boldText(String text) {
+        SpannableString spannable = new SpannableString(text);
+        spannable.setSpan(new StyleSpan(Typeface.BOLD), 0, text.length(), 0);
+        return spannable;
     }
 
     // This method checks if the event already has date and time confirmed.
@@ -193,10 +202,12 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
     }
 
     // This method calls alert dialog to display the list of names.
-    private void openDialog(final String[] split_participants, final String event_id, final ResultItem resultItem) {
+    private void openDialog(final String[] split_participants, final String event_id, final ResultItem resultItem, final String action) {
         final View dialogview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_result, null);
-        final TextView input_username = (TextView) dialogview.findViewById(R.id.result_notice);
+        final View header = LayoutInflater.from(getContext()).inflate(R.layout.header_result, null);
         final ListView listView = (ListView) dialogview.findViewById(R.id.result_list);
+        listView.addHeaderView(header);
+        final TextView input_username = (TextView) header.findViewById(R.id.result_notice);
         final List<ResultOption> list = new ArrayList<>();
 
         input_username.setText("Event : " + retrieveVoteItem(event_id).getEvent_title() + "\nStart  : " + Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + ", " + resultItem.getStart_time() +
@@ -224,7 +235,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                         final_list.add(list.get(i).getUsername());
                     }
                 }
-                pushData(confirmParticipants(final_list), resultItem);
+                pushData(confirmParticipants(final_list), resultItem, action);
                 Toast.makeText(getContext(), "Details successfully sent", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
@@ -240,10 +251,12 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
     }
 
     // This method calls alert dialog to display the list of names.
-    private void openViewDialog(final String[] split_participants, String event_id, final ResultItem resultItem) {
+    private void openViewDialog(final String[] split_participants, String event_id, final ResultItem resultItem, final String action) {
         final View dialogview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_result, null);
-        final TextView input_username = (TextView) dialogview.findViewById(R.id.result_notice);
+        final View header = LayoutInflater.from(getContext()).inflate(R.layout.header_result, null);
+        final TextView input_username = (TextView) header.findViewById(R.id.result_notice);
         final ListView listView = (ListView) dialogview.findViewById(R.id.result_list);
+        listView.addHeaderView(header);
         final List<ResultOption> list = new ArrayList<>();
 
         VoteItem voteItem = retrieveVoteItem(event_id);
@@ -274,7 +287,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                         final_list.add(list.get(i).getUsername());
                     }
                 }
-                pushData(confirmParticipants(final_list), resultItem);
+                pushData(confirmParticipants(final_list), resultItem, action);
                 Toast.makeText(getContext(), "Details successfully sent", Toast.LENGTH_SHORT).show();
                 dialog.dismiss();
             }
@@ -289,18 +302,8 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         dialog.show();
     }
 
-
-    // This method calls alert dialog to inform users a message.
-    private void alertUser(String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        dialogBuilder.setTitle("Confirm date and time");
-        dialogBuilder.setMessage(message);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
-    }
-
     // This method push the items in Cloudant database
-    private void pushData(String participants, ResultItem resultItem) {
+    private void pushData(String participants, ResultItem resultItem, String action) {
         String start_date = resultItem.getStart_date();
         String end_date = resultItem.getEnd_date();
         String start_time = resultItem.getStart_time();
@@ -320,7 +323,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         VoteItem voteItem = votingDatabase.getVoteItem(votingDatabase, event_id);
         // Send out confirmation date and time to target participants
         cloudantConnect.sendConfirmationToTargetParticipants(my_username, participants, Integer.parseInt(event_id),
-                Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title(), start_date, end_date, start_time, end_time);
+                Integer.parseInt(voteItem.getImageId()), voteItem.getEvent_title(), start_date, end_date, start_time, end_time, action);
         cloudantConnect.startPushReplication();
     }
 }

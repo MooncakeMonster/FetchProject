@@ -527,7 +527,7 @@ public class CloudantConnect {
      */
     public void sendConfirmationToTargetParticipants(String my_username, String participants, int event_id,
                                                      int event_colour, String event_title, String start_date,
-                                                     String end_date, String start_time, String end_time) {
+                                                     String end_date, String start_time, String end_time, String action) {
         // Retrieve all participants username
         String[] username = participants.split(" ");
         int size = username.length;
@@ -543,6 +543,7 @@ public class CloudantConnect {
             user.setConfirm_end_date(end_date);
             user.setConfirm_start_time(start_time);
             user.setConfirm_end_time(end_time);
+            user.setConfirm_action(action);
 
             // Retrieve user's documents
             try {
@@ -708,6 +709,7 @@ public class CloudantConnect {
         user.setConfirm_end_date(null);
         user.setConfirm_start_time(null);
         user.setConfirm_end_time(null);
+        user.setConfirm_action(null);
 
         // Retrieve user's documents
         try {

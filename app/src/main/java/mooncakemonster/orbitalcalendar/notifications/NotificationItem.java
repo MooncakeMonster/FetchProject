@@ -24,9 +24,12 @@ public class NotificationItem implements Serializable {
     private String start_time;
     private String end_time;
     private String reject_reason;
+    private String confirm_action;
 
-    public NotificationItem(String action_done, String row_id, int notificationId, int timestamp, int eventId, int imageId, String sender_username, String message, String sender_event, String action,
-                            String sender_location, String sender_notes, String selected_option, String start_date, String end_date, String start_time, String end_time, String reject_reason) {
+    public NotificationItem(String action_done, String row_id, int notificationId, int timestamp, int eventId, int imageId,
+                            String sender_username, String message, String sender_event, String action,
+                            String sender_location, String sender_notes, String selected_option, String start_date,
+                            String end_date, String start_time, String end_time, String reject_reason, String confirm_action) {
         this.action_done = action_done;
         this.row_id = row_id;
         this.notificationId = notificationId;
@@ -45,6 +48,8 @@ public class NotificationItem implements Serializable {
         this.start_time = start_time;
         this.end_time = end_time;
         this.reject_reason = reject_reason;
+        this.confirm_action = confirm_action;
+
     }
 
     public String getAction_done() {
@@ -189,5 +194,13 @@ public class NotificationItem implements Serializable {
 
     public void setReject_reason(String reject_reason) {
         this.reject_reason = reject_reason;
+    }
+
+    public String getConfirm_action() {
+        return confirm_action;
+    }
+
+    public void setConfirm_action(String confirm_action) {
+        this.confirm_action = confirm_action;
     }
 }

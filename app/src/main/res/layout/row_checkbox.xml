@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
@@ -9,13 +10,24 @@
         android:id="@+id/send_confirm_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/standard_padding_size"
         style="@android:style/Widget.Holo.CompoundButton.RadioButton" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/check_image"
+        fresco:actualImageScaleType="fitCenter"
+        android:layout_marginTop="@dimen/standard_padding_size"
+        android:layout_marginBottom="@dimen/standard_padding_size"
+        android:layout_marginLeft="@dimen/standard_padding_size" />
 
     <TextView
         android:id="@+id/participant_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/standard_padding_size"
+        android:layout_marginTop="@dimen/standard_padding_size"
         android:text="Username"
         android:textColor="@color/black"
         android:textSize="@dimen/standard_text_size" />

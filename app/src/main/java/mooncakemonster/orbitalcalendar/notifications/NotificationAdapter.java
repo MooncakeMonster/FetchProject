@@ -20,9 +20,6 @@ import android.widget.TextView;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -36,6 +33,8 @@ import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitation;
 import mooncakemonster.orbitalcalendar.voteinvitation.VoteInvitationSent;
+import mooncakemonster.orbitalcalendar.votesend.VoteItem;
+import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
  * Created by BAOJUN on 7/7/15.
@@ -46,6 +45,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
     private List<NotificationItem> objects;
     CloudantConnect cloudantConnect;
     ProgressDialog progressDialog;
+    VotingDatabase votingDatabase;
     NotificationDatabase notificationDatabase;
     FriendDatabase friendDatabase;
     UserDatabase db;
@@ -152,15 +152,10 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                                         timer.schedule(new TimerTask() {
                                             @Override
                                             public void run() {
-                                                // Also add sender into friend list once friend request is accepted
-                                                // Get date and time when friend is added
-                                                Calendar c = Calendar.getInstance();
-                                                Date date = c.getTime();
-                                                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, EEE @ hh:mma");
 
                                                 // Save friend into friendlist database
                                                 friendDatabase = new FriendDatabase(getContext());
-                                                friendDatabase.putInformation(friendDatabase, format.format(date), notificationItem.getSender_username());
+                                                friendDatabase.putInformation(friendDatabase, "true", Constant.retrieveCurrentTime(), notificationItem.getSender_username());
 
                                                 // Send back to user to inform about friend request acceptance
                                                 if (cloudantConnect == null)
@@ -205,8 +200,21 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                         case 6:
                             if(notificationItem.getAction_done().equals("false")) {
                                 dialogBuilder.setTitle("Confirm attendance");
-                                dialogBuilder.setMessage("Would you like to confirm attendance for the event \""
-                                        + notificationItem.getSender_event() + "\" with " + sender_username + "?");
+
+                                // Check if user can make it, cannot make it or has rejected voting for this event
+                                if(notificationItem.getConfirm_action().equals("can")) {
+                                    dialogBuilder.setMessage("You had voted for this option previously.\n\n" + "Would you like to confirm that you can attend the event \""
+                                            + notificationItem.getSender_event() + "\"?");
+                                } else if(notificationItem.getConfirm_action().equals("cannot")) {
+                                    dialogBuilder.setMessage("You did not vote for this option previously, but " + notificationItem.getSender_username() +
+                                            " still hopes that you will come.\n\n Would you like to change your mind and confirm that you can attend the event \""
+                                            + notificationItem.getSender_event() + "\"?");
+                                } else if(notificationItem.getConfirm_action().equals("reject")) {
+                                    dialogBuilder.setMessage("You had rejected voting for this event previously, but " + notificationItem.getSender_username() +
+                                            " still hopes that you can attend. \n\n Would you like to change your mind and confirm that you can attend the event \""
+                                            + notificationItem.getSender_event() + "\"?");
+                                }
+
                                 dialogBuilder.setNegativeButton("Cancel", null);
                                 dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                     @Override
@@ -253,7 +261,10 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                             inner_view.getContext().startActivity(intent);
                             break;
                         case 8:
-
+                            votingDatabase = new VotingDatabase(getContext());
+                            VoteItem voteItem = votingDatabase.getVoteItem(votingDatabase, "" + notificationItem.getEventId());
+                            String attendance = voteItem.getEvent_attendance();
+                            if(attendance != null) Constant.openAttendanceDialog(getContext(), attendance.split(" "));
                             break;
                         default:
                             break;

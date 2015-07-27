@@ -23,7 +23,7 @@ import java.util.List;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.voteresult.AttendanceAdapter;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.voteresult.ResultOption;
 import mooncakemonster.orbitalcalendar.voteresult.ResultOptionAdapter;
 import mooncakemonster.orbitalcalendar.votesend.VoteItem;
@@ -112,8 +112,8 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
 
             // Display final confirmed date
             if(voteItem.getEvent_confirm_start_date() != null) {
-                holder.event_start_end_date.setText(voteItem.getEvent_confirm_start_date() + " - " + voteItem.getEvent_confirm_end_date());
-                holder.event_start_end_time.setText(voteItem.getEvent_confirm_start_time() + " - " + voteItem.getEvent_confirm_end_time());
+                holder.event_start_end_date.setText("Start : " + voteItem.getEvent_confirm_start_date() + ", " + voteItem.getEvent_confirm_start_time());
+                holder.event_start_end_time.setText("End   : " + voteItem.getEvent_confirm_end_date() + ", " + voteItem.getEvent_confirm_end_time());
             } else {
                 holder.event_start_end_date.setText("Date not confirmed");
                 holder.event_start_end_time.setText("Time not confirmed");
@@ -138,7 +138,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
                 public void onClick(final View v) {
                     final String[] split_not_voted = checkNotVoted(voteItem.getEvent_voted_participants(), voteItem.getEvent_participants());
                     if(split_not_voted.length > 0) openReminderDialog(split_not_voted, voteItem);
-                    else alertUser("Send reminder", "No participant needs to be reminded to vote yet.");
+                    else Constant.alertUser(getContext(), "Send reminder", "No participant needs to be reminded to vote yet.");
                 }
             });
 
@@ -146,8 +146,8 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
                 @Override
                 public void onClick(View v) {
                     String attendance = voteItem.getEvent_attendance();
-                    if(attendance != null) openAttendanceDialog(attendance.split(" "));
-                    else alertUser("Attendance", "No participant has confirmed their attendance for this event yet.");
+                    if(attendance != null) Constant.openAttendanceDialog(getContext(), attendance.split(" "));
+                    else Constant.alertUser(getContext(), "Attendance", "No participant has confirmed their attendance for this event yet.");
                 }
             });
 
@@ -155,15 +155,6 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
         }
 
         return row;
-    }
-
-    // This method calls alert dialog to inform users a message.
-    private void alertUser(String title, String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-        dialogBuilder.setTitle(title);
-        dialogBuilder.setMessage(message);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
     }
 
     // This method calls alert dialog to display the list of names that had not cast votes.
@@ -211,37 +202,6 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
                 dialog.dismiss();
             }
         }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-
-        Dialog dialog = alertBuilder.create();
-        dialog.show();
-    }
-
-    // This method calls alert dialog to display the list of names that had confirmed their attendance.
-    private void openAttendanceDialog(String[] split_participants) {
-        final View dialogview = LayoutInflater.from(getContext()).inflate(R.layout.dialog_result, null);
-        final TextView input_username = (TextView) dialogview.findViewById(R.id.result_notice);
-        final ListView listView = (ListView) dialogview.findViewById(R.id.result_list);
-        final List<ResultOption> list = new ArrayList<>();
-
-        input_username.setText("The following participants will be coming to your event:");
-
-        final int size = split_participants.length;
-        for(int i = 0; i < size; i++) {
-            list.add(i, new ResultOption(true, split_participants[i]));
-        }
-
-        final AttendanceAdapter adapter = new AttendanceAdapter(getContext(), R.id.result_list, list);
-        listView.setAdapter(adapter);
-
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getContext());
-        alertBuilder.setTitle("Attendance");
-        alertBuilder.setView(dialogview);
-        alertBuilder.setCancelable(true).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

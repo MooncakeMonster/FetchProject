@@ -4,22 +4,30 @@
     android:layout_height="match_parent"
     android:background="@drawable/cloudy">
 
-    <ListView
-        android:id="@android:id/list"
-        android:divider="@color/black"
+    <com.baoyz.widget.PullRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_refresh_notification"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:divider="@color/black" />
+
+    </com.baoyz.widget.PullRefreshLayout>
 
     <!--In the event when there are no notifications-->
     <TextView
         android:id="@id/android:empty"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:text="No notification to display"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:textSize="@dimen/standard_text_size"
-        android:textColor="@color/colorPrimary"/>
+        android:text="No notification to display"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/standard_text_size" />
 
 </RelativeLayout>

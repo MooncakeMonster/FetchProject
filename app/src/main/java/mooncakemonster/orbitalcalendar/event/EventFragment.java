@@ -1,11 +1,13 @@
 package mooncakemonster.orbitalcalendar.event;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
@@ -34,6 +36,7 @@ public class EventFragment extends ListFragment {
     EventAdapter adapter;
     Appointment selected_appointment;
     Date latestDate;
+    ImageButton addEventButton;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -61,8 +64,19 @@ public class EventFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_listfragment, container, false);
+
+        addEventButton = (ImageButton) rootView.findViewById(R.id.addEventButton);
+
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity().getApplicationContext(), EventActivity.class);
+                intent.putExtra("date_passed", new Date(System.currentTimeMillis()));
+                startActivity(intent);
+            }
+        });
 
         return rootView;
     }

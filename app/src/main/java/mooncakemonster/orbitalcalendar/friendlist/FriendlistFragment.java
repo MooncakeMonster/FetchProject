@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
+import com.baoyz.widget.PullRefreshLayout;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -23,7 +25,7 @@ import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
-public class FriendlistFragment extends ListFragment {
+public class FriendlistFragment extends ListFragment implements PullRefreshLayout.OnRefreshListener {
 
     private static final String TAG = FriendlistFragment.class.getSimpleName();
     private FriendDatabase friendDatabase;
@@ -31,6 +33,7 @@ public class FriendlistFragment extends ListFragment {
     private ProgressDialog progressDialog;
     private List<FriendItem> allFriends;
     FriendlistAdapter adapter;
+    PullRefreshLayout swipeRefreshLayout;
     ImageButton add_friends;
     CloudantConnect cloudantConnect;
 
@@ -44,12 +47,6 @@ public class FriendlistFragment extends ListFragment {
         // Get adapter view
         adapter = new FriendlistAdapter(getActivity(), R.layout.row_friendlist, allFriends);
         setListAdapter(adapter);
-
-        /*
-        adapter.clear();
-        adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
-        adapter.notifyDataSetChanged();
-        */
     }
 
     @Override
@@ -57,6 +54,17 @@ public class FriendlistFragment extends ListFragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_friendlist, container, false);
+
+        swipeRefreshLayout = (PullRefreshLayout) rootView.findViewById(R.id.swipe_refresh_friendlist);
+        swipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                retrieveNotifications();
+            }
+        }, 3000);
 
         return rootView;
     }
@@ -93,6 +101,10 @@ public class FriendlistFragment extends ListFragment {
                             progressDialog.setMessage("Sending friend request...");
                             showDialog();
 
+                            adapter.clear();
+                            adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
+                            adapter.notifyDataSetChanged();
+
                             Timer timer = new Timer();
                             timer.schedule(new TimerTask() {
                                 @Override
@@ -100,6 +112,9 @@ public class FriendlistFragment extends ListFragment {
                                     db = new UserDatabase(getActivity());
                                     HashMap<String, String> user = db.getUserDetails();
                                     final String my_username = user.get("username");
+
+                                    friendDatabase = new FriendDatabase(getActivity());
+                                    friendDatabase.putInformation(friendDatabase, "false", Constant.retrieveCurrentTime(), my_username);
 
                                     cloudantConnect.sendFriendRequest(my_username, username);
                                     cloudantConnect.startPushReplication();
@@ -173,14 +188,21 @@ public class FriendlistFragment extends ListFragment {
 
                     alert.show();
                 }
-                                         }
-
-    );
+         });
 }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+    }
+
+    // This method retrieves the latest notifications from the database
+    private void retrieveNotifications() {
+        swipeRefreshLayout.setRefreshing(true);
+        adapter.clear();
+        adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
+        adapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     // This method shows progress dialog when not showing
@@ -193,5 +215,10 @@ public class FriendlistFragment extends ListFragment {
     private void hideDialog() {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
+    }
+
+    @Override
+    public void onRefresh() {
+        retrieveNotifications();
     }
 }

@@ -6,16 +6,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.baoyz.widget.PullRefreshLayout;
+
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 
-public class NotificationFragment extends ListFragment {
+public class NotificationFragment extends ListFragment implements PullRefreshLayout.OnRefreshListener {
 
     private static final String TAG = NotificationFragment.class.getSimpleName();
     private NotificationDatabase notificationDatabase;
     private List<NotificationItem> allNotifications;
     NotificationAdapter adapter;
+    PullRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,33 @@ public class NotificationFragment extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_notifications, container, false);
+
+        swipeRefreshLayout = (PullRefreshLayout) rootView.findViewById(R.id.swipe_refresh_notification);
+        swipeRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_MATERIAL);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefreshLayout.setRefreshing(true);
+                retrieveNotifications();
+            }
+        }, 3000);
+
+        return rootView;
+    }
+
+    // This method retrieves the latest notifications from the database
+    private void retrieveNotifications() {
+        swipeRefreshLayout.setRefreshing(true);
+        adapter.clear();
+        adapter.addAll(notificationDatabase.getAllNotifications(notificationDatabase));
+        adapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh() {
+        retrieveNotifications();
     }
 }

@@ -131,9 +131,7 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
 
                     for (int i = 0; i < size; i++) {
                         if (username.equals(selected_participants[i])) {
-                            usernameCompletionView.removeObject(username);
-                            //remove(username);
-                            //usernameCompletionView.notifyDataSetChanged();
+                            remove(username);
                             break;
                         }
                     }

@@ -11,10 +11,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 
@@ -26,15 +24,11 @@ public class VoteInvitationSent extends ActionBarActivity {
 
     // List to get all the date options
     private ListView listView;
-    SelectAdapterSent adapter;
+    private SelectAdapterSent adapter;
+    private NotificationItem notificationItem;
 
-    // Retrieve username from SQLite
-    UserDatabase db;
-    NotificationItem notificationItem;
-
-    Button reject_event;
-    TextView invite_sender, invite_title, invite_location, invite_notes;
-    String my_username = "";
+    private Button reject_event;
+    private TextView invite_sender, invite_title, invite_location, invite_notes;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,11 +45,6 @@ public class VoteInvitationSent extends ActionBarActivity {
         invite_title = (TextView) header.findViewById(R.id.invite_title);
         invite_location = (TextView) header.findViewById(R.id.invite_location);
         invite_notes = (TextView) header.findViewById(R.id.invite_notes);
-
-        db = new UserDatabase(this);
-        // Fetch user details from sqlite
-        HashMap<String, String> user = db.getUserDetails();
-        my_username = user.get("username");
 
         getSupportActionBar().setElevation(0);
 

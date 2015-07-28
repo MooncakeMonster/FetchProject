@@ -26,20 +26,17 @@ import mooncakemonster.orbitalcalendar.voteresult.ResultAdapter;
 import mooncakemonster.orbitalcalendar.voteresult.ResultDatabase;
 import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
 import mooncakemonster.orbitalcalendar.votesend.VoteItem;
-import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
  * Created by BAOJUN on 12/7/15.
  */
 public class VotingResultActivity extends ActionBarActivity {
 
-    CloudantConnect cloudantConnect;
-
-    VotingDatabase votingDatabase;
-    ResultDatabase resultDatabase;
+    private CloudantConnect cloudantConnect;
+    private ResultDatabase resultDatabase;
 
     private ListView listView;
-    ResultAdapter resultAdapter;
+    private ResultAdapter resultAdapter;
     private List<ResultItem> list;
 
     private TextView event_title, event_location;
@@ -55,7 +52,6 @@ public class VotingResultActivity extends ActionBarActivity {
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(this, "user");
 
-        votingDatabase = new VotingDatabase(this);
         resultDatabase = new ResultDatabase(this);
 
         resultDatabase = new ResultDatabase(this);

@@ -57,7 +57,8 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
     private OptionAdapter adapter;
     private FilteredArrayAdapter<String> filteredArrayAdapter;
     private UsernameCompletionView usernameCompletionView;
-    private String participants;
+    private String participants = " ";
+    String[] split_participants;
 
     // Retrieve username from SQLite
     private UserDatabase db;
@@ -106,12 +107,13 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
         list = friendDatabase.getAllFriendUsername(friendDatabase);
         int size = list.size();
 
-        String participants = "";
+        String list_participants = "";
         for(int i = 0; i < size; i++) {
-            participants += list.get(i).getUsername() + " ";
+            list_participants += list.get(i).getUsername() + " ";
         }
 
-        String[] split_participants = participants.split(" ");
+        usernameCompletionView = (UsernameCompletionView) findViewById(R.id.vote_participants);
+        split_participants = list_participants.split(" ");
         filteredArrayAdapter = new FilteredArrayAdapter<String>(this, R.layout.row_autocomplete, split_participants) {
 
             @Override
@@ -122,9 +124,24 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
                 }
 
                 String username = getItem(position);
-                RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(username));
-                ((SimpleDraweeView) convertView.findViewById(R.id.autocomplete_image)).setImageDrawable(roundImage);
-                ((TextView)convertView.findViewById(R.id.autocomplete_username)).setText(username);
+
+                if(username != null) {
+                    String[] selected_participants = participants.split(" ");
+                    int size = selected_participants.length;
+
+                    for (int i = 0; i < size; i++) {
+                        if (username.equals(selected_participants[i])) {
+                            usernameCompletionView.removeObject(username);
+                            //remove(username);
+                            //usernameCompletionView.notifyDataSetChanged();
+                            break;
+                        }
+                    }
+
+                    RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(username));
+                    ((SimpleDraweeView) convertView.findViewById(R.id.autocomplete_image)).setImageDrawable(roundImage);
+                    ((TextView) convertView.findViewById(R.id.autocomplete_username)).setText(username);
+                }
 
                 return convertView;
             }
@@ -134,12 +151,22 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
                 ch = ch.toLowerCase();
                 return username.toLowerCase().startsWith(ch);
             }
+
+            @Override
+            public void notifyDataSetChanged() {
+                super.notifyDataSetChanged();
+            }
+
+            @Override
+            public void remove(String object) {
+                super.remove(object);
+            }
         };
 
-        usernameCompletionView = (UsernameCompletionView) findViewById(R.id.vote_participants);
         usernameCompletionView.setAdapter(filteredArrayAdapter);
         usernameCompletionView.setTokenListener(this);
         usernameCompletionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+        if (savedInstanceState == null) usernameCompletionView.setPrefix("To: ");
 
         //(3) Extract data from appointment
         notes = appt.getNotes();
@@ -187,6 +214,20 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    // This method removes the username from the list once it is selected.
+    private String[] removeSelectedParticipants(String[] split_participants, String[] selected_participants) {
+        int split_size = split_participants.length;
+        int selected_size = selected_participants.length;
+
+        for(int i = 0; i < split_size; i++) {
+            for(int j = 0; j < selected_size; j++)
+                if(split_participants[i].equals(selected_participants[j]))
+                    split_participants[i] = "";
+        }
+
+        return split_participants;
     }
 
     // This method collates the options sent out by the requester.
@@ -245,7 +286,7 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
             } else if (adapter.getCount() < 2) {
                 Constant.alertUser(this, "Sending failed!", "Please add at least two options.");
             } else if(!friendDatabase.checkUsername(friendDatabase, participants)) {
-                Constant.alertUser(this, "Sending failed!", "Please ensure that the usernames provided are valid.");
+                Constant.alertUser(this, "Sending failed!", "Please ensure that the username entered is valid.");
             }
 
             // Save data

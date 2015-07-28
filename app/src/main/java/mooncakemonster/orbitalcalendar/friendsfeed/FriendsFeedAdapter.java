@@ -44,13 +44,13 @@ public class FriendsFeedAdapter extends ArrayAdapter<NotificationItem> {
 
     private static final String TAG = FriendsFeedAdapter.class.getSimpleName();
     private List<NotificationItem> objects;
-    CloudantConnect cloudantConnect;
-    ProgressDialog progressDialog;
-    VotingDatabase votingDatabase;
-    NotificationDatabase notificationDatabase;
-    FriendDatabase friendDatabase;
-    UserDatabase db;
-    Intent intent;
+    private CloudantConnect cloudantConnect;
+    private ProgressDialog progressDialog;
+    private VotingDatabase votingDatabase;
+    private NotificationDatabase notificationDatabase;
+    private FriendDatabase friendDatabase;
+    private UserDatabase db;
+    private Intent intent;
 
     public FriendsFeedAdapter(Context context, int resource, List<NotificationItem> objects) {
         super(context, resource, objects);
@@ -101,7 +101,7 @@ public class FriendsFeedAdapter extends ArrayAdapter<NotificationItem> {
                 cloudantConnect = new CloudantConnect(getContext(), "user");
 
             // Set darker colour to indicate user has not read the notification
-            if(notificationItem.getClicked().equals("false")) holder.layout.setBackgroundColor(getContext().getResources().getColor(R.color.sky));
+            if(notificationItem.getClicked().equals("false")) holder.layout.setBackgroundResource(R.drawable.header);
 
             //RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(notificationItem.getSender_username()));
             holder.action_image.setImageResource(Constant.getCircleColour(notificationItem.getImageId()));

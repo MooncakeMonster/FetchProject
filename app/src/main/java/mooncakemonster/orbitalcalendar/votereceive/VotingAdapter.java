@@ -42,9 +42,9 @@ import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 
 public class VotingAdapter extends ArrayAdapter<VoteItem> {
 
-    UserDatabase db;
-    CloudantConnect cloudantConnect;
-    List<VoteItem> objects;
+    private UserDatabase db;
+    private CloudantConnect cloudantConnect;
+    private List<VoteItem> objects;
 
     public VotingAdapter(Context context, int resource, List<VoteItem> objects) {
         super(context, resource, objects);

@@ -38,12 +38,12 @@ public class NotificationReceiveService extends Service {
     private PowerManager.WakeLock mWakeLock;
 
     // Connect to cloudant
-    UserDatabase db;
-    CloudantConnect cloudantConnect;
-    VotingDatabase votingDatabase;
-    ResultDatabase resultDatabase;
-    NotificationDatabase notificationDatabase;
-    FriendDatabase friendDatabase;
+    private UserDatabase db;
+    private CloudantConnect cloudantConnect;
+    private VotingDatabase votingDatabase;
+    private ResultDatabase resultDatabase;
+    private NotificationDatabase notificationDatabase;
+    private FriendDatabase friendDatabase;
 
     private static final String TAG = NotificationReceiveService.class.getSimpleName();
 

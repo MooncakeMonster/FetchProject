@@ -14,10 +14,10 @@ import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 public class VotingFragment extends ListFragment {
 
     // SQLite database
-    VotingDatabase votingDatabase;
+    private VotingDatabase votingDatabase;
 
     // Adapter for listing out the event votes
-    VotingAdapter votingAdapter;
+    private VotingAdapter votingAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

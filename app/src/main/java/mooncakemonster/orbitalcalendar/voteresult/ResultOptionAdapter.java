@@ -23,7 +23,7 @@ import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 public class ResultOptionAdapter extends ArrayAdapter<ResultOption> {
 
     private List<ResultOption> objects;
-    CloudantConnect cloudantConnect;
+    private CloudantConnect cloudantConnect;
 
     public ResultOptionAdapter(Context context, int resource, List<ResultOption> objects) {
         super(context, resource, objects);

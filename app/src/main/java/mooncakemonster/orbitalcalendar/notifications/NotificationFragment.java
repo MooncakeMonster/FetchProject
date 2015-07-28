@@ -18,8 +18,8 @@ public class NotificationFragment extends ListFragment implements PullRefreshLay
     private static final String TAG = NotificationFragment.class.getSimpleName();
     private NotificationDatabase notificationDatabase;
     private List<NotificationItem> allNotifications;
-    NotificationAdapter adapter;
-    PullRefreshLayout swipeRefreshLayout;
+    private NotificationAdapter adapter;
+    private PullRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

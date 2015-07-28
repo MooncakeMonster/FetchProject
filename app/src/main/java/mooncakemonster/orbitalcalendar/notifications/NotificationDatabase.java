@@ -130,13 +130,14 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.update(NotificationData.NotificationInfo.TABLE_NAME, values, selection, args);
     }
 
-    // This method retrieves all notifications.
+    // This method retrieves all notifications. (Limit to only maximum 20 notifications)
     public List<NotificationItem> getAllNotifications(NotificationDatabase data) {
         List<NotificationItem> notificationItems = new ArrayList<>();
         Cursor cursor = getInformation(data);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
+            if(notificationItems.size() > 20) notificationItems.remove(0);
             NotificationItem notificationItem = new NotificationItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5),
                                                 cursor.getInt(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11),
                                                 cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17), cursor.getString(18), cursor.getString(19));
@@ -149,15 +150,14 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         return notificationItems;
     }
 
-    // This method retrieves all notifications of a target user. (Limit to only maximum 20 notifications)
+    // This method retrieves all notifications of a target user.
     public List<NotificationItem> getUserNotifications(NotificationDatabase data, String username) {
         List<NotificationItem> notificationItems = new ArrayList<>();
         Cursor cursor = getInformation(data);
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            if(notificationItems.size() > 20) notificationItems.remove(0);
-            if(cursor.getString(6).equals(username)) {
+            if(cursor.getString(7).equals(username)) {
                 NotificationItem notificationItem = new NotificationItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5),
                         cursor.getInt(6), cursor.getString(7), cursor.getString(8), cursor.getString(9), cursor.getString(10), cursor.getString(11),
                         cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15), cursor.getString(16), cursor.getString(17), cursor.getString(18), cursor.getString(19));

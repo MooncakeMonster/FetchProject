@@ -21,7 +21,7 @@ import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 public class AttendanceAdapter extends ArrayAdapter<ResultOption> {
 
     private List<ResultOption> objects;
-    CloudantConnect cloudantConnect;
+    private CloudantConnect cloudantConnect;
 
     public AttendanceAdapter(Context context, int resource, List<ResultOption> objects) {
         super(context, resource, objects);

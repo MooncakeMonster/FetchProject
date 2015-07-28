@@ -43,13 +43,13 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
 
     private static final String TAG = NotificationAdapter.class.getSimpleName();
     private List<NotificationItem> objects;
-    CloudantConnect cloudantConnect;
-    ProgressDialog progressDialog;
-    VotingDatabase votingDatabase;
-    NotificationDatabase notificationDatabase;
-    FriendDatabase friendDatabase;
-    UserDatabase db;
-    Intent intent;
+    private CloudantConnect cloudantConnect;
+    private ProgressDialog progressDialog;
+    private VotingDatabase votingDatabase;
+    private NotificationDatabase notificationDatabase;
+    private FriendDatabase friendDatabase;
+    private UserDatabase db;
+    private Intent intent;
 
     public NotificationAdapter(Context context, int resource, List<NotificationItem> objects) {
         super(context, resource, objects);

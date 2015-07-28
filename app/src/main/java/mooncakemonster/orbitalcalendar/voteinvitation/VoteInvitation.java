@@ -34,20 +34,20 @@ import mooncakemonster.orbitalcalendar.notifications.NotificationItem;
 public class VoteInvitation extends ActionBarActivity {
 
     // Connect to cloudant database
-    CloudantConnect cloudantConnect;
+    private CloudantConnect cloudantConnect;
 
     // List to get all the date options
     private ListView listView;
-    SelectAdapter adapter;
+    private SelectAdapter adapter;
 
     // Retrieve username from SQLite
-    UserDatabase db;
-    NotificationDatabase notificationDatabase;
-    NotificationItem notificationItem;
+    private UserDatabase db;
+    private NotificationDatabase notificationDatabase;
+    private NotificationItem notificationItem;
 
-    Button reject_event;
-    TextView invite_sender, invite_title, invite_location, invite_notes;
-    String my_username = "", selected_option = "", start_date = "", end_date = "", start_time = "", end_time = "",
+    private Button reject_event;
+    private TextView invite_sender, invite_title, invite_location, invite_notes;
+    private String my_username = "", selected_option = "", start_date = "", end_date = "", start_time = "", end_time = "",
             not_start_date = "", not_end_date = "", not_start_time = "", not_end_time = "", reject_reason = null;
 
     @Override

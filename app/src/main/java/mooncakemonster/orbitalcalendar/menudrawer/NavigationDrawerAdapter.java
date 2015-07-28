@@ -16,7 +16,7 @@ import mooncakemonster.orbitalcalendar.R;
  * Created by BAOJUN on 9/6/15.
  */
 public class NavigationDrawerAdapter extends RecyclerView.Adapter<NavigationDrawerAdapter.MyViewHolder> {
-    List<NavDrawerItem> data = Collections.emptyList();
+    private List<NavDrawerItem> data = Collections.emptyList();
     private LayoutInflater inflater;
     private Context context;
 

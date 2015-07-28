@@ -49,8 +49,6 @@ public class FriendsFeedActivity extends Activity {
         allNotifications = notificationDatabase.getUserNotifications(notificationDatabase, friendItem.getUsername());
         // Get adapter view
         adapter = new FriendsFeedAdapter(this, R.layout.row_notifications, allNotifications);
-        adapter.clear();
-        adapter.addAll(notificationDatabase.getAllNotifications(notificationDatabase));
         listView = (ListView) findViewById(R.id.friendsfeed_list);
         listView.setAdapter(adapter);
 
@@ -72,8 +70,12 @@ public class FriendsFeedActivity extends Activity {
 
             if (cloudantConnect == null) cloudantConnect = new CloudantConnect(getApplicationContext(), "user");
 
-            SimpleDraweeView imageView = (SimpleDraweeView) findViewById(R.id.header_image);
-            imageView.setImageBitmap(cloudantConnect.retrieveUserImage(friendItem.getUsername()));
+            if(friendItem.getFriend_added().equals("true")) {
+                SimpleDraweeView imageView = (SimpleDraweeView) findViewById(R.id.header_image);
+                imageView.setImageBitmap(cloudantConnect.retrieveUserImage(friendItem.getUsername()));
+            } else {
+                header_image.setVisibility(View.INVISIBLE);
+            }
 
             return AnimatorBuilder.create().applyVerticalParallax(header_image)
                     .applyFade(getHeader().findViewById(R.id.header_image), 0f);

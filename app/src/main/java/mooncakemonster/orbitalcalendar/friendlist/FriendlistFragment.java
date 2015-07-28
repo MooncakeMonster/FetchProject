@@ -91,12 +91,12 @@ public class FriendlistFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
 
-                        final String username = input_username.getText().toString();
+                        final String editText_username = input_username.getText().toString();
 
                         // Send friend request
                         if (cloudantConnect == null) cloudantConnect = new CloudantConnect(getActivity(), "user");
                         // Check if friend username exist first
-                        if (cloudantConnect.checkExistingItems("username", username)) {
+                        if (cloudantConnect.checkExistingItems("username", editText_username)) {
                             progressDialog.setMessage("Sending friend request...");
                             showDialog();
 
@@ -113,9 +113,9 @@ public class FriendlistFragment extends Fragment {
                                     final String my_username = user.get("username");
 
                                     friendDatabase = new FriendDatabase(getActivity());
-                                    friendDatabase.putInformation(friendDatabase, "false", Constant.retrieveCurrentTime(), my_username);
+                                    friendDatabase.putInformation(friendDatabase, "false", Constant.retrieveCurrentTime(), editText_username);
 
-                                    cloudantConnect.sendFriendRequest(my_username, username);
+                                    cloudantConnect.sendFriendRequest(my_username, editText_username);
                                     cloudantConnect.startPushReplication();
 
                                     //Toast.makeText(getActivity(), "Friend request sent successfully", Toast.LENGTH_SHORT).show();

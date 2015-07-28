@@ -34,9 +34,9 @@ import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
  */
 public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
-    UserDatabase db;
-    CloudantConnect cloudantConnect;
-    VotingDatabase votingDatabase;
+    private UserDatabase db;
+    private CloudantConnect cloudantConnect;
+    private VotingDatabase votingDatabase;
     private List<ResultItem> objects;
 
     public ResultAdapter(Context context, int resource, List<ResultItem> objects) {
@@ -95,8 +95,8 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
             holder.grey_time = (TextView) row.findViewById(R.id.grey_time);
             holder.total_text = (TextView) row.findViewById(R.id.total_text);
 
-            if(confirmDateTime(event_id, resultItem.getStart_date()) != null) {
-                int colour = getContext().getResources().getColor(R.color.colorPrimary);
+            if(confirmDateTime(event_id, resultItem.getStart_date()) == null) {
+                int colour = getContext().getResources().getColor(R.color.transparentblack);
                 holder.grey_start_date.setTextColor(colour);
                 holder.grey_end_date.setTextColor(colour);
                 holder.grey_time.setTextColor(colour);

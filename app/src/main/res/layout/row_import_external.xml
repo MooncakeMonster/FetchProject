@@ -87,7 +87,9 @@
                 android:layout_alignBaseline="@+id/import_event_location"
                 android:layout_alignBottom="@+id/import_event_location"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
+                android:layout_alignParentEnd="true"
+                android:focusable="false"
+                android:enabled="false"/>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

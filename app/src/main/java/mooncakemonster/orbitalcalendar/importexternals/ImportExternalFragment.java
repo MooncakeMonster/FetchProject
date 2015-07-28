@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.io.File;
-
 import mooncakemonster.orbitalcalendar.R;
 
 public class ImportExternalFragment extends Fragment {
@@ -65,23 +63,13 @@ public class ImportExternalFragment extends Fragment {
         switch(requestCode){
             case ICS_IMPORT_REQUEST:
                 Uri uri = data.getData();
-                String relativePath = uri.getPath();
 
-                String absolutePath = null;
-
-                if(relativePath != null && uri.getLastPathSegment().endsWith("ics")) {
-                    // Selected file/directory path is below
-                    File relativeFile = new File(relativePath);
-                    absolutePath = relativeFile.getAbsolutePath();
-                }
-
-                if (absolutePath!= null) {
+                if (uri != null) {
                     Intent intent = new Intent(getActivity(), ImportICSParser.class);
-                    intent.putExtra("filePath", absolutePath);
+                    intent.putExtra("fileChosen", uri);
                     startActivity(intent);
                     break;
                 }
-
             default:
                 break;
         }

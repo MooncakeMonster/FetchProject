@@ -77,6 +77,7 @@ public final class Constant
     public static final long DAY_IN_MILLISECOND = 86400000L;
     public static final long YESTERDAY_IN_MILLISECOND = 172800000L;
     public static final long WEEK_IN_MILLISECOND = 604800000L;
+    public static final long CENTURY_IN_MILLISECOND = 3155692600000L;
 
     public static final int EVENT_TITLE_MAX_LENGTH = 50;
     public static final int LOCATION_MAX_LENGTH = 50;

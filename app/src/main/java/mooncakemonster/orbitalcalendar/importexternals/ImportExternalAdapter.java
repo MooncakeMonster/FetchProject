@@ -58,6 +58,16 @@ public class ImportExternalAdapter extends ArrayAdapter<ImportedAppointment> {
 
             holder.to_import = (CheckBox) row.findViewById(R.id.to_import);
 
+            //Get event name and location
+            String title;
+            String location;
+            if( (title = appointment.getEvent()) != null) {
+                holder.import_event_title.setText(title);
+            }
+            if( (location = appointment.getLocation()) != null) {
+                holder.import_event_location.setText(location);
+            }
+
             // Get date
             String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), Constant.YYYYMMDD_FORMATTER, new SimpleDateFormat("yyyy MMM dd"));
             final String[] date = finalDate.split(" ");

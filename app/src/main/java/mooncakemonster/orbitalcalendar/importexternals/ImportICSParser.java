@@ -1,28 +1,27 @@
 package mooncakemonster.orbitalcalendar.importexternals;
 
 import android.app.ListActivity;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.ical.compat.jodatime.DateTimeIterator;
+import com.google.ical.compat.jodatime.DateTimeIterable;
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.ReadableDateTime;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 
 /**
@@ -49,8 +49,8 @@ public class ImportICSParser extends ListActivity {
     //Pattern to determine if string follows the format:
     // (a) FIELD;miscellaneousstring:VALUE
     // (b) FIELD:VALUE
-    private static final String withSemiColon = "^([-A-Z]+);(.*):([^:]*):?";
-    private static final String withColon = "^([-A-Z]+ ):([^:]*):?";
+    private static final String withSemiColon = "^([A-Z]+);(.+):([^:]+):?";
+    private static final String withColon = "^([A-Z]+):([^:]+):?";
 
     private static Pattern stringWithSemiColon = Pattern.compile(withSemiColon);
     private static Pattern stringWithColon = Pattern.compile(withColon);
@@ -58,20 +58,27 @@ public class ImportICSParser extends ListActivity {
     //Pattern to process duration field
     private static Pattern durationFormat = Pattern.compile("[-+]?P([0-9]{0,2})W?([0-9]{0,2})D?T?([0-9]{0,2})H?([0-9]{0,2})M?([0-9]{0,2})S?");
 
+    //List to store all imported appointments
+    private List<ImportedAppointment> listOfInput = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.row_import_external_list);
         Bundle extras = getIntent().getExtras();
-        List<ImportedAppointment> listOfInput = null;
 
         Button import_external_events = (Button) findViewById(R.id.add_imported);
 
         if (extras != null) {
             //Assuming user got here from ImportExternalFragment.java
-            String filePath = extras.getString("filePath");
+            //String filePath = extras.getString("filePath");
+            Uri uri = extras.getParcelable("fileChosen");
             //Get list of appointments
-            listOfInput = icsReader(filePath);
+            listOfInput = icsReader(uri);
+        }
+
+        if(listOfInput == null) {
+            import_external_events.setVisibility(View.INVISIBLE);
         }
 
         ArrayAdapter adapter = new ImportExternalAdapter(this, R.layout.row_import_external, listOfInput);
@@ -83,21 +90,20 @@ public class ImportICSParser extends ListActivity {
         super.onListItemClick(l, v, position, id);
         ImportedAppointment appt = (ImportedAppointment) l.getItemAtPosition(position);
         appt.toggle();
+        ((BaseAdapter)l.getAdapter()).notifyDataSetChanged();
     }
 
-    public List<ImportedAppointment> icsReader(String file) {
+    public List<ImportedAppointment> icsReader(Uri file) {
 
         //For storing actual appointments in
         List<ImportedAppointment> timetable = new ArrayList<ImportedAppointment>();
         ImportedAppointment tempAppt;
 
         try {
+            InputStream inputStream = getContentResolver().openInputStream(file);
             //Open resources
-            FileReader dataFile = new FileReader(file);
-            BufferedReader bufferedDataFile = new BufferedReader(dataFile);
-
-            //Read and obtain the number of lines in file
-            int numLine = countLines(file);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
 
             //Variables for storing details pertaining to appointment
             String event = null;
@@ -114,9 +120,10 @@ public class ImportICSParser extends ListActivity {
             String RDATE = "";
             String EXDATE = "";
 
-            for (int counter = 0; counter < numLine; counter++) {
+            //String for input
+            String line;
 
-                String line = bufferedDataFile.readLine();
+            while ( (line = bufferedReader.readLine()) != null ) {
                 //Processing of line
                 String field = null;
                 String intermediate = null;
@@ -132,8 +139,8 @@ public class ImportICSParser extends ListActivity {
                 }
                 //Otherwise, split string as per normal
                 else if (matchWithColon.matches()) {
-                    field = matchWithSemiColon.group(1);
-                    value = matchWithSemiColon.group(2);
+                    field = matchWithColon.group(1);
+                    value = matchWithColon.group(2);
                     //Clear value of intermediate
                     intermediate = null;
                 } else {
@@ -147,6 +154,20 @@ public class ImportICSParser extends ListActivity {
                     case "BEGIN":
                         if (value.equals("VALARM")) {
                             hasAlarm = true;
+                        } else if (value.equals("VEVENT")) {
+                            //Clear all traces of previous value
+                            event = null;
+                            location = null;
+                            startMillisec = 0;
+                            endMillisec = 0;
+                            notes = null;
+                            hasAlarm = false;
+                            alarmMillisec = 0;
+                            //Nuke for RRULE's value
+                            RRULE = "";
+                            EXRULE = "";
+                            RDATE = "";
+                            EXDATE = "";
                         }
                         break;
 
@@ -250,15 +271,21 @@ public class ImportICSParser extends ListActivity {
                             DateTimeZone tzid = DateTimeZone.getDefault();
 
                             try {
-                                DateTimeIterator timeList = DateTimeIteratorFactory.createDateTimeIterator(blockLine, jodaTime, tzid, true);
+                                DateTimeIterable timeList = DateTimeIteratorFactory.createDateTimeIterable(blockLine, jodaTime, tzid, true);
+                                //Set limit on recurrence; prevent infinite recurrence.
+                                //Tentatively limit to 100 years from today.
+                                long limit = System.currentTimeMillis() + Constant.CENTURY_IN_MILLISECOND / 100;
 
-                                while(timeList.hasNext()) {
-                                    DateTime tempDate = timeList.next();
+                                for(DateTime tempDate: timeList){
                                     long startMillisecond = tempDate.getMillis();
+
+                                    if(startMillisecond > limit){
+                                        break;
+                                    }
+
                                     //Get startProperDate
                                     date = new Date(startMillisecond);
                                     dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
-
                                     tempAppt = new ImportedAppointment();
                                     tempAppt.setEvent(event);
                                     tempAppt.setStartDate(startMillisecond);
@@ -268,6 +295,8 @@ public class ImportICSParser extends ListActivity {
                                     tempAppt.setNotes(notes);
                                     tempAppt.setRemind(startMillisecond - alarmMillisec);
                                     tempAppt.setToImport();
+
+                                    timetable.add(tempAppt);
                                 }
                             } catch (ParseException e) {
                                 e.printStackTrace();
@@ -284,8 +313,9 @@ public class ImportICSParser extends ListActivity {
                 }
             }
             //Close resources
-            bufferedDataFile.close();
-            dataFile.close();
+            bufferedReader.close();
+            inputStreamReader.close();
+            inputStream.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -295,36 +325,13 @@ public class ImportICSParser extends ListActivity {
         return timetable;
     }
 
-    //Helper method for counting lines in file
-    public int countLines(String filename) throws IOException {
-        InputStream is = new BufferedInputStream(new FileInputStream(filename));
-        try {
-            byte[] c = new byte[1024];
-            int count = 0;
-            int readChars = 0;
-            boolean empty = true;
-            while ((readChars = is.read(c)) != -1) {
-                empty = false;
-                for (int i = 0; i < readChars; ++i) {
-                    if (c[i] == '\n') {
-                        ++count;
-                    }
-                }
-            }
-            return (count == 0 && !empty) ? 1 : count;
-        } finally {
-            is.close();
-        }
-    }
-
     //Helper method for processing duration (e.g. DURATION:PT1H0M0S)
     private static long processDuration(String duration) {
         Matcher match = durationFormat.matcher(duration);
 
         long answer = 0;
 
-        if(match.find())
-        {
+        if(match.find()) {
             if(match.group(0) != null) {answer += Integer.parseInt(match.group(0)) * Constant.WEEK_IN_MILLISECOND;}
             if(match.group(1) != null) {answer += Integer.parseInt(match.group(1)) * Constant.DAY_IN_MILLISECOND;}
             if(match.group(2) != null) {answer += Integer.parseInt(match.group(2)) * Constant.HOUR_IN_MILLISECOND;}
@@ -348,21 +355,29 @@ public class ImportICSParser extends ListActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            //Open database
-            //Get array from adapter
-            List<ImportedAppointment> timetable = null;
-            //insert in database
-            for(ImportedAppointment appt: timetable) {
-                if(appt.isToImport()) {
 
-                }
-            }
-            //Close database
-            finish();
-            return true;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onClick(View v){
+        switch(v.getId())
+        {
+            case R.id.add_imported:
+                //Iterate through the list and add in database, any flagged as add_imported
+                //Open database
+                AppointmentController appointmentDatabase = new AppointmentController(this);
+                appointmentDatabase.open();
+                //Insert in database
+                for(ImportedAppointment appt: listOfInput) {
+                    if(appt.isToImport()) {
+                        appointmentDatabase.createAppointment(appt);
+                    }
+                }
+                //Close database
+                finish();
+                break;
+        }
     }
 
 }

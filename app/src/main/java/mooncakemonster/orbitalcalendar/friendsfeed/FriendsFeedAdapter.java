@@ -100,6 +100,9 @@ public class FriendsFeedAdapter extends ArrayAdapter<NotificationItem> {
             if (cloudantConnect == null)
                 cloudantConnect = new CloudantConnect(getContext(), "user");
 
+            // Set darker colour to indicate user has not read the notification
+            if(notificationItem.getClicked().equals("false")) holder.layout.setBackgroundColor(getContext().getResources().getColor(R.color.sky));
+
             //RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(notificationItem.getSender_username()));
             holder.action_image.setImageResource(Constant.getCircleColour(notificationItem.getImageId()));
 
@@ -132,6 +135,10 @@ public class FriendsFeedAdapter extends ArrayAdapter<NotificationItem> {
 
                     final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
 
+                    // Once notification is clicked, set as true to indicate user has seen the notification
+                    notificationDatabase = new NotificationDatabase(getContext());
+                    notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), "true", null, null);
+
                     switch (notificationItem.getNotificationId()) {
                         case 1:
 
@@ -143,7 +150,7 @@ public class FriendsFeedAdapter extends ArrayAdapter<NotificationItem> {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         notificationDatabase = new NotificationDatabase(getContext());
-                                        notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), "true", null);
+                                        notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), null, "true", null);
 
                                         dialog.dismiss();
                                         progressDialog.setMessage("Informing " + notificationItem.getSender_username() + " ...");
@@ -221,7 +228,7 @@ public class FriendsFeedAdapter extends ArrayAdapter<NotificationItem> {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         notificationDatabase = new NotificationDatabase(getContext());
-                                        notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), "true", null);
+                                        notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), null, "true", null);
 
                                         dialog.dismiss();
                                         progressDialog.setMessage("Confirm attendance with " + sender_username + "...");

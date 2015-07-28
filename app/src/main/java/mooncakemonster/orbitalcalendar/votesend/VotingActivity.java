@@ -1,24 +1,31 @@
 package mooncakemonster.orbitalcalendar.votesend;
 
-import android.app.AlertDialog;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.tokenautocomplete.FilteredArrayAdapter;
+import com.tokenautocomplete.TokenCompleteTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
@@ -27,6 +34,7 @@ import mooncakemonster.orbitalcalendar.database.Appointment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.friendlist.FriendItem;
+import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 import mooncakemonster.orbitalcalendar.voteresult.ResultDatabase;
 import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
 
@@ -34,31 +42,35 @@ import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
  * This class allows users to send a list of date
  * and time options to participants for voting an event.
  */
-public class VotingActivity extends ActionBarActivity {
+public class VotingActivity extends ActionBarActivity implements TokenCompleteTextView.TokenListener {
 
     private static final String TAG = VotingActivity.class.getSimpleName();
 
     // Connect to cloudant database
-    CloudantConnect cloudantConnect;
+    private CloudantConnect cloudantConnect;
 
     // Save the option dates in SQLite database
-    ResultDatabase resultDatabase;
+    private ResultDatabase resultDatabase;
 
     // List to get all the appointments
     private ListView listView;
-    OptionAdapter adapter;
+    private OptionAdapter adapter;
+    private FilteredArrayAdapter<String> filteredArrayAdapter;
+    private UsernameCompletionView usernameCompletionView;
+    private String participants;
 
     // Retrieve username from SQLite
-    UserDatabase db;
-    FriendDatabase friendDatabase;
-    VotingDatabase votingDatabase;
-    List<FriendItem> list;
+    private UserDatabase db;
+    private FriendDatabase friendDatabase;
+    private VotingDatabase votingDatabase;
+    private List<FriendItem> list;
 
-    TextView vote_title, vote_location;
-    MultiAutoCompleteTextView vote_participants;
-    Button add_option;
-    String notes = "", start_date = "", end_date = "", start_time = "", end_time = "";
-    int colour, eventId;
+    private TextView vote_title, vote_location;
+    private MultiAutoCompleteTextView vote_participants;
+    private Button add_option;
+    private String notes = "", start_date = "", end_date = "", start_time = "", end_time = "";
+    private int colour, eventId;
+    private ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,14 +108,38 @@ public class VotingActivity extends ActionBarActivity {
 
         String participants = "";
         for(int i = 0; i < size; i++) {
-            participants += "@" + list.get(i).getUsername() + " ";
+            participants += list.get(i).getUsername() + " ";
         }
 
         String[] split_participants = participants.split(" ");
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.row_participants, split_participants);
-        vote_participants.setAdapter(arrayAdapter);
-        vote_participants.setThreshold(1);
-        vote_participants.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        filteredArrayAdapter = new FilteredArrayAdapter<String>(this, R.layout.row_autocomplete, split_participants) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+                    LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    convertView = layoutInflater.inflate(R.layout.row_autocomplete, parent, false);
+                }
+
+                String username = getItem(position);
+                RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(username));
+                ((SimpleDraweeView) convertView.findViewById(R.id.autocomplete_image)).setImageDrawable(roundImage);
+                ((TextView)convertView.findViewById(R.id.autocomplete_username)).setText(username);
+
+                return convertView;
+            }
+
+            @Override
+            protected boolean keepObject(String username, String ch) {
+                ch = ch.toLowerCase();
+                return username.toLowerCase().startsWith(ch);
+            }
+        };
+
+        usernameCompletionView = (UsernameCompletionView) findViewById(R.id.vote_participants);
+        usernameCompletionView.setAdapter(filteredArrayAdapter);
+        usernameCompletionView.setTokenListener(this);
+        usernameCompletionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
 
         //(3) Extract data from appointment
         notes = appt.getNotes();
@@ -191,15 +227,6 @@ public class VotingActivity extends ActionBarActivity {
 
     }
 
-    // This method calls alert dialog to inform users a message.
-    private void alertUser(String title, String message) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(VotingActivity.this);
-        dialogBuilder.setTitle(title);
-        dialogBuilder.setMessage(message);
-        dialogBuilder.setPositiveButton("Ok", null);
-        dialogBuilder.show();
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -214,44 +241,86 @@ public class VotingActivity extends ActionBarActivity {
         if (id == R.id.action_add) {
             // Do not save data
             if (vote_participants.getText().toString().isEmpty()) {
-                alertUser("Sending failed!", "Please enter participants.");
+                Constant.alertUser(this, "Sending failed!", "Please enter participants.");
             } else if (adapter.getCount() < 2) {
-                alertUser("Sending failed!", "Please add at least two options.");
+                Constant.alertUser(this, "Sending failed!", "Please add at least two options.");
+            } else if(!friendDatabase.checkUsername(friendDatabase, participants)) {
+                Constant.alertUser(this, "Sending failed!", "Please ensure that the usernames provided are valid.");
             }
 
             // Save data
             else {
-                // Add information into database
-                collateDateTime();
-                // Retrieve all users
-                String participants = vote_participants.getText().toString().replace("@", "").replace(",", "");
-                String title = vote_title.getText().toString();
-                String location = vote_location.getText().toString().replace(" @ ", "");
+                progressDialog = new ProgressDialog(this);
+                progressDialog.setCancelable(false);
 
-                eventId = votingDatabase.eventSize(votingDatabase);
+                progressDialog.setMessage("Sending voting request...");
+                showDialog();
 
-                votingDatabase.putInformation(votingDatabase, "" + eventId, "" + colour, title, location,
-                        participants, null, null, start_date, end_date, start_time, end_time, null, null, null, null);
+                Timer timer = new Timer();
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        // Add information into database
+                        collateDateTime();
+                        // Retrieve all users
+                        String title = vote_title.getText().toString();
+                        String location = vote_location.getText().toString().replace(" @ ", "");
 
-                // Save options in SQLite for voting result
-                saveOptions(new ResultItem("" + eventId, start_date, end_date, start_time, end_time, participants, "", "", "", ""));
+                        eventId = votingDatabase.eventSize(votingDatabase);
 
-                // Fetch user details from sqlite
-                HashMap<String, String> user = db.getUserDetails();
+                        votingDatabase.putInformation(votingDatabase, "" + eventId, "" + colour, title, location,
+                                participants, null, null, start_date, end_date, start_time, end_time, null, null, null, null);
 
-                // Send out to users via Cloudant
-                cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participants, eventId, colour,
-                                                                title, location, notes, start_date, end_date, start_time, end_time);
-                // Push all options to other targeted participants
-                cloudantConnect.startPushReplication();
+                        // Save options in SQLite for voting result
+                        saveOptions(new ResultItem("" + eventId, start_date, end_date, start_time, end_time, participants, "", "", "", ""));
 
-                Toast.makeText(getBaseContext(), "Successfully sent out for voting", Toast.LENGTH_SHORT).show();
-                finish();
+                        // Fetch user details from sqlite
+                        HashMap<String, String> user = db.getUserDetails();
+
+                        // Send out to users via Cloudant
+                        cloudantConnect.sendOptionsToTargetParticipants(user.get("username"), participants, eventId, colour,
+                                title, location, notes, start_date, end_date, start_time, end_time);
+                        // Push all options to other targeted participants
+                        cloudantConnect.startPushReplication();
+
+                        finish();
+                        hideDialog();
+                    }
+                }, 1500);
             }
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void updateTokenConfirmation() {
+        participants = "";
+        for (Object token : usernameCompletionView.getObjects()) {
+            participants += token.toString() + " ";
+        }
+    }
+
+    @Override
+    public void onTokenAdded(Object o) {
+        updateTokenConfirmation();
+    }
+
+    @Override
+    public void onTokenRemoved(Object o) {
+        updateTokenConfirmation();
+    }
+
+    // This method shows progress dialog when not showing
+    private void showDialog() {
+        if (!progressDialog.isShowing())
+            progressDialog.show();
+    }
+
+    // This method dismiss progress dialog when required (dialog must be showing)
+    private void hideDialog() {
+        if (progressDialog.isShowing())
+            progressDialog.dismiss();
     }
 }

@@ -27,19 +27,21 @@
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <MultiAutoCompleteTextView
-            android:id="@+id/vote_participants"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/standard_icon_size"
-            android:layout_marginBottom="@dimen/standard_padding_size"
-            android:layout_marginTop="20dp"
-            android:ems="10"
-            android:hint="Participants"
-            android:padding="@dimen/standard_padding_size"
-            android:text="">
-
-            <requestFocus />
-        </MultiAutoCompleteTextView>
+    <mooncakemonster.orbitalcalendar.votesend.UsernameCompletionView
+        android:id="@+id/vote_participants"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/standard_icon_size"
+        android:layout_marginBottom="@dimen/standard_padding_size"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter username"
+        android:padding="@dimen/standard_padding_size"
+        android:imeOptions="actionDone"
+        android:textColor="@color/black"
+        android:textSize="19sp"
+        android:nextFocusDown="@+id/editText"
+        android:inputType="text|textNoSuggestions|textMultiLine"
+        android:focusableInTouchMode="true" />
 
         <Button
             android:id="@+id/add_option"

@@ -75,7 +75,8 @@ public class FriendsFeedActivity extends Activity {
             SimpleDraweeView imageView = (SimpleDraweeView) findViewById(R.id.header_image);
             imageView.setImageBitmap(cloudantConnect.retrieveUserImage(friendItem.getUsername()));
 
-            return AnimatorBuilder.create().applyVerticalParallax(header_image);
+            return AnimatorBuilder.create().applyVerticalParallax(header_image)
+                    .applyFade(getHeader().findViewById(R.id.header_image), 0f);
         }
     }
 }

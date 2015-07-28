@@ -219,7 +219,7 @@ public class VoteInvitation extends ActionBarActivity {
             // Save data
             else {
                 notificationDatabase = new NotificationDatabase(this);
-                notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), "true", selected_option);
+                notificationDatabase.updateInformation(notificationDatabase, notificationItem.getRow_id(), null, "true", selected_option);
 
                 pushItem(my_username, notificationItem.getSender_username(), notificationItem.getEventId(), notificationItem.getImageId(),
                         notificationItem.getSender_event(), notificationItem.getSender_location(),

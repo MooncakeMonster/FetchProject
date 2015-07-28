@@ -37,12 +37,12 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
 
     private static final String TAG = RegisterActivity.class.getSimpleName();
 
-    Button register;
-    TextView link_to_login;
-    EditText email_address;
-    EditText username;
-    EditText password;
-    EditText confirm_password;
+    private Button register;
+    private TextView link_to_login;
+    private EditText email_address;
+    private EditText username;
+    private EditText password;
+    private EditText confirm_password;
 
     private ProgressDialog progressDialog;
 

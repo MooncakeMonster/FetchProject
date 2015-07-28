@@ -10,9 +10,9 @@ import android.util.Log;
 public class LoginManager {
     private static String TAG = LoginManager.class.getSimpleName();
 
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    Context context;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private Context context;
 
     private static final String PREF_NAME = "FetchUser";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";

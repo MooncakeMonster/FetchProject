@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,6 +49,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
     }
 
     static class Holder {
+        ImageView event_over;
         TextView event_title;
         TextView event_location;
         TextView event_start_end_time;
@@ -82,6 +84,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
 
         if (appointment != null) {
             holder = new Holder();
+            holder.event_over = (ImageView) row.findViewById(R.id.event_over);
             holder.event_colour = (RelativeLayout) row.findViewById(R.id.event_set_colour);
             holder.event_title = (TextView) row.findViewById(R.id.event_title);
             holder.event_location = (TextView) row.findViewById(R.id.event_location);
@@ -93,6 +96,18 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             holder.edit_event = (Button) row.findViewById(R.id.expand_edit_event);
             holder.vote_event = (Button) row.findViewById(R.id.expand_vote_event);
             holder.remove_event = (Button) row.findViewById(R.id.remove_event);
+
+            // Check if the event is already over
+            if(appointment.getStartDate() < System.currentTimeMillis()) {
+                holder.event_over.setBackgroundResource(R.drawable.translucent);
+                holder.event_day.setTextColor(getContext().getResources().getColor(R.color.transparentblack));
+                holder.event_month_year.setTextColor(getContext().getResources().getColor(R.color.transparentblack));
+            } else {
+                holder.event_over.setVisibility(View.INVISIBLE);
+                holder.event_day.setTextColor(getContext().getResources().getColor(R.color.black));
+                holder.event_month_year.setTextColor(getContext().getResources().getColor(R.color.black));
+            }
+
 
             holder.event_colour.setBackgroundResource(appointment.getColour());
             holder.event_title.setText(appointment.getEvent());
@@ -127,24 +142,27 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             holder.vote_event.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), VotingActivity.class);
+                    if (appointment.getStartDate() > System.currentTimeMillis()) {
+                        Intent intent = new Intent(getContext(), VotingActivity.class);
 
-                    Bundle bundle = new Bundle();
+                        Bundle bundle = new Bundle();
 
-                    //TODO: Replace with parcable once MVP is out
-                    bundle.putSerializable("appointment", appointment);
+                        //TODO: Replace with parcable once MVP is out
+                        bundle.putSerializable("appointment", appointment);
 
-                    // Store bundle into intent
-                    intent.putExtras(bundle);
-                    view.getContext().startActivity(intent);
-
+                        // Store bundle into intent
+                        intent.putExtras(bundle);
+                        view.getContext().startActivity(intent);
+                    } else {
+                        Constant.alertUser(getContext(), "Vote Event", "Unable to request voting as the event is already over.");
+                    }
                 }
-            });
+             });
 
-            // Remove from list
-            holder.remove_event.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+             // Remove from list
+             holder.remove_event.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick (View v){
                     AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                     alert.setTitle("Delete appointment");
                     alert.setMessage("Are you sure you want to delete \"" + appointment.toString() + "\"?");
@@ -171,7 +189,7 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
                     });
                     alert.show();
                 }
-            });
+             });
 
             /*
             //Prevent repeated dates shown on listview
@@ -186,9 +204,9 @@ public class EventAdapter extends ArrayAdapter<Appointment> {
             }
             */
 
-            row.setTag(holder);
-        }
+                row.setTag(holder);
+            }
 
-        return row;
+            return row;
     }
 }

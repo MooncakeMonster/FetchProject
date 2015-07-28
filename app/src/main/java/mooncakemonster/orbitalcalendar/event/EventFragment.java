@@ -33,10 +33,10 @@ public class EventFragment extends ListFragment {
     private AppointmentController appointmentDatabase;
     //List to get all the appointments
     private List<Appointment> allAppointment;
-    EventAdapter adapter;
-    Appointment selected_appointment;
-    Date latestDate;
-    ImageButton addEventButton;
+    private EventAdapter adapter;
+    private Appointment selected_appointment;
+    private Date latestDate;
+    private ImageButton addEventButton;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

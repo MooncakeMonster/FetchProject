@@ -110,4 +110,22 @@ public class FriendDatabase extends SQLiteOpenHelper {
         return friend_list;
     }
 
+    // This method checks if the usernames are user's friends
+    public boolean checkUsername(FriendDatabase data, String participants) {
+        String[] split_participants = participants.split(" ");
+        int size = split_participants.length;
+        Cursor cursor = getInformation(data);
+
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            for (int i = 0; i < size; i++) {
+                if (!cursor.getString(2).equals(split_participants[i])) return false;
+            }
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return true;
+    }
+
 }

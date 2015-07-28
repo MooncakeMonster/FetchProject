@@ -6,6 +6,7 @@ import java.io.Serializable;
  * Created by BAOJUN on 7/7/15.
  */
 public class NotificationItem implements Serializable {
+    private String clicked;
     private String action_done;
     private String row_id;
     private int notificationId;
@@ -26,10 +27,11 @@ public class NotificationItem implements Serializable {
     private String reject_reason;
     private String confirm_action;
 
-    public NotificationItem(String action_done, String row_id, int notificationId, int timestamp, int eventId, int imageId,
+    public NotificationItem(String clicked, String action_done, String row_id, int notificationId, int timestamp, int eventId, int imageId,
                             String sender_username, String message, String sender_event, String action,
                             String sender_location, String sender_notes, String selected_option, String start_date,
                             String end_date, String start_time, String end_time, String reject_reason, String confirm_action) {
+        this.clicked = clicked;
         this.action_done = action_done;
         this.row_id = row_id;
         this.notificationId = notificationId;
@@ -50,6 +52,14 @@ public class NotificationItem implements Serializable {
         this.reject_reason = reject_reason;
         this.confirm_action = confirm_action;
 
+    }
+
+    public String getClicked() {
+        return clicked;
+    }
+
+    public void setClicked(String clicked) {
+        this.clicked = clicked;
     }
 
     public String getAction_done() {

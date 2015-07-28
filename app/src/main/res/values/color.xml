@@ -40,6 +40,7 @@
     <color name="lightgreen">#336666</color>
     <color name="orrange">#e33d1b</color>
     <color name="darkorrange">#cc2303</color>
+    <color name="transparentblack">#a6a6a6</color>
 
     <!-- Bear colours -->
     <color name="redbear">#FFFB6E72</color>

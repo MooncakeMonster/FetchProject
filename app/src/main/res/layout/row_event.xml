@@ -9,85 +9,99 @@
         android:id="@+id/event_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/event_list_margin"
         android:layout_marginBottom="@dimen/event_list_margin"
+        android:layout_marginTop="@dimen/event_list_margin"
         android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:orientation="vertical"
-            android:layout_marginLeft="@dimen/standard_margin_size">
+            android:layout_marginLeft="@dimen/standard_margin_size"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/event_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20"
-                android:gravity="center"
                 android:layout_centerHorizontal="true"
-                android:textColor="@color/caldroid_black"
+                android:gravity="center"
+                android:text="20"
                 android:textSize="45dp" />
 
             <TextView
                 android:id="@+id/event_month_year"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="JAN 2015"
-                android:textSize="12dp"
-                android:gravity="center"
                 android:layout_below="@id/event_day"
-                android:textColor="@color/caldroid_black" />
+                android:gravity="center"
+                android:text="JAN 2015"
+                android:textSize="12dp" />
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/standard_padding_size"
-            android:paddingBottom="@dimen/standard_padding_size"
-            android:paddingLeft="@dimen/feed_item_profile_info_padd"
-            android:paddingRight="@dimen/feed_item_profile_info_padd"
-            android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
-            android:layout_marginRight="@dimen/feed_item_profile_info_padd"
-            android:id="@+id/event_set_colour">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/event_title"
-                android:layout_width="fill_parent"
+            <RelativeLayout
+                android:id="@+id/event_set_colour"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Title"
-                android:textStyle="bold"
-                android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/standard_text_size" />
+                android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
+                android:layout_marginRight="@dimen/feed_item_profile_info_padd"
+                android:orientation="vertical"
+                android:background="@color/redbear"
+                android:paddingBottom="@dimen/standard_padding_size"
+                android:paddingLeft="@dimen/feed_item_profile_info_padd"
+                android:paddingRight="@dimen/feed_item_profile_info_padd"
+                android:paddingTop="@dimen/standard_padding_size">
 
-            <TextView
-                android:id="@+id/event_location"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Singapore"
-                android:layout_below="@id/event_title"
-                android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/feed_item_profile_name" />
+                <TextView
+                    android:id="@+id/event_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/standard_text_size"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/event_start_end_time"
-                android:layout_width="fill_parent"
+                <TextView
+                    android:id="@+id/event_location"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/event_title"
+                    android:text="Singapore"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/feed_item_profile_name" />
+
+                <TextView
+                    android:id="@+id/event_start_end_time"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/event_location"
+                    android:text="28 May 2015, Saturday"
+                    android:textColor="@color/caldroid_black"
+                    android:textSize="@dimen/feed_item_profile_name" />
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/event_over"
+                android:adjustViewBounds="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/event_location"
-                android:text="28 May 2015, Saturday"
-                android:textColor="@color/caldroid_black"
-                android:textSize="@dimen/feed_item_profile_name" />
-        </RelativeLayout>
+                android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
+                android:layout_marginRight="@dimen/feed_item_profile_info_padd"/>
+
+        </FrameLayout>
     </LinearLayout>
 
     <!-- Expandable view that is initially hidden and will slide out when the more button is pressed -->
     <LinearLayout
+        android:id="@+id/expandable"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="horizontal"
-        android:id="@+id/expandable">
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/expand_edit_event"
@@ -103,7 +117,7 @@
             android:layout_height="@dimen/standard_icon_size"
             android:layout_weight="0.33"
             android:background="@color/colorPrimary"
-            android:text="Vote Event"/>
+            android:text="Vote Event" />
 
         <Button
             android:id="@+id/remove_event"
@@ -111,7 +125,7 @@
             android:layout_height="@dimen/standard_icon_size"
             android:layout_weight="0.33"
             android:background="@color/colorPrimary"
-            android:text="Delete"/>
+            android:text="Delete" />
     </LinearLayout>
 </LinearLayout>
 

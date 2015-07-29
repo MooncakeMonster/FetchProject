@@ -100,10 +100,6 @@ public class FriendlistFragment extends Fragment {
                             progressDialog.setMessage("Sending friend request...");
                             showDialog();
 
-                            adapter.clear();
-                            adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
-                            adapter.notifyDataSetChanged();
-
                             Timer timer = new Timer();
                             timer.schedule(new TimerTask() {
                                 @Override
@@ -117,6 +113,10 @@ public class FriendlistFragment extends Fragment {
 
                                     cloudantConnect.sendFriendRequest(my_username, editText_username);
                                     cloudantConnect.startPushReplication();
+
+                                    adapter.clear();
+                                    adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
+                                    adapter.notifyDataSetChanged();
 
                                     //Toast.makeText(getActivity(), "Friend request sent successfully", Toast.LENGTH_SHORT).show();
                                     hideDialog();

@@ -174,6 +174,28 @@ public class VoteItem implements Serializable {
         this.event_confirm_end_time = event_confirm_end_time;
     }
 
+    // This method sort items according to event name.
+    public static Comparator<VoteItem> eventNameComparator = new Comparator<VoteItem>() {
+        @Override
+        public int compare(VoteItem lhs, VoteItem rhs) {
+            String this_title = lhs.getEvent_title();
+            String that_title = rhs.getEvent_title();
+
+            int this_size = this_title.length();
+            int that_size = that_title.length();
+            int size;
+
+            if(this_size < that_size) size = this_size;
+            else size = that_size;
+
+            for(int i = 0; i < size; i++) {
+                if (lhs.getEvent_title().charAt(i) < rhs.getEvent_title().charAt(i)) return -1;
+                else if (lhs.getEvent_title().charAt(i) > rhs.getEvent_title().charAt(i)) return 1;
+            }
+            return 0;
+        }
+    };
+
 
     // This method sort items according to number of voted participants.
     public static Comparator<VoteItem> totalComparator = new Comparator<VoteItem>() {

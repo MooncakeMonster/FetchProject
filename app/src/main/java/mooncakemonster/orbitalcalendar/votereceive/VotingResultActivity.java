@@ -80,7 +80,7 @@ public class VotingResultActivity extends ActionBarActivity {
         sort_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] sort_type = {"Highest votes on top", "Recent date on top", "Recent time on top"};
+                final String[] sort_type = {"Highest vote on top", "Recent date on top", "Recent time on top"};
                 list = resultDatabase.getAllTargetResults(resultDatabase, Integer.parseInt(voteItem.getEventId()));
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(VotingResultActivity.this);

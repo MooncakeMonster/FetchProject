@@ -135,17 +135,20 @@ public class FriendDatabase extends SQLiteOpenHelper {
         String[] split_participants = participants.split(" ");
         int size = split_participants.length;
         Cursor cursor = getInformation(data);
+        int count = 0;
 
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
             for (int i = 0; i < size; i++) {
-                if (cursor.getString(0).equals("false") || !cursor.getString(2).equals(split_participants[i])) return false;
+                if (cursor.getString(0).equals("true") && cursor.getString(2).equals(split_participants[i]))
+                    count++;
             }
             cursor.moveToNext();
         }
 
         cursor.close();
-        return true;
+        if(count == size) return true;
+        return false;
     }
 
 

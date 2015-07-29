@@ -50,7 +50,7 @@ public class EventView extends DialogFragment
     }
 
     //Allow only one instance of EventView at any one time
-    static EventView newInstance(Appointment appt) {
+    public static EventView newInstance(Appointment appt) {
         EventView eventview = new EventView();
 
         Bundle bundle = new Bundle();

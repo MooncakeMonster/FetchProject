@@ -15,6 +15,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
         <!-- Event title -->
         <EditText
             android:id="@+id/title"
@@ -24,9 +30,20 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/standard_margin_size"
             android:layout_weight="1"
-            android:singleLine="true"
             android:hint="@string/event_title"
-            android:padding="@dimen/standard_padding_size" />
+            android:padding="@dimen/standard_padding_size"
+            android:singleLine="true" />
+
+
+        <Button
+            android:id="@+id/colour_button"
+            android:layout_width="35dp"
+            android:layout_height="45dp"
+            android:layout_weight="0.1"
+            android:onClick="onClick"
+            android:background="@drawable/partyred" />
+
+        </LinearLayout>
 
 
         <LinearLayout
@@ -42,9 +59,9 @@
                 android:layout_height="@dimen/standard_icon_size"
                 android:layout_marginBottom="@dimen/standard_margin_size"
                 android:layout_weight="0.9"
-                android:singleLine="true"
                 android:hint="@string/event_location"
-                android:padding="@dimen/standard_padding_size" />
+                android:padding="@dimen/standard_padding_size"
+                android:singleLine="true" />
 
             <Button
                 android:id="@+id/location_button"
@@ -62,103 +79,110 @@
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/text_left_date"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/from"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="left"
-                    android:inputType="textCapCharacters"
-                    android:padding="@dimen/standard_padding_size"
-                    android:text="From"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="17dp" />
-
-
-                <Button
-                    android:id="@+id/to"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="left"
-                    android:inputType="textCapCharacters"
-                    android:padding="@dimen/standard_padding_size"
-                    android:text="To"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="17dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/text_left_date"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/startD"
-                    android:layout_width="170dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_horizontal"
-                    android:inputType="textCapCharacters"
-                    android:padding="@dimen/standard_padding_size"
-                    android:text="Start Date"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="17dp" />
-
-
-                <Button
-                    android:id="@+id/endD"
-                    android:layout_width="170dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_horizontal"
-                    android:inputType="textCapCharacters"
-                    android:padding="@dimen/standard_padding_size"
-                    android:text="End Date"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="17dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/startT"
+                <LinearLayout
+                    android:id="@+id/text_left_date"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_horizontal"
-                    android:inputType="textCapCharacters"
-                    android:padding="@dimen/standard_padding_size"
-                    android:text="Start time"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="17dp" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/endT"
+                    <Button
+                        android:id="@+id/from"
+                        android:layout_width="60dp"
+                        android:layout_height="@dimen/standard_icon_size"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="left"
+                        android:inputType="textCapCharacters"
+                        android:padding="@dimen/standard_padding_size"
+                        android:text="From"
+                        android:textColor="@color/caldroid_black"
+                        android:textSize="17dp" />
+
+
+                    <Button
+                        android:id="@+id/to"
+                        android:layout_width="60dp"
+                        android:layout_height="@dimen/standard_icon_size"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="left"
+                        android:inputType="textCapCharacters"
+                        android:padding="@dimen/standard_padding_size"
+                        android:text="To"
+                        android:textColor="@color/caldroid_black"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_horizontal"
-                    android:inputType="textCapCharacters"
-                    android:padding="@dimen/standard_padding_size"
-                    android:text="End time"
-                    android:textColor="@color/caldroid_black"
-                    android:textSize="17dp" />
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/text_left_date"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/startD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_icon_size"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_horizontal"
+                        android:inputType="textCapCharacters"
+                        android:padding="@dimen/standard_padding_size"
+                        android:text="Start Date"
+                        android:textColor="@color/caldroid_black"
+                        android:textSize="17dp" />
+
+
+                    <Button
+                        android:id="@+id/endD"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_icon_size"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_horizontal"
+                        android:inputType="textCapCharacters"
+                        android:padding="@dimen/standard_padding_size"
+                        android:text="End Date"
+                        android:textColor="@color/caldroid_black"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/startT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_icon_size"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_horizontal"
+                        android:inputType="textCapCharacters"
+                        android:padding="@dimen/standard_padding_size"
+                        android:text="Start time"
+                        android:textColor="@color/caldroid_black"
+                        android:textSize="17dp" />
+
+                    <Button
+                        android:id="@+id/endT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/standard_icon_size"
+                        android:layout_weight="1"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_horizontal"
+                        android:inputType="textCapCharacters"
+                        android:padding="@dimen/standard_padding_size"
+                        android:text="End time"
+                        android:textColor="@color/caldroid_black"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -177,19 +201,19 @@
                 <CheckBox
                     android:id="@+id/everybox"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/standard_icon_size"
                     android:layout_weight="1"
                     android:onClick="selectItem"
                     android:text="Repeat every"
                     android:textColor="@color/caldroid_black"
                     android:textSize="@dimen/event_text_size"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <!-- Reminder checkbox -->
                 <CheckBox
                     android:id="@+id/remindbox"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/standard_icon_size"
                     android:layout_marginBottom="@dimen/standard_margin_size"
                     android:layout_weight="1"
                     android:checked="false"
@@ -197,7 +221,7 @@
                     android:text="Remind me"
                     android:textColor="@color/caldroid_black"
                     android:textSize="@dimen/event_text_size"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
@@ -211,7 +235,7 @@
                     android:id="@+id/everynum"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/event_button_size"
+                    android:layout_height="@dimen/standard_icon_size"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:textColor="@color/caldroid_black"
@@ -223,7 +247,7 @@
                     android:id="@+id/remindnum"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/standard_icon_size"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:textColor="@color/caldroid_black"
@@ -241,7 +265,7 @@
                     android:id="@+id/everyweek"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/event_button_size"
+                    android:layout_height="@dimen/standard_icon_size"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:gravity="start|center_vertical"
@@ -254,10 +278,10 @@
                     android:id="@+id/remindweek"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="@dimen/standard_icon_size"
                     android:layout_weight="1"
-                    android:gravity="start|center_vertical"
                     android:background="@android:color/transparent"
+                    android:gravity="start|center_vertical"
                     android:inputType="textCapCharacters"
                     android:textColor="@color/caldroid_black"
                     android:textSize="@dimen/event_text_size" />
@@ -270,7 +294,7 @@
         <EditText
             android:id="@+id/appointmentNotes"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="80dp"
             android:layout_marginBottom="@dimen/standard_margin_size"
             android:layout_weight="1"
             android:background="@drawable/back_button"
@@ -278,81 +302,6 @@
             android:hint="@string/event_notes"
             android:inputType="textMultiLine"
             android:padding="@dimen/standard_padding_size" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <!-- Bear colours -->
-            <Button
-                android:id="@+id/imageButton"
-                android:layout_width="@dimen/standard_icon_size"
-                android:layout_height="@dimen/event_icon_size"
-                android:layout_above="@+id/buttonHolder"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="@dimen/standard_margin_size"
-                android:background="@drawable/beared"
-                android:onClick="onClick" />
-
-            <Button
-                android:id="@+id/imageButton2"
-                android:layout_width="@dimen/standard_icon_size"
-                android:layout_height="@dimen/event_icon_size"
-                android:layout_alignTop="@+id/imageButton"
-                android:layout_toEndOf="@+id/imageButton"
-                android:layout_toRightOf="@+id/imageButton"
-                android:layout_weight="1"
-                android:background="@drawable/bearyellow"
-                android:onClick="onClick" />
-
-            <Button
-                android:id="@+id/imageButton3"
-                android:layout_width="@dimen/standard_icon_size"
-                android:layout_height="@dimen/event_icon_size"
-                android:layout_alignTop="@+id/imageButton2"
-                android:layout_toEndOf="@+id/imageButton2"
-                android:layout_toRightOf="@+id/imageButton2"
-                android:layout_weight="1"
-                android:background="@drawable/beargreen"
-                android:onClick="onClick" />
-
-            <Button
-                android:id="@+id/imageButton4"
-                android:layout_width="@dimen/standard_icon_size"
-                android:layout_height="@dimen/event_icon_size"
-                android:layout_alignBottom="@+id/imageButton3"
-                android:layout_toEndOf="@+id/imageButton3"
-                android:layout_toRightOf="@+id/imageButton3"
-                android:layout_weight="1"
-                android:background="@drawable/bearblue"
-                android:onClick="onClick" />
-
-            <Button
-                android:id="@+id/imageButton6"
-                android:layout_width="@dimen/standard_icon_size"
-                android:layout_height="@dimen/event_icon_size"
-                android:layout_alignBottom="@+id/imageButton4"
-                android:layout_toEndOf="@+id/imageButton4"
-                android:layout_toRightOf="@+id/imageButton4"
-                android:layout_weight="1"
-                android:background="@drawable/bearpurple"
-                android:onClick="onClick" />
-
-            <Button
-                android:id="@+id/selected_bear"
-                android:layout_width="@dimen/standard_icon_size"
-                android:layout_height="@dimen/event_icon_size"
-                android:layout_alignEnd="@+id/buttonHolder"
-                android:layout_alignRight="@+id/buttonHolder"
-                android:layout_alignTop="@+id/imageButton6"
-                android:layout_marginRight="20dp"
-                android:layout_weight="1"
-                android:background="@drawable/none"
-                android:gravity="center" />
-        </LinearLayout>
-
 
         <LinearLayout
             android:id="@+id/buttonHolder"

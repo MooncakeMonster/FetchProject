@@ -4,9 +4,13 @@
     tools:context="mooncakemonster.orbitalcalendar.menudrawer.MenuDrawer">
 
     <item
-        android:id="@+id/action_close"
-        android:title="Close"
-        android:icon="@drawable/cross"
+        android:id="@+id/action_cancel"
+        android:title="CANCEL"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_edit"
+        android:title="SAVE"
         app:showAsAction="ifRoom" />
 
 </menu>

@@ -1,14 +1,20 @@
 package mooncakemonster.orbitalcalendar.event;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
@@ -27,7 +33,7 @@ public class EventView extends DialogFragment
     private Appointment eventViewAppointment;
 
     private EditText eventLabel, locationLabel,  notesLabel;
-    private Button beginDateButton, endDateButton, beginTimeButton, endTimeButton, remindNum, remindBox, everyNum, everyBox, colourInput;
+    private Button beginDateButton, endDateButton, beginTimeButton, endTimeButton, remindNum, remindBox, everyNum, everyBox, colourInput, from , to;
     private CheckBox reminderCheckBox, repeatAppointment;
 
     private static CharSequence[] everyWheel = {"day", "week", "month", "year"};
@@ -65,8 +71,11 @@ public class EventView extends DialogFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+        // Prevent keyboard from appearing automatically
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
         //(1) Set Title for DialogFragment
-        getDialog().setTitle("View/Edit Event");
+        getDialog().setTitle("View Event");
         View view = inflater.inflate(R.layout.activity_event, container, false);
         //(2) Instantiate widgets
         instantiateWidgets(view);
@@ -80,6 +89,7 @@ public class EventView extends DialogFragment
             public void onClick(View v) {
                 if (editButton.getText().toString().equals("EDIT")) {
                     toggle(true);
+                    getDialog().setTitle("Edit Event");
                     editButton.setText("SAVE");
                     //Initialise and open database
                     appointmentDatabase = new AppointmentController(getActivity());
@@ -154,6 +164,7 @@ public class EventView extends DialogFragment
                     }
 
                     //Insert into database
+                    if(selected_colour == 0) selected_colour = R.color.redbear;
                     appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
                     //Delete current appointment
                     appointmentDatabase.deleteAppointment(eventViewAppointment);
@@ -172,6 +183,7 @@ public class EventView extends DialogFragment
                 getDialog().dismiss();
             }
         });
+
 
         return view;
     }
@@ -205,28 +217,18 @@ public class EventView extends DialogFragment
         everyNum = (Button) view.findViewById(R.id.everynum);
         everyBox = (Button) view.findViewById(R.id.everyweek);
 
-        //Set bear color
-        colourInput = (Button) view.findViewById(R.id.selected_bear);
+        from = (Button) view.findViewById(R.id.from);
+        to = (Button) view.findViewById(R.id.to);
 
-        switch (selected_colour) {
-            case R.color.redbear:
-                colourInput.setBackgroundResource(R.drawable.beared);
-                break;
-            case R.color.yellowbear:
-                colourInput.setBackgroundResource(R.drawable.bearyellow);
-                break;
-            case R.color.greenbear:
-                colourInput.setBackgroundResource(R.drawable.beargreen);
-                break;
-            case R.color.bluebear:
-                colourInput.setBackgroundResource(R.drawable.bearblue);
-                break;
-            case R.color.purplebear:
-                colourInput.setBackgroundResource(R.drawable.bearpurple);
-                break;
-            default:
-                break;
-        }
+
+        //Set bear color
+        colourInput = (Button) view.findViewById(R.id.colour_button);
+        colourInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
 
         //(3) Assign respective string values and settings
         eventLabel.setText(event);
@@ -291,37 +293,145 @@ public class EventView extends DialogFragment
         repeatAppointment.setEnabled(false);
         everyBox.setEnabled(false);
         everyNum.setEnabled(false);
+        colourInput.setEnabled(false);
+
+        // Still set text colours to black when click is disabled
+        if(!value) {
+            int colour = getResources().getColor(R.color.black);
+            eventLabel.setTextColor(colour);
+            locationLabel.setTextColor(colour);
+            notesLabel.setTextColor(colour);
+            beginDateButton.setTextColor(colour);
+            beginTimeButton.setTextColor(colour);
+            endDateButton.setTextColor(colour);
+            endTimeButton.setTextColor(colour);
+            remindBox.setTextColor(colour);
+            remindNum.setTextColor(colour);
+
+            // Set line under textview
+            //eventLabel.setBackgroundResource(R.drawable.textview_line);
+            //locationLabel.setBackgroundResource(R.drawable.textview_line);
+        }
 
         repeatAppointment.setVisibility(View.GONE);
         everyBox.setVisibility(View.GONE);
         everyNum.setVisibility(View.GONE);
     }
 
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.imageButton:
-                colourInput.setBackgroundResource(R.drawable.beared);
-                selected_colour = R.color.redbear;
-                break;
-            case R.id.imageButton2:
-                colourInput.setBackgroundResource(R.drawable.bearyellow);
-                selected_colour = R.color.yellowbear;
-                break;
-            case R.id.imageButton3:
-                colourInput.setBackgroundResource(R.drawable.beargreen);
-                selected_colour = R.color.greenbear;
-                break;
-            case R.id.imageButton4:
-                colourInput.setBackgroundResource(R.drawable.bearblue);
-                selected_colour = R.color.bluebear;
-                break;
-            case R.id.imageButton6:
-                colourInput.setBackgroundResource(R.drawable.bearpurple);
-                selected_colour = R.color.purplebear;
-                break;
-            default:
-                break;
+
+    // This method calls alert dialog to display the list of names.
+    private void openDialog() {
+        final View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_colour, null);
+        final SimpleDraweeView red = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton1);
+        final SimpleDraweeView yellow = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton2);
+        final SimpleDraweeView green = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton3);
+        final SimpleDraweeView blue = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton4);
+        final SimpleDraweeView purple = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton5);
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        alertBuilder.setTitle("Select colour");
+        alertBuilder.setView(dialogview);
+
+        // Default red
+        setColour(R.color.redbear);
+
+        red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.redbear);
+                red.setBackgroundResource(R.drawable.sunred);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                green.setBackgroundResource(R.drawable.beargreen);
+                blue.setBackgroundResource(R.drawable.bearblue);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        yellow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.yellowbear);
+                yellow.setBackgroundResource(R.drawable.sunyellow);
+                red.setBackgroundResource(R.drawable.beared);
+                green.setBackgroundResource(R.drawable.beargreen);
+                blue.setBackgroundResource(R.drawable.bearblue);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.greenbear);
+                green.setBackgroundResource(R.drawable.sungreen);
+                red.setBackgroundResource(R.drawable.beared);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                blue.setBackgroundResource(R.drawable.bearblue);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        blue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.bluebear);
+                blue.setBackgroundResource(R.drawable.sunblue);
+                red.setBackgroundResource(R.drawable.beared);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                green.setBackgroundResource(R.drawable.beargreen);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        purple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.purplebear);
+                purple.setBackgroundResource(R.drawable.sunpurple);
+                red.setBackgroundResource(R.drawable.beared);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                green.setBackgroundResource(R.drawable.beargreen);
+                blue.setBackgroundResource(R.drawable.bearblue);
+            }
+        });
+
+        alertBuilder.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                colourInput.setBackgroundResource(getPartyBear(selected_colour));
+                dialog.dismiss();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        Dialog dialog = alertBuilder.create();
+        dialog.show();
+    }
+
+    private void setColour(int colourInput) {
+        this.selected_colour = colourInput;
+    }
+
+    private int getPartyBear(int colourInput) {
+        switch(colourInput) {
+            case R.color.redbear:
+                return R.drawable.partyred;
+            case R.color.yellowbear:
+                return R.drawable.partyyellow;
+            case R.color.greenbear:
+                return R.drawable.partygreen;
+            case R.color.bluebear:
+                return R.drawable.partyblue;
+            case R.color.purplebear:
+                return R.drawable.partypurple;
         }
+
+        // Should not reach here
+        return -1;
     }
 
     /*

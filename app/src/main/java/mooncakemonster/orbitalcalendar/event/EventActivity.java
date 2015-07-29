@@ -1,17 +1,23 @@
 package mooncakemonster.orbitalcalendar.event;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.Calendar;
 
@@ -63,6 +69,8 @@ public class EventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_event);
 
         getSupportActionBar().setElevation(0);
+        // Prevent keyboard from appearing automatically
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         //Store date passed from intent in millisecond. If unavailable, default to current time.
         long datePassedInMillisecond = 0;
@@ -79,7 +87,7 @@ public class EventActivity extends ActionBarActivity {
         appointmentDatabase.open();
 
         //Initialise bear button
-        colourInput = (Button) findViewById(R.id.selected_bear);
+        colourInput = (Button) findViewById(R.id.colour_button);
     }
 
     //Helper Method: Initialise date and time from intent
@@ -155,7 +163,7 @@ public class EventActivity extends ActionBarActivity {
             }
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
 
-        datePicker.setTitle("Set Recurring Event's Limit");
+        //datePicker.setTitle("Set Recurring Event's Limit");
         datePicker.getDatePicker().setMinDate(beginEventMillisecond);
         datePicker.setCancelable(false);
         datePicker.setButton(DialogInterface.BUTTON_POSITIVE, "Set", new DialogInterface.OnClickListener() {
@@ -169,6 +177,121 @@ public class EventActivity extends ActionBarActivity {
             }
         });
         datePicker.show();
+    }
+
+    // This method calls alert dialog to display the list of names.
+    private void openDialog() {
+        final View dialogview = LayoutInflater.from(this).inflate(R.layout.dialog_colour, null);
+        final SimpleDraweeView red = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton1);
+        final SimpleDraweeView yellow = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton2);
+        final SimpleDraweeView green = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton3);
+        final SimpleDraweeView blue = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton4);
+        final SimpleDraweeView purple = (SimpleDraweeView) dialogview.findViewById(R.id.imageButton5);
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
+        alertBuilder.setTitle("Select colour");
+        alertBuilder.setView(dialogview);
+
+        // Default red
+        setColour(R.color.redbear);
+
+        red.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.redbear);
+                red.setBackgroundResource(R.drawable.sunred);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                green.setBackgroundResource(R.drawable.beargreen);
+                blue.setBackgroundResource(R.drawable.bearblue);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        yellow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.yellowbear);
+                yellow.setBackgroundResource(R.drawable.sunyellow);
+                red.setBackgroundResource(R.drawable.beared);
+                green.setBackgroundResource(R.drawable.beargreen);
+                blue.setBackgroundResource(R.drawable.bearblue);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        green.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.greenbear);
+                green.setBackgroundResource(R.drawable.sungreen);
+                red.setBackgroundResource(R.drawable.beared);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                blue.setBackgroundResource(R.drawable.bearblue);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        blue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.bluebear);
+                blue.setBackgroundResource(R.drawable.sunblue);
+                red.setBackgroundResource(R.drawable.beared);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                green.setBackgroundResource(R.drawable.beargreen);
+                purple.setBackgroundResource(R.drawable.bearpurple);
+            }
+        });
+
+        purple.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setColour(R.color.purplebear);
+                purple.setBackgroundResource(R.drawable.sunpurple);
+                red.setBackgroundResource(R.drawable.beared);
+                yellow.setBackgroundResource(R.drawable.bearyellow);
+                green.setBackgroundResource(R.drawable.beargreen);
+                blue.setBackgroundResource(R.drawable.bearblue);
+            }
+        });
+
+        alertBuilder.setCancelable(true).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                colourInput.setBackgroundResource(getPartyBear(selected_colour));
+                dialog.dismiss();
+            }
+        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        Dialog dialog = alertBuilder.create();
+        dialog.show();
+    }
+
+    private void setColour(int colourInput) {
+        this.selected_colour = colourInput;
+    }
+
+    private int getPartyBear(int colourInput) {
+        switch(colourInput) {
+            case R.color.redbear:
+                return R.drawable.partyred;
+            case R.color.yellowbear:
+                return R.drawable.partyyellow;
+            case R.color.greenbear:
+                return R.drawable.partygreen;
+            case R.color.bluebear:
+                return R.drawable.partyblue;
+            case R.color.purplebear:
+                return R.drawable.partypurple;
+        }
+
+        // Should not reach here
+        return -1;
     }
 
     protected boolean insertInDatabase() {
@@ -318,6 +441,7 @@ public class EventActivity extends ActionBarActivity {
             //Set alarm
             AlarmSetter.setAlarm(getApplicationContext(), event, location, remind);
             //Insert into database
+            if(selected_colour == 0) selected_colour = R.color.redbear;
             appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
         }
 
@@ -326,6 +450,10 @@ public class EventActivity extends ActionBarActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.colour_button:
+                openDialog();
+                break;
+
             case R.id.addAppointmentButton:
                 if (insertInDatabase()) {
                     //Inform user that appointment has been created and return to previous activity
@@ -352,26 +480,6 @@ public class EventActivity extends ActionBarActivity {
                 finish();
                 break;
 
-            case R.id.imageButton:
-                colourInput.setBackgroundResource(R.drawable.beared);
-                selected_colour = R.color.redbear;
-                break;
-            case R.id.imageButton2:
-                colourInput.setBackgroundResource(R.drawable.bearyellow);
-                selected_colour = R.color.yellowbear;
-                break;
-            case R.id.imageButton3:
-                colourInput.setBackgroundResource(R.drawable.beargreen);
-                selected_colour = R.color.greenbear;
-                break;
-            case R.id.imageButton4:
-                colourInput.setBackgroundResource(R.drawable.bearblue);
-                selected_colour = R.color.bluebear;
-                break;
-            case R.id.imageButton6:
-                colourInput.setBackgroundResource(R.drawable.bearpurple);
-                selected_colour = R.color.purplebear;
-                break;
 
             default:
                 break;
@@ -381,7 +489,7 @@ public class EventActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_cross, menu);
+        getMenuInflater().inflate(R.menu.menu_plus, menu);
         return true;
     }
 
@@ -389,8 +497,19 @@ public class EventActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_close) {
-            finish();
+        if (id == R.id.action_add) {
+            if (insertInDatabase()) {
+                //Inform user that appointment has been created and return to previous activity
+                Toast.makeText(this.getApplicationContext(), "Appointment set successfully.", Toast.LENGTH_SHORT).show();
+
+                if (getParent() == null) {
+                    setResult(EventActivity.APPOINTMENT_SET);
+                } else {
+                    getParent().setResult(EventActivity.APPOINTMENT_SET);
+                }
+
+                finish();
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);

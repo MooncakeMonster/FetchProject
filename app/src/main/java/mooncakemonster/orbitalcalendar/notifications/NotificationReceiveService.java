@@ -251,7 +251,7 @@ public class NotificationReceiveService extends Service {
                     my_user.getSelected_event_notes(), null, start_date, end_date, start_time, end_time, reject_reason, null);
 
             // (1) Update the voted participants for that event to indicate the number of voted participants in VotingFragment
-            votingDatabase.updateInformation(votingDatabase, event_id, voted_participant, null, null, null, null, null);
+            votingDatabase.updateInformation(votingDatabase, event_id, voted_participant, null, null, null, null, null, null);
 
             if (action.equals("accept")) {
                 Log.d(TAG, "accept");
@@ -313,7 +313,7 @@ public class NotificationReceiveService extends Service {
                     my_user.getAttendance_my_username(), " will be coming to your event \"", my_user.getAttendance_event_title(),
                     "\". Checkout the current attendance for the event.", null, null, null, null, null, null, null, null, null);
 
-            votingDatabase.updateInformation(votingDatabase, "" + my_user.getAttendance_event_id(), null, my_user.getAttendance_my_username(), null, null, null, null);
+            votingDatabase.updateInformation(votingDatabase, "" + my_user.getAttendance_event_id(), null, my_user.getAttendance_my_username(), null, null, null, null, null);
 
             cloudantConnect.resetVotingAttendance(my_user);
             cloudantConnect.startPushReplication();

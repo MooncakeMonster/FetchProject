@@ -95,7 +95,11 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
             holder.grey_time = (TextView) row.findViewById(R.id.grey_time);
             holder.total_text = (TextView) row.findViewById(R.id.total_text);
 
-            if(confirmDateTime(event_id, resultItem.getStart_date()) == null) {
+            votingDatabase = new VotingDatabase(getContext());
+            VoteItem voteItem = votingDatabase.getVoteItem(votingDatabase, event_id);
+
+            if (voteItem.getEvent_confirmed().equals("true")
+                    && confirmDateTime(event_id, resultItem.getStart_date()) == null) {
                 int colour = getContext().getResources().getColor(R.color.transparentblack);
                 holder.grey_start_date.setTextColor(colour);
                 holder.grey_end_date.setTextColor(colour);
@@ -105,34 +109,25 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 holder.result_end_date.setTextColor(colour);
                 holder.result_time.setTextColor(colour);
                 holder.result_total.setTextColor(colour);
-
-                holder.grey_start_date.setText(boldText("Start Date:"));
-                holder.grey_end_date.setText(boldText("End Date:"));
-                holder.grey_time.setText(boldText("Time:"));
-                holder.total_text.setText(boldText("TOTAL"));
-
-                holder.result_start_date.setText(boldText(Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER)));
-                holder.result_end_date.setText(boldText(Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER)));
-                holder.result_time.setText(boldText(resultItem.getStart_time() + " - " + resultItem.getEnd_time()));
-                //holder.result_name.setText(resultItem.getSelected_username());
-                holder.result_total.setText(resultItem.getTotal());
-
-            } else {
-                holder.result_start_date.setText(Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
-                holder.result_end_date.setText(Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
-                holder.result_time.setText(resultItem.getStart_time() + " - " + resultItem.getEnd_time());
-                //holder.result_name.setText(resultItem.getSelected_username());
-                holder.result_total.setText(resultItem.getTotal());
             }
+
+            holder.result_start_date.setText(Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
+            holder.result_end_date.setText(Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
+            holder.result_time.setText(resultItem.getStart_time() + " - " + resultItem.getEnd_time());
+            //holder.result_name.setText(resultItem.getSelected_username());
+            holder.result_total.setText(resultItem.getTotal());
 
             // Show list of participants who can make it
             holder.can_make_it.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String participants = resultItem.getSelected_username();
-                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem, "can");
-                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem, "can");
-                    else Constant.alertUser(getContext(), "Confirm date and time", "No participant can make it on this day yet.");
+                    if (!participants.isEmpty() && confirmDateTime == null)
+                        openDialog(participants.split(" "), event_id, resultItem, "can");
+                    else if (!participants.isEmpty())
+                        openViewDialog(participants.split(" "), event_id, resultItem, "can");
+                    else
+                        Constant.alertUser(getContext(), "Confirm date and time", "No participant can make it on this day yet.");
                 }
             });
 
@@ -141,9 +136,12 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 @Override
                 public void onClick(View v) {
                     String participants = resultItem.getNot_selected_username();
-                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem, "cannot");
-                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem, "cannot");
-                    else Constant.alertUser(getContext(), "Confirm date and time", "No participant cannot make it on this day yet.");
+                    if (!participants.isEmpty() && confirmDateTime == null)
+                        openDialog(participants.split(" "), event_id, resultItem, "cannot");
+                    else if (!participants.isEmpty())
+                        openViewDialog(participants.split(" "), event_id, resultItem, "cannot");
+                    else
+                        Constant.alertUser(getContext(), "Confirm date and time", "No participant cannot make it on this day yet.");
                 }
             });
 
@@ -152,9 +150,12 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 @Override
                 public void onClick(View v) {
                     String participants = resultItem.getUsername_rejected();
-                    if (!participants.isEmpty() && confirmDateTime == null) openDialog(participants.split(" "), event_id, resultItem, "reject");
-                    else if(!participants.isEmpty()) openViewDialog(participants.split(" "), event_id, resultItem, "reject");
-                    else Constant.alertUser(getContext(), "Confirm date and time", "No participant has rejected voting for this event yet.");
+                    if (!participants.isEmpty() && confirmDateTime == null)
+                        openDialog(participants.split(" "), event_id, resultItem, "reject");
+                    else if (!participants.isEmpty())
+                        openViewDialog(participants.split(" "), event_id, resultItem, "reject");
+                    else
+                        Constant.alertUser(getContext(), "Confirm date and time", "No participant has rejected voting for this event yet.");
                 }
             });
 
@@ -176,7 +177,8 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         votingDatabase = new VotingDatabase(getContext());
         VoteItem voteItem = votingDatabase.getVoteItem(votingDatabase, event_id);
 
-        if(voteItem.getEvent_confirm_start_date() != null && voteItem.getEvent_confirm_start_date().equals(start_date)) {
+        if (voteItem.getEvent_confirm_start_date() != null
+                && voteItem.getEvent_confirm_start_date().equals(start_date)) {
             return voteItem;
         }
 
@@ -212,10 +214,10 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
         input_username.setText("Event : " + retrieveVoteItem(event_id).getEvent_title() + "\nStart  : " + Constant.standardYearMonthDate(resultItem.getStart_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + ", " + resultItem.getStart_time() +
                 "\nEnd    : " + Constant.standardYearMonthDate(resultItem.getEnd_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER) + ", " + resultItem.getEnd_time()
-                 + "\n\nPlease select the participants you would like to confirm the event's date and time with.");
+                + "\n\nPlease select the participants you would like to confirm the event's date and time with.");
 
         final int size = split_participants.length;
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             list.add(i, new ResultOption(true, split_participants[i]));
         }
 
@@ -266,7 +268,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
                 + "\n\nTo change the event's confirmed date and time to the current selected option, simply select the participants to confirm with and press the \"confirm\" button.");
 
         final int size = split_participants.length;
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             list.add(i, new ResultOption(false, split_participants[i]));
         }
 
@@ -312,7 +314,7 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
 
         // Update confirmed date and time into SQLite database
         votingDatabase = new VotingDatabase(getContext());
-        votingDatabase.updateInformation(votingDatabase, event_id, null, null, start_date, end_date, start_time, end_time);
+        votingDatabase.updateInformation(votingDatabase, event_id, null, null, "true", start_date, end_date, start_time, end_time);
 
         // Retrieve own username
         db = new UserDatabase(getContext());

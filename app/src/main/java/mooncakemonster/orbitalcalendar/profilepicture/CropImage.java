@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -39,6 +40,7 @@ public class CropImage extends ActionBarActivity {
 
     private CropImageView cropImageView;
     private Uri imageUri;
+    private TextView image_empty;
     private Button load_image, rotate_left, rotate_right;
     private CloudantConnect cloudantConnect;
     private UserDatabase db;
@@ -58,10 +60,12 @@ public class CropImage extends ActionBarActivity {
             this.cloudantConnect = new CloudantConnect(this, "user");
 
         cropImageView = (CropImageView) findViewById(R.id.CropImageView);
+        image_empty = (TextView) findViewById(R.id.image_empty);
 
-        try {
+        if(cloudantConnect.retrieveUserImage(my_username) != null) {
             cropImageView.setImageBitmap(cloudantConnect.retrieveUserImage(my_username));
-        } catch (Exception e) {
+            image_empty.setVisibility(View.INVISIBLE);
+        } else {
             cropImageView.setImageResource(R.drawable.profile);
         }
 

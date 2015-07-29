@@ -25,9 +25,23 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:gravity="center"
-        android:text="No result to display"
+        android:text="** No result to display **"
         android:textColor="@color/colorPrimary"
         android:textSize="@dimen/standard_text_size" />
+
+    <ImageButton
+        android:id="@+id/sort_button"
+        android:layout_width="@dimen/picture_button_size"
+        android:layout_height="@dimen/picture_button_size"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/picture_button_margin"
+        android:layout_marginEnd="@dimen/picture_button_margin"
+        android:layout_marginRight="@dimen/picture_button_margin"
+        android:background="@drawable/filter"
+        android:elevation="@dimen/picture_elevation"
+        android:stateListAnimator="@anim/button_elevation"
+        android:tint="@android:color/white" />
 
 
 </RelativeLayout>

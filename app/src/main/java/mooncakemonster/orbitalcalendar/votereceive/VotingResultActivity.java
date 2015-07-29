@@ -16,12 +16,10 @@ import android.widget.TextView;
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
-import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.voteresult.ResultAdapter;
 import mooncakemonster.orbitalcalendar.voteresult.ResultDatabase;
 import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
@@ -82,72 +80,31 @@ public class VotingResultActivity extends ActionBarActivity {
         sort_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] sort_type = {"Sort by total votes", "Sort by date", "Sort by time"};
+                final String[] sort_type = {"Highest votes on top", "Recent date on top", "Recent time on top"};
                 list = resultDatabase.getAllTargetResults(resultDatabase, Integer.parseInt(voteItem.getEventId()));
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(VotingResultActivity.this);
                 alertBuilder.setTitle("Sort Voting List").setSingleChoiceItems(sort_type, 0, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                }).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
                         switch(which) {
                             case 0:
-                                // (1) Sort according to total votes
-                                Collections.sort(list, new Comparator<ResultItem>() {
-                                    @Override
-                                    public int compare(ResultItem lhs, ResultItem rhs) {
-                                        int this_total = Integer.parseInt(lhs.getTotal());
-                                        int that_total = Integer.parseInt(rhs.getTotal());
-
-                                        if(this_total < that_total) return -1;
-                                        else if(this_total > that_total) return 1;
-
-                                        return 0;
-                                    }
-                                });
-
+                                // (1) Sort according to total number of participants that voted the option
+                                Collections.sort(list, ResultItem.totalComparator);
                                 resultAdapter.clear();
                                 resultAdapter.addAll(list);
                                 resultAdapter.notifyDataSetChanged();
                                 break;
                             case 1:
                                 // (2) Sort according to date
-                                Collections.sort(list, new Comparator<ResultItem>() {
-                                    @Override
-                                    public int compare(ResultItem lhs, ResultItem rhs) {
-                                        long this_start_date = Constant.stringToMillisecond(lhs.getStart_date(), lhs.getStart_time(), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
-                                        long that_start_date = Constant.stringToMillisecond(rhs.getStart_date(), rhs.getStart_time(), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
-
-                                        if(this_start_date < that_start_date) return -1;
-                                        else if(this_start_date > that_start_date) return 1;
-
-                                        return 0;
-                                    }
-                                });
-
+                                Collections.sort(list, ResultItem.dateComparator);
                                 resultAdapter.clear();
                                 resultAdapter.addAll(list);
                                 resultAdapter.notifyDataSetChanged();
                                 break;
                             case 2:
                                 // (3) Sort according to time
-                                Collections.sort(list, new Comparator<ResultItem>() {
-                                    @Override
-                                    public int compare(ResultItem lhs, ResultItem rhs) {
-                                        long this_start_time = Constant.stringToMillisecond(lhs.getStart_time(), Constant.TIMEFORMATTER);
-                                        long that_start_time = Constant.stringToMillisecond(rhs.getStart_time(), Constant.TIMEFORMATTER);
-
-                                        if (this_start_time < that_start_time) return -1;
-                                        else if (this_start_time > that_start_time) return 1;
-
-                                        return 0;
-                                    }
-                                });
-
+                                Collections.sort(list, ResultItem.timeComparator);
                                 resultAdapter.clear();
                                 resultAdapter.addAll(list);
                                 resultAdapter.notifyDataSetChanged();
@@ -155,12 +112,7 @@ public class VotingResultActivity extends ActionBarActivity {
                         }
                         dialog.dismiss();
                     }
-                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+                }).setNegativeButton("Cancel", null);
 
                 Dialog dialog = alertBuilder.create();
                 dialog.show();

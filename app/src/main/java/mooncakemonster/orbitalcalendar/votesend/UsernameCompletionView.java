@@ -50,13 +50,13 @@ public class UsernameCompletionView extends TokenCompleteTextView<String> {
         friendDatabase = new FriendDatabase(getContext());
 
         try {
-            if (friendDatabase.checkUsername(friendDatabase, s)) {
+            if (friendDatabase.checkSingleUsername(friendDatabase, s)) {
                 RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(s));
                 simpleDraweeView.setImageDrawable(roundImage);
             } else {
                 Constant.alertUser(getContext(), "Invalid username", "Please ensure that the username you entered is valid.");
             }
-        } catch (Exception e) {
+        } catch (OutOfMemoryError e) {
             Log.e(TAG, "OOM error");
         }
 

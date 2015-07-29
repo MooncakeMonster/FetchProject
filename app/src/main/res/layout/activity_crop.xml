@@ -12,6 +12,18 @@
         android:layout_weight="1"
         app:scaleType="fitCenter"/>
 
+    <!--In the event when there are no image set-->
+    <TextView
+        android:id="@+id/image_empty"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:text="** No profile photo set **"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/standard_text_size" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

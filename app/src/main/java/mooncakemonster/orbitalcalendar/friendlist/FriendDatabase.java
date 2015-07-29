@@ -110,6 +110,26 @@ public class FriendDatabase extends SQLiteOpenHelper {
         return friend_list;
     }
 
+    // This method retrieves all friends' username.
+    public List<FriendItem> getAcceptedFriendUsername(FriendDatabase data) {
+        List<FriendItem> friend_list = new ArrayList<>();
+        Cursor cursor = getInformation(data);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            if(cursor.getString(0).equals("true")) {
+                FriendItem friend = new FriendItem(cursor.getString(0), cursor.getInt(1), cursor.getString(2));
+                friend_list.add(friend);
+            }
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        Collections.sort(friend_list);
+        return friend_list;
+    }
+
     // This method checks if the usernames are user's friends
     public boolean checkUsername(FriendDatabase data, String participants) {
         String[] split_participants = participants.split(" ");
@@ -119,7 +139,7 @@ public class FriendDatabase extends SQLiteOpenHelper {
         cursor.moveToFirst();
         while(!cursor.isAfterLast()) {
             for (int i = 0; i < size; i++) {
-                if (!cursor.getString(2).equals(split_participants[i])) return false;
+                if (cursor.getString(0).equals("false") || !cursor.getString(2).equals(split_participants[i])) return false;
             }
             cursor.moveToNext();
         }
@@ -128,4 +148,18 @@ public class FriendDatabase extends SQLiteOpenHelper {
         return true;
     }
 
+
+    // This method checks if the username is user's friends
+    public boolean checkSingleUsername(FriendDatabase data, String participant) {
+        Cursor cursor = getInformation(data);
+
+        cursor.moveToFirst();
+        while(!cursor.isAfterLast()) {
+            if (cursor.getString(0).equals("true") && cursor.getString(2).equals(participant)) return true;
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        return false;
+    }
 }

@@ -24,6 +24,7 @@ public class VotingData {
         public static final String START_TIME = "start_time";
         public static final String END_TIME = "end_time";
 
+        public static final String CONFIRMED = "confirmed";
         public static final String CONFIRM_START_DATE = "confirm_start_date";
         public static final String CONFIRM_END_DATE = "confirm_end_date";
         public static final String CONFIRM_START_TIME = "confirm_start_time";

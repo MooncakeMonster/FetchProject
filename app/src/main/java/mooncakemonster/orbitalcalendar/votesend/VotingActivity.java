@@ -104,7 +104,7 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
 
         //(2) Enter participants
         friendDatabase = new FriendDatabase(this);
-        list = friendDatabase.getAllFriendUsername(friendDatabase);
+        list = friendDatabase.getAcceptedFriendUsername(friendDatabase);
         int size = list.size();
 
         String list_participants = "";
@@ -308,7 +308,7 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
                         eventId = votingDatabase.eventSize(votingDatabase);
 
                         votingDatabase.putInformation(votingDatabase, "" + eventId, "" + colour, title, location,
-                                participants, null, null, start_date, end_date, start_time, end_time, null, null, null, null);
+                                participants, null, null, start_date, end_date, start_time, end_time, "false", null, null, null, null);
 
                         // Save options in SQLite for voting result
                         saveOptions(new ResultItem("" + eventId, start_date, end_date, start_time, end_time, participants, "", "", "", ""));

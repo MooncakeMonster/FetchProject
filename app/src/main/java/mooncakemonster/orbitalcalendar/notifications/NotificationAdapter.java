@@ -180,7 +180,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                                         }, 1500);
                                     }
                                 });
-                                dialogBuilder.show();
+                                //dialogBuilder.show();
                             } else {
                                 Constant.alertUser(getContext(), "Friend request", "You had already accepted friend request from \"" + notificationItem.getSender_username() + "\".");
                             }

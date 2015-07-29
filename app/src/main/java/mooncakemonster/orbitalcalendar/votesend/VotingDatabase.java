@@ -28,6 +28,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
             VotingData.VotingInfo.END_DATE + " TEXT, " +
             VotingData.VotingInfo.START_TIME + " TEXT, " +
             VotingData.VotingInfo.END_TIME + " TEXT, " +
+            VotingData.VotingInfo.CONFIRMED + " TEXT, " +
             VotingData.VotingInfo.CONFIRM_START_DATE + " TEXT, " +
             VotingData.VotingInfo.CONFIRM_END_DATE + " TEXT, " +
             VotingData.VotingInfo.CONFIRM_START_TIME + " TEXT, " +
@@ -54,7 +55,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
     // This method insets information into the database
     public void putInformation(VotingDatabase data, String event_id, String event_colour, String event_title, String event_location,
                                String event_participants, String event_voted_participants, String event_attendance, String start_date, String end_date, String start_time, String end_time,
-                               String confirm_start_date, String confirm_end_date, String confirm_start_time, String confirm_end_time) {
+                               String confirmed, String confirm_start_date, String confirm_end_date, String confirm_start_time, String confirm_end_time) {
         // Write data into database
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -71,6 +72,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
         contentValues.put(VotingData.VotingInfo.END_DATE, end_date);
         contentValues.put(VotingData.VotingInfo.START_TIME, start_time);
         contentValues.put(VotingData.VotingInfo.END_TIME, end_time);
+        contentValues.put(VotingData.VotingInfo.CONFIRMED, confirmed);
         contentValues.put(VotingData.VotingInfo.CONFIRM_START_DATE, confirm_start_date);
         contentValues.put(VotingData.VotingInfo.CONFIRM_END_DATE, confirm_end_date);
         contentValues.put(VotingData.VotingInfo.CONFIRM_START_TIME, confirm_start_time);
@@ -96,6 +98,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
                 VotingData.VotingInfo.END_DATE,
                 VotingData.VotingInfo.START_TIME,
                 VotingData.VotingInfo.END_TIME,
+                VotingData.VotingInfo.CONFIRMED,
                 VotingData.VotingInfo.CONFIRM_START_DATE,
                 VotingData.VotingInfo.CONFIRM_END_DATE,
                 VotingData.VotingInfo.CONFIRM_START_TIME,
@@ -107,7 +110,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
 
     // Update data from database
     public void updateInformation(VotingDatabase data, String event_id, String updated_voted_participants, String attendance,
-                                  String confirmed_start_date, String confirmed_end_date, String confirmed_start_time, String confirmed_end_time) {
+                                  String confirmed, String confirmed_start_date, String confirmed_end_date, String confirmed_start_time, String confirmed_end_time) {
 
         Cursor cursor = getInformation(data);
         cursor.moveToFirst();
@@ -170,6 +173,9 @@ public class VotingDatabase extends SQLiteOpenHelper {
                     values.put(VotingData.VotingInfo.EVENT_ATTENDANCE, stored_attendance);
                 }
 
+                // Update confirmed status
+                if(confirmed != null) values.put(VotingData.VotingInfo.CONFIRMED, confirmed);
+
                 // Update confirmed dates
                 if (confirmed_start_date != null) {
                     values.put(VotingData.VotingInfo.CONFIRM_START_DATE, confirmed_start_date);
@@ -198,8 +204,52 @@ public class VotingDatabase extends SQLiteOpenHelper {
         while (!cursor.isAfterLast()) {
             VoteItem voteItem = new VoteItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
                     cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
-                    cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14));
+                    cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15));
             votings.add(voteItem);
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        Collections.reverse(votings);
+
+        return votings;
+    }
+
+    // This method retrieves all not confirmed date votings.
+    public List<VoteItem> getNotConfirmedVotings(VotingDatabase data) {
+        List<VoteItem> votings = new ArrayList<VoteItem>();
+        Cursor cursor = getInformation(data);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            if(cursor.getString(11).equals("false")) {
+                VoteItem voteItem = new VoteItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                        cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
+                        cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15));
+                votings.add(voteItem);
+            }
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+        Collections.reverse(votings);
+
+        return votings;
+    }
+
+    // This method retrieves all confirmed date votings.
+    public List<VoteItem> getConfirmedVotings(VotingDatabase data) {
+        List<VoteItem> votings = new ArrayList<VoteItem>();
+        Cursor cursor = getInformation(data);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            if(cursor.getString(11).equals("true")) {
+                VoteItem voteItem = new VoteItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
+                        cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
+                        cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15));
+                votings.add(voteItem);
+            }
             cursor.moveToNext();
         }
 
@@ -219,7 +269,7 @@ public class VotingDatabase extends SQLiteOpenHelper {
             if (event_id.equals(cursor.getString(0))) {
                 voteItem = new VoteItem(cursor.getString(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4),
                         cursor.getString(5), cursor.getString(6), cursor.getString(7), cursor.getString(8), cursor.getString(9),
-                        cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14));
+                        cursor.getString(10), cursor.getString(11), cursor.getString(12), cursor.getString(13), cursor.getString(14), cursor.getString(15));
                 break;
             }
             cursor.moveToNext();

@@ -1,5 +1,9 @@
 package mooncakemonster.orbitalcalendar.voteresult;
 
+import java.util.Comparator;
+
+import mooncakemonster.orbitalcalendar.database.Constant;
+
 /**
  * Created by BAOJUN on 10/7/15.
  */
@@ -108,4 +112,46 @@ public class ResultItem {
     public void setTotal(String total) {
         this.total = total;
     }
+
+    // This method sort items according to total number of voted participants for that option.
+    public static Comparator<ResultItem> totalComparator = new Comparator<ResultItem>() {
+        @Override
+        public int compare(ResultItem lhs, ResultItem rhs) {
+            int this_total = Integer.parseInt(lhs.getTotal());
+            int that_total = Integer.parseInt(rhs.getTotal());
+
+            if(this_total < that_total) return -1;
+            else if(this_total > that_total) return 1;
+
+            return 0;
+        }
+    };
+
+    // This method sort items according to date.
+    public static Comparator<ResultItem> dateComparator = new Comparator<ResultItem>() {
+        @Override
+        public int compare(ResultItem lhs, ResultItem rhs) {
+            long this_start_date = Constant.stringToMillisecond(lhs.getStart_date(), lhs.getStart_time(), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
+            long that_start_date = Constant.stringToMillisecond(rhs.getStart_date(), rhs.getStart_time(), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
+
+            if(this_start_date < that_start_date) return -1;
+            else if(this_start_date > that_start_date) return 1;
+
+            return 0;
+        }
+    };
+
+    // This method sort items according to time.
+    public static Comparator<ResultItem> timeComparator = new Comparator<ResultItem>() {
+        @Override
+        public int compare(ResultItem lhs, ResultItem rhs) {
+            long this_start_time = Constant.stringToMillisecond(lhs.getStart_time(), Constant.TIMEFORMATTER);
+            long that_start_time = Constant.stringToMillisecond(rhs.getStart_time(), Constant.TIMEFORMATTER);
+
+            if (this_start_time < that_start_time) return -1;
+            else if (this_start_time > that_start_time) return 1;
+
+            return 0;
+        }
+    };
 }

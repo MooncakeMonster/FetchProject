@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
@@ -49,56 +50,60 @@ public class VotingFragment extends ListFragment {
         sort_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] sort_type = {"Sort by event name", "Highest vote on top", "Recent date on top", "Confirmed events on top", "Confirmed events below"};
-                list = votingDatabase.getAllVotings(votingDatabase);
+                if (votingAdapter.getCount() == 0) {
+                    Constant.alertUser(getActivity(), "Sort Voting Result", "Unable to sort as there is no vote sent yet.");
+                } else {
+                    final String[] sort_type = {"Sort by event name", "Highest vote on top", "Recent date on top", "Confirmed events on top", "Confirmed events below"};
+                    list = votingDatabase.getAllVotings(votingDatabase);
 
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-                alertBuilder.setTitle("Sort Voting Result").setSingleChoiceItems(sort_type, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                // Sort according to event name
-                                Collections.sort(list, VoteItem.eventNameComparator);
-                                votingAdapter.clear();
-                                votingAdapter.addAll(list);
-                                votingAdapter.notifyDataSetChanged();
-                                break;
-                            case 1:
-                                // (1) Sort according to total votes
-                                Collections.sort(list, VoteItem.totalComparator);
-                                votingAdapter.clear();
-                                votingAdapter.addAll(list);
-                                votingAdapter.notifyDataSetChanged();
-                                break;
-                            case 2:
-                                // (2) Sort according to date and time
-                                Collections.sort(list, VoteItem.dateComparator);
-                                votingAdapter.clear();
-                                votingAdapter.addAll(list);
-                                votingAdapter.notifyDataSetChanged();
-                                break;
-                            case 3:
-                                // (3) Sort according to confirmed event (top)
-                                list = combineList(votingDatabase.getConfirmedVotings(votingDatabase), votingDatabase.getNotConfirmedVotings(votingDatabase));
-                                votingAdapter.clear();
-                                votingAdapter.addAll(list);
-                                votingAdapter.notifyDataSetChanged();
-                                break;
-                            case 4:
-                                // (4) Sort according to confirmed event (below)
-                                list = combineList(votingDatabase.getNotConfirmedVotings(votingDatabase), votingDatabase.getConfirmedVotings(votingDatabase));
-                                votingAdapter.clear();
-                                votingAdapter.addAll(list);
-                                votingAdapter.notifyDataSetChanged();
-                                break;
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+                    alertBuilder.setTitle("Sort Voting Result").setSingleChoiceItems(sort_type, 0, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case 0:
+                                    // Sort according to event name
+                                    Collections.sort(list, VoteItem.eventNameComparator);
+                                    votingAdapter.clear();
+                                    votingAdapter.addAll(list);
+                                    votingAdapter.notifyDataSetChanged();
+                                    break;
+                                case 1:
+                                    // (1) Sort according to total votes
+                                    Collections.sort(list, VoteItem.totalComparator);
+                                    votingAdapter.clear();
+                                    votingAdapter.addAll(list);
+                                    votingAdapter.notifyDataSetChanged();
+                                    break;
+                                case 2:
+                                    // (2) Sort according to date and time
+                                    Collections.sort(list, VoteItem.dateComparator);
+                                    votingAdapter.clear();
+                                    votingAdapter.addAll(list);
+                                    votingAdapter.notifyDataSetChanged();
+                                    break;
+                                case 3:
+                                    // (3) Sort according to confirmed event (top)
+                                    list = combineList(votingDatabase.getConfirmedVotings(votingDatabase), votingDatabase.getNotConfirmedVotings(votingDatabase));
+                                    votingAdapter.clear();
+                                    votingAdapter.addAll(list);
+                                    votingAdapter.notifyDataSetChanged();
+                                    break;
+                                case 4:
+                                    // (4) Sort according to confirmed event (below)
+                                    list = combineList(votingDatabase.getNotConfirmedVotings(votingDatabase), votingDatabase.getConfirmedVotings(votingDatabase));
+                                    votingAdapter.clear();
+                                    votingAdapter.addAll(list);
+                                    votingAdapter.notifyDataSetChanged();
+                                    break;
+                            }
+                            dialog.dismiss();
                         }
-                        dialog.dismiss();
-                    }
-                }).setNegativeButton("Cancel", null);
+                    }).setNegativeButton("Cancel", null);
 
-                Dialog dialog = alertBuilder.create();
-                dialog.show();
+                    Dialog dialog = alertBuilder.create();
+                    dialog.show();
+                }
             }
         });
 

@@ -114,9 +114,11 @@ public class FriendlistFragment extends Fragment {
                                     cloudantConnect.sendFriendRequest(my_username, editText_username);
                                     cloudantConnect.startPushReplication();
 
+                                    /*
                                     adapter.clear();
                                     adapter.addAll(friendDatabase.getAllFriendUsername(friendDatabase));
                                     adapter.notifyDataSetChanged();
+                                    */
 
                                     //Toast.makeText(getActivity(), "Friend request sent successfully", Toast.LENGTH_SHORT).show();
                                     hideDialog();

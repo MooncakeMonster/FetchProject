@@ -88,6 +88,12 @@ public class EventActivity extends ActionBarActivity {
 
         //Initialise bear button
         colourInput = (Button) findViewById(R.id.colour_button);
+        colourInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openDialog();
+            }
+        });
     }
 
     //Helper Method: Initialise date and time from intent
@@ -324,6 +330,8 @@ public class EventActivity extends ActionBarActivity {
         // Ensure inputs are not of null value: (a) event
         if (!Constant.minStringLength(event, 1, eventInput, null))
             return false;
+        if (!Constant.minStringLength(location, 1, locationInput, null))
+            return false;
             // Check length of input: (a) event, (b) location, (c) notes
         else if (!Constant.maxStringLength(event, Constant.EVENT_TITLE_MAX_LENGTH, eventInput,
                 "No more than " + Constant.EVENT_TITLE_MAX_LENGTH + " characters for event."))
@@ -450,10 +458,6 @@ public class EventActivity extends ActionBarActivity {
 
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.colour_button:
-                openDialog();
-                break;
-
             case R.id.addAppointmentButton:
                 if (insertInDatabase()) {
                     //Inform user that appointment has been created and return to previous activity

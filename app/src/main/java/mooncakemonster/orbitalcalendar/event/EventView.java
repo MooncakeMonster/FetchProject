@@ -33,7 +33,7 @@ public class EventView extends DialogFragment
     private Appointment eventViewAppointment;
 
     private EditText eventLabel, locationLabel,  notesLabel;
-    private Button beginDateButton, endDateButton, beginTimeButton, endTimeButton, remindNum, remindBox, everyNum, everyBox, colourInput, from , to;
+    private Button beginDateButton, endDateButton, beginTimeButton, endTimeButton, remindNum, remindBox, everyNum, everyBox, colourInput;
     private CheckBox reminderCheckBox, repeatAppointment;
 
     private static CharSequence[] everyWheel = {"day", "week", "month", "year"};
@@ -217,10 +217,6 @@ public class EventView extends DialogFragment
         everyNum = (Button) view.findViewById(R.id.everynum);
         everyBox = (Button) view.findViewById(R.id.everyweek);
 
-        from = (Button) view.findViewById(R.id.from);
-        to = (Button) view.findViewById(R.id.to);
-
-
         //Set bear color
         colourInput = (Button) view.findViewById(R.id.colour_button);
         colourInput.setOnClickListener(new View.OnClickListener() {
@@ -288,12 +284,12 @@ public class EventView extends DialogFragment
         reminderCheckBox.setEnabled(value);
         remindBox.setEnabled(value);
         remindNum.setEnabled(value);
+        colourInput.setEnabled(value);
 
         //Repeat Appointment capability will not be available here
         repeatAppointment.setEnabled(false);
         everyBox.setEnabled(false);
         everyNum.setEnabled(false);
-        colourInput.setEnabled(false);
 
         // Still set text colours to black when click is disabled
         if(!value) {

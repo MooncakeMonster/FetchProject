@@ -15,33 +15,53 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <!-- Event title -->
-        <EditText
-            android:id="@+id/title"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/standard_icon_size"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/standard_margin_size"
-            android:layout_weight="1"
-            android:hint="@string/event_title"
-            android:padding="@dimen/standard_padding_size"
-            android:singleLine="true" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Event title -->
+                <EditText
+                    android:id="@+id/title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/standard_icon_size"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:hint="@string/event_title"
+                    android:paddingLeft="@dimen/standard_padding_size"
+                    android:paddingRight="@dimen/standard_padding_size"
+                    android:paddingTop="@dimen/standard_padding_size"
+                    android:singleLine="true" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/standard_margin_size"
+                    android:layout_weight="1"
+                    android:background="#000000"
+                    android:layout_marginLeft="5dp"
+                    android:paddingLeft="@dimen/standard_padding_size"
+                    android:paddingRight="@dimen/standard_padding_size" />
+
+            </LinearLayout>
 
 
-        <Button
-            android:id="@+id/colour_button"
-            android:layout_width="35dp"
-            android:layout_height="45dp"
-            android:layout_weight="0.1"
-            android:onClick="onClick"
-            android:background="@drawable/partyred" />
+            <Button
+                android:id="@+id/colour_button"
+                android:layout_width="@dimen/event_button_size"
+                android:layout_height="52dp"
+                android:layout_weight="0.1"
+                android:background="@drawable/partyred"
+                android:onClick="onClick" />
 
         </LinearLayout>
 
@@ -52,21 +72,41 @@
             android:orientation="horizontal"
             android:weightSum="1">
 
-            <!-- Location -->
-            <EditText
-                android:id="@+id/appointmentLocation"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/standard_icon_size"
-                android:layout_marginBottom="@dimen/standard_margin_size"
-                android:layout_weight="0.9"
-                android:hint="@string/event_location"
-                android:padding="@dimen/standard_padding_size"
-                android:singleLine="true" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- Location -->
+                <EditText
+                    android:id="@+id/appointmentLocation"
+                    android:layout_width="fill_parent"
+                    android:layout_height="@dimen/standard_icon_size"
+                    android:layout_weight="0.9"
+                    android:background="#00000000"
+                    android:hint="@string/event_location"
+                    android:paddingLeft="@dimen/standard_padding_size"
+                    android:paddingRight="@dimen/standard_padding_size"
+                    android:paddingTop="@dimen/standard_padding_size"
+                    android:singleLine="true" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/standard_margin_size"
+                    android:layout_marginLeft="5dp"
+                    android:layout_weight="1"
+                    android:background="#000000"
+                    android:paddingLeft="@dimen/standard_padding_size"
+                    android:paddingRight="@dimen/standard_padding_size" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/location_button"
                 android:layout_width="@dimen/event_button_size"
-                android:layout_height="@dimen/event_button_size"
+                android:layout_height="45dp"
                 android:layout_weight="0.1"
                 android:background="@drawable/location" />
 
@@ -97,7 +137,9 @@
                         android:background="@android:color/transparent"
                         android:gravity="left"
                         android:inputType="textCapCharacters"
-                        android:padding="@dimen/standard_padding_size"
+                        android:paddingBottom="@dimen/standard_padding_size"
+                        android:paddingLeft="@dimen/standard_padding_size"
+                        android:paddingTop="@dimen/standard_padding_size"
                         android:text="From"
                         android:textColor="@color/caldroid_black"
                         android:textSize="17dp" />
@@ -111,7 +153,9 @@
                         android:background="@android:color/transparent"
                         android:gravity="left"
                         android:inputType="textCapCharacters"
-                        android:padding="@dimen/standard_padding_size"
+                        android:paddingBottom="@dimen/standard_padding_size"
+                        android:paddingLeft="@dimen/standard_padding_size"
+                        android:paddingTop="@dimen/standard_padding_size"
                         android:text="To"
                         android:textColor="@color/caldroid_black"
                         android:textSize="17dp" />
@@ -164,7 +208,8 @@
                         android:background="@android:color/transparent"
                         android:gravity="center_horizontal"
                         android:inputType="textCapCharacters"
-                        android:padding="@dimen/standard_padding_size"
+                        android:paddingBottom="@dimen/standard_padding_size"
+                        android:paddingTop="@dimen/standard_padding_size"
                         android:text="Start time"
                         android:textColor="@color/caldroid_black"
                         android:textSize="17dp" />
@@ -177,7 +222,8 @@
                         android:background="@android:color/transparent"
                         android:gravity="center_horizontal"
                         android:inputType="textCapCharacters"
-                        android:padding="@dimen/standard_padding_size"
+                        android:paddingBottom="@dimen/standard_padding_size"
+                        android:paddingTop="@dimen/standard_padding_size"
                         android:text="End time"
                         android:textColor="@color/caldroid_black"
                         android:textSize="17dp" />
@@ -207,7 +253,7 @@
                     android:text="Repeat every"
                     android:textColor="@color/caldroid_black"
                     android:textSize="@dimen/event_text_size"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
                 <!-- Reminder checkbox -->
                 <CheckBox
@@ -221,7 +267,7 @@
                     android:text="Remind me"
                     android:textColor="@color/caldroid_black"
                     android:textSize="@dimen/event_text_size"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -294,7 +340,7 @@
         <EditText
             android:id="@+id/appointmentNotes"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
+            android:layout_height="120dp"
             android:layout_marginBottom="@dimen/standard_margin_size"
             android:layout_weight="1"
             android:background="@drawable/back_button"

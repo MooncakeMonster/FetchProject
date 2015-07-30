@@ -147,7 +147,8 @@ public class FriendDatabase extends SQLiteOpenHelper {
         }
 
         cursor.close();
-        if(count == size) return true;
+        // TODO: Change to == once we prevent users from sending request to themselves
+        if(count >= size) return true;
         return false;
     }
 

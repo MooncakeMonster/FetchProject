@@ -50,7 +50,7 @@ public class VotingFragment extends ListFragment {
         sort_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (votingAdapter.getCount() == 0) {
+                if (votingAdapter.getCount() < 2) {
                     Constant.alertUser(getActivity(), "Sort Voting Result", "Unable to sort as there is no vote sent yet.");
                 } else {
                     final String[] sort_type = {"Sort by event name", "Highest vote on top", "Recent date on top", "Confirmed events on top", "Confirmed events below"};

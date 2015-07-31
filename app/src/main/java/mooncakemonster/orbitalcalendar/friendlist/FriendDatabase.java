@@ -69,12 +69,12 @@ public class FriendDatabase extends SQLiteOpenHelper {
     }
 
     // Update data from database
-    public void updateInformation(FriendDatabase data, String username, long friend_timestamp, String friend_added) {
-        String selection = FriendData.FriendInfo.FRIEND_USERNAME + " LIKE ? ";
+    public void updateInformation(FriendDatabase data, String friend_added, long timestamp, String username) {
+        String selection = FriendData.FriendInfo.FRIEND_USERNAME + " =? ";
         String[] args = { username };
 
         ContentValues values = new ContentValues();
-        values.put(FriendData.FriendInfo.FRIEND_TIMESTAMP, friend_timestamp);
+        values.put(FriendData.FriendInfo.FRIEND_TIMESTAMP, timestamp);
         values.put(FriendData.FriendInfo.FRIEND_ADDED, friend_added);
 
         SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();

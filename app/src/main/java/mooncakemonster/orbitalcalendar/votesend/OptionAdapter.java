@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
@@ -52,16 +53,10 @@ public class OptionAdapter extends ArrayAdapter<OptionItem> {
             holder.remove_option = (Button) row.findViewById(R.id.remove_option);
 
             // Create Date and time picker
-            Constant.setButtonDatePicker(getContext(), holder.vote_start_date, 0, "");
+            Constant.setButtonDatePicker(getContext(), holder.vote_start_date, Constant.stringToMillisecond(holder.vote_start_date.toString(), new SimpleDateFormat("dd/MM/yyyy")), "");
             Constant.setButtonDatePicker(getContext(), holder.vote_end_date, 0, "");
             Constant.setButtonTimePicker(getContext(), holder.vote_start_time, 0, "");
             Constant.setButtonTimePicker(getContext(), holder.vote_end_time, 0, "");
-
-            //Reset date and time picker to better reflect default value (i.e. first proposed appointment)
-            holder.vote_start_date.setText(optionItem.getEvent_start_date());
-            holder.vote_end_date.setText(optionItem.getEvent_end_date());
-            holder.vote_start_time.setText(optionItem.getEvent_start_time());
-            holder.vote_end_time.setText(optionItem.getEvent_end_time());
 
             // Remove option from list
             holder.remove_option.setOnClickListener(new View.OnClickListener() {

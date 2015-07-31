@@ -170,7 +170,7 @@ public class NotificationReceiveService extends Service {
 
             // Save friend into friendlist database
             friendDatabase = new FriendDatabase(this);
-            friendDatabase.updateInformation(friendDatabase, my_username, Constant.retrieveCurrentTime(), "true");
+            friendDatabase.updateInformation(friendDatabase, "true", Constant.retrieveCurrentTime(), my_username);
 
             cloudantConnect.resetFriendAccepted(my_username);
             cloudantConnect.startPushReplication();

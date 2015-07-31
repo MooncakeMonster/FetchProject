@@ -103,19 +103,7 @@
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
 
         <!--For parsing data from .ics extension-->
-        <activity android:name=".importexternals.ImportICSParser">
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="file" />
-                <data android:mimeType="\*/\*" />
-                <data android:pathPattern=".*\\.ics" />
-                <data android:host="*" />
-            </intent-filter>
-            -->
-        </activity>
+        <activity android:name=".importexternals.ImportICSParser"/>
 
         <receiver android:name="mooncakemonster.orbitalcalendar.alarm.AlarmReceiver">
             <intent-filter>
@@ -135,14 +123,11 @@
 
         </receiver>
 
-
         <service
             android:name= "mooncakemonster.orbitalcalendar.notifications.NotificationReceiveService"
-            android:label="NotificationReceiveService" >
-        </service>
-
+            android:label="NotificationReceiveService"
+            android:enabled="true"/>
 
     </application>
-
 
 </manifest>

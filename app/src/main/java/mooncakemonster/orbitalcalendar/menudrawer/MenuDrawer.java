@@ -1,6 +1,9 @@
 package mooncakemonster.orbitalcalendar.menudrawer;
 
 
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +18,7 @@ import android.view.View;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
+import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
 import mooncakemonster.orbitalcalendar.friendlist.FriendlistFragment;
 import mooncakemonster.orbitalcalendar.importexternals.ImportExternalFragment;
@@ -35,7 +39,12 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
         setContentView(R.layout.activity_menubar);
 
         //TODO: Place this in appropriate place - tentatively here for testing
-        startService(new Intent(this, NotificationReceiveService.class));
+        //startService(new Intent(this, NotificationReceiveService.class));
+        Intent intent = new Intent(getApplicationContext(), NotificationReceiveService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), NotificationReceiveService.JOB_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
+        am.cancel(pendingIntent);
+        am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constant.MIN_IN_MILLISECOND, pendingIntent);
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 

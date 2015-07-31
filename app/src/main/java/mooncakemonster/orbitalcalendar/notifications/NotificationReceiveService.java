@@ -33,6 +33,8 @@ import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
  */
 public class NotificationReceiveService extends Service {
 
+    public static int JOB_ID = 1244325;
+
     private static String LOCK_NAME_STATIC = "mooncakemonster.orbitalcalendar.Notification.NotificationReceiveService.STATIC";
 
     private PowerManager.WakeLock mWakeLock;
@@ -95,16 +97,8 @@ public class NotificationReceiveService extends Service {
          */
         @Override
         protected Void doInBackground(Void... params) {
-            while (true) {
-                onReceiveUpdate();
-                try {
-                    //Thread.sleep(1000l * 60);
-                } catch (Exception e) {
-
-                }
-            }
-
-            //return null;
+            onReceiveUpdate();
+            return null;
         }
 
         /**

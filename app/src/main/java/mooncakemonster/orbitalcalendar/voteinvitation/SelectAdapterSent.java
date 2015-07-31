@@ -41,14 +41,12 @@ public class SelectAdapterSent extends ArrayAdapter<SelectItem> {
         LayoutInflater inflater;
         final Holder holder;
 
-        if(row == null) {
-            inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_selected_checkbox, parent, false);
-        }
+        inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        row = inflater.inflate(R.layout.row_selected_checkbox, parent, false);
 
         final SelectItem selectItem = objects.get(position);
 
-        if(selectItem != null) {
+        if (selectItem != null) {
             holder = new Holder();
 
             holder.select_date = (CheckBox) row.findViewById(R.id.select_date);

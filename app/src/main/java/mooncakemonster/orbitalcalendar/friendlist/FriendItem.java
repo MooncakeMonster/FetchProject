@@ -44,7 +44,6 @@ public class FriendItem implements Comparable<FriendItem>, Serializable {
 
     @Override
     public int compareTo(@NonNull FriendItem another) {
-        if(this.username.charAt(0) < another.getUsername().charAt(0)) return -1;
-        return 1;
+        return this.username.compareTo(another.getUsername());
     }
 }

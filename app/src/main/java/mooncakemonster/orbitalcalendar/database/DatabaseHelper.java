@@ -13,6 +13,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
     public static final String DATABASE_NAME = "appointment";
     //Serial number of the rows
     public static final String COLUMN_ID = "_id";
+    //Serial number of sub events
+    public static final String SUB_ID = "_sub_id";
+    //Save the actual start date of few days event
+    public static final String ACTUAL_START_DATE = "actual_start_date";
     //What is this appointment about
     public static final String EVENT = "event";
     //Start date for easy comparison: In format YYYY-MM-DD
@@ -31,6 +35,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_CREATE = "CREATE TABLE " + DATABASE_NAME + " (" + COLUMN_ID + " INTEGER PRIMARY KEY, "
+                                                                                         + SUB_ID + " INTEGER NOT NULL, "
+                                                                                         + ACTUAL_START_DATE+ " TEXT NOT NULL, "
                                                                                          + EVENT + " TEXT NOT NULL, "
                                                                                          + STARTPROPERDATE + " TEXT NOT NULL, "
                                                                                          + STARTDATE + " INTEGER NOT NULL, "

@@ -84,10 +84,12 @@ public class VotingResultActivity extends ActionBarActivity {
                 list = resultDatabase.getAllTargetResults(resultDatabase, Integer.parseInt(voteItem.getEventId()));
 
                 AlertDialog.Builder alertBuilder = new AlertDialog.Builder(VotingResultActivity.this);
-                alertBuilder.setTitle("Sort Voting List").setSingleChoiceItems(sort_type, 0, new DialogInterface.OnClickListener() {
+                alertBuilder.setTitle("Sort Voting List").setSingleChoiceItems(sort_type, 0, null)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch(which) {
+                        int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                        switch(selectedPosition) {
                             case 0:
                                 // (1) Sort according to total number of participants that voted the option
                                 Collections.sort(list, ResultItem.totalComparator);

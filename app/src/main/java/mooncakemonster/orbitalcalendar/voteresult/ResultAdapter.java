@@ -62,10 +62,9 @@ public class ResultAdapter extends ArrayAdapter<ResultItem> {
         LayoutInflater inflater;
         final Holder holder;
 
-        if (row == null) {
-            inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_vote_result, parent, false);
-        }
+
+        inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        row = inflater.inflate(R.layout.row_vote_result, parent, false);
 
         final ResultItem resultItem = objects.get(position);
 

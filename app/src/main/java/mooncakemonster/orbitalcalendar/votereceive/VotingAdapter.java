@@ -31,12 +31,12 @@ import mooncakemonster.orbitalcalendar.votesend.VoteItem;
 /*************************************************************************************************
  * Purpose: VotingAdapter.java serves as a "holder" which contain the interface for how a voting
  * "unit" will appear in VotingFragment.java
- *
+ * <p/>
  * VotingAdapter.java will display:
  * (a) Number of votes casted, compared to expected votes.
  * (b) Event name
  * (c) Confirmation status of both date and time
- *
+ * <p/>
  * Access via: Click on the menu button on top left corner, then Voting Results
  **************************************************************************************************/
 
@@ -67,14 +67,12 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
         LayoutInflater inflater;
         Holder holder;
 
-        if(row == null) {
-            inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_vote_history, parent, false);
-        }
+        inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        row = inflater.inflate(R.layout.row_vote_history, parent, false);
 
         final VoteItem voteItem = objects.get(position);
 
-        if(voteItem != null) {
+        if (voteItem != null) {
             holder = new Holder();
 
             holder.relativeLayout = (RelativeLayout) row.findViewById(R.id.history_set_colour);
@@ -99,7 +97,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
             String[] split_voted_participants = {};
             final String voted_participants = voteItem.getEvent_voted_participants();
 
-            if(voted_participants != null) {
+            if (voted_participants != null) {
                 split_voted_participants = voted_participants.split(" ");
             }
 
@@ -111,7 +109,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
             holder.event_location.setText(voteItem.getEvent_location());
 
             // Display final confirmed date
-            if(voteItem.getEvent_confirm_start_date() != null) {
+            if (voteItem.getEvent_confirm_start_date() != null) {
                 holder.event_start_end_date.setText("Start : " + voteItem.getEvent_confirm_start_date() + ", " + voteItem.getEvent_confirm_start_time());
                 holder.event_start_end_time.setText("End   : " + voteItem.getEvent_confirm_end_date() + ", " + voteItem.getEvent_confirm_end_time());
             } else {
@@ -137,8 +135,9 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
                 @Override
                 public void onClick(final View v) {
                     final String[] split_not_voted = checkNotVoted(voteItem.getEvent_voted_participants(), voteItem.getEvent_participants());
-                    if(split_not_voted.length > 0) openReminderDialog(split_not_voted, voteItem);
-                    else Constant.alertUser(getContext(), "Send reminder", "No participant needs to be reminded to vote yet.");
+                    if (split_not_voted.length > 0) openReminderDialog(split_not_voted, voteItem);
+                    else
+                        Constant.alertUser(getContext(), "Send reminder", "No participant needs to be reminded to vote yet.");
                 }
             });
 
@@ -146,8 +145,10 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
                 @Override
                 public void onClick(View v) {
                     String attendance = voteItem.getEvent_attendance();
-                    if(attendance != null) Constant.openAttendanceDialog(getContext(), attendance.split(" "));
-                    else Constant.alertUser(getContext(), "Attendance", "No participant has confirmed their attendance for this event yet.");
+                    if (attendance != null)
+                        Constant.openAttendanceDialog(getContext(), attendance.split(" "));
+                    else
+                        Constant.alertUser(getContext(), "Attendance", "No participant has confirmed their attendance for this event yet.");
                 }
             });
 
@@ -169,7 +170,7 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
         input_username.setText("Select the participants to remind them to vote for this event:");
 
         final int size = split_participants.length;
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             list.add(i, new ResultOption(true, split_participants[i]));
         }
 
@@ -218,10 +219,10 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
     private String[] checkNotVoted(String voted_participants, String participants) {
         String[] split_voted_participants = {};
 
-        if(voted_participants != null) split_voted_participants = voted_participants.split(" ");
+        if (voted_participants != null) split_voted_participants = voted_participants.split(" ");
         int size = split_voted_participants.length;
 
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             participants = participants.replace(split_voted_participants[i], "");
         }
 
@@ -233,8 +234,8 @@ public class VotingAdapter extends ArrayAdapter<VoteItem> {
         String send_participants = "";
         int size = list.size();
 
-        for(int i = 0; i < size; i++) {
-           send_participants += list.get(i) + " ";
+        for (int i = 0; i < size; i++) {
+            send_participants += list.get(i) + " ";
         }
         return send_participants;
     }

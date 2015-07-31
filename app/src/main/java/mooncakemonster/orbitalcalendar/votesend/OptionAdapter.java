@@ -40,12 +40,10 @@ public class OptionAdapter extends ArrayAdapter<OptionItem> {
 
         final OptionItem optionItem = objects.get(position);
 
-        if (row == null) {
-            LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_vote, parent, false);
-        }
+        LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        row = inflater.inflate(R.layout.row_vote, parent, false);
 
-        if(optionItem != null) {
+        if (optionItem != null) {
             holder = new Holder();
             holder.vote_start_date = (Button) row.findViewById(R.id.option_start_date);
             holder.vote_end_date = (Button) row.findViewById(R.id.option_end_date);

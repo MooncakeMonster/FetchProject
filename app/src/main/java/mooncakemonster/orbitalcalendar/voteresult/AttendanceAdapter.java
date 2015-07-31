@@ -40,10 +40,8 @@ public class AttendanceAdapter extends ArrayAdapter<ResultOption> {
         LayoutInflater inflater;
         final Holder holder;
 
-        if (row == null) {
-            inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_nocheckbox, parent, false);
-        }
+        inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        row = inflater.inflate(R.layout.row_nocheckbox, parent, false);
 
         final ResultOption resultOption = objects.get(position);
 
@@ -58,7 +56,8 @@ public class AttendanceAdapter extends ArrayAdapter<ResultOption> {
             holder.username.setText(resultOption.getUsername());
 
             // Retrieve user image from cloudant database
-            if (cloudantConnect == null) this.cloudantConnect = new CloudantConnect(getContext(), "user");
+            if (cloudantConnect == null)
+                this.cloudantConnect = new CloudantConnect(getContext(), "user");
             RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(resultOption.getUsername()));
             holder.image.setImageDrawable(roundImage);
 

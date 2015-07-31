@@ -25,6 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:text="20"
                 android:textSize="45dp" />
 
@@ -34,14 +35,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/event_day"
                 android:gravity="center"
+                android:textColor="@color/black"
                 android:text="JAN 2015"
                 android:textSize="12dp" />
 
         </RelativeLayout>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:id="@+id/event_set_colour"
@@ -84,6 +82,7 @@
                     android:textSize="@dimen/feed_item_profile_name" />
             </RelativeLayout>
 
+            <!--
             <ImageView
                 android:id="@+id/event_over"
                 android:adjustViewBounds="true"
@@ -92,8 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
                 android:layout_marginRight="@dimen/feed_item_profile_info_padd"/>
-
-        </FrameLayout>
+                -->
     </LinearLayout>
 
     <!-- Expandable view that is initially hidden and will slide out when the more button is pressed -->

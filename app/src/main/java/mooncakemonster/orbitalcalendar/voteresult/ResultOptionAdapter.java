@@ -41,14 +41,12 @@ public class ResultOptionAdapter extends ArrayAdapter<ResultOption> {
         View row = convertView;
         Holder holder;
 
-        if(row == null) {
-            LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_checkbox, parent, false);
-        }
+        LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        row = inflater.inflate(R.layout.row_checkbox, parent, false);
 
         final ResultOption resultOption = objects.get(position);
 
-        if(resultOption != null) {
+        if (resultOption != null) {
             holder = new Holder();
             holder.checkbox = (CheckBox) row.findViewById(R.id.send_confirm_date);
             holder.image = (SimpleDraweeView) row.findViewById(R.id.check_image);
@@ -57,7 +55,8 @@ public class ResultOptionAdapter extends ArrayAdapter<ResultOption> {
             holder.username.setText(resultOption.getUsername());
 
             // Retrieve user image from cloudant database
-            if (cloudantConnect == null) this.cloudantConnect = new CloudantConnect(getContext(), "user");
+            if (cloudantConnect == null)
+                this.cloudantConnect = new CloudantConnect(getContext(), "user");
             RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(resultOption.getUsername()));
             holder.image.setImageDrawable(roundImage);
 
@@ -66,7 +65,7 @@ public class ResultOptionAdapter extends ArrayAdapter<ResultOption> {
             holder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked) {
+                    if (isChecked) {
                         resultOption.setChecked(true);
                     } else {
                         resultOption.setChecked(false);

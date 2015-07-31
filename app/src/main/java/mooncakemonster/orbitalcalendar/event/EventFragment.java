@@ -2,13 +2,11 @@ package mooncakemonster.orbitalcalendar.event;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ListView;
 
 import com.tjerkw.slideexpandable.library.SlideExpandableListAdapter;
 
@@ -23,7 +21,7 @@ import mooncakemonster.orbitalcalendar.database.Constant;
 
 /***********************************************************************************************
  * Purpose: EventFragment.java shows the user all the appointment(s) created in the form of a list
- *
+ * <p/>
  * Access via: Click on the menu button on top left corner, then Events
  ************************************************************************************************/
 
@@ -34,7 +32,6 @@ public class EventFragment extends ListFragment {
     //List to get all the appointments
     private List<Appointment> allAppointment;
     private EventAdapter adapter;
-    private Appointment selected_appointment;
     private Date latestDate;
     private ImageButton addEventButton;
 
@@ -46,8 +43,7 @@ public class EventFragment extends ListFragment {
         appointmentDatabase.open();
         allAppointment = appointmentDatabase.getAllAppointment();
         //Initialise ArrayAdapter adapter for view
-        adapter = new EventAdapter(getActivity(), R.layout.row_event, allAppointment);
-        setListAdapter(new SlideExpandableListAdapter(adapter, R.id.event_layout, R.id.expandable));
+        adapter = new EventAdapter(getActivity());
 
         //Set first row to be today's date; if no events today, set it on the latest upcoming date
         latestDate = Calendar.getInstance().getTime();
@@ -55,12 +51,39 @@ public class EventFragment extends ListFragment {
                 Constant.TIMEFORMATTER.format(latestDate), Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
         int size = allAppointment.size();
 
+        // Add separator into listview
+        boolean separated = true;
+        // Get position of latest date
+        int j, latest = 0;
         for (int i = 0; i < size; i++) {
-            if (adapter.getItem(i).getStartDate() >= todayInMillisecond) {
-                getListView().setSelectionFromTop(i, 0);
-                break;
+            Appointment appointment = allAppointment.get(i);
+
+            //Check if that particular appointment is > 1 day
+            long days = fewDaysAppointment(appointment.getStartDate(), appointment.getEndDate());
+            for (j = 0; j < days; j++) {
+                adapter.addItem(new Appointment(appointment.getId(), appointment.getEvent() + " (Day " + j + ")", appointment.getStartProperDate(),
+                        appointment.getStartDate() + Constant.DAY_IN_MILLISECOND, appointment.getEndDate(), appointment.getLocation(), appointment.getNotes(),
+                        appointment.getRemind(), appointment.getColour()));
             }
+
+            i += j;
+
+            if (separated && allAppointment.get(i).getStartDate() >= todayInMillisecond) {
+                // Add separator into listview
+                adapter.addSeparatorItem(i);
+                adapter.addItem(appointment);
+                separated = false;
+            } else {
+                adapter.addItem(appointment);
+            }
+
+            if (separated && allAppointment.get(i).getStartDate() >= todayInMillisecond)
+                latest++;
         }
+
+        setListAdapter(new SlideExpandableListAdapter(adapter, R.id.event_layout, R.id.expandable));
+        if(latest >= 5) getListView().setSelectionFromTop(0, 0);
+        else getListView().setSelectionFromTop(size - 6, 0);
     }
 
     @Override
@@ -81,20 +104,8 @@ public class EventFragment extends ListFragment {
         return rootView;
     }
 
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        Appointment selectedAppt = adapter.getItem(position);
-        selected_appointment = adapter.getItem(position);
-
-        //Instantiate EventView.java for viewing of appointment (and editing)
-        //TODO: Error occurs when user click on edit event, then cancel successively on the same list item. Resolve this bug!
-        DialogFragment dialogfragment = EventView.newInstance(selectedAppt);
-        dialogfragment.show(getFragmentManager(), null);
-
-        //Update ArrayAdapter
-        allAppointment = appointmentDatabase.getAllAppointment();
-        adapter.notifyDataSetChanged();
+    private long fewDaysAppointment(long start_milliseconds, long end_milliseconds) {
+        return (end_milliseconds - start_milliseconds) / Constant.DAY_IN_MILLISECOND;
     }
 
     @Override

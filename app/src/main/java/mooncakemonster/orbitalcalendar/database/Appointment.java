@@ -30,6 +30,21 @@ public class Appointment implements Comparable<Appointment>, Serializable {
     private long remind;
     private int colour;
 
+    public Appointment() { }
+
+    public Appointment(long id, String event, String startProperDate, long startDate, long endDate,
+                       String location, String notes, long remind, int colour) {
+        this.id = id;
+        this.event = event;
+        this.startProperDate = startProperDate;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.location = location;
+        this.notes = notes;
+        this.remind = remind;
+        this.colour = colour;
+    }
+
     //ID of the entry in SQLite table
     public long getId() {
         return id;

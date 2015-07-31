@@ -42,14 +42,12 @@ public class SelectAdapter extends ArrayAdapter<SelectItem> {
         LayoutInflater inflater;
         final Holder holder;
 
-        if(row == null) {
-            inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            row = inflater.inflate(R.layout.row_selected_checkbox, parent, false);
-        }
+        inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        row = inflater.inflate(R.layout.row_selected_checkbox, parent, false);
 
         final SelectItem selectItem = objects.get(position);
 
-        if(selectItem != null) {
+        if (selectItem != null) {
             holder = new Holder();
 
             holder.select_date = (CheckBox) row.findViewById(R.id.select_date);
@@ -61,13 +59,13 @@ public class SelectAdapter extends ArrayAdapter<SelectItem> {
             holder.select_date.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if(isChecked) selectItem.setSelected_date(true);
+                    if (isChecked) selectItem.setSelected_date(true);
                     else selectItem.setSelected_date(false);
                 }
             });
 
             holder.select_start_date.setText(Constant.standardYearMonthDate(selectItem.getEvent_start_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
-            holder.select_end_date.setText( Constant.standardYearMonthDate(selectItem.getEvent_end_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
+            holder.select_end_date.setText(Constant.standardYearMonthDate(selectItem.getEvent_end_date(), new SimpleDateFormat("dd/MM/yyyy"), Constant.DATEFORMATTER));
             holder.select_start_time.setText(selectItem.getEvent_start_time());
             holder.select_end_time.setText(selectItem.getEvent_end_time());
 

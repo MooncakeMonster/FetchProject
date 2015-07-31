@@ -69,11 +69,9 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         LayoutInflater inflater;
         Holder holder;
 
-        if (row == null) {
-            inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            Fresco.initialize(getContext());
-            row = inflater.inflate(R.layout.row_notifications, parent, false);
-        }
+        inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Fresco.initialize(getContext());
+        row = inflater.inflate(R.layout.row_notifications, parent, false);
 
         final NotificationItem notificationItem = objects.get(position);
 
@@ -100,7 +98,8 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                 cloudantConnect = new CloudantConnect(getContext(), "user");
 
             // Set darker colour to indicate user has not read the notification
-            if(notificationItem.getClicked().equals("false")) holder.layout.setBackgroundColor(getContext().getResources().getColor(R.color.sky));
+            if (notificationItem.getClicked().equals("false"))
+                holder.layout.setBackgroundColor(getContext().getResources().getColor(R.color.sky));
 
             RoundImage roundImage = new RoundImage(cloudantConnect.retrieveUserImage(notificationItem.getSender_username()));
             holder.action_image.setImageDrawable(roundImage);
@@ -141,7 +140,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                     switch (notificationItem.getNotificationId()) {
                         case 1:
 
-                            if(notificationItem.getAction_done().equals("false")) {
+                            if (notificationItem.getAction_done().equals("false")) {
                                 dialogBuilder.setTitle("Friend request");
                                 dialogBuilder.setMessage("Would you like to accept friend request from \"" + notificationItem.getSender_username() + "\"?");
                                 dialogBuilder.setNegativeButton("Cancel", null);
@@ -188,7 +187,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                         case 2:
                             break;
                         case 3:
-                            if(notificationItem.getAction_done().equals("false")) {
+                            if (notificationItem.getAction_done().equals("false")) {
                                 intent = new Intent(getContext(), VoteInvitation.class);
                             } else {
                                 intent = new Intent(getContext(), VoteInvitationSent.class);
@@ -204,18 +203,18 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                                     ": \"" + notificationItem.getReject_reason() + "\"");
                             break;
                         case 6:
-                            if(notificationItem.getAction_done().equals("false")) {
+                            if (notificationItem.getAction_done().equals("false")) {
                                 dialogBuilder.setTitle("Confirm attendance");
 
                                 // Check if user can make it, cannot make it or has rejected voting for this event
-                                if(notificationItem.getConfirm_action().equals("can")) {
+                                if (notificationItem.getConfirm_action().equals("can")) {
                                     dialogBuilder.setMessage("You had voted for this option previously.\n\n" + "Would you like to confirm that you can attend the event \""
                                             + notificationItem.getSender_event() + "\"?");
-                                } else if(notificationItem.getConfirm_action().equals("cannot")) {
+                                } else if (notificationItem.getConfirm_action().equals("cannot")) {
                                     dialogBuilder.setMessage("You did not vote for this option previously, but " + notificationItem.getSender_username() +
                                             " still hopes that you will come.\n\n Would you like to change your mind and confirm that you can attend the event \""
                                             + notificationItem.getSender_event() + "\"?");
-                                } else if(notificationItem.getConfirm_action().equals("reject")) {
+                                } else if (notificationItem.getConfirm_action().equals("reject")) {
                                     dialogBuilder.setMessage("You had rejected voting for this event previously, but " + notificationItem.getSender_username() +
                                             " still hopes that you can attend. \n\n Would you like to change your mind and confirm that you can attend the event \""
                                             + notificationItem.getSender_event() + "\"?");
@@ -270,7 +269,8 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                             votingDatabase = new VotingDatabase(getContext());
                             VoteItem voteItem = votingDatabase.getVoteItem(votingDatabase, "" + notificationItem.getEventId());
                             String attendance = voteItem.getEvent_attendance();
-                            if(attendance != null) Constant.openAttendanceDialog(getContext(), attendance.split(" "));
+                            if (attendance != null)
+                                Constant.openAttendanceDialog(getContext(), attendance.split(" "));
                             break;
                         default:
                             break;
@@ -294,28 +294,32 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         Log.d(TAG, "difference" + difference);
 
         // (1) Received less than 10 seconds
-        if(difference <= Constant.MIN_IN_MILLISECOND / 6) return "A few seconds ago";
-        // (2) Received less than a minute (< 60 secs)
-        else if(difference <= Constant.MIN_IN_MILLISECOND) return (difference / Constant.SECOND_IN_MILLISECOND) + " seconds ago";
-        // (3) Received less than an hour (< 60 mins)
-        else if(difference <= Constant.HOUR_IN_MILLISECOND) {
+        if (difference <= Constant.MIN_IN_MILLISECOND / 6) return "A few seconds ago";
+            // (2) Received less than a minute (< 60 secs)
+        else if (difference <= Constant.MIN_IN_MILLISECOND)
+            return (difference / Constant.SECOND_IN_MILLISECOND) + " seconds ago";
+            // (3) Received less than an hour (< 60 mins)
+        else if (difference <= Constant.HOUR_IN_MILLISECOND) {
             long final_time = difference / Constant.MIN_IN_MILLISECOND;
             if (final_time == 1) return "1 min ago";
             return final_time + " mins ago";
         }
         // (4) Received an hour ago
-        else if(difference <= Constant.DAY_IN_MILLISECOND && ((difference / Constant.HOUR_IN_MILLISECOND) < 2)) return "About an hour ago";
-        // (5) Received less than a day (< 24 hours)
-        else if(difference <= Constant.DAY_IN_MILLISECOND) {
+        else if (difference <= Constant.DAY_IN_MILLISECOND && ((difference / Constant.HOUR_IN_MILLISECOND) < 2))
+            return "About an hour ago";
+            // (5) Received less than a day (< 24 hours)
+        else if (difference <= Constant.DAY_IN_MILLISECOND) {
             long final_time = difference / Constant.HOUR_IN_MILLISECOND;
             if (final_time == 1) return "1 hour ago";
             return final_time + " hours ago";
         }
         // (6) Received yesterday
-        else if(difference <= Constant.YESTERDAY_IN_MILLISECOND) return "Yesterday at" + Constant.getDate(timestamp, Constant.TIMEFORMATTER);
-        // (7) Received within this week
-        else if(difference <= Constant.WEEK_IN_MILLISECOND) return Constant.getDate(timestamp, Constant.NOTIFICATION_WEEK_DATEFORMATTER);
-        // (8) Received other days
+        else if (difference <= Constant.YESTERDAY_IN_MILLISECOND)
+            return "Yesterday at" + Constant.getDate(timestamp, Constant.TIMEFORMATTER);
+            // (7) Received within this week
+        else if (difference <= Constant.WEEK_IN_MILLISECOND)
+            return Constant.getDate(timestamp, Constant.NOTIFICATION_WEEK_DATEFORMATTER);
+            // (8) Received other days
         else return Constant.getDate(timestamp, Constant.NOTIFICATION_DATEFORMATTER);
     }
 

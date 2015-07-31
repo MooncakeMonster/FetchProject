@@ -58,17 +58,17 @@ public class EventFragment extends ListFragment {
         for (int i = 0; i < size; i++) {
             Appointment appointment = allAppointment.get(i);
 
-            if (allAppointment.get(i).getStartDate() >= todayInMillisecond)
-                latest++;
+            if (appointment.getStartDate() >= todayInMillisecond) latest++;
+            else past++;
 
-            if (separated && allAppointment.get(i).getStartDate() >= todayInMillisecond) {
+            if (separated && appointment.getStartDate() >= todayInMillisecond) {
                 // Add separator into listview
                 if (past > 0) adapter.addSeparatorItem(appointment, past);
                 adapter.addItem(appointment);
                 separated = false;
+                past++;
             } else {
                 adapter.addItem(appointment);
-                past++;
             }
         }
 

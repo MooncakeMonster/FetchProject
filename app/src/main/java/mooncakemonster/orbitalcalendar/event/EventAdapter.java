@@ -1,6 +1,7 @@
 package mooncakemonster.orbitalcalendar.event;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -59,15 +60,31 @@ public class EventAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    public void addSeparatorItem(int position) {
+    public void addSeparatorItem(final Appointment appointment, int position) {
         separatorSet.add(position);
+        objects.add(appointment);
         notifyDataSetChanged();
     }
 
-    public void removeItem(final Appointment appointment) {
-        objects.remove(appointment);
-        appointmentDatabase.deleteAppointment(appointment);
-        notifyDataSetChanged();
+    public void removeItem(final Appointment appointment, boolean deletion) {
+        appointmentDatabase.open();
+
+        // remove from list
+        long id = appointment.getId() - appointment.getSub_id();
+        long last_day = (appointment.getEndDate() - appointment.getActualStartDate()) / Constant.DAY_IN_MILLISECOND;
+
+        // For few days event
+        if(deletion) {
+            for(int i = 0; i < last_day; i++)
+                objects.remove(appointmentDatabase.getTargetEvent(id + i, i));
+            appointmentDatabase.deleteAppointment(appointment);
+
+        } else {
+            objects.remove(appointment);
+            appointmentDatabase.deleteTargetAppointment(appointment);
+        }
+
+        updateAdapter(objects);
     }
 
     @Override
@@ -122,8 +139,6 @@ public class EventAdapter extends BaseAdapter {
             case TYPE_ITEM:
                 row = inflater.inflate(R.layout.row_event, null);
 
-                appointmentDatabase.open();
-
                 if (appointment != null) {
                     holder = new Holder();
                     holder.event_colour = (RelativeLayout) row.findViewById(R.id.event_set_colour);
@@ -140,11 +155,12 @@ public class EventAdapter extends BaseAdapter {
 
 
                     holder.event_colour.setBackgroundResource(appointment.getColour());
-                    holder.event_title.setText(appointment.getEvent());
+                    if(appointment.getSub_id() == -1) holder.event_title.setText(appointment.getEvent());
+                    else holder.event_title.setText(appointment.getEvent() + " (Day " + appointment.getSub_id() + ")");
                     holder.event_location.setText(appointment.getLocation());
 
                     // Get date
-                    String finalDate = Constant.standardYearMonthDate(appointment.getStartProperDate(), Constant.YYYYMMDD_FORMATTER, new SimpleDateFormat("yyyy MMM dd"));
+                    String finalDate = Constant.getDate(appointment.getStartDate(), new SimpleDateFormat("yyyy MMM dd"));
                     final String[] date = finalDate.split(" ");
                     holder.event_day.setText(date[2]);
                     holder.event_month_year.setText(date[1] + " " + date[0]);
@@ -161,6 +177,7 @@ public class EventAdapter extends BaseAdapter {
                             //Instantiate EventView.java for viewing of appointment (and editing)
                             DialogFragment dialogfragment = EventView.newInstance(appointment);
                             dialogfragment.show(((FragmentActivity) context).getSupportFragmentManager(), null);
+                            appointmentDatabase.open();
                             objects = appointmentDatabase.getAllAppointment();
                             notifyDataSetChanged();
                         }
@@ -191,27 +208,54 @@ public class EventAdapter extends BaseAdapter {
                     holder.remove_event.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(context);
-                            alert.setTitle("Delete appointment");
-                            alert.setMessage("Are you sure you want to delete \"" + appointment.toString() + "\"?");
+                            if(appointment.getSub_id() == -1) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(context);
+                                alert.setTitle("Delete event");
+                                alert.setMessage("Are you sure you want to delete \"" + appointment.toString() + "\"?");
 
-                            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    //Delete from ArrayAdapter & allAppointment
-                                    removeItem(appointment);
-                                    //Remove dialog after execution of the above
-                                    dialog.dismiss();
-                                }
-                            });
+                                alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        //Delete from ArrayAdapter & allAppointment
+                                        removeItem(appointment, false);
+                                        //Remove dialog after execution of the above
+                                        notifyDataSetChanged();
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                alert.show();
+                            } else {
+                                final String[] sort_type = {"Delete selected day", "Delete entire event"};
 
-                            alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            alert.show();
+                                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+                                alertBuilder.setTitle("Delete event").setSingleChoiceItems(sort_type, 0, null)
+                                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                                        switch (selectedPosition) {
+                                            case 0:
+                                                removeItem(appointment, false);
+                                                notifyDataSetChanged();
+                                                break;
+                                            case 1:
+                                                removeItem(appointment, true);
+                                                notifyDataSetChanged();
+                                                break;
+
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).setNegativeButton("Cancel", null);
+
+                                Dialog dialog = alertBuilder.create();
+                                dialog.show();
+                            }
                         }
                     });
 
@@ -221,5 +265,10 @@ public class EventAdapter extends BaseAdapter {
                 break;
         }
         return row;
+    }
+
+    private void updateAdapter(List<Appointment> objects) {
+        this.objects = objects;
+        this.notifyDataSetChanged();
     }
 }

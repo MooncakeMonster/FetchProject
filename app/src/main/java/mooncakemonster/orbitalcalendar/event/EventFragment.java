@@ -53,37 +53,29 @@ public class EventFragment extends ListFragment {
 
         // Add separator into listview
         boolean separated = true;
-        // Get position of latest date
-        int j, latest = 0;
+        int past = 0, latest = 0;
+
         for (int i = 0; i < size; i++) {
             Appointment appointment = allAppointment.get(i);
 
-            //Check if that particular appointment is > 1 day
-            long days = fewDaysAppointment(appointment.getStartDate(), appointment.getEndDate());
-            for (j = 0; j < days; j++) {
-                adapter.addItem(new Appointment(appointment.getId(), appointment.getEvent() + " (Day " + j + ")", appointment.getStartProperDate(),
-                        appointment.getStartDate() + Constant.DAY_IN_MILLISECOND, appointment.getEndDate(), appointment.getLocation(), appointment.getNotes(),
-                        appointment.getRemind(), appointment.getColour()));
-            }
-
-            i += j;
+            if (allAppointment.get(i).getStartDate() >= todayInMillisecond)
+                latest++;
 
             if (separated && allAppointment.get(i).getStartDate() >= todayInMillisecond) {
                 // Add separator into listview
-                adapter.addSeparatorItem(i);
+                if (past > 0) adapter.addSeparatorItem(appointment, past);
                 adapter.addItem(appointment);
                 separated = false;
             } else {
                 adapter.addItem(appointment);
+                past++;
             }
-
-            if (separated && allAppointment.get(i).getStartDate() >= todayInMillisecond)
-                latest++;
         }
 
         setListAdapter(new SlideExpandableListAdapter(adapter, R.id.event_layout, R.id.expandable));
-        if(latest >= 5) getListView().setSelectionFromTop(0, 0);
-        else getListView().setSelectionFromTop(size - 6, 0);
+        if (latest >= 5) getListView().setSelectionFromTop(past, 0);
+        else getListView().setSelectionFromTop(size - 5, 0);
+
     }
 
     @Override
@@ -102,10 +94,6 @@ public class EventFragment extends ListFragment {
         });
 
         return rootView;
-    }
-
-    private long fewDaysAppointment(long start_milliseconds, long end_milliseconds) {
-        return (end_milliseconds - start_milliseconds) / Constant.DAY_IN_MILLISECOND;
     }
 
     @Override

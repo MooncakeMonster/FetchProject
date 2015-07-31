@@ -102,13 +102,13 @@ public class EventView extends DialogFragment
                     //Get Event Name
                     final String event = eventLabel.getText().toString();
                     //Begin date and time
-                    String beginD = beginDateButton.getText().toString().replace("From     ", "");
+                    String beginD = beginDateButton.getText().toString();
                     final String beginT = beginTimeButton.getText().toString();
                     final long beginEventMillisecond = Constant.stringToMillisecond(beginD, beginT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
                     //Standardised format for event's starting date: YYYY-MM-DD
                     final String startProperDate = Constant.standardYearMonthDate(beginD, Constant.DATEFORMATTER, Constant.YYYYMMDD_FORMATTER);
                     //End date and time
-                    final String endD = endDateButton.getText().toString().replace("To         ", "");
+                    final String endD = endDateButton.getText().toString();
                     final String endT = endTimeButton.getText().toString();
                     final long endEventMillisecond = Constant.stringToMillisecond(endD, endT, Constant.DATEFORMATTER, Constant.TIMEFORMATTER);
                     //Get Event's location
@@ -165,7 +165,17 @@ public class EventView extends DialogFragment
 
                     //Insert into database
                     if(selected_colour == 0) selected_colour = R.color.redbear;
-                    appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+                    // Check if it is a few days event
+                    long size = fewDaysAppointment(beginEventMillisecond, endEventMillisecond);
+                    if(size > 1) {
+                        for (int i = 0; i < size; i++) {
+                            long current_day = beginEventMillisecond + (Constant.DAY_IN_MILLISECOND * i);
+                            appointmentDatabase.createAppointment(i, beginEventMillisecond, event, startProperDate, current_day, endEventMillisecond, location, notes, remind, selected_colour);
+                        }
+                    } else {
+                        appointmentDatabase.createAppointment(-1, beginEventMillisecond, event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+                    }
+
                     //Delete current appointment
                     appointmentDatabase.deleteAppointment(eventViewAppointment);
                     //Close dialog
@@ -188,11 +198,15 @@ public class EventView extends DialogFragment
         return view;
     }
 
+    private long fewDaysAppointment(long start_milliseconds, long end_milliseconds) {
+        return (end_milliseconds - start_milliseconds) / Constant.DAY_IN_MILLISECOND;
+    }
+
     private void instantiateWidgets(View view)
     {
         //(1) Extract data from eventViewAppointment
         String event = eventViewAppointment.getEvent();
-        long startDate = eventViewAppointment.getStartDate();
+        long startDate = eventViewAppointment.getActualStartDate();
         long endDate = eventViewAppointment.getEndDate();
         String location = eventViewAppointment.getLocation();
         String notes = eventViewAppointment.getNotes();

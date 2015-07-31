@@ -300,6 +300,10 @@ public class EventActivity extends ActionBarActivity {
         return -1;
     }
 
+    private long fewDaysAppointment(long start_milliseconds, long end_milliseconds) {
+        return (end_milliseconds - start_milliseconds) / Constant.DAY_IN_MILLISECOND;
+    }
+
     protected boolean insertInDatabase() {
         final EditText eventInput = (EditText) findViewById(R.id.title);
         final EditText locationInput = (EditText) findViewById(R.id.appointmentLocation);
@@ -395,7 +399,7 @@ public class EventActivity extends ActionBarActivity {
                         long endMil = end.getTimeInMillis();
 
                         String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
-                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+                        appointmentDatabase.createAppointment(-1, startMil, event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
 
                         start.add(Calendar.DATE, factor);
                         end.add(Calendar.DATE, factor);
@@ -409,7 +413,7 @@ public class EventActivity extends ActionBarActivity {
                         long startMil = start.getTimeInMillis();
                         long endMil = end.getTimeInMillis();
                         String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
-                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+                        appointmentDatabase.createAppointment(-1, startMil, event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
 
                         start.add(Calendar.DATE, factor);
                         end.add(Calendar.DATE, factor);
@@ -422,7 +426,7 @@ public class EventActivity extends ActionBarActivity {
                         long startMil = start.getTimeInMillis();
                         long endMil = end.getTimeInMillis();
                         String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
-                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+                        appointmentDatabase.createAppointment(-1, startMil, event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
 
                         start.add(Calendar.MONTH, factor);
                         end.add(Calendar.MONTH, factor);
@@ -435,7 +439,7 @@ public class EventActivity extends ActionBarActivity {
                         long startMil = start.getTimeInMillis();
                         long endMil = end.getTimeInMillis();
                         String startRepeatedProperDate = Constant.getDate(startMil, "yyyy MM dd");
-                        appointmentDatabase.createAppointment(event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
+                        appointmentDatabase.createAppointment(-1, startMil, event, startRepeatedProperDate, startMil, endMil, location, notes, remind, selected_colour);
 
                         start.add(Calendar.YEAR, factor);
                         end.add(Calendar.YEAR, factor);
@@ -449,8 +453,18 @@ public class EventActivity extends ActionBarActivity {
             //Set alarm
             AlarmSetter.setAlarm(getApplicationContext(), event, location, remind);
             //Insert into database
-            if(selected_colour == 0) selected_colour = R.color.redbear;
-            appointmentDatabase.createAppointment(event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+            if (selected_colour == 0) selected_colour = R.color.redbear;
+
+            // Check if it is a few days event
+            long size = fewDaysAppointment(beginEventMillisecond, endEventMillisecond);
+            if(size > 1) {
+                for (int i = 0; i < size; i++) {
+                    long current_day = beginEventMillisecond + (Constant.DAY_IN_MILLISECOND * i);
+                    appointmentDatabase.createAppointment(i, beginEventMillisecond, event, startProperDate, current_day, endEventMillisecond, location, notes, remind, selected_colour);
+                }
+            } else {
+                appointmentDatabase.createAppointment(-1, beginEventMillisecond, event, startProperDate, beginEventMillisecond, endEventMillisecond, location, notes, remind, selected_colour);
+            }
         }
 
         return true;

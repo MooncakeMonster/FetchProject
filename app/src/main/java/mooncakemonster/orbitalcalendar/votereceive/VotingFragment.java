@@ -57,10 +57,12 @@ public class VotingFragment extends ListFragment {
                     list = votingDatabase.getAllVotings(votingDatabase);
 
                     AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
-                    alertBuilder.setTitle("Sort Voting Result").setSingleChoiceItems(sort_type, 0, new DialogInterface.OnClickListener() {
+                    alertBuilder.setTitle("Sort Voting Result").setSingleChoiceItems(sort_type, 0, null)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            switch (which) {
+                            int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+                            switch (selectedPosition) {
                                 case 0:
                                     // Sort according to event name
                                     Collections.sort(list, VoteItem.eventNameComparator);

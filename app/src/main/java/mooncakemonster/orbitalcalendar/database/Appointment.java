@@ -21,6 +21,8 @@ import java.io.Serializable;
 public class Appointment implements Comparable<Appointment>, Serializable {
 
     private long id;
+    private long sub_id;
+    private long actualStartDate;
     private String event;
     private String startProperDate;
     private long startDate;
@@ -32,9 +34,11 @@ public class Appointment implements Comparable<Appointment>, Serializable {
 
     public Appointment() { }
 
-    public Appointment(long id, String event, String startProperDate, long startDate, long endDate,
+    public Appointment(long id, long sub_id, long actualStartDate, String event, String startProperDate, long startDate, long endDate,
                        String location, String notes, long remind, int colour) {
         this.id = id;
+        this.sub_id = sub_id;
+        this.actualStartDate = actualStartDate;
         this.event = event;
         this.startProperDate = startProperDate;
         this.startDate = startDate;
@@ -52,6 +56,18 @@ public class Appointment implements Comparable<Appointment>, Serializable {
     public void setId(long id) {
         this.id = id;
     }
+
+    //SUB_ID of the few days event
+    public long getSub_id() {
+        return sub_id;
+    }
+    public void setSub_id(long sub_id) {
+        this.sub_id = sub_id;
+    }
+
+    // Save actual start date for few days event
+    public long getActualStartDate() { return actualStartDate; }
+    public void setActualStartDate(long actualStartDate) { this.actualStartDate = actualStartDate; }
 
     //Event
     public String getEvent() {

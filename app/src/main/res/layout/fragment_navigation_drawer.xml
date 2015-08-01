@@ -1,9 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
-
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <RelativeLayout
         android:id="@+id/nav_header_container"
@@ -13,44 +15,116 @@
         android:background="@color/colorPrimary">
 
         <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/usericon"
             android:layout_width="@dimen/nav_icon"
             android:layout_height="@dimen/nav_icon"
-            android:id="@+id/usericon"
-            fresco:actualImageScaleType="fitCenter"
+            android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="@dimen/standard_margin_size"
             android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_marginBottom="@dimen/standard_margin_size"
+            fresco:actualImageScaleType="fitCenter" />
 
         <TextView
+            android:id="@+id/displayusername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/event_text_size"
-            android:textStyle="normal"
-            android:id="@+id/displayusername"
-            android:textColor="@color/caldroid_white"
             android:layout_below="@+id/usericon"
-            android:layout_centerInParent="true"/>
-
-        <ImageView
-            android:id="@+id/settings"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_margin="8dp"
-            android:background="@drawable/settings"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_centerInParent="true"
+            android:textColor="@color/caldroid_white"
+            android:textSize="@dimen/event_text_size"
+            android:textStyle="normal" />
 
     </RelativeLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/drawerList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_below="@id/nav_header_container"
+        android:layout_marginBottom="@dimen/standard_padding_size"
         android:layout_marginTop="15dp" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/drawerList"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="1"
+        android:background="@color/lightgray" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_below="@+id/drawerList"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/nav_settings"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/standard_padding_size"
+                android:layout_marginTop="@dimen/standard_padding_size"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:text="Account Settings"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/importNUS"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/nav_settings"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/standard_padding_size"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:text="Import ICS File"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/importFacebook"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/importNUS"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/standard_padding_size"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:text="Import Facebook Events"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/nav_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@+id/importFacebook"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/standard_padding_size"
+                android:gravity="center"
+                android:paddingBottom="5dp"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:text="Logout"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>

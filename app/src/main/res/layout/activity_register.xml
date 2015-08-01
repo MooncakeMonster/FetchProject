@@ -22,6 +22,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/username"
         android:hint="@string/register_username"
+        android:inputType="textPersonName"
         android:layout_marginBottom="@dimen/standard_margin_size"
         android:background="@color/caldroid_white"
         android:padding="@dimen/standard_padding_size"

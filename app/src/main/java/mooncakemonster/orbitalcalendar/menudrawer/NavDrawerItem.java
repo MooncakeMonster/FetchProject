@@ -5,6 +5,7 @@ package mooncakemonster.orbitalcalendar.menudrawer;
  */
 public class NavDrawerItem {
     private boolean showNotify;
+    private int icon;
     private String title;
 
 
@@ -12,7 +13,7 @@ public class NavDrawerItem {
 
     }
 
-    public NavDrawerItem(boolean showNotify, String title) {
+    public NavDrawerItem(boolean showNotify, int icon, String title) {
         this.showNotify = showNotify;
         this.title = title;
     }
@@ -23,6 +24,14 @@ public class NavDrawerItem {
 
     public void setShowNotify(boolean showNotify) {
         this.showNotify = showNotify;
+    }
+
+    public int getIcon() {
+        return icon;
+    }
+
+    public void setIcon(int icon) {
+        this.icon = icon;
     }
 
     public String getTitle() {

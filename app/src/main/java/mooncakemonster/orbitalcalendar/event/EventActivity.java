@@ -458,7 +458,7 @@ public class EventActivity extends ActionBarActivity {
             // Check if it is a few days event
             long size = fewDaysAppointment(beginEventMillisecond, endEventMillisecond);
             if(size > 1) {
-                for (int i = 0; i < size; i++) {
+                for (int i = 0; i <= size; i++) {
                     long current_day = beginEventMillisecond + (Constant.DAY_IN_MILLISECOND * i);
                     appointmentDatabase.createAppointment(i, beginEventMillisecond, event, startProperDate, current_day, endEventMillisecond, location, notes, remind, selected_colour);
                 }

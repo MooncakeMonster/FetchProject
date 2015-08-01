@@ -441,6 +441,40 @@ public class CloudantConnect {
         }
     }
 
+    /**
+     * This method updates friend from friend list if that friend has updated his/her username
+     */
+    public void sendFriendUpdate(String my_username, String sender_username) {
+        User user = getTargetUser(sender_username);
+        user.setFriend_update(my_username);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
+    /**
+     * This method removes friend updated once received by user.
+     */
+    public void resetFriendUpdate(String my_username) {
+        User user = getTargetUser(my_username);
+        user.setFriend_update(null);
+
+        // Retrieve user's documents
+        try {
+            // Update the latest targeted user's items back into Cloudant document
+            updateUserDetailsDocument(user);
+            Log.d(TAG, "Successfully updated target user's information");
+        } catch (ConflictException e) {
+            Log.e(TAG, "Unable to update target user's information");
+        }
+    }
+
     /****************************************************************************************************
      * (4) VOTING DOCUMENT
      ****************************************************************************************************/
@@ -614,7 +648,7 @@ public class CloudantConnect {
      * @return user found in Cloudant
      */
     public User getTargetUser(String username) {
-        Log.d(TAG, username);
+        //Log.d(TAG, username);
         int size_doc = this.datastore.getDocumentCount();
 
         List<BasicDocumentRevision> all_doc = this.datastore.getAllDocuments(0, size_doc, true);

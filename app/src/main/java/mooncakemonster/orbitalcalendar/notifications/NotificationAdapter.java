@@ -171,6 +171,7 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                                                 HashMap<String, String> user = db.getUserDetails();
                                                 String my_username = user.get("username");
                                                 cloudantConnect.sendFriendAccepted(my_username, notificationItem.getSender_username());
+                                                cloudantConnect.startPushReplication();
 
                                                 //Toast.makeText(getContext(), "Friend request accepted", Toast.LENGTH_SHORT).show();
 

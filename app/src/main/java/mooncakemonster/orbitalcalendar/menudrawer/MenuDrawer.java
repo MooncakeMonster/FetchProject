@@ -21,7 +21,6 @@ import mooncakemonster.orbitalcalendar.calendar.CalendarFragment;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.event.EventFragment;
 import mooncakemonster.orbitalcalendar.friendlist.FriendlistFragment;
-import mooncakemonster.orbitalcalendar.importexternals.ImportExternalFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationFragment;
 import mooncakemonster.orbitalcalendar.notifications.NotificationReceiveService;
 import mooncakemonster.orbitalcalendar.votereceive.VotingFragment;
@@ -95,14 +94,10 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
                 title = "Friend List";
                 break;
             case 3:
-                fragment = new ImportExternalFragment();
-                title = "Import Events";
-                break;
-            case 4:
                 fragment = new NotificationFragment();
                 title = "Notifications";
                 break;
-            case 5:
+            case 4:
                 fragment = new VotingFragment();
                 title = "Voting Results";
                 break;

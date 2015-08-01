@@ -12,7 +12,7 @@
         android:id="@+id/usernameL"
         android:hint="@string/register_username"
         android:background="@color/caldroid_white"
-        android:inputType="textEmailAddress"
+        android:inputType="textPersonName"
         android:layout_marginBottom="@dimen/standard_margin_size"
         android:padding="@dimen/standard_padding_size"
         android:layout_gravity="center_horizontal"

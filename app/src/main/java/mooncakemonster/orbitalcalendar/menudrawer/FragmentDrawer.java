@@ -1,9 +1,16 @@
 package mooncakemonster.orbitalcalendar.menudrawer;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +22,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -26,9 +33,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
-import mooncakemonster.orbitalcalendar.accountsettings.SettingActivity;
+import mooncakemonster.orbitalcalendar.authentication.LoginActivity;
+import mooncakemonster.orbitalcalendar.authentication.LoginManager;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.importexternals.ImportFacebookLogin;
+import mooncakemonster.orbitalcalendar.importexternals.ImportICSParser;
 import mooncakemonster.orbitalcalendar.profilepicture.CropImage;
 import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
 
@@ -42,15 +52,26 @@ public class FragmentDrawer extends Fragment {
     private DrawerLayout mDrawerLayout;
     private NavigationDrawerAdapter adapter;
     private View containerView;
+
     private RoundImage roundImage;
     private SimpleDraweeView userIcon;
-    private ImageView settings;
+    private TextView settings;
+    private TextView nusTimetable;
+    private TextView facebookImport;
+    private TextView logoutButton;
     private TextView displayUsername;
+
     private static String[] titles = null;
+    private static TypedArray icon = null;
+
     private FragmentDrawerListener drawerListener;
+
     private CloudantConnect cloudantConnect;
     private UserDatabase db;
     private HashMap<String, String> user;
+    private LoginManager session;
+
+    public static final int ICS_IMPORT_REQUEST = 1;
 
     public FragmentDrawer() {
 
@@ -67,6 +88,7 @@ public class FragmentDrawer extends Fragment {
         for (int i = 0; i < titles.length; i++) {
             NavDrawerItem navItem = new NavDrawerItem();
             navItem.setTitle(titles[i]);
+            navItem.setIcon(icon.getResourceId(i, -1));
             data.add(navItem);
         }
         return data;
@@ -77,6 +99,8 @@ public class FragmentDrawer extends Fragment {
         super.onCreate(savedInstanceState);
 
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_items);
+        icon = getActivity().getResources().obtainTypedArray(R.array.nav_drawer_icons);
+
     }
 
     @Override
@@ -90,10 +114,14 @@ public class FragmentDrawer extends Fragment {
 
         if (cloudantConnect == null)
             this.cloudantConnect = new CloudantConnect(getActivity(), "user");
-        String my_username = user.get("username");
+        final String my_username = user.get("username");
         cloudantConnect.startPullReplication();
 
         userIcon = (SimpleDraweeView) layout.findViewById(R.id.usericon);
+        settings = (TextView) layout.findViewById(R.id.nav_settings);
+        facebookImport = (TextView) layout.findViewById(R.id.importFacebook);
+        nusTimetable = (TextView) layout.findViewById(R.id.importNUS);
+        logoutButton = (TextView) layout.findViewById(R.id.nav_logout);
 
         try {
             roundImage = new RoundImage(cloudantConnect.retrieveUserImage(my_username));
@@ -110,11 +138,61 @@ public class FragmentDrawer extends Fragment {
             }
         });
 
-        settings = (ImageView) layout.findViewById(R.id.settings);
+        // (1) Account settings
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity().getApplicationContext(), SettingActivity.class));
+                openDialog(user.get("email"), my_username);
+            }
+        });
+
+        // (2) Facebook importing of friends' birthday
+        facebookImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                ImportFacebookLogin fragment = new ImportFacebookLogin();
+                fragment.show(fragmentManager, "facebook_login_fragment");
+            }
+        });
+
+        // (3) Importing NUS timetable
+        nusTimetable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Get file path from file picker
+                Intent intentFilePath = new Intent(Intent.ACTION_GET_CONTENT);
+                intentFilePath.setType("*/*");
+                startActivityForResult(intentFilePath, ICS_IMPORT_REQUEST);
+            }
+        });
+
+        // (4) Logout button
+        session = new LoginManager(getActivity());
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+                dialogBuilder.setTitle("Logout");
+                dialogBuilder.setMessage("Are you sure you want to logout from Fetch?");
+                dialogBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        session.setLogin(false);
+
+                        // Remove user from sqlite in phone
+                        db.deleteUsers();
+
+                        Intent intent = new Intent(getActivity(), LoginActivity.class);
+                        // Finish all previous activity and show login activity
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                }).setNegativeButton("Cancel", null);
+
+                AlertDialog alertDialog = dialogBuilder.create();
+                alertDialog.show();
             }
         });
 
@@ -225,5 +303,52 @@ public class FragmentDrawer extends Fragment {
 
     public interface FragmentDrawerListener {
         void onDrawerItemSelected(View view, int position);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        // Terminate if result code indicate so
+        if(resultCode == Activity.RESULT_CANCELED) {
+            return;
+        }
+        //If manages to get chosen file
+        switch(requestCode){
+            case ICS_IMPORT_REQUEST:
+                Uri uri = data.getData();
+
+                if (uri != null) {
+                    Intent intent = new Intent(getActivity(), ImportICSParser.class);
+                    intent.putExtra("fileChosen", uri);
+                    startActivity(intent);
+                    break;
+                }
+            default:
+                break;
+        }
+    }
+
+    // This method calls alert dialog to display the list of names.
+    private void openDialog(final String email, final String username) {
+        final View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_account_settings, null);
+        final TextView input_text = (TextView) dialogview.findViewById(R.id.input_text);
+        final EditText input_email = (EditText) dialogview.findViewById(R.id.input_email);
+        final EditText input_username = (EditText) dialogview.findViewById(R.id.input_username);
+
+        input_text.setText("If you change your username, your friends will be notified.");
+        input_email.setText(email);
+        input_username.setText(username);
+
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(getActivity());
+        alertBuilder.setView(dialogview);
+        alertBuilder.setTitle("Account Settings");
+        alertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).setNegativeButton("Cancel", null);
+
+        Dialog dialog = alertBuilder.create();
+        dialog.show();
     }
 }

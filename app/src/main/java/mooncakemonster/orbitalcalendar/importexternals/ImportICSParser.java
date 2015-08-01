@@ -55,8 +55,9 @@ public class ImportICSParser extends ListActivity {
     private static Pattern stringWithSemiColon = Pattern.compile(withSemiColon);
     private static Pattern stringWithColon = Pattern.compile(withColon);
 
+    private static final String withTriggerRegex = "[-+]?P([0-9]{0,2})W?([0-9]{0,2})D?T?([0-9]{0,2})H?([0-9]{0,2})M?([0-9]{0,2})S?";
     //Pattern to process duration field
-    private static Pattern durationFormat = Pattern.compile("[-+]?P([0-9]{0,2})W?([0-9]{0,2})D?T?([0-9]{0,2})H?([0-9]{0,2})M?([0-9]{0,2})S?");
+    private static Pattern durationFormat = Pattern.compile(withTriggerRegex);
 
     //List to store all imported appointments
     private List<ImportedAppointment> listOfInput = null;
@@ -343,10 +344,10 @@ public class ImportICSParser extends ListActivity {
         long answer = 0;
 
         if(match.matches()) {
-            if(match.group(1) != null) {answer += Integer.parseInt(match.group(1)) * Constant.WEEK_IN_MILLISECOND;}
-            if(match.group(2) != null) {answer += Integer.parseInt(match.group(2)) * Constant.DAY_IN_MILLISECOND;}
-            if(match.group(3) != null) {answer += Integer.parseInt(match.group(3)) * Constant.HOUR_IN_MILLISECOND;}
-            if(match.group(4) != null) {answer += Integer.parseInt(match.group(4)) * Constant.MIN_IN_MILLISECOND;}
+            if(match.find(1)) {answer += Integer.parseInt(match.group(1)) * Constant.WEEK_IN_MILLISECOND;}
+            if(match.find(2)) {answer += Integer.parseInt(match.group(2)) * Constant.DAY_IN_MILLISECOND;}
+            if(match.find(3)) {answer += Integer.parseInt(match.group(3)) * Constant.HOUR_IN_MILLISECOND;}
+            if(match.find(4)) {answer += Integer.parseInt(match.group(4)) * Constant.MIN_IN_MILLISECOND;}
             //Second omitted, as such precision is not required
         }
 

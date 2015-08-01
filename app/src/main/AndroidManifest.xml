@@ -104,6 +104,7 @@
 
         <!--For parsing data from .ics extension-->
         <activity android:name=".importexternals.ImportICSParser"/>
+        <activity android:name=".importexternals.ImportFacebook"/>
 
         <receiver android:name="mooncakemonster.orbitalcalendar.alarm.AlarmReceiver">
             <intent-filter>

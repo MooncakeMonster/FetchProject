@@ -25,7 +25,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.database.Appointment;
@@ -102,7 +101,7 @@ public class ImportFacebookLogin extends DialogFragment {
                 // handle the result
                 JSONObject jObject = response.getJSONObject();
                 JSONArray eventsList = null;
-                List<Appointment> appointmentList = new ArrayList<Appointment>();
+                ArrayList<ImportedAppointment> appointmentList = new ArrayList<ImportedAppointment>();
 
                 try {
                     eventsList = jObject.getJSONArray("data");
@@ -151,11 +150,12 @@ public class ImportFacebookLogin extends DialogFragment {
                             }
                         }
 
-                        Appointment tempAppt = new Appointment();
+                        ImportedAppointment tempAppt = new ImportedAppointment();
                         tempAppt.setEvent(event);
                         tempAppt.setStartDate(startTimeMillisec);
                         tempAppt.setStartProperDate(startProperDate);
                         tempAppt.setEndDate(endTimeMillisec);
+                        tempAppt.setToImport();
 
                         appointmentList.add(tempAppt);
 
@@ -168,20 +168,12 @@ public class ImportFacebookLogin extends DialogFragment {
 
                 Collections.sort(appointmentList);
 
-                //TODO: Create a dialog box, verifying events that user wants to import
-                //TODO: Ensure "update" does not replicate the same event again
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("FacebookImported", appointmentList);
+                Intent intent = new Intent(getActivity(), ImportFacebook.class);
+                intent.putExtras(bundle);
 
-                //Insert into Appointment
-                appointmentDatabase = new AppointmentController(getActivity());
-                appointmentDatabase.open();
-
-                for(Appointment appointment : appointmentList)
-                {
-                    appointmentDatabase.createAppointment(appointment);
-                }
-
-                appointmentDatabase.close();
-                appointmentDatabase = null;
+                startActivity(intent);
 
             }
         }

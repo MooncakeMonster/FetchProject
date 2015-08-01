@@ -29,7 +29,7 @@ import mooncakemonster.orbitalcalendar.voteresult.ResultItem;
 import mooncakemonster.orbitalcalendar.votesend.VotingDatabase;
 
 /**
- * Created by MunKeat_2 on 12/7/2015.
+ *
  */
 public class NotificationReceiveService extends Service {
 
@@ -170,7 +170,7 @@ public class NotificationReceiveService extends Service {
 
             // Save friend into friendlist database
             friendDatabase = new FriendDatabase(this);
-            friendDatabase.updateInformation(friendDatabase, "true", Constant.retrieveCurrentTime(), my_username);
+            friendDatabase.updateInformation(friendDatabase, "true", Constant.retrieveCurrentTime(), my_user.getFriend_accept_username() );
 
             cloudantConnect.resetFriendAccepted(my_username);
             cloudantConnect.startPushReplication();

@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.google.ical.compat.jodatime.DateTimeIterable;
+import com.google.ical.compat.jodatime.DateTimeIterator;
 import com.google.ical.compat.jodatime.DateTimeIteratorFactory;
 
 import org.joda.time.DateTime;
@@ -112,6 +112,7 @@ public class ImportICSParser extends ListActivity {
             long endMillisec = 0;
             String notes = null;
             boolean hasAlarm = false;
+            boolean hasRepeat = false;
             //Difference from start time
             long alarmMillisec = 0;
             //Variable for RRULE
@@ -222,15 +223,19 @@ public class ImportICSParser extends ListActivity {
 
                     //Is there a repeat appointment in the future?
                     case "RRULE":
+                        hasRepeat = true;
                         RRULE = line + "\n";
                         break;
                     case "EXRULE":
+                        hasRepeat = true;
                         EXRULE = line + "\n";
                         break;
                     case "RDATE":
+                        hasRepeat = true;
                         RDATE = line + "\n";
                         break;
                     case "EXDATE":
+                        hasRepeat = true;
                         EXDATE = line + "\n";
                         break;
 
@@ -238,8 +243,7 @@ public class ImportICSParser extends ListActivity {
                     case "TRIGGER":
                         if (hasAlarm) {
                             //Set if only alarm is made to trigger before the beginning of event commencement
-                            if (value.contains("+")) break;
-                            else if (value.contains("-")) value = value.substring(1, value.length());
+                            if (value.contains("-") || value.contains("+")) value = value.substring(1, value.length());
                             alarmMillisec = processDuration(value);
                         }
 
@@ -265,41 +269,48 @@ public class ImportICSParser extends ListActivity {
 
                             timetable.add(tempAppt);
 
-                            //RRULE
-                            String blockLine = RRULE + EXRULE + RDATE + EXDATE;
-                            ReadableDateTime jodaTime = new DateTime(startMillisec);
-                            DateTimeZone tzid = DateTimeZone.getDefault();
+                            if (hasRepeat) {
+                                //RRULE
+                                String blockLine = RRULE + EXRULE + RDATE + EXDATE;
+                                ReadableDateTime jodaTime = new DateTime(startMillisec);
+                                DateTimeZone tzid = DateTimeZone.getDefault();
 
-                            try {
-                                DateTimeIterable timeList = DateTimeIteratorFactory.createDateTimeIterable(blockLine, jodaTime, tzid, true);
                                 //Set limit on recurrence; prevent infinite recurrence.
                                 //Tentatively limit to 100 years from today.
-                                long limit = System.currentTimeMillis() + Constant.CENTURY_IN_MILLISECOND / 100;
+                                long limit = System.currentTimeMillis() + Constant.CENTURY_IN_MILLISECOND;
 
-                                for(DateTime tempDate: timeList){
-                                    long startMillisecond = tempDate.getMillis();
+                                try {
+                                    DateTimeIterator timeList = DateTimeIteratorFactory.createDateTimeIterator(blockLine, jodaTime, tzid, true);
+                                    //Remove first appointment, which was already added in above
+                                    timeList.next();
 
-                                    if(startMillisecond > limit){
-                                        break;
+                                    while (timeList.hasNext()) {
+                                        DateTime tempDate = timeList.next();
+                                        long startMillisecond = tempDate.getMillis();
+
+                                        if (startMillisecond > limit) {
+                                            break;
+                                        }
+
+                                        //Get startProperDate
+                                        date = new Date(startMillisecond);
+                                        dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
+
+                                        tempAppt = new ImportedAppointment();
+                                        tempAppt.setEvent(event);
+                                        tempAppt.setStartDate(startMillisecond);
+                                        tempAppt.setStartProperDate(dateFormatted);
+                                        tempAppt.setEndDate(endMillisec);
+                                        tempAppt.setLocation(location);
+                                        tempAppt.setNotes(notes);
+                                        tempAppt.setRemind(startMillisecond - alarmMillisec);
+                                        tempAppt.setToImport();
+
+                                        timetable.add(tempAppt);
                                     }
-
-                                    //Get startProperDate
-                                    date = new Date(startMillisecond);
-                                    dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
-                                    tempAppt = new ImportedAppointment();
-                                    tempAppt.setEvent(event);
-                                    tempAppt.setStartDate(startMillisecond);
-                                    tempAppt.setStartProperDate(dateFormatted);
-                                    tempAppt.setEndDate(endMillisec);
-                                    tempAppt.setLocation(location);
-                                    tempAppt.setNotes(notes);
-                                    tempAppt.setRemind(startMillisecond - alarmMillisec);
-                                    tempAppt.setToImport();
-
-                                    timetable.add(tempAppt);
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (ParseException e) {
-                                e.printStackTrace();
                             }
 
                         } else if (value.equals("VALARM")) {
@@ -331,11 +342,11 @@ public class ImportICSParser extends ListActivity {
 
         long answer = 0;
 
-        if(match.find()) {
-            if(match.group(0) != null) {answer += Integer.parseInt(match.group(0)) * Constant.WEEK_IN_MILLISECOND;}
-            if(match.group(1) != null) {answer += Integer.parseInt(match.group(1)) * Constant.DAY_IN_MILLISECOND;}
-            if(match.group(2) != null) {answer += Integer.parseInt(match.group(2)) * Constant.HOUR_IN_MILLISECOND;}
-            if(match.group(3) != null) {answer += Integer.parseInt(match.group(3)) * Constant.MIN_IN_MILLISECOND;}
+        if(match.matches()) {
+            if(match.group(1) != null) {answer += Integer.parseInt(match.group(1)) * Constant.WEEK_IN_MILLISECOND;}
+            if(match.group(2) != null) {answer += Integer.parseInt(match.group(2)) * Constant.DAY_IN_MILLISECOND;}
+            if(match.group(3) != null) {answer += Integer.parseInt(match.group(3)) * Constant.HOUR_IN_MILLISECOND;}
+            if(match.group(4) != null) {answer += Integer.parseInt(match.group(4)) * Constant.MIN_IN_MILLISECOND;}
             //Second omitted, as such precision is not required
         }
 

@@ -7,7 +7,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ImportFacebook extends ListActivity {
         setContentView(R.layout.row_import_external_list);
         Bundle extras = getIntent().getExtras();
 
-        Button import_external_events = (Button) findViewById(R.id.add_imported);
+        ImageButton import_external_events = (ImageButton) findViewById(R.id.add_imported);
 
         if (extras != null) {
             //Assuming user got here from ImportExternalFragment.java

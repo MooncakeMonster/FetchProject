@@ -30,7 +30,6 @@ import com.antonyt.infiniteviewpager.InfiniteViewPager;
 import com.caldroid.R.id;
 import com.caldroid.R.layout;
 import com.caldroid.R.style;
-import com.roomorama.caldroid.CaldroidGridAdapter;
 import com.roomorama.caldroid.CalendarHelper;
 import com.roomorama.caldroid.DateGridFragment;
 import com.roomorama.caldroid.MonthPagerAdapter;
@@ -73,7 +72,7 @@ public class CaldroidFragmentModified extends DialogFragment {
     private TextView monthTitleTextView;
     private GridView weekdayGridView;
     private InfiniteViewPager dateViewPager;
-    private CaldroidFragmentModified.DatePageChangeListener pageChangeListener;
+    private DatePageChangeListener pageChangeListener;
     private ArrayList<DateGridFragment> fragments;
     private int themeResource;
     public static final String DIALOG_TITLE = "dialogTitle";
@@ -108,7 +107,7 @@ public class CaldroidFragmentModified extends DialogFragment {
     protected HashMap<DateTime, Integer> textColorForDateTimeMap;
     protected int startDayOfWeek;
     private boolean sixWeeksInCalendar;
-    protected ArrayList<CaldroidGridAdapter> datePagerAdapters;
+    protected ArrayList<CaldroidCustomGridAdapter> datePagerAdapters;
     protected boolean enableSwipe;
     protected boolean showNavigationArrows;
     protected boolean enableClickOnDisabledDates;
@@ -140,8 +139,8 @@ public class CaldroidFragmentModified extends DialogFragment {
         return this.caldroidListener;
     }
 
-    public CaldroidGridAdapter getNewDatesGridAdapter(int month, int year) {
-        return new CaldroidGridAdapter(this.getActivity(), month, year, this.getCaldroidData(), this.extraData);
+    public CaldroidCustomGridAdapter getNewDatesGridAdapter(int month, int year) {
+        return new CaldroidCustomGridAdapter(this.getActivity(), month, year, this.getCaldroidData(), this.extraData);
     }
 
     public WeekdayArrayAdapter getNewWeekdayAdapter() {
@@ -184,7 +183,7 @@ public class CaldroidFragmentModified extends DialogFragment {
         this.monthTitleTextView = monthTitleTextView;
     }
 
-    public ArrayList<CaldroidGridAdapter> getDatePagerAdapters() {
+    public ArrayList<CaldroidCustomGridAdapter> getDatePagerAdapters() {
         return this.datePagerAdapters;
     }
 
@@ -668,7 +667,7 @@ public class CaldroidFragmentModified extends DialogFragment {
             Iterator i$ = this.datePagerAdapters.iterator();
 
             while(i$.hasNext()) {
-                CaldroidGridAdapter adapter = (CaldroidGridAdapter)i$.next();
+                CaldroidCustomGridAdapter adapter = (CaldroidCustomGridAdapter)i$.next();
                 adapter.setCaldroidData(this.getCaldroidData());
                 adapter.setExtraData(this.extraData);
                 adapter.updateToday();
@@ -835,21 +834,21 @@ public class CaldroidFragmentModified extends DialogFragment {
 
     private void setupDateGridPages(View view) {
         DateTime currentDateTime = new DateTime(Integer.valueOf(this.year), Integer.valueOf(this.month), Integer.valueOf(1), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0));
-        this.pageChangeListener = new CaldroidFragmentModified.DatePageChangeListener();
+        this.pageChangeListener = new DatePageChangeListener();
         this.pageChangeListener.setCurrentDateTime(currentDateTime);
-        CaldroidGridAdapter adapter0 = this.getNewDatesGridAdapter(currentDateTime.getMonth().intValue(), currentDateTime.getYear().intValue());
+        CaldroidCustomGridAdapter adapter0 = this.getNewDatesGridAdapter(currentDateTime.getMonth().intValue(), currentDateTime.getYear().intValue());
         this.dateInMonthsList = adapter0.getDatetimeList();
         DateTime nextDateTime = currentDateTime.plus(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), DayOverflow.LastDay);
-        CaldroidGridAdapter adapter1 = this.getNewDatesGridAdapter(nextDateTime.getMonth().intValue(), nextDateTime.getYear().intValue());
+        CaldroidCustomGridAdapter adapter1 = this.getNewDatesGridAdapter(nextDateTime.getMonth().intValue(), nextDateTime.getYear().intValue());
         DateTime next2DateTime = nextDateTime.plus(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), DayOverflow.LastDay);
-        CaldroidGridAdapter adapter2 = this.getNewDatesGridAdapter(next2DateTime.getMonth().intValue(), next2DateTime.getYear().intValue());
+        CaldroidCustomGridAdapter adapter2 = this.getNewDatesGridAdapter(next2DateTime.getMonth().intValue(), next2DateTime.getYear().intValue());
         DateTime prevDateTime = currentDateTime.minus(Integer.valueOf(0), Integer.valueOf(1), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), Integer.valueOf(0), DayOverflow.LastDay);
-        CaldroidGridAdapter adapter3 = this.getNewDatesGridAdapter(prevDateTime.getMonth().intValue(), prevDateTime.getYear().intValue());
+        CaldroidCustomGridAdapter adapter3 = this.getNewDatesGridAdapter(prevDateTime.getMonth().intValue(), prevDateTime.getYear().intValue());
         this.datePagerAdapters.add(adapter0);
         this.datePagerAdapters.add(adapter1);
         this.datePagerAdapters.add(adapter2);
         this.datePagerAdapters.add(adapter3);
-        this.pageChangeListener.setCaldroidGridAdapters(this.datePagerAdapters);
+        this.pageChangeListener.setCaldroidCustomGridAdapters(this.datePagerAdapters);
         this.dateViewPager = (InfiniteViewPager)view.findViewById(id.months_infinite_pager);
         this.dateViewPager.setEnabled(this.enableSwipe);
         this.dateViewPager.setSixWeeksInCalendar(this.sixWeeksInCalendar);
@@ -859,7 +858,7 @@ public class CaldroidFragmentModified extends DialogFragment {
 
         for(int infinitePagerAdapter = 0; infinitePagerAdapter < 4; ++infinitePagerAdapter) {
             DateGridFragment dateGridFragment = this.fragments.get(infinitePagerAdapter);
-            CaldroidGridAdapter adapter = this.datePagerAdapters.get(infinitePagerAdapter);
+            CaldroidCustomGridAdapter adapter = this.datePagerAdapters.get(infinitePagerAdapter);
             dateGridFragment.setGridViewRes(this.getGridViewRes());
             dateGridFragment.setGridAdapter(adapter);
             dateGridFragment.setOnItemClickListener(this.getDateItemClickListener());
@@ -903,7 +902,7 @@ public class CaldroidFragmentModified extends DialogFragment {
     public class DatePageChangeListener implements OnPageChangeListener {
         private int currentPage = 1000;
         private DateTime currentDateTime;
-        private ArrayList<CaldroidGridAdapter> caldroidGridAdapters;
+        private ArrayList<CaldroidCustomGridAdapter> caldroidCustomGridAdapters;
 
         public DatePageChangeListener() {
         }
@@ -925,12 +924,12 @@ public class CaldroidFragmentModified extends DialogFragment {
             CaldroidFragmentModified.this.setCalendarDateTime(this.currentDateTime);
         }
 
-        public ArrayList<CaldroidGridAdapter> getCaldroidGridAdapters() {
-            return this.caldroidGridAdapters;
+        public ArrayList<CaldroidCustomGridAdapter> getCaldroidCustomGridAdapters() {
+            return this.caldroidCustomGridAdapters;
         }
 
-        public void setCaldroidGridAdapters(ArrayList<CaldroidGridAdapter> caldroidGridAdapters) {
-            this.caldroidGridAdapters = caldroidGridAdapters;
+        public void setCaldroidCustomGridAdapters(ArrayList<CaldroidCustomGridAdapter> caldroidCustomGridAdapters) {
+            this.caldroidCustomGridAdapters = caldroidCustomGridAdapters;
         }
 
         private int getNext(int position) {
@@ -952,9 +951,9 @@ public class CaldroidFragmentModified extends DialogFragment {
         }
 
         public void refreshAdapters(int position) {
-            CaldroidGridAdapter currentAdapter = this.caldroidGridAdapters.get(this.getCurrent(position));
-            CaldroidGridAdapter prevAdapter = this.caldroidGridAdapters.get(this.getPrevious(position));
-            CaldroidGridAdapter nextAdapter = this.caldroidGridAdapters.get(this.getNext(position));
+            CaldroidCustomGridAdapter currentAdapter = this.caldroidCustomGridAdapters.get(this.getCurrent(position));
+            CaldroidCustomGridAdapter prevAdapter = this.caldroidCustomGridAdapters.get(this.getPrevious(position));
+            CaldroidCustomGridAdapter nextAdapter = this.caldroidCustomGridAdapters.get(this.getNext(position));
             if(position == this.currentPage) {
                 currentAdapter.setAdapterDateTime(this.currentDateTime);
                 currentAdapter.notifyDataSetChanged();
@@ -978,7 +977,7 @@ public class CaldroidFragmentModified extends DialogFragment {
         public void onPageSelected(int position) {
             this.refreshAdapters(position);
             CaldroidFragmentModified.this.setCalendarDateTime(this.currentDateTime);
-            CaldroidGridAdapter currentAdapter = this.caldroidGridAdapters.get(position % 4);
+            CaldroidCustomGridAdapter currentAdapter = this.caldroidCustomGridAdapters.get(position % 4);
             CaldroidFragmentModified.this.dateInMonthsList.clear();
             CaldroidFragmentModified.this.dateInMonthsList.addAll(currentAdapter.getDatetimeList());
         }

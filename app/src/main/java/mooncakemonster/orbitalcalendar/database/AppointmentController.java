@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -172,6 +174,26 @@ public class AppointmentController
             if(cursor.getLong(0) == id && cursor.getLong(1) == sub_id) {
                 appointment = cursorToAppointment(cursor);
                 break;
+            }
+            cursor.moveToNext();
+        }
+        // Note! Close cursor after use
+        cursor.close();
+
+        return appointment;
+    }
+
+    // This method retrieves the target date of event
+    public List<Appointment> getTargetEvent(String date) {
+        List<Appointment> appointment = new ArrayList<>();
+        Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME, allColumns, null, null, null, null, null);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            String target_date = Constant.getDate(cursor.getLong(2), new SimpleDateFormat("yyyy-MM-dd"));
+            Log.d("HEY", date + "/" + target_date);
+            if(date.equals(target_date)) {
+                appointment.add(cursorToAppointment(cursor));
             }
             cursor.moveToNext();
         }

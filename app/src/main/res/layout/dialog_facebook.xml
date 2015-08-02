@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/input_fb_text"
+        android:gravity="center_vertical"
+        android:textColor="@color/black"
+        android:textSize="@dimen/event_text_size"
+        android:padding="@dimen/standard_padding_size"
+        android:layout_marginTop = "@dimen/standard_padding_size"
+        android:layout_marginLeft="@dimen/standard_padding_size"
+        android:layout_marginRight="@dimen/standard_padding_size"/>
+
+    <com.facebook.login.widget.LoginButton
+        xmlns:fb="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/facebook_login_button"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/event_button_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/input_fb_text"
+        android:layout_margin="15dp"
+        fb:login_text="@string/login_desc"
+        fb:logout_text="@string/logout_desc"/>
+
+</RelativeLayout>

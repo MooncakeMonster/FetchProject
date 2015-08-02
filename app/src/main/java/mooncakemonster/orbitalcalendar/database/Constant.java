@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.voteresult.AttendanceAdapter;
@@ -589,13 +590,29 @@ public final class Constant
 
     public static int getCircleColour(int chosenColour) {
         switch (chosenColour) {
-            case R.color.redbear: return R.drawable.ballred;
-            case R.color.yellowbear: return R.drawable.ballyellow;
-            case R.color.greenbear: return R.drawable.ballgreen;
-            case R.color.bluebear: return R.drawable.ballblue;
-            case R.color.purplebear: return R.drawable.ballpurple;
+            case R.color.redbear: return R.drawable.border_red;
+            case R.color.yellowbear: return R.drawable.border_yellow;
+            case R.color.greenbear: return R.drawable.border_green;
+            case R.color.bluebear: return R.drawable.border_blue;
+            case R.color.purplebear: return R.drawable.border_purple;
         }
 
         return R.drawable.ballpurple;
+    }
+
+    public static int getRandomColour() {
+        Random random = new Random();
+        int chosenColour = random.nextInt(4);
+
+        switch (chosenColour) {
+            case 0: return R.drawable.beared;
+            case 1: return R.drawable.bearyellow;
+            case 2: return R.drawable.beargreen;
+            case 3: return R.drawable.bearblue;
+            case 4: return R.drawable.bearpurple;
+        }
+
+        // Should not reach here
+        return -1;
     }
 }

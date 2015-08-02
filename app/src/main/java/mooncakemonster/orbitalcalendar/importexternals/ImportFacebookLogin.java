@@ -6,6 +6,7 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -37,6 +38,7 @@ import mooncakemonster.orbitalcalendar.database.Constant;
 public class ImportFacebookLogin extends DialogFragment {
 
     private LoginButton loginButton;
+    private TextView input_fb_text;
     private CallbackManager callbackManager;
 
     private static String dateWithTime = "yyyy-MM-dd'T'HH:mm:ss";
@@ -60,7 +62,12 @@ public class ImportFacebookLogin extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_importfacebooklogin, container, false);
+        View view = inflater.inflate(R.layout.dialog_facebook, container, false);
+
+        getDialog().setTitle("Import Facebook Events");
+
+        input_fb_text = (TextView) view.findViewById(R.id.input_fb_text);
+        input_fb_text.setText("Please login to your Facebook account to import your Facebook events into Fetch.");
 
         loginButton = (LoginButton) view.findViewById(R.id.facebook_login_button);
         //Set permission at users_events

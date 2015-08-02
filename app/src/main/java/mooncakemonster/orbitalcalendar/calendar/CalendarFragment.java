@@ -82,7 +82,7 @@ public class CalendarFragment extends ListFragment {
             public void onCaldroidViewCreated() {
                 //Ensure days of the week displayed (e.g. Sun, Mon, Tues,...) are black
                 WeekdayArrayAdapter.textColor = Color.BLACK;
-                highlightEventDates();
+                //highlightEventDates();
                 displayEventList(cal.getTime());
             }
 

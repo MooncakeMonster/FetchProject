@@ -89,7 +89,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:focusable="false"
-                android:enabled="false"/>
+                android:checked="false" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

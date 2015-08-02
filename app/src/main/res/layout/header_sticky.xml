@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@drawable/header"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
@@ -14,6 +13,12 @@
         android:layout_gravity="start|left"
         android:padding="@dimen/standard_padding_size"
         android:textColor="@color/colorPrimaryDark"
-        android:textSize="22sp"
+        android:textSize="21sp"
         android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_marginBottom="20dp"
+        android:background="@color/colorPrimary" />
 </LinearLayout>

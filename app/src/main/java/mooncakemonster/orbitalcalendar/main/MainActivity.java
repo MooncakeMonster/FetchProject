@@ -13,23 +13,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.LoginActivity;
 
 public class MainActivity extends ActionBarActivity {
 
-    protected ImageLoader imageLoader;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        imageLoader = ImageLoader.getInstance();
-        imageLoader.init(ImageLoaderConfiguration.createDefault(this));
 
         setAnimationFadeIn();
         setTapAnywhereToContinue();

@@ -60,12 +60,6 @@ public class CaldroidCustomGridAdapter extends CaldroidGridAdapter {
         SimpleDraweeView ballblue = (SimpleDraweeView) cellView.findViewById(R.id.ball4);
         SimpleDraweeView ballpurple = (SimpleDraweeView) cellView.findViewById(R.id.ball5);
 
-        ballred.setVisibility(View.INVISIBLE);
-        ballyellow.setVisibility(View.INVISIBLE);
-        ballgreen.setVisibility(View.INVISIBLE);
-        ballblue.setVisibility(View.INVISIBLE);
-        ballpurple.setVisibility(View.INVISIBLE);
-
         tv1.setTextColor(Color.BLACK);
         // Get dateTime of this cell
         DateTime dateTime = this.datetimeList.get(position);
@@ -123,35 +117,20 @@ public class CaldroidCustomGridAdapter extends CaldroidGridAdapter {
         // Set colour into imageview
         if(allAppointments.size() > 0) {
             if (allAppointments.size() == 1) {
-                ballgreen.setVisibility(View.VISIBLE);
                 ballgreen.setBackgroundResource(Constant.getCircleColour(colour_array[0]));
             } else if (allAppointments.size() == 2) {
-                ballyellow.setVisibility(View.VISIBLE);
-                ballgreen.setVisibility(View.VISIBLE);
                 ballyellow.setBackgroundResource(Constant.getCircleColour(colour_array[0]));
                 ballgreen.setBackgroundResource(Constant.getCircleColour(colour_array[1]));
             } else if (allAppointments.size() == 3) {
-                ballyellow.setVisibility(View.VISIBLE);
-                ballgreen.setVisibility(View.VISIBLE);
-                ballblue.setVisibility(View.VISIBLE);
                 ballyellow.setBackgroundResource(Constant.getCircleColour(colour_array[0]));
                 ballgreen.setBackgroundResource(Constant.getCircleColour(colour_array[1]));
                 ballblue.setBackgroundResource(Constant.getCircleColour(colour_array[2]));
             } else if (allAppointments.size() == 4) {
-                ballred.setVisibility(View.VISIBLE);
-                ballyellow.setVisibility(View.VISIBLE);
-                ballgreen.setVisibility(View.VISIBLE);
-                ballblue.setVisibility(View.VISIBLE);
                 ballred.setBackgroundResource(Constant.getCircleColour(colour_array[0]));
                 ballyellow.setBackgroundResource(Constant.getCircleColour(colour_array[1]));
                 ballgreen.setBackgroundResource(Constant.getCircleColour(colour_array[2]));
                 ballblue.setBackgroundResource(Constant.getCircleColour(colour_array[3]));
             } else if (allAppointments.size() >= 5) {
-                ballred.setVisibility(View.VISIBLE);
-                ballyellow.setVisibility(View.VISIBLE);
-                ballgreen.setVisibility(View.VISIBLE);
-                ballblue.setVisibility(View.VISIBLE);
-                ballpurple.setVisibility(View.VISIBLE);
                 ballred.setBackgroundResource(Constant.getCircleColour(colour_array[0]));
                 ballyellow.setBackgroundResource(Constant.getCircleColour(colour_array[1]));
                 ballgreen.setBackgroundResource(Constant.getCircleColour(colour_array[2]));

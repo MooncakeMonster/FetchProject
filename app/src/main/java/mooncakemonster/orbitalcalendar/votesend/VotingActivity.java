@@ -22,10 +22,13 @@ import com.tokenautocomplete.TokenCompleteTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeSet;
 
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
@@ -54,6 +57,7 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
 
     // List to get all the appointments
     private ListView listView;
+    private List<OptionItem> option_list;
     private OptionAdapter adapter;
     private FilteredArrayAdapter<String> filteredArrayAdapter;
     private UsernameCompletionView usernameCompletionView;
@@ -183,8 +187,8 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
 
         // Add default first item to List
         OptionItem firstProposedDate = new OptionItem(startDate, endDate, startTime, endTime);
-
-        adapter = new OptionAdapter(this, R.layout.row_vote, new ArrayList<OptionItem>());
+        option_list = new ArrayList<>();
+        adapter = new OptionAdapter(this, R.layout.row_vote, option_list);
         listView.setAdapter(adapter);
 
         adapter.add(firstProposedDate);
@@ -208,7 +212,8 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
             @Override
             public void onClick(View v) {
                 Log.d("Button pressed", "Add option");
-                adapter.add(new OptionItem(startDate, endDate, startTime, endTime));
+                OptionItem optionItem = new OptionItem(startDate, endDate, startTime, endTime);
+                adapter.add(optionItem);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -285,6 +290,8 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
                 Constant.alertUser(this, "Sending failed!", "Please add at least two options.");
             } else if(!friendDatabase.checkUsername(friendDatabase, participants)) {
                 Constant.alertUser(this, "Sending failed!", "Please ensure that the username entered is valid.");
+            } else if(!checkNoDuplicateOption(option_list)) {
+                Constant.alertUser(this, "Sending failed!", "Please ensure that the options are unique.");
             }
 
             // Save data
@@ -340,6 +347,30 @@ public class VotingActivity extends ActionBarActivity implements TokenCompleteTe
             participants += token.toString() + " ";
         }
     }
+
+    // This method checkes if there are duplicated options
+    public boolean checkNoDuplicateOption(List<OptionItem> list) {
+
+        Set set = new TreeSet<OptionItem>(new Comparator<OptionItem>() {
+            @Override
+            public int compare(OptionItem lhs, OptionItem rhs) {
+                if(lhs.getEvent_start_date().equals(rhs.getEvent_start_date())
+                        && lhs.getEvent_end_date().equals(rhs.getEvent_end_date())
+                        && lhs.getEvent_start_time().equals(rhs.getEvent_start_time())
+                        && lhs.getEvent_end_time().equals(rhs.getEvent_end_time())){
+                    return 0;
+                }
+
+                return 1;
+            }
+        });
+
+        set.addAll(list);
+
+        if(list.size() == set.size()) return true;
+        return false;
+    }
+
 
     @Override
     public void onTokenAdded(Object o) {

@@ -97,8 +97,9 @@ public class NotificationReceiveService extends Service {
          */
         @Override
         protected Void doInBackground(Void... params) {
-            onReceiveUpdate();
-            return null;
+            while(true) {
+                onReceiveUpdate();
+            }
         }
 
         /**
@@ -185,7 +186,7 @@ public class NotificationReceiveService extends Service {
 
             cloudantConnect.resetFriendRemoved(my_username);
             cloudantConnect.startPushReplication();
-            
+
         }
         if (my_user.getOption_event_title() != null) {
 

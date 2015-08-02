@@ -8,13 +8,13 @@
     android:layout_height="wrap_content">
 
     <com.facebook.drawee.view.SimpleDraweeView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/friend_image"
         fresco:actualImageScaleType="fitCenter"
         android:layout_marginTop="@dimen/standard_padding_size"
         android:layout_marginBottom="@dimen/standard_padding_size"
-        android:layout_marginLeft="22dp" />
+        android:layout_marginLeft="35dp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/standard_padding_size"
             android:text="Username"
             android:singleLine="false"
-            android:textSize="20dp" />
+            android:textSize="17dp" />
 
         <TextView
             android:id="@+id/friend_timestamp"
@@ -43,7 +43,7 @@
             android:text="Became friends on 25 July 2015, Sat @ 2:35pm"
             android:singleLine="false"
             android:paddingTop="1dp"
-            android:textSize="11dp" />
+            android:textSize="10dp" />
 
     </LinearLayout>
 </LinearLayout>

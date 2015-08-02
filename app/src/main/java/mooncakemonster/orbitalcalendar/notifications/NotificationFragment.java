@@ -63,6 +63,7 @@ public class NotificationFragment extends ListFragment implements PullRefreshLay
         swipeRefreshLayout.setRefreshing(false);
     }
 
+
     @Override
     public void onRefresh() {
         retrieveNotifications();

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -28,6 +29,7 @@ import java.util.TimerTask;
 import mooncakemonster.orbitalcalendar.R;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.database.AppointmentController;
 import mooncakemonster.orbitalcalendar.database.Constant;
 import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.profilepicture.RoundImage;
@@ -243,6 +245,29 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
                                                 HashMap<String, String> user = db.getUserDetails();
                                                 String my_username = user.get("username");
 
+
+                                                AppointmentController appointmentController = new AppointmentController(getContext());
+                                                appointmentController.open();
+
+                                                long start = Constant.stringToMillisecond(notificationItem.getStart_date(), notificationItem.getStart_time(),
+                                                        new SimpleDateFormat("dd/MM/yyyy"), new SimpleDateFormat("hh:mma"));
+                                                long end = Constant.stringToMillisecond(notificationItem.getEnd_date(), notificationItem.getEnd_time(),
+                                                        new SimpleDateFormat("dd/MM/yyyy"), new SimpleDateFormat("hh:mma"));
+                                                long size = fewDaysAppointment(start, end);
+
+                                                // Few days event
+                                                if(size > 1) {
+                                                    for (int i = 0; i < size; i++) {
+                                                        appointmentController.createAppointment((long) i, start, notificationItem.getSender_event(),
+                                                                notificationItem.getStart_date(), start, end, notificationItem.getSender_location(),
+                                                                notificationItem.getSender_notes(), -1, notificationItem.getEventId());
+                                                    }
+                                                } else {
+                                                    appointmentController.createAppointment((long) -1, start, notificationItem.getSender_event(),
+                                                            notificationItem.getStart_date(), start, end, notificationItem.getSender_location(),
+                                                            notificationItem.getSender_notes(), -1, notificationItem.getEventId());
+                                                }
+
                                                 cloudantConnect.sendAttendanceToTargetParticipants(my_username, sender_username,
                                                         notificationItem.getEventId(), notificationItem.getImageId(), notificationItem.getSender_event());
                                                 cloudantConnect.startPushReplication();
@@ -283,6 +308,10 @@ public class NotificationAdapter extends ArrayAdapter<NotificationItem> {
         }
 
         return row;
+    }
+
+    private long fewDaysAppointment(long start_milliseconds, long end_milliseconds) {
+        return (end_milliseconds - start_milliseconds) / Constant.DAY_IN_MILLISECOND;
     }
 
     // This method computes the time received the notification

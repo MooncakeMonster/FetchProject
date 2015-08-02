@@ -219,7 +219,7 @@ public class AppointmentController
         return appt;
     }
 
-    private int getCount() {
+    public int getCount() {
         Cursor cursor = database.query(DatabaseHelper.DATABASE_NAME,allColumns, null, null, null, null, null);
         int size = cursor.getCount();
         cursor.close();

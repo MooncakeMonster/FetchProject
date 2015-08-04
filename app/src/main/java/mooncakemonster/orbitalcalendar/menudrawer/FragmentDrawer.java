@@ -37,6 +37,7 @@ import mooncakemonster.orbitalcalendar.authentication.LoginActivity;
 import mooncakemonster.orbitalcalendar.authentication.LoginManager;
 import mooncakemonster.orbitalcalendar.authentication.UserDatabase;
 import mooncakemonster.orbitalcalendar.cloudant.CloudantConnect;
+import mooncakemonster.orbitalcalendar.friendlist.FriendDatabase;
 import mooncakemonster.orbitalcalendar.importexternals.ImportFacebookLogin;
 import mooncakemonster.orbitalcalendar.importexternals.ImportICSParser;
 import mooncakemonster.orbitalcalendar.profilepicture.CropImage;
@@ -68,6 +69,7 @@ public class FragmentDrawer extends Fragment {
 
     private CloudantConnect cloudantConnect;
     private UserDatabase db;
+    private FriendDatabase friendDatabase;
     private HashMap<String, String> user;
     private LoginManager session;
 
@@ -344,6 +346,22 @@ public class FragmentDrawer extends Fragment {
         alertBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                String new_email = input_email.getText().toString();
+                String new_username = input_username.getText().toString();
+
+                db = new UserDatabase(getActivity().getApplicationContext());
+                user = db.getUserDetails();
+
+                if (cloudantConnect == null) cloudantConnect = new CloudantConnect(getActivity(), "user");
+                String my_username = user.get("username");
+
+                friendDatabase = new FriendDatabase(getActivity());
+                cloudantConnect.sendFriendUpdate(my_username, new_username, friendDatabase.getAllFriendUsernameString(friendDatabase));
+                cloudantConnect.startPushReplication();
+
+                // Update to phone
+                db.updateUsers(new_email, new_username);
+
                 dialog.dismiss();
             }
         }).setNegativeButton("Cancel", null);

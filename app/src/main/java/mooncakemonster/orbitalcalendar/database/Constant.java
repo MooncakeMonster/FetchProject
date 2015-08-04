@@ -605,11 +605,11 @@ public final class Constant
         int chosenColour = random.nextInt(4);
 
         switch (chosenColour) {
-            case 0: return R.drawable.beared;
-            case 1: return R.drawable.bearyellow;
-            case 2: return R.drawable.beargreen;
-            case 3: return R.drawable.bearblue;
-            case 4: return R.drawable.bearpurple;
+            case 0: return R.color.redbear;
+            case 1: return R.color.yellowbear;
+            case 2: return R.color.greenbear;
+            case 3: return R.color.bluebear;
+            case 4: return R.color.purplebear;
         }
 
         // Should not reach here

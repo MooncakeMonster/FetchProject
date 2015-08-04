@@ -111,6 +111,22 @@ public class FriendDatabase extends SQLiteOpenHelper {
     }
 
     // This method retrieves all friends' username.
+    public String getAllFriendUsernameString(FriendDatabase data) {
+        String friend_list = "";
+        Cursor cursor = getInformation(data);
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            friend_list += cursor.getString(2) + " ";
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+
+        return friend_list;
+    }
+
+    // This method retrieves all friends' username.
     public List<FriendItem> getAcceptedFriendUsername(FriendDatabase data) {
         List<FriendItem> friend_list = new ArrayList<>();
         Cursor cursor = getInformation(data);

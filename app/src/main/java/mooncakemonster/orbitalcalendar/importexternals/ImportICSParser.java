@@ -9,7 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.google.ical.compat.jodatime.DateTimeIterator;
@@ -68,7 +68,7 @@ public class ImportICSParser extends ListActivity {
         setContentView(R.layout.row_import_external_list);
         Bundle extras = getIntent().getExtras();
 
-        Button import_external_events = (Button) findViewById(R.id.add_imported);
+        ImageButton import_external_events = (ImageButton) findViewById(R.id.add_imported);
 
         if (extras != null) {
             //Assuming user got here from ImportExternalFragment.java
@@ -259,6 +259,7 @@ public class ImportICSParser extends ListActivity {
 
                             //Set value for initial appointment
                             tempAppt = new ImportedAppointment();
+                            tempAppt.setColour(Constant.getRandomColour());
                             tempAppt.setEvent(event);
                             tempAppt.setStartDate(startMillisec);
                             tempAppt.setStartProperDate(dateFormatted);

@@ -97,9 +97,8 @@ public class NotificationReceiveService extends Service {
          */
         @Override
         protected Void doInBackground(Void... params) {
-            while(true) {
-                onReceiveUpdate();
-            }
+            onReceiveUpdate();
+            return null;
         }
 
         /**
@@ -139,6 +138,7 @@ public class NotificationReceiveService extends Service {
         User my_user = cloudantConnect.getTargetUser(my_username);
 
         /*
+         * case 0: Friend username update
          * case 1: Friend request received
          * case 2: Friend accepted request
          * case x: Friend removed (do not show as notification)
@@ -148,6 +148,18 @@ public class NotificationReceiveService extends Service {
          * case 7: Target participants gets reminder to vote for an event
          * case 8: Target participants gets attendance
          */
+
+        if(my_user.getFriend_update() != null) {
+
+            Log.d(TAG, "Friend update");
+            setNotification(cloudantConnect.retrieveUserImage(my_user.getFriend_previous_username()), R.color.yellowbear, FRIEND_REQUEST_FOUND, my_user.getFriend_previous_username() + " has updated his/her username to " + my_user.getFriend_update() + ".");
+
+            notificationDatabase.putInformation(notificationDatabase, "false", "false", "" + notificationDatabase.notificationSize(notificationDatabase), 1, Constant.retrieveCurrentTime(), -1, -1, my_user.getFriend_previous_username(),
+                    " has updated his/her username to " + my_user.getFriend_update(), "",  ". Your friendlist has been updated.", null, null, null, null, null, null, null, null, null);
+
+            cloudantConnect.resetFriendUpdate(my_username);
+            cloudantConnect.startPushReplication();
+        }
 
         if(my_user.getFriend_request_username() != null) {
 

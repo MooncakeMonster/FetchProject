@@ -38,11 +38,10 @@ public class MenuDrawer extends ActionBarActivity implements FragmentDrawer.Frag
         setContentView(R.layout.activity_menubar);
 
         //TODO: Place this in appropriate place - tentatively here for testing
-        startService(new Intent(this, NotificationReceiveService.class));
-
+        //startService(new Intent(this, NotificationReceiveService.class));
         Intent intent = new Intent(getApplicationContext(), NotificationReceiveService.class);
         PendingIntent pendingIntent = PendingIntent.getService(getApplicationContext(), NotificationReceiveService.JOB_ID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) getSystemService(Activity.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager)getSystemService(Activity.ALARM_SERVICE);
         am.cancel(pendingIntent);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Constant.MIN_IN_MILLISECOND, pendingIntent);
 

@@ -20,6 +20,7 @@ public class User {
     private String friend_request_username;
     private String friend_accept_username;
     private String friend_remove;
+    private String friend_previous_username;
     private String friend_update;
 
     // Voting options
@@ -144,6 +145,14 @@ public class User {
 
     public void setFriend_remove(String friend_remove) {
         this.friend_remove = friend_remove;
+    }
+
+    public String getFriend_previous_username() {
+        return friend_previous_username;
+    }
+
+    public void setFriend_previous_username(String friend_previous_username) {
+        this.friend_previous_username = friend_previous_username;
     }
 
     public String getFriend_update() {
@@ -512,6 +521,7 @@ public class User {
         user.setFriend_request_username((String) ((Map) user_revised.get("friend")).get("friend_request_username"));
         user.setFriend_accept_username((String) ((Map) user_revised.get("friend")).get("friend_accept_username"));
         user.setFriend_remove((String) ((Map) user_revised.get("friend")).get("friend_remove"));
+        user.setFriend_previous_username((String) ((Map) user_revised.get("friend")).get("friend_previous_username"));
         user.setFriend_update((String) ((Map) user_revised.get("friend")).get("friend_update"));
 
         // Voting options
@@ -585,6 +595,7 @@ public class User {
         friend.put("friend_request_username", friend_request_username);
         friend.put("friend_accept_username", friend_accept_username);
         friend.put("friend_remove", friend_remove);
+        friend.put("friend_previous_username", friend_previous_username);
         friend.put("friend_update", friend_update);
 
         // Voting options

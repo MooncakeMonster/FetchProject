@@ -158,6 +158,7 @@ public class ImportFacebookLogin extends DialogFragment {
                         }
 
                         ImportedAppointment tempAppt = new ImportedAppointment();
+                        tempAppt.setColour(Constant.getRandomColour());
                         tempAppt.setEvent(event);
                         tempAppt.setStartDate(startTimeMillisec);
                         tempAppt.setStartProperDate(startProperDate);

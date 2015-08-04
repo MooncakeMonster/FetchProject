@@ -318,6 +318,7 @@ public class CloudantConnect {
      * Returns the image in byte array from database
      */
     public Bitmap retrieveUserImage(String username) {
+        Log.d("HEY", username);
         BasicDocumentRevision document = retrieveUserDocument(username);
         Attachment attachment = document.getAttachments().get(getTargetUser(username).getImage());
 
@@ -444,9 +445,13 @@ public class CloudantConnect {
     /**
      * This method updates friend from friend list if that friend has updated his/her username
      */
-    public void sendFriendUpdate(String my_username, String sender_username) {
-        User user = getTargetUser(sender_username);
-        user.setFriend_update(my_username);
+    public void sendFriendUpdate(String my_username, String new_username, String friendlist) {
+
+        Log.d("HEY", my_username + "/" + new_username);
+
+        // (1) Update own username
+        User user = getTargetUser(my_username);
+        user.setFriend_update(new_username);
 
         // Retrieve user's documents
         try {
@@ -456,6 +461,25 @@ public class CloudantConnect {
         } catch (ConflictException e) {
             Log.e(TAG, "Unable to update target user's information");
         }
+
+        // (2) Update to all friends
+        String[] split_friendlist = friendlist.split(" ");
+        int size = split_friendlist.length;
+
+        for(int i = 0; i < size; i++) {
+            user = getTargetUser(split_friendlist[i]);
+            user.setFriend_previous_username(my_username);
+            user.setFriend_update(new_username);
+
+            // Retrieve user's documents
+            try {
+                // Update the latest targeted user's items back into Cloudant document
+                updateUserDetailsDocument(user);
+                Log.d(TAG, "Successfully updated target user's information");
+            } catch (ConflictException e) {
+                Log.e(TAG, "Unable to update target user's information");
+            }
+        }
     }
 
     /**
@@ -463,6 +487,7 @@ public class CloudantConnect {
      */
     public void resetFriendUpdate(String my_username) {
         User user = getTargetUser(my_username);
+        user.setFriend_previous_username(null);
         user.setFriend_update(null);
 
         // Retrieve user's documents

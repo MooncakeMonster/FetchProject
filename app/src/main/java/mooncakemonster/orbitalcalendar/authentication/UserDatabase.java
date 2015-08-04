@@ -106,14 +106,13 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
     // This method updates user information.
-    public void updateUsers(String image, String email, String username, String latest_image) {
-        String selection = KEY_IMAGE + " LIKE ? AND " +
-                           KEY_EMAIL + " LIKE ? AND " +
-                           KEY_USERNAME + " LIKE ? ";
-        String[] args = { image, email, username };
+    public void updateUsers(String email, String username) {
+        String selection = KEY_USERNAME + " =? ";
+        String[] args = { username };
 
         ContentValues values = new ContentValues();
-        values.put(KEY_IMAGE, latest_image);
+        values.put(KEY_EMAIL, email);
+        values.put(KEY_USERNAME, username);
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.update(TABLE_LOGIN, values, selection, args);

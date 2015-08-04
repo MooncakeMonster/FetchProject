@@ -451,7 +451,7 @@ public class CloudantConnect {
 
         // (1) Update own username
         User user = getTargetUser(my_username);
-        user.setFriend_update(new_username);
+        user.setUsername(new_username);
 
         // Retrieve user's documents
         try {

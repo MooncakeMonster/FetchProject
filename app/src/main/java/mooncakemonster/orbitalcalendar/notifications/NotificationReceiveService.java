@@ -152,10 +152,10 @@ public class NotificationReceiveService extends Service {
         if(my_user.getFriend_update() != null) {
 
             Log.d(TAG, "Friend update");
-            setNotification(cloudantConnect.retrieveUserImage(my_user.getFriend_previous_username()), R.color.yellowbear, FRIEND_REQUEST_FOUND, my_user.getFriend_previous_username() + " has updated his/her username to " + my_user.getFriend_update() + ".");
+            setNotification(cloudantConnect.retrieveUserImage(my_user.getFriend_update()), R.color.yellowbear, FRIEND_REQUEST_FOUND, my_user.getFriend_previous_username() + " has updated his/her username to " + my_user.getFriend_update() + ".");
 
-            notificationDatabase.putInformation(notificationDatabase, "false", "false", "" + notificationDatabase.notificationSize(notificationDatabase), 1, Constant.retrieveCurrentTime(), -1, -1, my_user.getFriend_previous_username(),
-                    " has updated his/her username to " + my_user.getFriend_update(), "",  ". Your friendlist has been updated.", null, null, null, null, null, null, null, null, null);
+            notificationDatabase.putInformation(notificationDatabase, "false", "false", "" + notificationDatabase.notificationSize(notificationDatabase), 1, Constant.retrieveCurrentTime(), -1, -1, my_user.getFriend_update(),
+                    " is the new username updated by " + my_user.getFriend_previous_username(), "",  "!", null, null, null, null, null, null, null, null, null);
 
             cloudantConnect.resetFriendUpdate(my_username);
             cloudantConnect.startPushReplication();

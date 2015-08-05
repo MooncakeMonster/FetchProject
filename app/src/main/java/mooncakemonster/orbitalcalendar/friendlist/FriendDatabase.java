@@ -81,6 +81,27 @@ public class FriendDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.update(FriendData.FriendInfo.TABLE_NAME, values, selection, args);
     }
 
+    // Update data from database
+    public void updateNewUsername(FriendDatabase data, String previous_username, String new_username) {
+        String selection = FriendData.FriendInfo.FRIEND_USERNAME + " =? ";
+        String[] args = { previous_username };
+
+        Cursor cursor = getInformation(data);
+        ContentValues values = new ContentValues();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            if(cursor.getString(2).equals(previous_username)) {
+                values.put(FriendData.FriendInfo.FRIEND_USERNAME, new_username);
+                break;
+            }
+            cursor.moveToNext();
+        }
+
+        SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
+        sqLiteDatabase.update(FriendData.FriendInfo.TABLE_NAME, values, selection, args);
+    }
+
 
     // Delete data from database
     public void deleteInformation(FriendDatabase data, String username) {

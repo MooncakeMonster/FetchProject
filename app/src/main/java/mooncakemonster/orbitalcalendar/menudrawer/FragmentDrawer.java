@@ -360,7 +360,7 @@ public class FragmentDrawer extends Fragment {
                 cloudantConnect.startPushReplication();
 
                 // Update to phone
-                db.updateUsers(new_email, new_username);
+                db.updateUsers(new_email, my_username, new_username);
 
                 dialog.dismiss();
             }

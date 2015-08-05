@@ -130,6 +130,27 @@ public class NotificationDatabase extends SQLiteOpenHelper {
         sqLiteDatabase.update(NotificationData.NotificationInfo.TABLE_NAME, values, selection, args);
     }
 
+    // Update action to database
+    public void updateUserInformation(NotificationDatabase data, String previous_username, String new_username) {
+        String selection = NotificationData.NotificationInfo.SENDER_USERNAME + "=?";
+        String[] args = { previous_username };
+        Cursor cursor = getInformation(data);
+        ContentValues values = new ContentValues();
+
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            if(cursor.getString(7).equals(previous_username)) {
+                values.put(NotificationData.NotificationInfo.SENDER_USERNAME, new_username);
+                SQLiteDatabase sqLiteDatabase = data.getWritableDatabase();
+                sqLiteDatabase.update(NotificationData.NotificationInfo.TABLE_NAME, values, selection, args);
+            }
+
+            cursor.moveToNext();
+        }
+
+        cursor.close();
+    }
+
     // This method retrieves all notifications. (Limit to only maximum 20 notifications)
     public List<NotificationItem> getAllNotifications(NotificationDatabase data) {
         List<NotificationItem> notificationItems = new ArrayList<>();

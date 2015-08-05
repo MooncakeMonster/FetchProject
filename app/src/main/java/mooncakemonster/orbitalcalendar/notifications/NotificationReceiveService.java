@@ -157,6 +157,15 @@ public class NotificationReceiveService extends Service {
             notificationDatabase.putInformation(notificationDatabase, "false", "false", "" + notificationDatabase.notificationSize(notificationDatabase), 1, Constant.retrieveCurrentTime(), -1, -1, my_user.getFriend_update(),
                     " is the new username updated by " + my_user.getFriend_previous_username(), "",  "!", null, null, null, null, null, null, null, null, null);
 
+            // Update in notification
+            notificationDatabase.updateUserInformation(notificationDatabase, my_user.getFriend_previous_username(), my_user.getFriend_update());
+
+            // Update in friendlist
+            friendDatabase = new FriendDatabase(getApplicationContext());
+            friendDatabase.updateNewUsername(friendDatabase, my_user.getFriend_previous_username(), my_user.getFriend_update());
+
+            // TODO: Update in resultlist
+
             cloudantConnect.resetFriendUpdate(my_username);
             cloudantConnect.startPushReplication();
         }

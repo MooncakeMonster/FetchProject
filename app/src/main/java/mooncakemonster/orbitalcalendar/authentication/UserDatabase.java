@@ -106,13 +106,13 @@ public class UserDatabase extends SQLiteOpenHelper {
     }
 
     // This method updates user information.
-    public void updateUsers(String email, String username) {
+    public void updateUsers(String email, String previous_username, String new_username) {
         String selection = KEY_USERNAME + " =? ";
-        String[] args = { username };
+        String[] args = { previous_username };
 
         ContentValues values = new ContentValues();
         values.put(KEY_EMAIL, email);
-        values.put(KEY_USERNAME, username);
+        values.put(KEY_USERNAME, new_username);
 
         SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
         sqLiteDatabase.update(TABLE_LOGIN, values, selection, args);

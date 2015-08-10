@@ -259,8 +259,10 @@ public class ImportICSParser extends ListActivity {
 
                             //Set value for initial appointment
                             tempAppt = new ImportedAppointment();
+                            tempAppt.setSub_id(-1);
                             tempAppt.setColour(Constant.getRandomColour());
                             tempAppt.setEvent(event);
+                            //tempAppt.setActualStartDate(startMillisec);
                             tempAppt.setStartDate(startMillisec);
                             tempAppt.setStartProperDate(dateFormatted);
                             tempAppt.setEndDate(endMillisec);
@@ -299,7 +301,10 @@ public class ImportICSParser extends ListActivity {
                                         dateFormatted = Constant.YYYYMMDD_FORMATTER.format(date);
 
                                         tempAppt = new ImportedAppointment();
+                                        tempAppt.setSub_id(-1);
+                                        tempAppt.setColour(Constant.getRandomColour());
                                         tempAppt.setEvent(event);
+                                        //tempAppt.setActualStartDate(startMillisecond);
                                         tempAppt.setStartDate(startMillisecond);
                                         tempAppt.setStartProperDate(dateFormatted);
                                         tempAppt.setEndDate(endMillisec);

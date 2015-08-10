@@ -107,6 +107,7 @@ public class CaldroidCustomGridAdapter extends CaldroidGridAdapter {
                 Appointment appointment = allAppointments.get(i);
                 if (appointment != null) {
                     colour_array[i] = allAppointments.get(i).getColour();
+                    Log.d("HEY COLOUR", "" + allAppointments.get(i).getColour());
                 }
             } catch (IndexOutOfBoundsException e) {
                 Log.e("CustomAdapter", "No event dates found");

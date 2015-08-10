@@ -33,7 +33,7 @@ public class EventView extends DialogFragment
     private Appointment eventViewAppointment;
 
     private EditText eventLabel, locationLabel,  notesLabel;
-    private Button beginDateButton, endDateButton, beginTimeButton, endTimeButton, remindNum, remindBox, everyNum, everyBox, colourInput;
+    private Button colour_button, beginDateButton, endDateButton, beginTimeButton, endTimeButton, remindNum, remindBox, everyNum, everyBox, colourInput;
     private CheckBox reminderCheckBox, repeatAppointment;
 
     private static CharSequence[] everyWheel = {"day", "week", "month", "year"};
@@ -214,6 +214,7 @@ public class EventView extends DialogFragment
         selected_colour = eventViewAppointment.getColour();
 
         //(2) Assign TextViews, Buttons and Checkboxes through findViewById
+        colour_button = (Button) view.findViewById(R.id.colour_button);
         eventLabel = (EditText) view.findViewById(R.id.title);
         locationLabel = (EditText) view.findViewById(R.id.appointmentLocation);
         notesLabel = (EditText) view.findViewById(R.id.appointmentNotes);
@@ -241,6 +242,7 @@ public class EventView extends DialogFragment
         });
 
         //(3) Assign respective string values and settings
+        colour_button.setBackgroundResource(selected_colour);
         eventLabel.setText(event);
         locationLabel.setText(location);
         notesLabel.setText(notes);

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -26,6 +27,8 @@ public class ImportExternalAdapter extends ArrayAdapter<ImportedAppointment> {
     }
 
     static class Holder {
+        RelativeLayout relativeLayout;
+
         TextView import_event_day;
         TextView import_event_month_year;
 
@@ -49,6 +52,7 @@ public class ImportExternalAdapter extends ArrayAdapter<ImportedAppointment> {
 
         if(appointment != null) {
             holder = new Holder();
+            holder.relativeLayout = (RelativeLayout)row.findViewById(R.id.import_event_set_colour_checked);
             holder.import_event_day = (TextView)row.findViewById(R.id.import_event_day);
             holder.import_event_month_year = (TextView) row.findViewById(R.id.import_event_month_year);
 
@@ -58,14 +62,18 @@ public class ImportExternalAdapter extends ArrayAdapter<ImportedAppointment> {
 
             holder.to_import = (CheckBox) row.findViewById(R.id.to_import);
 
+            holder.relativeLayout.setBackgroundResource(appointment.getColour());
+
             //Get event name and location
             String title;
             String location;
             if( (title = appointment.getEvent()) != null) {
                 holder.import_event_title.setText(title);
             }
-            if( (location = appointment.getLocation()) != null) {
+            if( (location = appointment.getLocation()) != null && !location.isEmpty()) {
                 holder.import_event_location.setText(location);
+            } else {
+                holder.import_event_location.setText("Location not available");
             }
 
             // Get date

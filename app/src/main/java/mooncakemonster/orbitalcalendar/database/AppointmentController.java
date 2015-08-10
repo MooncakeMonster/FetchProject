@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -190,6 +191,7 @@ public class AppointmentController
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             String target_date = Constant.getDate(cursor.getLong(2), new SimpleDateFormat("yyyy-MM-dd"));
+            Log.d("HEY DATE", date + "/" + target_date);
             if(date.equals(target_date)) {
                 appointment.add(cursorToAppointment(cursor));
             }

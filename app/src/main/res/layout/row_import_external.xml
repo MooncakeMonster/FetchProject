@@ -51,7 +51,7 @@
             android:paddingRight="@dimen/feed_item_profile_info_padd"
             android:layout_marginLeft="@dimen/feed_item_profile_info_padd"
             android:layout_marginRight="@dimen/feed_item_profile_info_padd"
-            android:id="@+id/import_event_set_colour">
+            android:id="@+id/import_event_set_colour_checked">
 
             <TextView
                 android:id="@+id/import_event_title"

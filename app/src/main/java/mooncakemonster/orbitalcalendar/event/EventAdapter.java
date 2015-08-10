@@ -157,7 +157,9 @@ public class EventAdapter extends BaseAdapter {
                     holder.event_colour.setBackgroundResource(appointment.getColour());
                     if(appointment.getSub_id() == -1) holder.event_title.setText(appointment.getEvent());
                     else holder.event_title.setText(appointment.getEvent() + " (Day " + appointment.getSub_id() + ")");
-                    holder.event_location.setText(appointment.getLocation());
+
+                    if(appointment.getLocation() == null) holder.event_location.setText("Location not available");
+                    else holder.event_location.setText(appointment.getLocation());
 
                     // Get date
                     String finalDate = Constant.getDate(appointment.getStartDate(), new SimpleDateFormat("yyyy MMM dd"));

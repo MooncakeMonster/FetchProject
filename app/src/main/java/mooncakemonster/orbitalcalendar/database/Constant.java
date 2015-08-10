@@ -613,6 +613,6 @@ public final class Constant
         }
 
         // Should not reach here
-        return -1;
+        return R.color.yellowbear;
     }
 }

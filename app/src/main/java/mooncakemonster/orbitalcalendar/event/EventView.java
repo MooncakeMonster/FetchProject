@@ -242,7 +242,7 @@ public class EventView extends DialogFragment
         });
 
         //(3) Assign respective string values and settings
-        colour_button.setBackgroundResource(selected_colour);
+        colour_button.setBackgroundResource(Constant.getPartyBearColour(selected_colour));
         eventLabel.setText(event);
         locationLabel.setText(location);
         notesLabel.setText(notes);

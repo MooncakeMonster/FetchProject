@@ -600,6 +600,18 @@ public final class Constant
         return R.drawable.ballpurple;
     }
 
+    public static int getPartyBearColour(int chosenColour) {
+        switch (chosenColour) {
+            case R.color.redbear: return R.drawable.partyred;
+            case R.color.yellowbear: return R.drawable.partyyellow;
+            case R.color.greenbear: return R.drawable.partygreen;
+            case R.color.bluebear: return R.drawable.partyblue;
+            case R.color.purplebear: return R.drawable.partypurple;
+        }
+
+        return R.drawable.ballpurple;
+    }
+
     public static int getRandomColour() {
         Random random = new Random();
         int chosenColour = random.nextInt(4);

@@ -35,6 +35,8 @@ public class CaldroidCustomGridAdapter extends CaldroidGridAdapter {
                                      HashMap<String, Object> caldroidData,
                                      HashMap<String, Object> extraData) {
         super(context, month, year, caldroidData, extraData);
+        appointmentController = new AppointmentController(context);
+        appointmentController.open();
     }
 
     @Override
@@ -95,8 +97,6 @@ public class CaldroidCustomGridAdapter extends CaldroidGridAdapter {
 
         // (2) Customize for selected dates
         // Check if the current date is in database
-        appointmentController = new AppointmentController(context);
-        appointmentController.open();
         String date = dateTime.format("YYYY-MM-DD");
         allAppointments = appointmentController.getTargetEvent(date);
         int[] colour_array = new int[5];

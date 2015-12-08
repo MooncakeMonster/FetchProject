@@ -1,5 +1,4 @@
 # FetchProject
----
 
 Fetch is a personalised scheduler that stores all your appointment and to-do.
 Most of us have the experience of having to go back and forth between friends when trying to schedule for an

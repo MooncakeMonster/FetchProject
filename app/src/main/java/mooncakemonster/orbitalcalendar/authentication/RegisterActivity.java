@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -64,6 +65,7 @@ public class RegisterActivity extends Activity implements SharedPreferences.OnSh
         password = (EditText) findViewById(R.id.password);
         confirm_password = (EditText) findViewById(R.id.confirmpassword);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
 

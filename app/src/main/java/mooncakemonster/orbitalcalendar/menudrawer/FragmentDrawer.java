@@ -101,7 +101,7 @@ public class FragmentDrawer extends Fragment {
         super.onCreate(savedInstanceState);
 
         titles = getActivity().getResources().getStringArray(R.array.nav_drawer_items);
-        icon = getActivity().getResources().obtainTypedArray(R.array.nav_drawer_icons);
+        //icon = getActivity().getResources().obtainTypedArray(R.array.nav_drawer_icons);
 
     }
 

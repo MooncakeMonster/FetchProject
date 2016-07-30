@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -53,6 +58,10 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
         progressDialog.setCancelable(false);
         loginManager = new LoginManager(getApplicationContext());
         userDatabase = new UserDatabase(getApplicationContext());
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        setEditTextLine(username);
+        setEditTextLine(password);
 
         // Load Cloudant settings
         PreferenceManager.setDefaultValues(this, R.xml.preference, false);
@@ -128,6 +137,17 @@ public class LoginActivity extends Activity implements SharedPreferences.OnShare
             // Resets username and password
             username.setText("");
             password.setText("");
+        }
+    }
+
+    private void setEditTextLine(EditText editText) {
+        Drawable drawable = editText.getBackground();
+        drawable.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+
+        if(Build.VERSION.SDK_INT > 16) {
+            editText.setBackground(drawable);
+        }else{
+            editText.setBackgroundDrawable(drawable);
         }
     }
 

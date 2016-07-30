@@ -1,4 +1,4 @@
-package mooncakemonster.orbitalcalendar.main;
+package mooncakemonster.orbitalcalendar.zremove;
 
 /**
  * This program is first executed when the app runs.

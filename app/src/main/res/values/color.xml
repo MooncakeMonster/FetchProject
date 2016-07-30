@@ -10,12 +10,12 @@
     <color name="background">#C2DFFF</color>
     <color name="button">#6698FF</color>
 
-    <color name="colorPrimary">#6698FF</color>
-    <color name="colorPrimaryDark">#2B60DE</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorAccent">#FFFFFF</color>
     <color name="textColorPrimary">#FFFFFF</color>
     <color name="windowBackground">#FFFFFF</color>
     <color name="navigationBarColor">#000000</color>
-    <color name="colorAccent">#2B60DE</color>
 
     <color name="white">#FFFFFF</color>
     <color name="feed_bg">#C3DEFC</color>

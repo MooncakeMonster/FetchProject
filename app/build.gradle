@@ -58,7 +58,6 @@ dependencies {
     compile "com.splitwise:tokenautocomplete:2.0.1@aar"
 
 
-    compile files('libs/volley.jar')
     compile 'net.danlew:android.joda:2.8.1'
     compile files('libs/rfc2445-4Mar2011.jar')
     compile fileTree(dir: 'libs', include: ['*.jar'])
